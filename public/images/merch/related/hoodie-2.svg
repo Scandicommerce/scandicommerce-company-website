@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 500">
+  <rect width="400" height="500" fill="#666666"/>
+  <g transform="translate(100, 100)">
+    <!-- Person with hoodie -->
+    <circle cx="100" cy="50" r="40" fill="#F0D0B0"/>
+    <path d="M50 90 Q100 70 150 90 L160 130 L40 130 Z" fill="#7A7A7A" stroke="#6A6A6A" stroke-width="2"/>
+    <path d="M20 130 L20 280 L180 280 L180 130 Z" fill="#7A7A7A" stroke="#6A6A6A" stroke-width="3"/>
+    <!-- Zip line -->
+    <line x1="100" y1="130" x2="100" y2="280" stroke="#555555" stroke-width="3"/>
+    <!-- Inner t-shirt -->
+    <rect x="80" y="130" width="40" height="30" fill="white"/>
+  </g>
+</svg>

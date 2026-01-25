@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400">
+  <rect width="400" height="400" fill="#F8F8F8"/>
+  <g transform="translate(150, 30)">
+    <!-- Bottle cap -->
+    <rect x="25" y="10" width="50" height="30" rx="5" fill="#E5E5E5"/>
+    <!-- Bottle neck -->
+    <rect x="30" y="40" width="40" height="30" fill="white" stroke="#E5E5E5" stroke-width="2"/>
+    <!-- Bottle body -->
+    <path d="M20 70 Q20 90 15 110 L15 310 Q15 330 50 330 Q85 330 85 310 L85 110 Q80 90 80 70 Z" fill="white" stroke="#E5E5E5" stroke-width="3"/>
+    <!-- Logo -->
+    <g transform="translate(22, 160)">
+      <circle cx="28" cy="28" r="25" fill="#03C1CA" opacity="0.1"/>
+      <text x="28" y="24" font-family="Arial, sans-serif" font-size="9" font-weight="bold" fill="#03C1CA" text-anchor="middle">Scandi</text>
+      <text x="28" y="38" font-family="Arial, sans-serif" font-size="9" font-weight="bold" fill="#03C1CA" text-anchor="middle">Commerce</text>
+    </g>
+  </g>
+</svg>

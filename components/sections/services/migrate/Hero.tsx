@@ -1,0 +1,260 @@
+'use client'
+
+import Link from 'next/link'
+import LiquidBlob from '@/components/ui/LiquidBlob'
+
+interface HeroData {
+  heroTitle?: {
+    text?: string
+    highlight?: string
+  }
+  heroDescription?: string
+  heroButtons?: Array<{
+    text: string
+    link: string
+    variant?: string
+  }>
+}
+
+interface HeroProps {
+  hero?: HeroData
+}
+
+export default function Hero({ hero }: HeroProps) {
+  const titleText = hero?.heroTitle?.text
+  const titleHighlight = hero?.heroTitle?.highlight
+  const description = hero?.heroDescription
+  const buttons = hero?.heroButtons
+
+  const renderTitle = () => {
+    if (!titleText) return null
+    if (!titleHighlight || !titleText.includes(titleHighlight)) {
+      return <span className="xl:text-[#FFFFFF] text-[#222222]">{titleText}</span>
+    }
+    const parts = titleText.split(titleHighlight)
+    return (
+      <>
+        <span className="xl:text-[#FFFFFF] text-[#222222]">{parts[0]}</span>
+        <span className="text-[#1DEFFA]">{titleHighlight}</span>
+        <span className="xl:text-[#FFFFFF] text-[#222222]">{parts[1]}</span>
+      </>
+    )
+  }
+
+  return (
+    <section className="hero-section-responsive relative bg-[#F8F8F8] py-16 lg:py-24 overflow-hidden min-h-[calc(100vh-80px)] flex items-center justify-center">
+      <style dangerouslySetInnerHTML={{ __html: `
+        @media (max-height: 425px) {
+          .liquid-blob-small-height {
+            width: 60% !important;
+            height: 60% !important;
+          }
+        }
+        @media (min-width: 375px) and (max-width: 425px) {
+          .liquid-blob-medium-width {
+            top: 28% !important;
+          }
+        }
+        @media (min-width: 375px) and (max-width: 401px) {
+          .liquid-blob-375-401 {
+            top: 26% !important;
+          }
+        }
+        @media (min-width: 406px) and (max-width: 424px) {
+          .liquid-blob-406-424 {
+            top: 26% !important;
+          }
+        }
+        @media (min-width: 425px) and (max-width: 640px) {
+          .liquid-blob-425-640-width {
+            top: 32% !important;
+          }
+        }
+        @media (min-width: 425px) and (max-width: 460px) {
+          .liquid-blob-425-460 {
+            top: 26% !important;
+          }
+        }
+        @media (min-width: 640px) and (max-width: 640px) {
+          .liquid-blob-640-width {
+            top: 35% !important;
+          }
+        }
+        @media (min-width: 641px) and (max-width: 767px) {
+          .liquid-blob-large-width {
+            top: 40% !important;
+          }
+        }
+        @media (min-width: 641px) and (max-width: 684px) {
+          .liquid-blob-641-684 {
+            top: 35% !important;
+          }
+        }
+        @media (min-width: 685px) and (max-width: 767px) {
+          .liquid-blob-685-767 {
+            top: 36% !important;
+          }
+        }
+        @media (min-width: 768px) and (max-width: 768px) {
+          .liquid-blob-768-width {
+            top: 50% !important;
+          }
+        }
+        @media (min-width: 768px) and (max-width: 924px) {
+          .liquid-blob-768-924 {
+            width: 85% !important;
+            height: 85% !important;
+          }
+        }
+        @media (min-width: 925px) and (max-width: 1023px) {
+          .liquid-blob-925-1023 {
+            width: 88% !important;
+            height: 88% !important;
+          }
+        }
+        @media (min-width: 1280px) and (max-width: 1629px) {
+          .liquid-blob-xl-width {
+            width: 110% !important;
+            height: 110% !important;
+          }
+        }
+        @media (min-width: 640px) and (max-width: 767px) {
+          .hero-buttons-gap {
+            margin-top: 80px !important;
+          }
+        }
+        @media (min-width: 536px) and (max-width: 639px) {
+          .hero-content-536-639 {
+            width: 85% !important;
+            gap: 30px !important;
+          }
+          .hero-buttons-gap-536-639 {
+            margin-top: 60px !important;
+          }
+        }
+        @media (min-width: 536px) and (max-width: 551px) {
+          .hero-content-536-551 {
+            width: 95% !important;
+            gap: 24px !important;
+          }
+          .liquid-blob-536-551 {
+            width: 80% !important;
+            height: 80% !important;
+            top: 35% !important;
+          }
+        }
+        @media (min-width: 566px) and (max-width: 598px) {
+          .hero-content-566-598 {
+            width: 78% !important;
+          }
+        }
+        @media (min-width: 461px) and (max-width: 565px) {
+          .hero-content-461-565 {
+            width: 78% !important;
+          }
+        }
+        @media (min-width: 461px) and (max-width: 535px) {
+          .hero-content-461-535 {
+            width: 76% !important;
+            gap: 24px !important;
+          }
+          .hero-buttons-gap-461-535 {
+            margin-top: 50px !important;
+          }
+          .liquid-blob-461-535 {
+            width: 85% !important;
+            height: 85% !important;
+            top: 34% !important;
+          }
+        }
+        @media (min-width: 474px) and (max-width: 508px) {
+          .hero-content-474-508 {
+            width: 88% !important;
+          }
+        }
+        @media (min-width: 474px) and (max-width: 492px) {
+          .hero-content-474-492 {
+            width: 91% !important;
+          }
+        }
+        @media (min-width: 474px) and (max-width: 477px) {
+          .hero-content-474-477 {
+            width: 94% !important;
+          }
+        }
+        @media (min-width: 461px) and (max-width: 470px) {
+          .hero-content-461-470 {
+            width: 95% !important;
+            gap: 20px !important;
+          }
+        }
+        @media (min-width: 406px) and (max-width: 460px) {
+          .hero-content-406-460 {
+            width: 88% !important;
+            gap: 80px !important;
+          }
+        }
+        // @media (min-width: 402px) and (max-width: 405px) {
+        //   .hero-content-402-405 {
+        //     width: 88% !important;
+        //   }
+        // }
+        @media (min-width: 375px) and (max-width: 405px) {
+          .hero-content-375-405 {
+            width: 100% !important;
+            padding-left: 0 !important;
+            padding-right: 0 !important;
+          }
+        }
+        @media (max-width: 1023px) {
+          .hero-section-responsive {
+            min-height: calc(90vh - 80px) !important;
+          }
+        }
+      `}} />
+      <LiquidBlob
+        page="homepage"
+        rotation={0}
+        className="liquid-blob-small-height liquid-blob-medium-width liquid-blob-375-401 liquid-blob-406-424 liquid-blob-425-460 liquid-blob-425-640-width liquid-blob-461-535 liquid-blob-536-551 liquid-blob-640-width liquid-blob-large-width liquid-blob-641-684 liquid-blob-685-767 liquid-blob-768-width liquid-blob-768-924 liquid-blob-925-1023 liquid-blob-xl-width top-[25%] sm:top-[35%] md:top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[75%] h-[75%] md:w-[80%] md:h-[80%] lg:w-[95%] lg:h-[95%] xl:w-[90%] xl:h-[90%] 2xl:w-[85%] 2xl:h-[85%]"
+        enableMouseFollow={true}
+      />
+
+      <div className="absolute top-[35%] left-[25%] xl:block hidden w-40 h-40 rounded-full bg-[#1DEFFA33]"></div>
+      <div className="absolute bottom-[44%] right-[32%] xl:block hidden w-[60px] h-[60px] rounded-full bg-[#1DEFFA33]"></div>
+
+      <div className="container flex flex-col justify-center items-center mx-auto px-4 sm:px-6 lg:px-8 relative z-10 gap-[42px]">
+        <div className="hero-content-375-405 hero-content-402-405 hero-content-406-460 hero-content-461-470 hero-content-461-535 hero-content-461-565 hero-content-474-477 hero-content-474-492 hero-content-474-508 hero-content-536-551 hero-content-536-639 hero-content-566-598 flex flex-col justify-start items-center gap-[53px] sm:w-3/4 2xl:w-1/2 w-full">
+          {titleText && (
+            <h1 className="text-3xl lg:text-4xl xl:text-5xl font-bold text-center mb-4 sm:mb-6">
+              {renderTitle()}
+            </h1>
+          )}
+
+          {description && (
+            <p className="text-base lg:text-lg xl:text-xl xl:text-[#FFFFFF] text-[#222222] text-center leading-relaxed px-4">
+              {description}
+            </p>
+          )}
+        </div>
+
+        {buttons && buttons.length > 0 && (
+          <div className="hero-buttons-gap hero-buttons-gap-461-535 hero-buttons-gap-536-639 flex flex-col sm:flex-row gap-4 items-center justify-center w-full">
+            {buttons.map((button, index) => (
+              <Link
+                key={index}
+                href={button.link || '#'}
+                className={`min-w-[286px] px-8 py-4 transition-colors text-center w-full sm:w-auto ${
+                  button.variant === 'primary' || index === 0
+                    ? 'bg-[#1DEFFA] text-[#1F1D1D] hover:bg-[#1DEFFA]/90'
+                    : 'bg-black text-white md:bg-white md:text-[#1F1D1D] hover:bg-gray-800 md:hover:bg-gray-100'
+                }`}
+              >
+                {button.text}
+              </Link>
+            ))}
+          </div>
+        )}
+      </div>
+    </section>
+  )
+}

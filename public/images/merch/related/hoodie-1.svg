@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 500">
+  <rect width="400" height="500" fill="#5A5A5A"/>
+  <g transform="translate(100, 100)">
+    <!-- Hoodie silhouette -->
+    <path d="M50 30 Q100 0 150 30 L160 70 L40 70 Z" fill="#7A7A7A" stroke="#6A6A6A" stroke-width="2"/>
+    <path d="M20 70 L20 280 L180 280 L180 70 Z" fill="#7A7A7A" stroke="#6A6A6A" stroke-width="3"/>
+    <path d="M20 70 L-20 120 L-20 160 L10 160 L20 120" fill="#7A7A7A" stroke="#6A6A6A" stroke-width="2"/>
+    <path d="M180 70 L220 120 L220 160 L190 160 L180 120" fill="#7A7A7A" stroke="#6A6A6A" stroke-width="2"/>
+    <!-- Text overlay -->
+    <text x="100" y="150" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="white" text-anchor="middle">ESSENTIALS</text>
+    <text x="100" y="170" font-family="Arial, sans-serif" font-size="10" fill="white" text-anchor="middle">FEAR OF GOD</text>
+  </g>
+</svg>

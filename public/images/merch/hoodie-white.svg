@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400">
+  <rect width="400" height="400" fill="#F8F8F8"/>
+  <g transform="translate(50, 50)">
+    <!-- Hood -->
+    <path d="M100 30 Q150 0 200 30 L210 80 L90 80 Z" fill="white" stroke="#E5E5E5" stroke-width="2"/>
+    <!-- Body -->
+    <path d="M60 80 L60 300 L240 300 L240 80 Z" fill="white" stroke="#E5E5E5" stroke-width="3"/>
+    <!-- Left sleeve -->
+    <path d="M60 80 L10 140 L10 180 L50 180 L60 140" fill="white" stroke="#E5E5E5" stroke-width="2"/>
+    <!-- Right sleeve -->
+    <path d="M240 80 L290 140 L290 180 L250 180 L240 140" fill="white" stroke="#E5E5E5" stroke-width="2"/>
+    <!-- Neck opening -->
+    <ellipse cx="150" cy="85" rx="35" ry="15" fill="#F0F0F0"/>
+    <!-- Kangaroo pocket -->
+    <rect x="90" y="200" width="120" height="60" rx="5" fill="#F5F5F5" stroke="#E5E5E5" stroke-width="2"/>
+    <!-- Logo -->
+    <g transform="translate(105, 110)">
+      <circle cx="45" cy="35" r="32" fill="#03C1CA" opacity="0.1"/>
+      <text x="45" y="30" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="#03C1CA" text-anchor="middle">Scandi</text>
+      <text x="45" y="46" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="#03C1CA" text-anchor="middle">Commerce</text>
+    </g>
+  </g>
+</svg>

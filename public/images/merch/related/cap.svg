@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 500">
+  <rect width="400" height="500" fill="#8B7355"/>
+  <g transform="translate(80, 120)">
+    <!-- Person silhouette -->
+    <ellipse cx="120" cy="180" rx="80" ry="100" fill="#D4A574"/>
+    <!-- Hair -->
+    <path d="M40 180 Q60 80 120 60 Q180 80 200 180" fill="#5C4033"/>
+    <!-- Cap -->
+    <path d="M60 100 Q120 60 180 100 L185 130 Q120 110 55 130 Z" fill="#C4B090"/>
+    <path d="M55 130 Q120 150 185 130 L185 115 Q120 135 55 115 Z" fill="#B0A080"/>
+    <!-- Face features -->
+    <ellipse cx="100" cy="150" rx="8" ry="4" fill="#444"/>
+    <ellipse cx="140" cy="150" rx="8" ry="4" fill="#444"/>
+  </g>
+</svg>

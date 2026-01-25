@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400">
+  <rect width="400" height="400" fill="#F8F8F8"/>
+  <g transform="translate(80, 40)">
+    <!-- Body -->
+    <path d="M60 50 L50 200 L50 280 Q50 300 80 300 L80 250 Q80 230 100 230 L140 230 Q160 230 160 250 L160 300 Q190 300 190 280 L190 200 L180 50" fill="white" stroke="#E5E5E5" stroke-width="3"/>
+    <!-- Left sleeve -->
+    <path d="M60 50 L20 70 L20 110 L50 100 L60 70" fill="white" stroke="#E5E5E5" stroke-width="2"/>
+    <!-- Right sleeve -->
+    <path d="M180 50 L220 70 L220 110 L190 100 L180 70" fill="white" stroke="#E5E5E5" stroke-width="2"/>
+    <!-- Neck -->
+    <ellipse cx="120" cy="55" rx="40" ry="15" fill="#F0F0F0"/>
+    <!-- Snap buttons -->
+    <circle cx="100" cy="260" r="5" fill="#E5E5E5"/>
+    <circle cx="120" cy="260" r="5" fill="#E5E5E5"/>
+    <circle cx="140" cy="260" r="5" fill="#E5E5E5"/>
+    <!-- Logo -->
+    <g transform="translate(75, 100)">
+      <circle cx="45" cy="35" r="32" fill="#03C1CA" opacity="0.1"/>
+      <text x="45" y="30" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="#03C1CA" text-anchor="middle">Scandi</text>
+      <text x="45" y="45" font-family="Arial, sans-serif" font-size="10" font-weight="bold" fill="#03C1CA" text-anchor="middle">Commerce</text>
+    </g>
+  </g>
+</svg>

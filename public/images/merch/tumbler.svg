@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400">
+  <rect width="400" height="400" fill="#F8F8F8"/>
+  <g transform="translate(140, 50)">
+    <!-- Tumbler lid -->
+    <rect x="20" y="10" width="80" height="25" rx="5" fill="#333333"/>
+    <!-- Tumbler body -->
+    <path d="M15 35 L25 300 L95 300 L105 35 Z" fill="white" stroke="#E5E5E5" stroke-width="3"/>
+    <!-- Logo area -->
+    <g transform="translate(35, 120)">
+      <circle cx="25" cy="25" r="22" fill="#03C1CA" opacity="0.1"/>
+      <text x="25" y="20" font-family="Arial, sans-serif" font-size="9" font-weight="bold" fill="#03C1CA" text-anchor="middle">Scandi</text>
+      <text x="25" y="34" font-family="Arial, sans-serif" font-size="9" font-weight="bold" fill="#03C1CA" text-anchor="middle">Commerce</text>
+    </g>
+  </g>
+</svg>

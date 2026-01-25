@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400">
+  <rect width="400" height="400" fill="#F8F8F8"/>
+  <g transform="translate(50, 60)">
+    <!-- Body -->
+    <path d="M60 40 L60 280 L240 280 L240 40 Q200 30 150 30 Q100 30 60 40 Z" fill="white" stroke="#E5E5E5" stroke-width="3"/>
+    <!-- Left sleeve -->
+    <path d="M60 40 L10 100 L10 150 L50 150 L60 100" fill="white" stroke="#E5E5E5" stroke-width="2"/>
+    <!-- Right sleeve -->
+    <path d="M240 40 L290 100 L290 150 L250 150 L240 100" fill="white" stroke="#E5E5E5" stroke-width="2"/>
+    <!-- Neck -->
+    <ellipse cx="150" cy="45" rx="40" ry="18" fill="#F0F0F0" stroke="#E5E5E5" stroke-width="2"/>
+    <!-- Logo -->
+    <g transform="translate(100, 90)">
+      <circle cx="50" cy="40" r="38" fill="#03C1CA" opacity="0.1"/>
+      <text x="50" y="35" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#03C1CA" text-anchor="middle">Scandi</text>
+      <text x="50" y="52" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="#03C1CA" text-anchor="middle">Commerce</text>
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 500">
+  <rect width="400" height="500" fill="#D4C8B8"/>
+  <g transform="translate(100, 100)">
+    <!-- Tote bag -->
+    <path d="M30 80 L30 280 L170 280 L170 80 Z" fill="#F5F0E8" stroke="#C4B8A8" stroke-width="3"/>
+    <!-- Handles -->
+    <path d="M60 80 Q60 40 100 40 Q140 40 140 80" fill="none" stroke="#C4B8A8" stroke-width="4"/>
+    <!-- Pocket -->
+    <rect x="50" y="150" width="100" height="80" fill="#E8E0D4" stroke="#C4B8A8" stroke-width="2"/>
+    <!-- Sunglasses in pocket -->
+    <ellipse cx="80" cy="170" rx="15" ry="10" fill="#333"/>
+    <ellipse cx="120" cy="170" rx="15" ry="10" fill="#333"/>
+    <line x1="95" y1="170" x2="105" y2="170" stroke="#333" stroke-width="2"/>
+  </g>
+</svg>
