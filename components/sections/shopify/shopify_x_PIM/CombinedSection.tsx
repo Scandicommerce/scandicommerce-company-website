@@ -55,18 +55,18 @@ export default function CombinedSection({ combinedSection }: CombinedSectionProp
 
   return (
     <section className="bg-[#F8F8F8] py-16 lg:py-24">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="section_container mx-auto page-padding-x">
         {/* Choosing the Right PIM Section */}
         {choosingPim && (
           <div className="mb-16 lg:mb-24">
             <div className="text-center mb-12 lg:mb-16">
               {choosingPim.title && (
-                <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-[#222222] mb-4">
+                <h2 className="text-[5.3vw] xs:text-[3.5vw] sm:text-[3.2vw] md:text-[3.2vw] lg:text-[28px] xl:text-[34px] font-bold text-[#222222] mb-4">
                   {choosingPim.title}
                 </h2>
               )}
               {choosingPim.description && (
-                <p className="text-base lg:text-lg text-[#565454] max-w-5xl mx-auto">
+                <p className="text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[16px] xl:text-[18px] text-[#565454] max-w-5xl mx-auto">
                   {choosingPim.description}
                 </p>
               )}
@@ -78,12 +78,12 @@ export default function CombinedSection({ combinedSection }: CombinedSectionProp
                 {/* Left Column - Cyan Background */}
                 <div className="bg-[#03C1CA] p-6 lg:p-8">
                   {choosingPim.leftColumnTitle && (
-                    <h3 className="text-xl lg:text-2xl font-bold text-white mb-4">
+                    <h3 className="text-[4.3vw] xs:text-[2.6vw] sm:text-[2.5vw] md:text-[2.2vw] lg:text-[18px] xl:text-[24px] font-bold text-white mb-4">
                       {choosingPim.leftColumnTitle}
                     </h3>
                   )}
                   {choosingPim.leftColumnDescription && (
-                    <p className="text-white/90 mb-6">
+                    <p className="text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[16px] xl:text-[18px] text-white/90 mb-6">
                       {choosingPim.leftColumnDescription}
                     </p>
                   )}
@@ -102,18 +102,18 @@ export default function CombinedSection({ combinedSection }: CombinedSectionProp
                 {/* Right Column - White Background */}
                 <div className="p-6 lg:p-8 flex flex-col justify-center">
                   {choosingPim.impactParagraph1 && (
-                    <p className="text-base lg:text-lg text-[#565454] mb-6">
+                    <p className="text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[16px] xl:text-[18px] text-[#565454] mb-6">
                       <span className="font-bold text-[#222222]">The Impact:</span>{' '}
                       {choosingPim.impactParagraph1}
                     </p>
                   )}
                   {choosingPim.impactParagraph2 && (
-                    <p className="text-base lg:text-lg text-[#565454] mb-6">
+                    <p className="text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[16px] xl:text-[18px] text-[#565454] mb-6">
                       {choosingPim.impactParagraph2}
                     </p>
                   )}
                   {choosingPim.linkText && (
-                    <a href="/contact" className="text-[#03C1CA] hover:underline font-medium">
+                    <a href="/contact" className="text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[16px] xl:text-[18px] text-[#03C1CA] hover:underline font-medium">
                       {choosingPim.linkText}
                     </a>
                   )}
@@ -129,12 +129,12 @@ export default function CombinedSection({ combinedSection }: CombinedSectionProp
             <div className="bg-[#03C1CA] p-8 lg:p-12">
               <div className="text-center mb-12">
                 {gettingStarted.title && (
-                  <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-4">
+                  <h2 className="text-[5.3vw] xs:text-[3.5vw] sm:text-[3.2vw] md:text-[3.2vw] lg:text-[28px] xl:text-[34px] font-bold text-white mb-4">
                     {gettingStarted.title}
                   </h2>
                 )}
                 {gettingStarted.description && (
-                  <p className="text-base lg:text-lg text-white/90 max-w-5xl mx-auto">
+                  <p className="text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[16px] xl:text-[18px] text-white/90 max-w-5xl mx-auto">
                     {gettingStarted.description}
                   </p>
                 )}
@@ -148,11 +148,11 @@ export default function CombinedSection({ combinedSection }: CombinedSectionProp
                       key={index}
                       className="bg-[#1CD8E2] p-6"
                     >
-                      <h3 className="text-base lg:text-lg font-semibold text-white mb-2">
+                      <h3 className="text-[4.3vw] xs:text-[2.6vw] sm:text-[2.5vw] md:text-[2.2vw] lg:text-[18px] xl:text-[24px] font-semibold text-white mb-2">
                         {index + 1}. {step.title}
                       </h3>
                       {step.description && (
-                        <p className="text-sm text-white/90">
+                        <p className="text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[16px] xl:text-[18px] text-white/90">
                           {step.description}
                         </p>
                       )}
@@ -163,7 +163,7 @@ export default function CombinedSection({ combinedSection }: CombinedSectionProp
 
               {/* Implementation Timeline Note */}
               {gettingStarted.bottomNote && (
-                <p className="text-center text-base lg:text-lg text-white max-w-5xl mx-auto">
+                <p className="text-center text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[16px] xl:text-[18px] text-white max-w-5xl mx-auto">
                   {gettingStarted.bottomNote}
                 </p>
               )}
@@ -175,7 +175,7 @@ export default function CombinedSection({ combinedSection }: CombinedSectionProp
         {faq && faqItems.length > 0 && (
           <div className="mb-16 lg:mb-24 max-w-5xl mx-auto">
             {faq.title && (
-              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-[#222222] text-center mb-12 lg:mb-16">
+              <h2 className="text-[5.3vw] xs:text-[3.5vw] sm:text-[3.2vw] md:text-[3.2vw] lg:text-[28px] xl:text-[34px] font-bold text-[#222222] text-center mb-12 lg:mb-16">
                 {faq.title}
               </h2>
             )}
@@ -188,12 +188,12 @@ export default function CombinedSection({ combinedSection }: CombinedSectionProp
                   className="bg-white p-6 lg:p-8"
                 >
                   {item.question && (
-                    <h3 className="text-base sm:text-lg font-semibold text-[#222222] mb-3">
+                    <h3 className="text-[4.3vw] xs:text-[2.6vw] sm:text-[2.5vw] md:text-[2.2vw] lg:text-[18px] xl:text-[24px] font-semibold text-[#222222] mb-3">
                       {item.question}
                     </h3>
                   )}
                   {item.answer && (
-                    <p className="text-sm sm:text-base text-[#565454] leading-relaxed">
+                    <p className="text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[16px] xl:text-[18px] text-[#565454] leading-relaxed">
                       {item.answer}
                     </p>
                   )}
@@ -207,7 +207,7 @@ export default function CombinedSection({ combinedSection }: CombinedSectionProp
         {transformExperience && (
           <div className="max-w-5xl mx-auto">
             {transformExperience.title && (
-              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-[#222222] text-center mb-8">
+              <h2 className="text-[5.3vw] xs:text-[3.5vw] sm:text-[3.2vw] md:text-[3.2vw] lg:text-[28px] xl:text-[34px] font-bold text-[#222222] text-center mb-8">
                 {transformExperience.title}
               </h2>
             )}
@@ -215,13 +215,13 @@ export default function CombinedSection({ combinedSection }: CombinedSectionProp
             {/* Content */}
             <div className="space-y-6 mb-8">
               {transformExperience.paragraph1 && (
-                <p className="text-base lg:text-lg text-[#565454] leading-relaxed">
+                <p className="text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[16px] xl:text-[18px] text-[#565454] leading-relaxed">
                   {transformExperience.paragraph1}
                 </p>
               )}
 
               {transformExperience.paragraph2 && (
-                <p className="text-base lg:text-lg text-[#565454] leading-relaxed">
+                <p className="text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[16px] xl:text-[18px] text-[#565454] leading-relaxed">
                   {transformExperience.paragraph2}
                 </p>
               )}
@@ -230,7 +230,7 @@ export default function CombinedSection({ combinedSection }: CombinedSectionProp
             {/* Quote Block */}
             {transformExperience.quoteText && (
               <div className="bg-[#1DEFFA15] p-6 lg:p-8">
-                <p className="text-sm lg:text-base text-[#565454]">
+                <p className="text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[16px] xl:text-[18px] text-[#565454]">
                   &ldquo;{transformExperience.quoteText}&rdquo;
                 </p>
               </div>

@@ -106,7 +106,7 @@ export default function PainPoints({ painPoints }: PainPointsProps) {
 
   return (
     <section className="relative bg-gray-50 py-16 lg:py-24 overflow-hidden" ref={sectionRef}>
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 xl:px-56">
+      <div className="section_container mx-auto page-padding-x">
         {titleText && (
           <motion.div 
             ref={titleRef}

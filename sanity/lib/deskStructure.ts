@@ -166,7 +166,24 @@ export const deskStructure = (S: StructureBuilder) =>
       S.listItem()
         .title("Partners Page")
         .schemaType("partnersPage")
-        .child(S.documentTypeList("partnersPage").title("Partners Pages")),
+        .child(
+          S.list()
+            .title("Partners")
+            .items([
+              S.listItem()
+                .title("Partners Pages")
+                .schemaType("partnersPage")
+                .child(S.documentTypeList("partnersPage").title("Partners Pages")),
+              S.listItem()
+                .title("Partner Categories")
+                .schemaType("partnerCategory")
+                .child(
+                  S.documentTypeList("partnerCategory")
+                    .title("Partner Categories")
+                    .filter('_type == "partnerCategory"')
+                ),
+            ])
+        ),
 
       // Merch Pages
       S.listItem()

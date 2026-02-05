@@ -32,16 +32,16 @@ export default function SuccessStories({ successStories }: SuccessStoriesProps) 
 
       {/* Main content */}
       <div className="py-20 lg:py-28">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="section_container mx-auto page-padding-x">
           {/* Title */}
           <div className="text-center mb-12 lg:mb-16">
             {title && (
-              <h2 className="text-3xl lg:text-4xl xl:text-[42px] font-bold text-gray-900 mb-4">
+              <h2 className="text-[5.3vw] xs:text-[3.5vw] sm:text-[3.2vw] md:text-[3.2vw] lg:text-[28px] xl:text-[34px] font-bold text-gray-900 mb-4">
                 {title}
               </h2>
             )}
             {subtitle && (
-              <p className="text-base lg:text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
+              <p className="text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[16px] xl:text-[18px] text-gray-600 max-w-2xl mx-auto leading-relaxed">
                 {subtitle}
               </p>
             )}
@@ -71,7 +71,7 @@ export default function SuccessStories({ successStories }: SuccessStoriesProps) 
                     {/* Dark overlay with client name at bottom */}
                     <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#1a1a1a] via-[#1a1a1a]/90 to-transparent pt-16 pb-4 px-4">
                       {study.clientName && (
-                        <h3 className="text-white font-bold text-lg lg:text-xl text-center">
+                        <h3 className="text-white font-bold text-[4.3vw] xs:text-[2.6vw] sm:text-[2.5vw] md:text-[2.2vw] lg:text-[18px] xl:text-[24px] text-center">
                           {study.clientName}
                         </h3>
                       )}
@@ -81,12 +81,12 @@ export default function SuccessStories({ successStories }: SuccessStoriesProps) 
                   {/* Content - white background */}
                   <div className="bg-white p-6 lg:p-8 flex-1 border-b border-gray-200">
                     {study.heading && (
-                      <h4 className="text-[#00BFC8] font-semibold text-lg lg:text-xl mb-3">
+                      <h4 className="text-[#00BFC8] font-semibold text-[4.3vw] xs:text-[2.6vw] sm:text-[2.5vw] md:text-[2.2vw] lg:text-[18px] xl:text-[24px] mb-3">
                         {study.heading}
                       </h4>
                     )}
                     {study.description && (
-                      <p className="text-gray-600 text-sm leading-relaxed">
+                      <p className="text-gray-600 text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[16px] xl:text-[18px] leading-relaxed">
                         {study.description}
                       </p>
                     )}

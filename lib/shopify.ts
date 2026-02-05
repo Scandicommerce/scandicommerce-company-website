@@ -258,6 +258,100 @@ const ADD_TO_CART_MUTATION = `
   }
 `
 
+const CART_LINES_UPDATE_MUTATION = `
+  mutation cartLinesUpdate($cartId: ID!, $lines: [CartLineUpdateInput!]!) {
+    cartLinesUpdate(cartId: $cartId, lines: $lines) {
+      cart {
+        id
+        checkoutUrl
+        totalQuantity
+        lines(first: 50) {
+          edges {
+            node {
+              id
+              quantity
+              merchandise {
+                ... on ProductVariant {
+                  id
+                  title
+                  price {
+                    amount
+                    currencyCode
+                  }
+                  product {
+                    title
+                    handle
+                    images(first: 1) {
+                      edges {
+                        node {
+                          url
+                          altText
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+        cost {
+          totalAmount { amount currencyCode }
+          subtotalAmount { amount currencyCode }
+        }
+      }
+      userErrors { field message }
+    }
+  }
+`
+
+const CART_LINES_REMOVE_MUTATION = `
+  mutation cartLinesRemove($cartId: ID!, $lineIds: [ID!]!) {
+    cartLinesRemove(cartId: $cartId, lineIds: $lineIds) {
+      cart {
+        id
+        checkoutUrl
+        totalQuantity
+        lines(first: 50) {
+          edges {
+            node {
+              id
+              quantity
+              merchandise {
+                ... on ProductVariant {
+                  id
+                  title
+                  price {
+                    amount
+                    currencyCode
+                  }
+                  product {
+                    title
+                    handle
+                    images(first: 1) {
+                      edges {
+                        node {
+                          url
+                          altText
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+        cost {
+          totalAmount { amount currencyCode }
+          subtotalAmount { amount currencyCode }
+        }
+      }
+      userErrors { field message }
+    }
+  }
+`
+
 const GET_CART_QUERY = `
   query getCart($cartId: ID!) {
     cart(id: $cartId) {
@@ -808,6 +902,38 @@ interface CartLinesAddData {
   }
 }
 
+interface CartLinesUpdateData {
+  cartLinesUpdate: {
+    cart: {
+      id: string
+      checkoutUrl: string
+      totalQuantity?: number
+      lines: { edges: Array<{ node: CartLine }> }
+      cost: {
+        totalAmount: { amount: string; currencyCode: string }
+        subtotalAmount: { amount: string; currencyCode: string }
+      }
+    } | null
+    userErrors: Array<{ field: string[]; message: string }>
+  }
+}
+
+interface CartLinesRemoveData {
+  cartLinesRemove: {
+    cart: {
+      id: string
+      checkoutUrl: string
+      totalQuantity?: number
+      lines: { edges: Array<{ node: CartLine }> }
+      cost: {
+        totalAmount: { amount: string; currencyCode: string }
+        subtotalAmount: { amount: string; currencyCode: string }
+      }
+    } | null
+    userErrors: Array<{ field: string[]; message: string }>
+  }
+}
+
 interface CartData {
   cart: {
     id: string
@@ -954,5 +1080,120 @@ export async function getCart(cartId: string): Promise<ShopifyCart | null> {
   } catch (error) {
     console.error('Error fetching cart:', error)
     return null
+  }
+}
+
+/** Ensure cart line id is in Shopify GID format so update/remove work. Some API versions require ?cart= for line ids. */
+function toCartLineGid(lineId: string, cartId: string): string {
+  if (lineId.startsWith('gid://')) {
+    if (lineId.includes('?cart=')) return lineId
+    return `${lineId}?cart=${encodeURIComponent(cartId)}`
+  }
+  const base = `gid://shopify/CartLine/${lineId}`
+  return `${base}?cart=${encodeURIComponent(cartId)}`
+}
+
+export async function updateCartLine(
+  cartId: string,
+  lineId: string,
+  quantity: number
+): Promise<{ cart: ShopifyCart | null; checkoutUrl: string | null; error: string | null }> {
+  try {
+    const lineGid = toCartLineGid(lineId, cartId)
+    const data = await shopifyFetch<CartLinesUpdateData>(CART_LINES_UPDATE_MUTATION, {
+      cartId,
+      lines: [{ id: lineGid, quantity }],
+    })
+
+    if (data.cartLinesUpdate.userErrors.length > 0) {
+      return {
+        cart: null,
+        checkoutUrl: null,
+        error: data.cartLinesUpdate.userErrors.map((e) => e.message).join(', '),
+      }
+    }
+
+    if (!data.cartLinesUpdate.cart) {
+      return {
+        cart: null,
+        checkoutUrl: null,
+        error: 'Failed to update cart',
+      }
+    }
+
+    const cart: ShopifyCart = {
+      id: data.cartLinesUpdate.cart.id,
+      checkoutUrl: data.cartLinesUpdate.cart.checkoutUrl,
+      lines: data.cartLinesUpdate.cart.lines.edges.map((edge) => edge.node),
+      totalQuantity:
+        data.cartLinesUpdate.cart.totalQuantity ??
+        data.cartLinesUpdate.cart.lines.edges.reduce((acc, edge) => acc + edge.node.quantity, 0),
+      cost: data.cartLinesUpdate.cart.cost,
+    }
+
+    return {
+      cart,
+      checkoutUrl: data.cartLinesUpdate.cart.checkoutUrl,
+      error: null,
+    }
+  } catch (error) {
+    console.error('Error updating cart line:', error)
+    return {
+      cart: null,
+      checkoutUrl: null,
+      error: error instanceof Error ? error.message : 'Failed to update cart',
+    }
+  }
+}
+
+export async function removeCartLine(
+  cartId: string,
+  lineId: string
+): Promise<{ cart: ShopifyCart | null; checkoutUrl: string | null; error: string | null }> {
+  try {
+    const lineGid = toCartLineGid(lineId, cartId)
+    const data = await shopifyFetch<CartLinesRemoveData>(CART_LINES_REMOVE_MUTATION, {
+      cartId,
+      lineIds: [lineGid],
+    })
+
+    if (data.cartLinesRemove.userErrors.length > 0) {
+      return {
+        cart: null,
+        checkoutUrl: null,
+        error: data.cartLinesRemove.userErrors.map((e) => e.message).join(', '),
+      }
+    }
+
+    if (!data.cartLinesRemove.cart) {
+      return {
+        cart: null,
+        checkoutUrl: null,
+        error: 'Failed to update cart',
+      }
+    }
+
+    const cart: ShopifyCart = {
+      id: data.cartLinesRemove.cart.id,
+      checkoutUrl: data.cartLinesRemove.cart.checkoutUrl,
+      lines: data.cartLinesRemove.cart.lines.edges.map((edge) => edge.node),
+      totalQuantity:
+        data.cartLinesRemove.cart.totalQuantity ??
+        data.cartLinesRemove.cart.lines.edges.reduce((acc, edge) => acc + edge.node.quantity, 0),
+      cost: data.cartLinesRemove.cart.cost,
+    }
+
+    return {
+      cart,
+      checkoutUrl: data.cartLinesRemove.cart.checkoutUrl,
+      error: null,
+    }
+  } catch (error) {
+    console.error('Error removing cart line:', error)
+    return {
+      cart: null,
+      checkoutUrl: null,
+      error: error instanceof Error ? error.message : 'Failed to remove from cart',
+    }
   }
 }

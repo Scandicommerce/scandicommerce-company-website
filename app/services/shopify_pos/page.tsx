@@ -5,6 +5,7 @@ import PerfectFor from '@/components/sections/services/shopify_pos/PerfectFor'
 import ReadyForOmnichannel from '@/components/sections/services/shopify_pos/ReadyForOmnichannel'
 import { client } from '@/sanity/lib/client'
 import { shopifyPosPageQuery } from '@/sanity/lib/queries'
+import { getQueryParams } from '@/sanity/lib/queryHelpers'
 import Hero from '@/components/layout/Hero'
 import { Button } from '@/components/ui'
 
@@ -52,7 +53,7 @@ async function getPageData(): Promise<ShopifyPosPageData | null> {
   try {
     const data = await client.fetch<ShopifyPosPageData>(
       shopifyPosPageQuery,
-      {},
+      getQueryParams({}),
       { next: { revalidate: 0 } }
     )
     return data

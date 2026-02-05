@@ -6,6 +6,7 @@ import RevenueForm from '@/components/sections/shopify/shopify_platform/RevenueF
 import SuccessStories from '@/components/sections/shopify/shopify_platform/SuccessStories'
 import { client } from '@/sanity/lib/client'
 import { shopifyPlatformPageQuery } from '@/sanity/lib/queries'
+import { getQueryParams } from '@/sanity/lib/queryHelpers'
 import Hero from '@/components/layout/Hero'
 
 // Disable caching - always fetch fresh data from Sanity
@@ -70,7 +71,7 @@ async function getPageData(): Promise<ShopifyPlatformPageData | null> {
   try {
     const data = await client.fetch<ShopifyPlatformPageData>(
       shopifyPlatformPageQuery,
-      {},
+      getQueryParams({}),
       { next: { revalidate: 0 } }
     )
     return data

@@ -11,22 +11,22 @@ interface BaseButtonProps {
 
 interface ButtonAsButton
   extends
-    BaseButtonProps,
-    Omit<
-      ButtonHTMLAttributes<HTMLButtonElement>,
-      'className' | 'type' | 'children'
-    > {
+  BaseButtonProps,
+  Omit<
+    ButtonHTMLAttributes<HTMLButtonElement>,
+    'className' | 'type' | 'children'
+  > {
   href?: never
   htmlType?: 'button' | 'submit' | 'reset'
 }
 
 interface ButtonAsLink
   extends
-    BaseButtonProps,
-    Omit<
-      AnchorHTMLAttributes<HTMLAnchorElement>,
-      'className' | 'children' | 'type'
-    > {
+  BaseButtonProps,
+  Omit<
+    AnchorHTMLAttributes<HTMLAnchorElement>,
+    'className' | 'children' | 'type'
+  > {
   href: string
   htmlType?: never
 }
@@ -42,7 +42,7 @@ export default function Button({
   ...props
 }: ButtonProps) {
   const baseStyles =
-    'inline-block min-w-[286px] lg:px-8 px-4 lg:py-4 py-2 transition-colors text-center w-full sm:w-auto'
+    'flex justify-center items-center gap-3 min-w-[286px] lg:px-8 px-4 lg:py-4 py-2 transition-colors text-center w-full sm:w-auto sm:text-base xs:text-sm text-xs'
 
   const typeStyles =
     type === 'primary'

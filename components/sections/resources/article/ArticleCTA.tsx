@@ -5,7 +5,7 @@ import Link from 'next/link'
 export default function ArticleCTA() {
   return (
     <section className="bg-[#EFEFEF] py-8 pb-16">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="section_container mx-auto page-padding-x">
         <div className="max-w-6xl mx-auto">
           <div className="bg-[#03C1CA] p-8 md:p-12 lg:p-16 text-center">
             <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-4">

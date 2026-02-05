@@ -43,7 +43,7 @@ export default function Hero({ hero }: HeroProps) {
         enableMouseFollow={true}
       />
         
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div className="section_container mx-auto page-padding-x relative z-10">
         <div className="flex flex-col items-center justify-center text-center">
           <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 lg:mb-6">
             {renderTitle()}

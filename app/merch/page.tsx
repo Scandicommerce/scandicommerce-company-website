@@ -7,6 +7,7 @@ import { getShopifyProducts } from '@/lib/shopify'
 import { Product } from '@/components/sections/merch/ProductCard'
 import { client } from '@/sanity/lib/client'
 import { merchPageQuery } from '@/sanity/lib/queries'
+import { getQueryParams } from '@/sanity/lib/queryHelpers'
 import Hero from '@/components/layout/Hero'
 
 export const dynamic = 'force-dynamic'
@@ -47,7 +48,7 @@ interface MerchPageData {
 export async function generateMetadata() {
   const data: MerchPageData = await client.fetch(
     merchPageQuery,
-    {},
+    getQueryParams({}),
     { next: { revalidate: 0 } }
   )
 
@@ -63,7 +64,7 @@ export default async function Merch() {
   // Fetch Sanity data
   const pageData: MerchPageData = await client.fetch(
     merchPageQuery,
-    {},
+    getQueryParams({}),
     { next: { revalidate: 0 } }
   )
 

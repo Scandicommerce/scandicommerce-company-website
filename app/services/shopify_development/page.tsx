@@ -7,6 +7,7 @@ import Testimonial from '@/components/sections/services/shopify_development/Test
 import ReadyToBuild from '@/components/sections/services/shopify_development/ReadyToBuild'
 import { client } from '@/sanity/lib/client'
 import { shopifyDevelopmentPageQuery } from '@/sanity/lib/queries'
+import { getQueryParams } from '@/sanity/lib/queryHelpers'
 import Hero from '@/components/layout/Hero'
 import { Button } from '@/components/ui'
 
@@ -75,7 +76,7 @@ async function getPageData(): Promise<ShopifyDevPageData | null> {
   try {
     const data = await client.fetch<ShopifyDevPageData>(
       shopifyDevelopmentPageQuery,
-      {},
+      getQueryParams({}),
       { next: { revalidate: 0 } }
     )
     return data

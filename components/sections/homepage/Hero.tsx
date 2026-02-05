@@ -107,8 +107,8 @@ export default function Hero({ hero }: HeroProps) {
   return (
     <section className="relative bg-[#F8F8F8] py-16 lg:py-24 overflow-hidden min-h-[calc(100vh-80px)] flex items-center justify-center">
       {/* Three.js Torus Knot Animation */}
-      <TorusKnotAnimation className="opacity-70 lg:right-[-25%] sm:right-[-4%] sm:top-0 top-[27vw] xs:top-2 lg:w-[100%] lg:h-[100%] md:w-[55vw] sm:w-[70vw] sm:h-[65vw] xs:w-[60%] xs:h-[40%] w-[90%] flex justify-center sm:justify-start`" />
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <TorusKnotAnimation className="opacity-70 lg:right-[-25%] sm:top-0 top-[27vw] xs:top-2 lg:w-[100%] lg:h-[100%] md:w-[55vw] sm:w-[70vw] sm:h-[65vw] xs:w-[60%] xs:h-[40%] w-[90%] flex justify-center sm:justify-start`" />
+      <div className="section_container mx-auto page-padding-x">
         <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-12 lg:gap-16">
           <motion.div
             className="relative space-y-8 lg:space-y-14 w-full lg:w-3/5"

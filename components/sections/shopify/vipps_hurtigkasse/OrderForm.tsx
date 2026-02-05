@@ -33,13 +33,13 @@ export default function OrderForm({ orderForm }: OrderFormProps) {
 
   return (
     <section id="order-form" className="bg-[#03C1CA] py-16 lg:py-24">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="section_container mx-auto page-padding-x">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-10">
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-4">
+            <h2 className="text-[5.3vw] xs:text-[3.5vw] sm:text-[3.2vw] md:text-[3.2vw] lg:text-[28px] xl:text-[34px] font-bold text-white mb-4">
               {title}
             </h2>
-            <p className="text-base lg:text-lg text-white/90">
+            <p className="text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[16px] xl:text-[18px] text-white/90">
               {description}
             </p>
           </div>

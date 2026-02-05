@@ -11,7 +11,7 @@ interface AuthorBioProps {
 export default function AuthorBio({ author }: AuthorBioProps) {
   return (
     <section className="bg-[#EFEFEF] py-8">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="section_container mx-auto page-padding-x">
         <div className="max-w-6xl mx-auto">
           <div className="bg-white shadow-sm p-8 lg:p-10">
             <div className="flex flex-col md:flex-row items-center md:items-start gap-6">

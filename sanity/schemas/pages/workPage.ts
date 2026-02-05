@@ -1,10 +1,16 @@
 import { defineField, defineType, defineArrayMember } from "sanity";
+import { languageField } from "../objects/language";
 
 export const workPage = defineType({
   name: "workPage",
   title: "Work / Portfolio Page",
   type: "document",
+  groups: [
+    { name: "content", title: "Content", default: true },
+    { name: "settings", title: "Settings" },
+  ],
   fields: [
+    languageField,
     defineField({
       name: "pageTitle",
       title: "Page Title",

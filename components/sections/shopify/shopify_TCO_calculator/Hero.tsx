@@ -49,7 +49,7 @@ export default function Hero({ hero, onPlatformSelect }: HeroProps) {
           enableMouseFollow={true}
         />
 
-        <div className="container flex flex-col justify-center items-center mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div className="section_container flex flex-col justify-center items-center mx-auto page-padding-x relative z-10">
           {/* Hero Content */}
           <div className="flex flex-col justify-start items-center gap-6 sm:w-3/4 2xl:w-1/2 w-full text-center">
             {titleText && (
@@ -71,7 +71,7 @@ export default function Hero({ hero, onPlatformSelect }: HeroProps) {
       <div className="relative z-20">
         {/* Platform Selection Buttons */}
         {platforms.length > 0 && (
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8 pb-12 lg:pb-16">
+          <div className="section_container mx-auto page-padding-x pb-12 lg:pb-16">
             <div className="w-full max-w-5xl mx-auto">
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2 lg:gap-4">
                 {platforms.map((platform) => (

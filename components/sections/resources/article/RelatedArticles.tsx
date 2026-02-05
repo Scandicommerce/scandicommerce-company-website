@@ -12,7 +12,7 @@ interface RelatedArticlesProps {
 export default function RelatedArticles({ articles }: RelatedArticlesProps) {
   return (
     <section className="bg-[#EFEFEF] py-12 lg:py-16">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="section_container mx-auto page-padding-x">
         <h2 className="text-2xl md:text-3xl font-bold text-[#1F1D1D] text-center mb-10">
           Related Articles
         </h2>

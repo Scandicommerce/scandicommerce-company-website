@@ -1,10 +1,16 @@
 import { defineArrayMember, defineField, defineType } from "sanity";
+import { languageField } from "../objects/language";
 
 export const shopifyPlatformPage = defineType({
   name: "shopifyPlatformPage",
   title: "Shopify Platform Page",
   type: "document",
+  groups: [
+    { name: "content", title: "Content", default: true },
+    { name: "settings", title: "Settings" },
+  ],
   fields: [
+    languageField,
     defineField({
       name: "pageTitle",
       title: "Page Title",

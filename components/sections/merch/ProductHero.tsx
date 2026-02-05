@@ -54,7 +54,7 @@ export default function ProductHero({ product }: ProductHeroProps) {
 
   return (
     <section className="bg-[#F5F5F5] py-8 lg:py-16">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="section_container mx-auto page-padding-x">
         <div className="overflow-hidden">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 p-6 lg:p-12">
             <div className="space-y-4">

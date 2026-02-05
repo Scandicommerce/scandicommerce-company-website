@@ -20,12 +20,12 @@ export default function MapSection({ mapSection }: MapSectionProps) {
 
   return (
     <section className="py-12 lg:py-16 bg-white">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="section_container mx-auto page-padding-x">
         <div className="text-center mb-8">
-          <h2 className="text-2xl lg:text-3xl font-bold text-gray-900 mb-2">
+          <h2 className="text-[5.3vw] xs:text-[3.5vw] sm:text-[3.2vw] md:text-[3.2vw] lg:text-[28px] xl:text-[34px] font-bold text-gray-900 mb-2">
             {title}
           </h2>
-          <p className="text-sm text-gray-500">
+          <p className="text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[16px] xl:text-[18px] text-gray-500">
             {description}
           </p>
         </div>

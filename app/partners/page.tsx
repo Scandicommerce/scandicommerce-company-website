@@ -4,11 +4,18 @@ import WhyOurPartnership from '@/components/sections/partners/WhyOurPartnership'
 import PartnersGrid from '@/components/sections/partners/PartnersGrid'
 import BecomeAPartner from '@/components/sections/partners/BecomeAPartner'
 import { client } from '@/sanity/lib/client'
-import { partnersPageQuery } from '@/sanity/lib/queries'
+import { partnersPageQuery, partnerCategoriesQuery } from '@/sanity/lib/queries'
+import { getQueryParams } from '@/sanity/lib/queryHelpers'
 import Hero from '@/components/layout/Hero'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
+
+export interface PartnerCategoryItem {
+  _id: string
+  title: string
+  icon?: string
+}
 
 interface PartnersPageData {
   _id: string
@@ -33,10 +40,11 @@ interface PartnersPageData {
     partners?: {
       name?: string
       category?: string
+      categories?: PartnerCategoryItem[] | string[]
       description?: string
       benefits?: string[]
-      imageUrl?: string
-      logoUrl?: string
+      image?: { asset?: { _id?: string; url?: string }; crop?: unknown; hotspot?: unknown }
+      logo?: { asset?: { _id?: string; url?: string }; crop?: unknown; hotspot?: unknown }
     }[]
   }
   cta?: {
@@ -52,19 +60,18 @@ interface PartnersPageData {
 }
 
 export default async function Partners() {
-  const pageData: PartnersPageData = await client.fetch(
-    partnersPageQuery,
-    {},
-    { next: { revalidate: 0 } }
-  )
+  const [pageData, categoryList] = await Promise.all([
+    client.fetch<PartnersPageData>(partnersPageQuery, getQueryParams({}), { next: { revalidate: 0 } }),
+    client.fetch<PartnerCategoryItem[]>(partnerCategoriesQuery, {}, { next: { revalidate: 0 } }),
+  ])
 
   return (
     <div className="flex flex-col min-h-screen">
       <HeaderWrapper />
       <main className="flex-grow">
-        <Hero hero={pageData.hero} />
+        <Hero hero={pageData?.hero} />
         <WhyOurPartnership whyOurPartnership={pageData?.whyOurPartnership} />
-        <PartnersGrid partnersGrid={pageData?.partnersGrid} />
+        <PartnersGrid partnersGrid={pageData?.partnersGrid} categoryList={categoryList ?? undefined} />
         <BecomeAPartner cta={pageData?.cta} />
         <FooterWrapper />
       </main>

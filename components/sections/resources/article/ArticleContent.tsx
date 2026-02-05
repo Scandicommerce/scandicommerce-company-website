@@ -11,7 +11,7 @@ interface ArticleContentProps {
 export default function ArticleContent({ article }: ArticleContentProps) {
   return (
     <section className="bg-[#EFEFEF] py-12 lg:py-16">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="section_container mx-auto page-padding-x">
         {/* Featured Image */}
         <div className="max-w-6xl mx-auto mb-12 px-8 lg:px-10">
           <div className="relative w-full h-[400px] md:h-[500px] lg:h-[600px] xl:h-[700px] overflow-hidden shadow-lg">

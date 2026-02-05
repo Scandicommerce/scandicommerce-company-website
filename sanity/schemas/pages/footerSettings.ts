@@ -1,10 +1,16 @@
 import { defineField, defineType, defineArrayMember } from "sanity";
+import { languageField } from "../objects/language";
 
 export const footerSettings = defineType({
   name: "footerSettings",
   title: "Footer Settings",
   type: "document",
+  groups: [
+    { name: "content", title: "Content", default: true },
+    { name: "settings", title: "Settings" },
+  ],
   fields: [
+    languageField,
     defineField({
       name: "settingsTitle",
       title: "Settings Title",

@@ -82,7 +82,7 @@ export default function RelatedProducts({
 
   return (
     <section className="bg-white py-12 lg:py-20">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="section_container mx-auto page-padding-x">
         <h2 className="text-2xl lg:text-3xl xl:text-4xl font-bold text-[#222222] text-center mb-10 lg:mb-12">
           {title}
         </h2>

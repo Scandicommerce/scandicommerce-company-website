@@ -5,6 +5,7 @@ import OmnichannelFeatures from '@/components/sections/shopify/shopify_POS/Omnic
 import RevenueForm from '@/components/sections/shopify/shopify_POS/RevenueForm'
 import { client } from '@/sanity/lib/client'
 import { shopifyPosInfoPageQuery } from '@/sanity/lib/queries'
+import { getQueryParams } from '@/sanity/lib/queryHelpers'
 import Hero from '@/components/layout/Hero'
 
 // Disable caching - always fetch fresh data from Sanity
@@ -62,7 +63,7 @@ async function getPageData(): Promise<ShopifyPosInfoPageData | null> {
   try {
     const data = await client.fetch<ShopifyPosInfoPageData>(
       shopifyPosInfoPageQuery,
-      {},
+      getQueryParams({}),
       { next: { revalidate: 0 } }
     )
     return data

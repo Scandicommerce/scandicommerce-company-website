@@ -17,7 +17,7 @@ export default function GetShopifyInsitesDelivered({ newsletterCta }: GetShopify
 
   return (
     <section className="bg-[#03C1CA] py-16 lg:py-[170px]">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="section_container mx-auto page-padding-x">
         <div className="text-center flex flex-col items-center justify-start lg:gap-[91px] gap-16">
           <div className="flex flex-col items-center justify-start lg:gap-7 gap-4">
             <h2 className="lg:text-[48px] sm:text-4xl text-3xl font-bold text-white mb-4 lg:mb-6">

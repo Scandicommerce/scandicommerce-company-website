@@ -37,9 +37,9 @@ export default function HowToGetStarted({ howToGetStarted }: HowToGetStartedProp
 
   return (
     <section className="bg-[#F8F8F8] py-16 lg:py-24">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="section_container mx-auto page-padding-x">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-[#222222] mb-8 lg:mb-12">
+          <h2 className="text-[5.3vw] xs:text-[3.5vw] sm:text-[3.2vw] md:text-[3.2vw] lg:text-[28px] xl:text-[34px] font-bold text-[#222222] mb-8 lg:mb-12">
             {title}
           </h2>
 
@@ -52,19 +52,19 @@ export default function HowToGetStarted({ howToGetStarted }: HowToGetStartedProp
                   </div>
                   <div className="flex-grow">
                     {step.title && (
-                      <h3 className="text-lg lg:text-xl font-semibold text-[#222222] mb-3">
+                      <h3 className="text-[4.3vw] xs:text-[2.6vw] sm:text-[2.5vw] md:text-[2.2vw] lg:text-[18px] xl:text-[24px] font-semibold text-[#222222] mb-3">
                         {step.title}
                       </h3>
                     )}
                     {step.description && (
-                      <p className="text-sm lg:text-base text-[#565454] leading-relaxed">
+                      <p className="text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[16px] xl:text-[18px] text-[#565454] leading-relaxed">
                         {step.description}
                       </p>
                     )}
                     {step.subSteps && step.subSteps.length > 0 && (
                       <ul className="space-y-3 mt-3">
                         {step.subSteps.map((subStep, subIndex) => (
-                          <li key={subIndex} className="flex items-start gap-3 text-sm lg:text-base text-[#565454]">
+                          <li key={subIndex} className="flex items-start gap-3 text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[16px] xl:text-[18px] text-[#565454]">
                             <span className="text-[#03C1CA] font-bold mt-0.5">•</span>
                             <span>{subStep}</span>
                           </li>

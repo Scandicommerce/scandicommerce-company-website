@@ -7,12 +7,18 @@ import { resultsSection } from "../components/resultsSection";
 import { processSection } from "../components/processSection";
 import { partnersSection } from "../components/partnersSection";
 import { ctaSection } from "../components/ctaSection";
+import { languageField } from "../objects/language";
 
 export const landingPage = defineType({
   name: "landingPage",
   title: "Landing Page",
   type: "document",
+  groups: [
+    { name: "content", title: "Content", default: true },
+    { name: "settings", title: "Settings" },
+  ],
   fields: [
+    languageField,
     defineField({
       name: "pageTitle",
       title: "Page Title",
@@ -74,11 +80,12 @@ export const landingPage = defineType({
     select: {
       title: "pageTitle",
       isHomepage: "isHomepage",
+      language: "language",
     },
-    prepare({ title, isHomepage }) {
+    prepare({ title, isHomepage, language }) {
       return {
         title: title || "Untitled Landing Page",
-        subtitle: isHomepage ? "🏠 Homepage" : "Landing Page",
+        subtitle: `${isHomepage ? "🏠 Homepage" : "Landing Page"} • ${language || "en"}`,
       };
     },
   },

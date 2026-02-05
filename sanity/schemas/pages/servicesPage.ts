@@ -1,12 +1,18 @@
 import { defineField, defineType, defineArrayMember } from "sanity";
 import { heroSection } from "../components/heroSection";
 import { ctaSection } from "../components/ctaSection";
+import { languageField } from "../objects/language";
 
 export const servicesPage = defineType({
   name: "servicesPage",
   title: "Services Page",
   type: "document",
+  groups: [
+    { name: "content", title: "Content", default: true },
+    { name: "settings", title: "Settings" },
+  ],
   fields: [
+    languageField,
     defineField({
       name: "pageTitle",
       title: "Page Title",
@@ -79,11 +85,12 @@ export const servicesPage = defineType({
   preview: {
     select: {
       title: "pageTitle",
+      language: "language",
     },
-    prepare({ title }) {
+    prepare({ title, language }) {
       return {
         title: title || "Untitled Services Page",
-        subtitle: "Services Page",
+        subtitle: `Services Page • ${language || "en"}`,
       };
     },
   },

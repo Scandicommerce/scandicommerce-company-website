@@ -58,13 +58,13 @@ const defaultCards: CardData[] = [
 const getIcon = (iconName?: string) => {
   switch (iconName) {
     case 'email':
-      return <HiOutlineMail size={28} />
+      return <HiOutlineMail className='w-5 h-5 xs:w-6 xs:h-6 sm:w-7 sm:h-7' />
     case 'phone':
-      return <FiPhone size={28} />
+      return <FiPhone className='w-5 h-5 xs:w-6 xs:h-6 sm:w-7 sm:h-7' />
     case 'location':
-      return <HiOutlineLocationMarker size={28} />
+      return <HiOutlineLocationMarker className='w-5 h-5 xs:w-6 xs:h-6 sm:w-7 sm:h-7' />
     default:
-      return <HiOutlineMail size={28} />
+      return <HiOutlineMail className='w-5 h-5 xs:w-6 xs:h-6 sm:w-7 sm:h-7' />
   }
 }
 
@@ -73,14 +73,14 @@ function ContactCard({ icon, title, subtitle, detail, href, showLeftBorder, show
 
   const content = (
     <div className={`flex flex-col items-center text-center py-6 px-8 bg-white ${borderClasses}`}>
-      <div className="w-14 h-14 md:w-16 md:h-16 rounded-full bg-[#03C1CA] flex items-center justify-center mb-4">
+      <div className="w-10 h-10 xs:w-12 xs:h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-full bg-[#03C1CA] flex items-center justify-center mb-4">
         <div className="text-white text-xl md:text-2xl">
           {icon}
         </div>
       </div>
-      <h3 className="text-base md:text-lg font-bold text-gray-900 mb-2">{title}</h3>
-      <p className="text-xs md:text-sm text-gray-500 mb-1">{subtitle}</p>
-      <p className="text-xs md:text-sm text-[#03C1CA] font-medium">{detail}</p>
+      <h3 className="text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[16px] xl:text-[18px] font-bold text-gray-900 mb-2">{title}</h3>
+      <p className="text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[16px] xl:text-[18px] text-gray-500 mb-1">{subtitle}</p>
+      <p className="text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[16px] xl:text-[18px] text-[#03C1CA] font-medium">{detail}</p>
     </div>
   )
 
@@ -102,7 +102,7 @@ export default function ContactCards({ contactCards }: ContactCardsProps) {
 
   return (
     <section className="py-8 md:py-12 lg:py-16 bg-white">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="section_container mx-auto page-padding-x">
         <div className="flex flex-col md:flex-row items-stretch justify-center">
           {cards.map((card, index) => (
             <ContactCard

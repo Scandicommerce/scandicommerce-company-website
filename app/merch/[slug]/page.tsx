@@ -9,6 +9,7 @@ import { getShopifyProductByHandle, getShopifyRelatedProducts, getShopifyProduct
 import { notFound } from 'next/navigation'
 import { client } from '@/sanity/lib/client'
 import { merchProductSettingsQuery } from '@/sanity/lib/queries'
+import { getQueryParams } from '@/sanity/lib/queryHelpers'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -64,7 +65,7 @@ export default async function ProductDetailPage({
   // Fetch Sanity settings
   const settings: MerchProductSettingsData = await client.fetch(
     merchProductSettingsQuery,
-    {},
+    getQueryParams({}),
     { next: { revalidate: 0 } }
   )
 

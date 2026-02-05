@@ -27,16 +27,16 @@ export default function TimeSavings({ timeSavings }: TimeSavingsProps) {
 
   return (
     <section className="bg-[#1F1D1D] py-16 lg:py-24">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="section_container mx-auto page-padding-x">
         {/* Header */}
         <div className="text-center mb-12 lg:mb-16">
           {title && (
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white mb-4">
+            <h2 className="text-[5.3vw] xs:text-[3.5vw] sm:text-[3.2vw] md:text-[3.2vw] lg:text-[28px] xl:text-[34px] font-bold text-white mb-4">
               {title}
             </h2>
           )}
           {description && (
-            <p className="text-base lg:text-lg text-white/80 max-w-5xl mx-auto">
+            <p className="text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[16px] xl:text-[18px] text-white/80 max-w-5xl mx-auto">
               {description}
             </p>
           )}
@@ -51,17 +51,17 @@ export default function TimeSavings({ timeSavings }: TimeSavingsProps) {
                 className="bg-[#2A2828] p-6 lg:p-8"
               >
                 {card.title && (
-                  <h3 className="text-lg lg:text-xl font-semibold text-white mb-3 text-center">
+                  <h3 className="text-[4.3vw] xs:text-[2.6vw] sm:text-[2.5vw] md:text-[2.2vw] lg:text-[18px] xl:text-[24px] font-semibold text-white mb-3 text-center">
                     {card.title}
                   </h3>
                 )}
                 {card.description && (
-                  <p className="text-sm lg:text-base text-white/70 text-center mb-4">
+                  <p className="text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[16px] xl:text-[18px] text-white/70 text-center mb-4">
                     {card.description}
                   </p>
                 )}
                 {card.hours && (
-                  <p className="text-[#03C1CA] font-semibold text-center">
+                  <p className="text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[16px] xl:text-[18px] text-[#03C1CA] font-semibold text-center">
                     Hours saved per week: {card.hours}
                   </p>
                 )}
@@ -74,12 +74,12 @@ export default function TimeSavings({ timeSavings }: TimeSavingsProps) {
         {(summaryTitle || summaryDescription) && (
           <div className="bg-[#2A2828] p-6 lg:p-8 max-w-5xl mx-auto text-center">
             {summaryTitle && (
-              <h3 className="text-xl lg:text-2xl font-bold text-white mb-4">
+              <h3 className="text-[5.3vw] xs:text-[3.5vw] sm:text-[3.2vw] md:text-[3.2vw] lg:text-[28px] xl:text-[34px] font-bold text-white mb-4">
                 {summaryTitle}
               </h3>
             )}
             {summaryDescription && (
-              <p className="text-sm lg:text-base text-white/70">
+              <p className="text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[16px] xl:text-[18px] text-white/70">
                 {summaryDescription}
               </p>
             )}

@@ -27,12 +27,12 @@ export default function RisksAndProtection({ risksProtection }: RisksAndProtecti
 
   return (
     <section className="bg-[#F8F8F8] py-16 lg:py-[170px]">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="section_container mx-auto page-padding-x">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
           {/* Left Column: Migration risks we eliminate */}
           <div>
             {risksTitle && (
-              <h2 className="text-xl sm:text-3xl xl:text-4xl lg:text-start text-center font-bold text-[#1F1D1D] mb-8 lg:mb-12">
+              <h2 className="text-[5.3vw] xs:text-[3.5vw] sm:text-[3.2vw] md:text-[3.2vw] lg:text-[28px] xl:text-[34px] text-center font-bold text-[#1F1D1D] mb-8 lg:mb-12">
                 {risksTitle}
               </h2>
             )}
@@ -44,7 +44,7 @@ export default function RisksAndProtection({ risksProtection }: RisksAndProtecti
                     className="bg-white h-[98px] p-6 flex items-center gap-4 backdrop-blur-[10px]"
                   >
                     <HiXMark className="w-6 h-6 text-[#000000] flex-shrink-0" />
-                    <p className="text-base lg:text-lg text-[#565454]">
+                    <p className="text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[16px] xl:text-[18px] text-[#565454]">
                       {risk.text}
                     </p>
                   </div>
@@ -56,7 +56,7 @@ export default function RisksAndProtection({ risksProtection }: RisksAndProtecti
           {/* Right Column: How we protect your business */}
           <div>
             {protectionTitle && (
-              <h2 className="text-xl sm:text-3xl xl:text-4xl lg:text-start text-center font-bold text-[#1F1D1D] mb-8 lg:mb-12">
+              <h2 className="text-[5.3vw] xs:text-[3.5vw] sm:text-[3.2vw] md:text-[3.2vw] lg:text-[28px] xl:text-[34px] text-center font-bold text-[#1F1D1D] mb-8 lg:mb-12">
                 {protectionTitle}
               </h2>
             )}
@@ -70,12 +70,12 @@ export default function RisksAndProtection({ risksProtection }: RisksAndProtecti
                     <IoCheckmarkSharp className="w-6 h-6 text-[#03C1CA] flex-shrink-0" />
                     <div>
                       {protection.title && (
-                        <h3 className="text-base lg:text-lg font-bold text-[#565454] mb-1">
+                        <h3 className="text-[4.3vw] xs:text-[2.6vw] sm:text-[2.5vw] md:text-[2.2vw] lg:text-[18px] xl:text-[24px] font-bold text-[#565454] mb-1">
                           {protection.title}
                         </h3>
                       )}
                       {protection.description && (
-                        <p className="text-sm lg:text-base text-[#565454]">
+                        <p className="text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[16px] xl:text-[18px] text-[#565454]">
                           {protection.description}
                         </p>
                       )}

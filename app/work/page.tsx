@@ -5,6 +5,7 @@ import CTA from '@/components/sections/work/CTA'
 import Hero from '@/components/layout/Hero'
 import { client } from '@/sanity/lib/client'
 import { workPageQuery } from '@/sanity/lib/queries'
+import { getQueryParams } from '@/sanity/lib/queryHelpers'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -51,7 +52,7 @@ interface WorkPageData {
 export default async function Work() {
   const pageData: WorkPageData = await client.fetch(
     workPageQuery,
-    {},
+    getQueryParams({}),
     { next: { revalidate: 0 } }
   )
 

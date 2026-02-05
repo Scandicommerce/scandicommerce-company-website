@@ -9,6 +9,7 @@ import FAQ from '@/components/sections/shopify/shopify_x_AI/FAQ'
 import CTA from '@/components/sections/shopify/shopify_x_AI/CTA'
 import { client } from '@/sanity/lib/client'
 import { shopifyXAiPageQuery } from '@/sanity/lib/queries'
+import { getQueryParams } from '@/sanity/lib/queryHelpers'
 import Hero from '@/components/layout/Hero'
 
 // Disable caching - always fetch fresh data from Sanity
@@ -76,7 +77,7 @@ async function getPageData(): Promise<ShopifyXAiPageData | null> {
   try {
     const data = await client.fetch<ShopifyXAiPageData>(
       shopifyXAiPageQuery,
-      {},
+      getQueryParams({}),
       { next: { revalidate: 0 } }
     )
     return data

@@ -5,6 +5,7 @@ import FeaturedArticle from '@/components/sections/resources/FeaturedArticle'
 import GetShopifyInsitesDelivered from '@/components/sections/resources/GetShopifyInsitesDelivered'
 import { client } from '@/sanity/lib/client'
 import { blogPageQuery } from '@/sanity/lib/queries'
+import { getQueryParams } from '@/sanity/lib/queryHelpers'
 import Hero from '@/components/layout/Hero'
 
 export const dynamic = 'force-dynamic'
@@ -62,7 +63,7 @@ interface BlogPageData {
 export default async function Resources() {
   const pageData: BlogPageData = await client.fetch(
     blogPageQuery,
-    {},
+    getQueryParams({}),
     { next: { revalidate: 0 } }
   )
 

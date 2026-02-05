@@ -1,7 +1,8 @@
 'use client'
 
-import React, { useState } from 'react'
+import React from 'react'
 import Image from 'next/image'
+import HubSpotFormEmbed from './HubSpotFormEmbed'
 
 interface RevenueFormData {
   title?: string
@@ -26,26 +27,6 @@ interface RevenueFormProps {
 }
 
 export default function RevenueForm({ revenueForm }: RevenueFormProps) {
-  const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    phone: '',
-    company: '',
-  })
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    console.log('Form submitted:', formData)
-  }
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    })
-  }
-
   const title = revenueForm?.title
   const subtitle = revenueForm?.subtitle
   const testimonial = revenueForm?.testimonial
@@ -57,16 +38,16 @@ export default function RevenueForm({ revenueForm }: RevenueFormProps) {
       <div className="bg-[#00BFC8]">
         {/* Top section with title and testimonial */}
         <div className="pt-16 pb-8 lg:pt-20 lg:pb-12">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="section_container mx-auto page-padding-x">
             {/* Title */}
             <div className="text-center mb-10">
               {title && (
-                <h2 className="text-3xl lg:text-4xl xl:text-[42px] font-bold text-white mb-4">
+                <h2 className="text-[5.3vw] xs:text-[3.5vw] sm:text-[3.2vw] md:text-[3.2vw] lg:text-[28px] xl:text-[34px] font-bold text-white mb-4">
                   {title}
                 </h2>
               )}
               {subtitle && (
-                <p className="text-white/90 max-w-2xl mx-auto leading-relaxed" style={{ fontSize: '0.99rem' }}>
+                <p className="text-white/90 max-w-2xl mx-auto leading-relaxed text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[14px] xl:text-[16px]" >
                   {subtitle}
                 </p>
               )}
@@ -118,12 +99,12 @@ export default function RevenueForm({ revenueForm }: RevenueFormProps) {
 
         {/* Form section - white card */}
         <div className="pb-[4.5rem]">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="section_container mx-auto page-padding-x">
             <div className="w-full max-w-5xl lg:w-[75%] mx-auto bg-white shadow-2xl px-8 py-10 lg:px-16 lg:py-16">
               {/* Form header */}
               <div className="text-center mb-10">
                 {form?.formTitle && (
-                  <h3 className="text-2xl lg:text-3xl font-bold text-gray-900 mb-3">
+                  <h3 className="text-[5.3vw] xs:text-[3.5vw] sm:text-[3.2vw] md:text-[3.2vw] lg:text-[28px] xl:text-[34px] font-bold text-gray-900 mb-3">
                     {form.formTitle}
                   </h3>
                 )}
@@ -133,124 +114,16 @@ export default function RevenueForm({ revenueForm }: RevenueFormProps) {
                   </p>
                 )}
                 {form?.formDescription && (
-                  <p className="text-gray-600 text-sm">
+                  <p className="text-gray-600 text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[14px] xl:text-[16px]">
                     {form.formDescription}
                   </p>
                 )}
               </div>
 
-              {/* Form */}
-              <form onSubmit={handleSubmit}>
-                {/* First Name / Last Name */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
-                  <div>
-                    <label className="block text-sm text-gray-700 mb-2">
-                      First Name*
-                    </label>
-                    <input
-                      type="text"
-                      name="firstName"
-                      required
-                      value={formData.firstName}
-                      onChange={handleChange}
-                      className="w-full py-3 border-b border-gray-300 focus:outline-none focus:border-[#00BFC8] bg-transparent text-gray-900"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm text-gray-700 mb-2">
-                      Last Name*
-                    </label>
-                    <input
-                      type="text"
-                      name="lastName"
-                      required
-                      value={formData.lastName}
-                      onChange={handleChange}
-                      className="w-full py-3 border-b border-gray-300 focus:outline-none focus:border-[#00BFC8] bg-transparent text-gray-900"
-                    />
-                  </div>
-                </div>
-
-                {/* Email / Phone */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
-                  <div>
-                    <label className="block text-sm text-gray-700 mb-2">
-                      Email*
-                    </label>
-                    <input
-                      type="email"
-                      name="email"
-                      required
-                      value={formData.email}
-                      onChange={handleChange}
-                      className="w-full py-3 border-b border-gray-300 focus:outline-none focus:border-[#00BFC8] bg-transparent text-gray-900"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-sm text-gray-700 mb-2">
-                      Mobile Phone Number*
-                    </label>
-                    <input
-                      type="tel"
-                      name="phone"
-                      required
-                      value={formData.phone}
-                      onChange={handleChange}
-                      className="w-full py-3 border-b border-gray-300 focus:outline-none focus:border-[#00BFC8] bg-transparent text-gray-900"
-                    />
-                  </div>
-                </div>
-
-                {/* Company */}
-                <div className="mb-8 sm:w-1/2">
-                  <label className="block text-sm text-gray-700 mb-2">
-                    Company name*
-                  </label>
-                  <input
-                    type="text"
-                    name="company"
-                    required
-                    value={formData.company}
-                    onChange={handleChange}
-                    className="w-full py-3 border-b border-gray-300 focus:outline-none focus:border-[#00BFC8] bg-transparent text-gray-900"
-                  />
-                </div>
-
-                {/* reCAPTCHA and Privacy */}
-                <div className="flex flex-col sm:flex-row items-start gap-8 mb-10">
-                  {/* reCAPTCHA badge */}
-                  <div className="flex items-stretch flex-shrink-0">
-                    <div className="bg-[#1A9FD9] px-6 py-4 rounded-l">
-                      <p className="font-bold text-white text-base">protected by reCAPTCHA</p>
-                      <p className="text-sm text-[#00E5CC]">Privacy - Terms</p>
-                    </div>
-                    <div className="bg-[#F5F5F5] px-5 flex items-center justify-center rounded-r">
-                      <Image
-                        src="/images/shopify/shopify_platform/RecaptchaLogo.svg 1.png"
-                        alt="reCAPTCHA"
-                        width={48}
-                        height={48}
-                        className="w-12 h-12 object-contain"
-                      />
-                    </div>
-                  </div>
-
-                  {/* Privacy text */}
-                  <p className="text-sm text-gray-600 leading-relaxed flex-1">
-                    scandicommerce.no needs the contact information you provide to us to contact you about our products and services. You may unsubscribe from these communications at any time. For information on how to unsubscribe, as well as our privacy practices and commitment to protecting your privacy, please review our Privacy Policy.
-                  </p>
-                </div>
-
-                {/* Submit button */}
-                <div className="flex justify-center">
-                  <button
-                    type="submit"
-                    className="w-full sm:w-[70%] lg:w-[60%] bg-[#00BFC8] text-white py-4 px-6 rounded font-semibold text-lg hover:bg-[#00A8B0] transition-colors"
-                  >
-                    {form?.submitButtonText || 'Submit'}
-                  </button>
-                </div>
-              </form>
+              {/* HubSpot form embed */}
+              <div className="[&_.hs-form-frame]:min-h-[400px]">
+                <HubSpotFormEmbed />
+              </div>
 
               {/* Bottom section with HubSpot and trust signals - on white background */}
               <div className="mt-10 pt-8 pb-[4.5rem]">

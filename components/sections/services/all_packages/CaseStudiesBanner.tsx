@@ -22,11 +22,11 @@ export default function CaseStudiesBanner({ packageName, caseStudiesBanner }: Ca
 
   return (
     <section className="bg-[#F8F8F8] py-12 lg:py-16">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="section_container mx-auto page-padding-x">
         <div className="max-w-5xl mx-auto">
           {/* Teal banner with rounded corners */}
           <div className="bg-[#03C1CA] rounded-lg py-16 lg:py-20 px-8 text-center">
-            <h2 className="text-2xl lg:text-3xl font-bold text-white mb-4">
+            <h2 className="text-[5.3vw] xs:text-[3.5vw] sm:text-[3.2vw] md:text-[3.2vw] lg:text-[28px] xl:text-[34px] font-bold text-white mb-4">
               {title}
             </h2>
             <p className="text-base lg:text-lg text-white/90 mb-8">

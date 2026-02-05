@@ -1,4 +1,5 @@
 import { groq } from "next-sanity";
+import { defaultLanguage } from "./languages";
 
 // ============================================
 // Image Fragment
@@ -17,11 +18,17 @@ const imageFragment = groq`
 `;
 
 // ============================================
+// Helper: Language filter
+// ============================================
+// Use this in queries: language == $language || language == null
+// This allows fetching documents with a specific language or without language set (legacy)
+
+// ============================================
 // Landing Page Query
 // ============================================
 
 export const landingPageQuery = groq`
-  *[_type == "landingPage" && slug.current == $slug][0] {
+  *[_type == "landingPage" && slug.current == $slug && (language == $language || !defined(language))][0] {
     _id,
     pageTitle,
     "slug": slug.current,
@@ -143,7 +150,7 @@ export const landingPageQuery = groq`
 `;
 
 export const homepageQuery = groq`
-  *[_type == "landingPage" && isHomepage == true][0] {
+  *[_type == "landingPage" && isHomepage == true && (language == $language || !defined(language))][0] {
     _id,
     pageTitle,
     "slug": slug.current,
@@ -264,7 +271,7 @@ export const homepageQuery = groq`
 `;
 
 export const allLandingPagesQuery = groq`
-  *[_type == "landingPage"] | order(pageTitle asc) {
+  *[_type == "landingPage" && (language == $language || !defined(language))] | order(pageTitle asc) {
     _id,
     pageTitle,
     "slug": slug.current,
@@ -277,7 +284,7 @@ export const allLandingPagesQuery = groq`
 // ============================================
 
 export const servicesPageQuery = groq`
-  *[_type == "servicesPage" && slug.current == $slug][0] {
+  *[_type == "servicesPage" && slug.current == $slug && (language == $language || !defined(language))][0] {
     _id,
     title,
     "slug": slug.current,
@@ -294,7 +301,7 @@ export const servicesPageQuery = groq`
 // ============================================
 
 export const shopifyDevelopmentPageQuery = groq`
-  *[_type == "shopifyDevelopmentPage"][0] {
+  *[_type == "shopifyDevelopmentPage" && (language == $language || !defined(language))][0] {
     _id,
     pageTitle,
     "slug": slug.current,
@@ -361,7 +368,7 @@ export const shopifyDevelopmentPageQuery = groq`
 // ============================================
 
 export const migratePageQuery = groq`
-  *[_type == "migratePage"][0] {
+  *[_type == "migratePage" && (language == $language || !defined(language))][0] {
     _id,
     pageTitle,
     "slug": slug.current,
@@ -430,7 +437,7 @@ export const migratePageQuery = groq`
 // ============================================
 
 export const shopifyPosPageQuery = groq`
-  *[_type == "shopifyPosPage"][0] {
+  *[_type == "shopifyPosPage" && (language == $language || !defined(language))][0] {
     _id,
     pageTitle,
     "slug": slug.current,
@@ -476,7 +483,7 @@ export const shopifyPosPageQuery = groq`
 // ============================================
 
 export const allPackagesPageQuery = groq`
-  *[_type == "allPackagesPage"][0] {
+  *[_type == "allPackagesPage" && (language == $language || !defined(language))][0] {
     _id,
     pageTitle,
     "slug": slug.current,
@@ -521,7 +528,7 @@ export const allPackagesPageQuery = groq`
 // ============================================
 
 export const shopifyPlatformPageQuery = groq`
-  *[_type == "shopifyPlatformPage"][0] {
+  *[_type == "shopifyPlatformPage" && (language == $language || !defined(language))][0] {
     _id,
     pageTitle,
     "slug": slug.current,
@@ -585,7 +592,7 @@ export const shopifyPlatformPageQuery = groq`
 // ============================================
 
 export const shopifyPosInfoPageQuery = groq`
-  *[_type == "shopifyPosInfoPage"][0] {
+  *[_type == "shopifyPosInfoPage" && (language == $language || !defined(language))][0] {
     _id,
     pageTitle,
     "slug": slug.current,
@@ -642,7 +649,7 @@ export const shopifyPosInfoPageQuery = groq`
 // ============================================
 
 export const shopifyTcoCalculatorPageQuery = groq`
-  *[_type == "shopifyTcoCalculatorPage"][0] {
+  *[_type == "shopifyTcoCalculatorPage" && (language == $language || !defined(language))][0] {
     _id,
     pageTitle,
     "slug": slug.current,
@@ -665,7 +672,7 @@ export const shopifyTcoCalculatorPageQuery = groq`
 // Shopify x PIM Page Query
 // ============================================
 export const shopifyXPimPageQuery = groq`
-  *[_type == "shopifyXPimPage"][0] {
+  *[_type == "shopifyXPimPage" && (language == $language || !defined(language))][0] {
     _id,
     pageTitle,
     "slug": slug.current,
@@ -776,7 +783,7 @@ export const shopifyXPimPageQuery = groq`
 // Shopify x AI Page Query
 // ============================================
 export const shopifyXAiPageQuery = groq`
-  *[_type == "shopifyXAiPage"][0] {
+  *[_type == "shopifyXAiPage" && (language == $language || !defined(language))][0] {
     _id,
     pageTitle,
     "slug": slug.current,
@@ -857,7 +864,7 @@ export const shopifyXAiPageQuery = groq`
 // Why Shopify Page Query
 // ============================================
 export const whyShopifyPageQuery = groq`
-  *[_type == "whyShopifyPage"][0] {
+  *[_type == "whyShopifyPage" && (language == $language || !defined(language))][0] {
     _id,
     pageTitle,
     "slug": slug.current,
@@ -921,7 +928,7 @@ export const whyShopifyPageQuery = groq`
 
 // Work Page Query
 export const workPageQuery = groq`
-  *[_type == "workPage"][0] {
+  *[_type == "workPage" && (language == $language || !defined(language))][0] {
     _id,
     pageTitle,
     "slug": slug.current,
@@ -963,7 +970,7 @@ export const workPageQuery = groq`
 
 // About Page Query
 export const aboutPageQuery = groq`
-  *[_type == "aboutPage"][0] {
+  *[_type == "aboutPage" && (language == $language || !defined(language))][0] {
     _id,
     pageTitle,
     "slug": slug.current,
@@ -990,7 +997,11 @@ export const aboutPageQuery = groq`
     ourStory {
       title,
       description,
-      "imageUrl": image.asset->url,
+      "image": image {
+        "asset": asset->,
+        crop,
+        hotspot
+      },
       imageAlt
     },
     ourValues {
@@ -1008,7 +1019,11 @@ export const aboutPageQuery = groq`
         role,
         specialties,
         funFact,
-        "imageUrl": image.asset->url
+        "image": image {
+          "asset": asset->,
+          crop,
+          hotspot
+        }
       },
       buttonText,
       buttonLink
@@ -1035,9 +1050,18 @@ export const aboutPageQuery = groq`
   }
 `;
 
+// Partner Categories (dynamic filter list for partners page)
+export const partnerCategoriesQuery = groq`
+  *[_type == "partnerCategory"] {
+    _id,
+    title,
+    icon
+  }
+`;
+
 // Partners Page Query
 export const partnersPageQuery = groq`
-  *[_type == "partnersPage"][0] {
+  *[_type == "partnersPage" && (language == $language || !defined(language))][0] {
     _id,
     pageTitle,
     "slug": slug.current,
@@ -1060,10 +1084,19 @@ export const partnersPageQuery = groq`
       partners[] {
         name,
         category,
+        "categories": categories[]->{ _id, title, icon },
         description,
         benefits,
-        "imageUrl": image.asset->url,
-        "logoUrl": logo.asset->url
+        "image": image {
+          "asset": asset->,
+          crop,
+          hotspot
+        },
+        "logo": logo {
+          "asset": asset->,
+          crop,
+          hotspot
+        }
       }
     },
     cta {
@@ -1081,7 +1114,7 @@ export const partnersPageQuery = groq`
 
 // Contact Page Query
 export const contactPageQuery = groq`
-  *[_type == "contactPage"][0] {
+  *[_type == "contactPage" && (language == $language || !defined(language))][0] {
     _id,
     pageTitle,
     "slug": slug.current,
@@ -1102,12 +1135,18 @@ export const contactPageQuery = groq`
       }
     },
     bookingSection {
+      enabled,
       label,
       title,
       description,
       meetingTypes[] {
         title,
-        description
+        description,
+        durationMinutes
+      },
+      availableSlots[] {
+        date,
+        times
       },
       confirmButtonText
     },
@@ -1142,7 +1181,7 @@ export const contactPageQuery = groq`
 
 // Package Detail Page Query
 export const packageDetailPageQuery = groq`
-  *[_type == "packageDetailPage" && slug.current == $slug][0] {
+  *[_type == "packageDetailPage" && slug.current == $slug && (language == $language || !defined(language))][0] {
     _id,
     pageTitle,
     "slug": slug.current,
@@ -1211,7 +1250,7 @@ export const packageDetailPageQuery = groq`
 
 // Blog Page Query
 export const blogPageQuery = groq`
-  *[_type == "blogPage"][0] {
+  *[_type == "blogPage" && (language == $language || !defined(language))][0] {
     _id,
     pageTitle,
     "slug": slug.current,
@@ -1263,7 +1302,7 @@ export const blogPageQuery = groq`
 
 // Merch Page Query
 export const merchPageQuery = groq`
-  *[_type == "merchPage"][0] {
+  *[_type == "merchPage" && (language == $language || !defined(language))][0] {
     _id,
     pageTitle,
     "slug": slug.current,
@@ -1298,7 +1337,7 @@ export const merchPageQuery = groq`
 
 // Merch Product Settings Query
 export const merchProductSettingsQuery = groq`
-  *[_type == "merchProductSettings"][0] {
+  *[_type == "merchProductSettings" && (language == $language || !defined(language))][0] {
     _id,
     settingsTitle,
     productFeatures {
@@ -1336,7 +1375,7 @@ export const merchProductSettingsQuery = groq`
 
 // Header Settings Query
 export const headerSettingsQuery = groq`
-  *[_type == "headerSettings"][0] {
+  *[_type == "headerSettings" && (language == $language || !defined(language))][0] {
     _id,
     settingsTitle,
     servicesMenu {
@@ -1366,7 +1405,7 @@ export const headerSettingsQuery = groq`
 
 // Footer Settings Query
 export const footerSettingsQuery = groq`
-  *[_type == "footerSettings"][0] {
+  *[_type == "footerSettings" && (language == $language || !defined(language))][0] {
     _id,
     settingsTitle,
     columns[] {
@@ -1401,7 +1440,7 @@ export const footerSettingsQuery = groq`
 // Vipps Hurtigkasse Page Query
 // ============================================
 export const vippsHurtigkassePageQuery = groq`
-  *[_type == "vippsHurtigkassePage"][0] {
+  *[_type == "vippsHurtigkassePage" && (language == $language || !defined(language))][0] {
     _id,
     pageTitle,
     "slug": slug.current,
@@ -1440,7 +1479,8 @@ export const vippsHurtigkassePageQuery = groq`
     },
     pricing {
       sectionTitle,
-      price,
+      // price,
+      priceItems[] { priceText },
       priceNote,
       supportText
     },

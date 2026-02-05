@@ -15,12 +15,13 @@ export default function MigrationCalculator() {
   const [numberOfProducts, setNumberOfProducts] = useState<string>('100')
   const [numberOfCustomers, setNumberOfCustomers] = useState<string>('100')
   const [numberOfOrders, setNumberOfOrders] = useState<string>('100')
+  const [numberOfBlogs, setNumberOfBlogs] = useState<string>('0')
   const [pricingData, setPricingData] = useState<PricingData | null>(null)
   const [loading, setLoading] = useState<boolean>(false)
   const [error, setError] = useState<string>('')
 
-  // Fetch pricing data from API
-  const fetchPricing = useCallback(async () => {
+  // Fetch pricing from API (proxies to Litextension price-all-in-one)
+  const fetchPricing = useCallback(async (signal?: AbortSignal) => {
     if (
       !sourcePlatform ||
       !targetPlatform ||
@@ -35,34 +36,45 @@ export default function MigrationCalculator() {
     setError('')
 
     try {
-      // Use our own API route to avoid CORS issues
-      const apiUrl = `/api/migration-pricing?source=${sourcePlatform}&target=${targetPlatform}&products=${numberOfProducts}&customers=${numberOfCustomers}&orders=${numberOfOrders}`
-      const response = await fetch(apiUrl)
+      const params = new URLSearchParams({
+        source: sourcePlatform,
+        target: targetPlatform,
+        products: numberOfProducts,
+        customers: numberOfCustomers,
+        orders: numberOfOrders,
+      })
+      if (numberOfBlogs && numberOfBlogs !== '0') {
+        params.set('blogs', numberOfBlogs)
+      }
+      const apiUrl = `/api/migration-pricing?${params.toString()}`
+      const response = await fetch(apiUrl, { method: 'GET', signal })
 
       if (!response.ok) {
-        throw new Error('Failed to fetch pricing data')
+        const errBody = await response.json().catch(() => ({}))
+        throw new Error(
+          (errBody as { error?: string }).error || 'Failed to fetch pricing'
+        )
       }
 
-      // Small projects (200-5,000 entities): 50-60% markup
-      // Medium projects (5,000-100,000 entities): 40% markup
-      // Large projects (100,000+ entities): 30-35% markup
+      const data = await response.json()
 
-      const data: PricingData = await response.json()
-      const totalProduct =
-        parseInt(numberOfProducts) +
-        parseInt(numberOfCustomers) +
-        parseInt(numberOfOrders)
-
-      if (totalProduct < 5000) {
-        data.price += data.price * 0.5
-      } else if (totalProduct > 5000 && totalProduct < 100000) {
-        data.price += data.price * 0.4
-      } else {
-        data.price += data.price * 0.3
+      // Validate API response shape { price, time }
+      if (
+        typeof data?.price !== 'number' ||
+        typeof data?.time !== 'number'
+      ) {
+        throw new Error('Invalid pricing response')
       }
-      setPricingData(data)
+
+      setPricingData({
+        price: data.price,
+        time: data.time,
+        estimated: data.estimated === true,
+      })
     } catch (err) {
+      if (err instanceof Error && err.name === 'AbortError') return
       setError('Unable to fetch pricing. Please try again.')
+      setPricingData(null)
       console.error('API Error:', err)
     } finally {
       setLoading(false)
@@ -73,20 +85,25 @@ export default function MigrationCalculator() {
     numberOfProducts,
     numberOfCustomers,
     numberOfOrders,
+    numberOfBlogs,
   ])
 
-  // Fetch pricing when form values change
+  // Fetch pricing when form values change (debounced, cancel previous request)
   useEffect(() => {
+    const controller = new AbortController()
     const timeoutId = setTimeout(() => {
-      fetchPricing()
-    }, 500) // Debounce API calls
+      fetchPricing(controller.signal)
+    }, 500)
 
-    return () => clearTimeout(timeoutId)
+    return () => {
+      clearTimeout(timeoutId)
+      controller.abort()
+    }
   }, [fetchPricing])
 
   return (
     <section className="relative overflow-hidden bg-[#00BFC8] py-16 lg:py-24">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="section_container mx-auto page-padding-x">
         <div className="w-full max-w-2xl mx-auto">
           {/* Badge */}
           <div className="flex justify-center mb-6">
@@ -96,10 +113,10 @@ export default function MigrationCalculator() {
           </div>
 
           {/* Title */}
-          <h2 className="text-3xl lg:text-4xl xl:text-5xl font-bold text-white text-center mb-4">
+          <h2 className="text-[5.3vw] xs:text-[3.5vw] sm:text-[3.2vw] md:text-[3.2vw] lg:text-[28px] xl:text-[34px] font-bold text-white text-center mb-4">
             Get Your Migration Quote
           </h2>
-          <p className="text-white/90 text-center text-base lg:text-lg mb-10">
+          <p className="text-white/90 text-center text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[16px] xl:text-[18px] mb-10">
             Calculate your exact migration cost instantly
           </p>
 
@@ -241,6 +258,25 @@ export default function MigrationCalculator() {
                 />
               </div>
 
+              {/* Number of Blogs */}
+              <div>
+                <label
+                  htmlFor="blogs"
+                  className="block text-sm font-medium text-gray-900 mb-2"
+                >
+                  Number of Blogs
+                </label>
+                <input
+                  type="number"
+                  id="blogs"
+                  value={numberOfBlogs}
+                  onChange={(e) => setNumberOfBlogs(e.target.value)}
+                  className="w-full bg-white border border-[#E5E5E5] px-4 py-3 text-gray-900 text-base focus:outline-none focus:border-[#03C1CA] placeholder-gray-400"
+                  placeholder="0"
+                  min="0"
+                />
+              </div>
+
               {/* Help Text */}
               <div className="flex items-center gap-2 text-gray-500 text-sm">
                 <span className="flex items-center justify-center w-5 h-5 rounded-full bg-gray-100 text-gray-600 text-xs font-semibold">
@@ -252,7 +288,7 @@ export default function MigrationCalculator() {
 
             {/* Pricing Section */}
             <div className="mt-10 pt-8 border-t border-[#E5E5E5]">
-              <h3 className="text-xl lg:text-2xl font-bold text-gray-900 mb-6">
+              <h3 className="text-[4.3vw] xs:text-[2.6vw] sm:text-[2.5vw] md:text-[2.2vw] lg:text-[18px] xl:text-[24px] text-[#565454] font-bold text-gray-900 mb-6">
                 Migration Pricing
               </h3>
 
@@ -278,7 +314,7 @@ export default function MigrationCalculator() {
                       <span className="block text-sm text-gray-500 mb-1">
                         Total Cost
                       </span>
-                      <span className="text-3xl lg:text-4xl font-bold text-[#03C1CA] font-mono">
+                      <span className="text-[5.3vw] xs:text-[3.5vw] sm:text-[3.2vw] md:text-[3.2vw] lg:text-[28px] xl:text-[34px] font-bold text-[#03C1CA] font-mono">
                         ${Math.round(pricingData.price).toLocaleString()}
                       </span>
                     </div>
@@ -286,7 +322,7 @@ export default function MigrationCalculator() {
                       <span className="block text-sm text-gray-500 mb-1">
                         Estimated Time
                       </span>
-                      <span className="text-xl lg:text-2xl font-bold text-gray-900 font-mono">
+                      <span className="text-[5.3vw] xs:text-[3.5vw] sm:text-[3.2vw] md:text-[3.2vw] lg:text-[28px] xl:text-[34px] font-bold text-gray-900 font-mono">
                         {pricingData.time} days
                       </span>
                     </div>

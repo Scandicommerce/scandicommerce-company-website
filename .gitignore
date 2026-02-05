@@ -18,6 +18,8 @@
 # misc
 .DS_Store
 *.pem
+*-service-account*.json
+google-service-account.json
 
 # debug
 npm-debug.log*

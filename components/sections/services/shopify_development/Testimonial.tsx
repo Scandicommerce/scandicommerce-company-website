@@ -26,7 +26,7 @@ export default function Testimonial({ testimonial }: TestimonialProps) {
 
   return (
     <section className="bg-[#F8F8F8] py-12 sm:py-16 lg:py-24">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="section_container mx-auto page-padding-x">
         <div className="bg-white rounded-lg sm:rounded-xl p-5 sm:p-8 lg:p-12 shadow-sm">
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 sm:gap-8 lg:gap-10">
             {/* Left Content */}

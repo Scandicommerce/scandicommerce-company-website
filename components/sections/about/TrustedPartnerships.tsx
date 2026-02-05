@@ -90,13 +90,13 @@ export default function TrustedPartnerships({ trustedPartnerships }: TrustedPart
 
   return (
     <section className="bg-[#F8F8F8] py-16 lg:py-24">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="section_container mx-auto page-padding-x">
         {/* Title and Subtitle */}
         <div className="text-center mb-12 lg:mb-16 flex flex-col justify-start items-center gap-16">
-          <h2 className="text-2xl sm:text-4xl lg:text-5xl font-bold text-[#222222]">
+          <h2 className="text-[5.3vw] xs:text-[3.5vw] sm:text-[3.2vw] md:text-[3.2vw] lg:text-[28px] xl:text-[34px] font-bold text-[#222222]">
             {title}
           </h2>
-          <p className="text-sm sm:text-lg lg:text-xl text-[#555555] max-w-2xl mx-auto">
+          <p className="text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[16px] xl:text-[18px] text-[#555555] max-w-2xl mx-auto">
             {subtitle}
           </p>
         </div>

@@ -5,9 +5,11 @@ import PackageTabs from '@/components/sections/services/all_packages/PackageTabs
 import FrequentlyAddedTogether from '@/components/sections/services/all_packages/FrequentlyAddedTogether'
 import CaseStudiesBanner from '@/components/sections/services/all_packages/CaseStudiesBanner'
 import { getPackageBySlug, Package } from '@/lib/packages'
+import { getShopifyProductByHandle } from '@/lib/shopify'
 import { notFound } from 'next/navigation'
 import { client } from '@/sanity/lib/client'
 import { packageDetailPageQuery } from '@/sanity/lib/queries'
+import { getQueryParams } from '@/sanity/lib/queryHelpers'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -134,7 +136,7 @@ export default async function PackageDetailPage({
   // Try to fetch from Sanity first
   const sanityData: PackageDetailPageData = await client.fetch(
     packageDetailPageQuery,
-    { slug },
+    getQueryParams({ slug }),
     { next: { revalidate: 0 } }
   )
 
@@ -173,13 +175,81 @@ export default async function PackageDetailPage({
     if (!pkg.reviews?.length) pkg.reviews = staticPkg.reviews
   }
 
+  // Try to fetch Shopify product by handle (using slug)
+  // This allows packages to be sold as Shopify products
+  let shopifyProduct = null
+  try {
+    shopifyProduct = await getShopifyProductByHandle(slug)
+  } catch (error) {
+    // If product doesn't exist in Shopify, that's okay - package might not be a product
+    console.log(`Package "${slug}" not found in Shopify store`)
+  }
+
+  // Helper function to convert title to Shopify handle (slug)
+  const titleToHandle = (title: string): string => {
+    return title
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '')
+  }
+
+  // Get add-ons (from Sanity or use defaults)
+  const addOnsToProcess = sanityData?.addOns?.items && sanityData.addOns.items.length > 0
+    ? sanityData.addOns.items
+    : [
+        { title: 'CRO Audit', description: 'Comprehensive conversion optimization analysis', price: '12.000 kr' },
+        { title: 'Monthly Support', description: 'Ongoing updates, bug fixes, and improvements', price: '8.000 kr/mo' },
+      ]
+
+  // Fetch Shopify products for add-ons
+  const addOnsWithShopify = await Promise.all(
+    addOnsToProcess.map(async (addOn) => {
+      if (!addOn.title) return { ...addOn }
+
+      const handle = titleToHandle(addOn.title)
+      let shopifyProduct = null
+
+      try {
+        shopifyProduct = await getShopifyProductByHandle(handle)
+      } catch (error) {
+        // Add-on might not exist in Shopify, that's okay
+        console.log(`Add-on "${addOn.title}" (handle: "${handle}") not found in Shopify store`)
+      }
+
+      return {
+        ...addOn,
+        shopifyProduct: shopifyProduct
+          ? {
+              variantId: shopifyProduct.variants?.[0]?.id || '',
+              productTitle: shopifyProduct.title,
+              hasVariants: (shopifyProduct.variants?.length || 0) > 1,
+              variants: shopifyProduct.variants || [],
+            }
+          : undefined,
+      }
+    })
+  )
+
   return (
     <div className="flex flex-col min-h-screen">
       <HeaderWrapper />
       <main className="flex-grow">
-        <PackageHero pkg={pkg} />
+        <PackageHero 
+          pkg={pkg} 
+          shopifyProduct={shopifyProduct ? {
+            variantId: shopifyProduct.variants?.[0]?.id || '',
+            productTitle: shopifyProduct.title,
+            hasVariants: (shopifyProduct.variants?.length || 0) > 1,
+            variants: shopifyProduct.variants || [],
+          } : undefined}
+        />
         <PackageTabs pkg={pkg} />
-        <FrequentlyAddedTogether addOns={sanityData?.addOns} />
+        <FrequentlyAddedTogether 
+          addOns={{
+            ...sanityData?.addOns,
+            items: addOnsWithShopify,
+          }}
+        />
         <CaseStudiesBanner 
           packageName={pkg.title} 
           caseStudiesBanner={sanityData?.caseStudiesBanner}
@@ -200,7 +270,7 @@ export async function generateMetadata({
   // Try to fetch from Sanity first
   const sanityData: PackageDetailPageData = await client.fetch(
     packageDetailPageQuery,
-    { slug },
+    getQueryParams({ slug }),
     { next: { revalidate: 0 } }
   )
 

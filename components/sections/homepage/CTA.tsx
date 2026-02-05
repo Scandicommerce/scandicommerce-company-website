@@ -76,7 +76,7 @@ export default function CTA({ data }: CTAProps) {
 
   return (
     <section className="relative bg-teal py-16 lg:py-44 overflow-hidden" ref={ref}>
-      <div className="container mx-auto px-4 sm:px-6 lg:px-20">
+       <div className="section_container mx-auto page-padding-x">
         <motion.div 
           className="text-center"
           variants={containerVariants}

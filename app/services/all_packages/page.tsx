@@ -4,8 +4,9 @@ import PricingPackages from '@/components/sections/services/all_packages/Pricing
 import FAQ from '@/components/sections/services/all_packages/FAQ'
 import { client } from '@/sanity/lib/client'
 import { allPackagesPageQuery } from '@/sanity/lib/queries'
+import { getQueryParams } from '@/sanity/lib/queryHelpers'
 import Hero from '@/components/layout/Hero'
-import { Button } from '@/components/ui'
+import { getShopifyProductByHandle } from '@/lib/shopify'
 
 // Disable caching - always fetch fresh data from Sanity
 export const dynamic = 'force-dynamic'
@@ -50,7 +51,7 @@ async function getPageData(): Promise<AllPackagesPageData | null> {
   try {
     const data = await client.fetch<AllPackagesPageData>(
       allPackagesPageQuery,
-      {},
+      getQueryParams({}),
       { next: { revalidate: 0 } }
     )
     return data
@@ -60,15 +61,45 @@ async function getPageData(): Promise<AllPackagesPageData | null> {
   }
 }
 
-const buttonContents = [
-  'Woocommerce',
-  'Adobe (Magento)',
-  'Bigcommerce',
-  'Salesforce commerce cloud',
-]
+/** Get package slug from href (e.g. /services/all_packages/shopify-setup -> shopify-setup) */
+function slugFromHref(href: string): string | null {
+  if (!href) return null
+  const segments = href.split('/').filter(Boolean)
+  return segments.length > 0 ? segments[segments.length - 1]! : null
+}
 
 export default async function ServicesAllPackages() {
   const pageData = await getPageData()
+  const rawItems = pageData?.packages?.packagesItems ?? []
+
+  const packagesWithShopify = await Promise.all(
+    rawItems.map(async (item) => {
+      const slug = slugFromHref(item.href)
+      let shopifyVariantId: string | undefined
+      let shopifyProductTitle: string | undefined
+      if (slug) {
+        try {
+          const product = await getShopifyProductByHandle(slug)
+          if (product?.variants?.[0]) {
+            shopifyVariantId = product.variants[0].id
+            shopifyProductTitle = product.title
+          }
+        } catch {
+          // Package may not exist in Shopify
+        }
+      }
+      return {
+        ...item,
+        shopifyVariantId,
+        shopifyProductTitle,
+      }
+    })
+  )
+
+  const packages = {
+    ...pageData?.packages,
+    packagesItems: packagesWithShopify,
+  }
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -79,8 +110,7 @@ export default async function ServicesAllPackages() {
             ...pageData?.hero}}
         >
         </Hero>
-        {/* <Hero hero={pageData?.hero} /> */}
-        <PricingPackages packages={pageData?.packages} />
+        <PricingPackages packages={packages} />
         <FAQ faq={pageData?.faq} />
         <FooterWrapper />
       </main>

@@ -7,6 +7,7 @@ import RealMigrationResults from '@/components/sections/services/migrate/RealMig
 import MigrationCTA from '@/components/sections/services/migrate/MigrationCTA'
 import { client } from '@/sanity/lib/client'
 import { migratePageQuery } from '@/sanity/lib/queries'
+import { getQueryParams } from '@/sanity/lib/queryHelpers'
 import Hero from '@/components/layout/Hero'
 import { Button } from '@/components/ui'
 
@@ -77,7 +78,7 @@ async function getPageData(): Promise<MigratePageData | null> {
   try {
     const data = await client.fetch<MigratePageData>(
       migratePageQuery,
-      {},
+      getQueryParams({}),
       { next: { revalidate: 0 } }
     )
     return data

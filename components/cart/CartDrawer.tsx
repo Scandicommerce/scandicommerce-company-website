@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { HiXMark, HiShoppingBag, HiMinus, HiPlus, HiTrash } from 'react-icons/hi2'
 import Image from 'next/image'
@@ -8,8 +8,9 @@ import Link from 'next/link'
 import { useCart } from '@/contexts/CartContext'
 
 export default function CartDrawer() {
-  const { cart, isCartOpen, closeCart, isLoading } = useCart()
+  const { cart, isCartOpen, closeCart, isLoading, updateLineQuantity, removeLine } = useCart()
   const drawerRef = useRef<HTMLDivElement>(null)
+  const [cartError, setCartError] = useState<string | null>(null)
 
   // Close drawer when clicking outside
   useEffect(() => {
@@ -44,6 +45,11 @@ export default function CartDrawer() {
 
     return () => document.removeEventListener('keydown', handleEscape)
   }, [isCartOpen, closeCart])
+
+  // Clear error when opening drawer
+  useEffect(() => {
+    if (isCartOpen) setCartError(null)
+  }, [isCartOpen])
 
   const handleCheckout = () => {
     if (cart?.checkoutUrl) {
@@ -89,12 +95,18 @@ export default function CartDrawer() {
               </div>
               <button
                 onClick={closeCart}
-                className="p-2 hover:bg-[#F5F5F5] rounded-full transition-colors"
+                className="p-2 pr-0 hover:bg-[#F5F5F5] rounded-full transition-colors"
                 aria-label="Close cart"
               >
                 <HiXMark className="w-6 h-6 text-[#222222]" />
               </button>
             </div>
+
+            {cartError && (
+              <div className="mx-6 mt-2 px-3 py-2 bg-red-50 border border-red-200 text-red-700 text-sm rounded">
+                {cartError}
+              </div>
+            )}
 
             {/* Cart Items */}
             <div className="flex-1 overflow-y-auto">
@@ -144,21 +156,64 @@ export default function CartDrawer() {
 
                         {/* Product Info */}
                         <div className="flex-1 min-w-0">
-                          <Link
-                            href={`/merch/${item.productHandle}`}
-                            onClick={closeCart}
-                            className="font-medium text-[#222222] hover:text-[#03C1CA] transition-colors line-clamp-1"
-                          >
-                            {item.productTitle}
-                          </Link>
+                          <div className="flex items-start justify-between gap-2">
+                            <Link
+                              href={`/merch/${item.productHandle}`}
+                              onClick={closeCart}
+                              className="font-medium text-[#222222] hover:text-[#03C1CA] transition-colors line-clamp-1"
+                            >
+                              {item.productTitle}
+                            </Link>
+                            <button
+                              onClick={async () => {
+                                const result = await removeLine(item.id)
+                                if (!result.success) setCartError(result.error ?? 'Could not remove item')
+                              }}
+                              disabled={isLoading}
+                              className="p-1 text-[#666666] hover:text-red-600 hover:bg-red-50 rounded transition-colors flex-shrink-0 disabled:opacity-50"
+                              aria-label="Remove all of this product"
+                              title="Remove all"
+                            >
+                              <HiTrash className="w-4 h-4" />
+                            </button>
+                          </div>
                           {item.variantTitle !== 'Default Title' && (
                             <p className="text-sm text-[#666666] mt-0.5">
                               {item.variantTitle}
                             </p>
                           )}
-                          <div className="flex items-center justify-between mt-2">
-                            <div className="flex items-center gap-2">
-                              <span className="text-sm text-[#666666]">Qty: {item.quantity}</span>
+                          <div className="flex items-center justify-between mt-2 flex-wrap gap-2">
+                            <div className="flex items-center gap-1 bg-[#F5F5F5] rounded border border-[#E5E5E5]">
+                              <button
+                                onClick={async () => {
+                                  const result =
+                                    item.quantity > 1
+                                      ? await updateLineQuantity(item.id, item.quantity - 1)
+                                      : await removeLine(item.id)
+                                  if (!result.success) setCartError(result.error ?? 'Could not update quantity')
+                                }}
+                                disabled={isLoading}
+                                className="p-1.5 text-[#222222] hover:text-[#03C1CA] hover:bg-white rounded transition-colors disabled:opacity-50"
+                                aria-label="Remove one"
+                                title="Remove one"
+                              >
+                                <HiMinus className="w-4 h-4" />
+                              </button>
+                              <span className="text-sm font-medium text-[#222222] min-w-[1.5rem] text-center">
+                                {item.quantity}
+                              </span>
+                              <button
+                                onClick={async () => {
+                                  const result = await updateLineQuantity(item.id, item.quantity + 1)
+                                  if (!result.success) setCartError(result.error ?? 'Could not update quantity')
+                                }}
+                                disabled={isLoading}
+                                className="p-1.5 text-[#222222] hover:text-[#03C1CA] hover:bg-white rounded transition-colors disabled:opacity-50"
+                                aria-label="Add one"
+                                title="Add one"
+                              >
+                                <HiPlus className="w-4 h-4" />
+                              </button>
                             </div>
                             <span className="font-mono font-semibold text-[#222222]">
                               {(item.price * item.quantity).toFixed(2)} {item.currencyCode}

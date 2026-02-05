@@ -5,6 +5,7 @@ import React, { useRef } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { motion, useInView } from 'framer-motion'
+import Marquee from 'react-fast-marquee'
 
 interface Brand {
   name: string
@@ -66,58 +67,61 @@ const scrollVariants = {
 export default function TrustedBy({ trustedBy }: TrustedByProps) {
   const ref = useRef<HTMLDivElement>(null)
   const isInView = useInView(ref, { once: true, amount: 0.3 })
-  
-  const title = trustedBy?.title || 'Trusted by 50+ Norwegian brands'
-  const brands = trustedBy?.brands && trustedBy.brands.length > 0 
-    ? trustedBy.brands 
-    : defaultBrands
-  
-  const duplicatedBrands = [...brands, ...brands]
 
-  const renderBrandLogo = (brand: Brand, index: number, prefix: string) => {
+  const title = trustedBy?.title || 'Trusted by 50+ Norwegian brands'
+  const brands = trustedBy?.brands && trustedBy.brands.length > 0
+    ? trustedBy.brands
+    : defaultBrands
+
+  const renderBrandLogo = (brand: Brand, index: number) => {
     const logoUrl = brand.logo?.asset?.url
     const altText = brand.alt || brand.name || 'Brand logo'
-    
+
     if (!logoUrl) return null
 
-    const logoElement = (
-      <motion.div
-        key={`${prefix}-${index}`}
-        className="relative flex items-center justify-center flex-shrink-0"
-        whileHover={{ scale: 1.1 }}
-        transition={{ duration: 0.2 }}
+    return (
+      <div
+        key={`brand-${index}`}
+        className="relative flex items-center justify-center flex-shrink-0 mx-2 sm:mx-6 lg:mx-8"
       >
         {brand.link ? (
-          <Link href={brand.link} target="_blank" rel="noopener noreferrer">
+          <Link 
+            href={brand.link} 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="block transition-transform hover:scale-110 duration-200"
+          >
+            <div className="relative h-[70px] w-auto">
+              <Image
+                src={logoUrl}
+                alt={altText}
+                width={300}
+                height={150}
+                className="h-[50px] sm:h-[70px] w-auto object-contain"
+                unoptimized={logoUrl.startsWith('/')}
+              />
+            </div>
+          </Link>
+        ) : (
+          <div className="relative h-[70px] w-auto">
             <Image
               src={logoUrl}
               alt={altText}
-              width={150}
-              height={0}
-              className="object-contain w-auto h-auto"
+              width={300}
+              height={150}
+              className="h-[50px] sm:h-[70px] w-auto object-contain"
               unoptimized={logoUrl.startsWith('/')}
             />
-          </Link>
-        ) : (
-          <Image
-            src={logoUrl}
-            alt={altText}
-            width={150}
-            height={0}
-            className="object-contain w-auto h-auto"
-            unoptimized={logoUrl.startsWith('/')}
-          />
+          </div>
         )}
-      </motion.div>
+      </div>
     )
-
-    return logoElement
   }
 
   return (
     <section className="bg-teal py-12 lg:py-16 overflow-hidden" ref={ref}>
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div 
+      <div className="section_container mx-auto page-padding-x">
+        <motion.div
           className="text-center mb-8 lg:mb-12"
           variants={titleVariants}
           initial="hidden"
@@ -127,20 +131,20 @@ export default function TrustedBy({ trustedBy }: TrustedByProps) {
             {title}
           </h2>
         </motion.div>
-        <motion.div 
+        <motion.div
           className="relative w-full overflow-hidden"
           variants={scrollVariants}
           initial="hidden"
           animate={isInView ? "visible" : "hidden"}
         >
-          <div className="flex animate-scroll">
-            <div className="flex gap-6 lg:gap-8 flex-shrink-0">
-              {duplicatedBrands.map((brand, index) => renderBrandLogo(brand, index, 'first'))}
-            </div>
-            <div className="flex gap-6 lg:gap-8 flex-shrink-0" aria-hidden="true">
-              {duplicatedBrands.map((brand, index) => renderBrandLogo(brand, index, 'second'))}
-            </div>
-          </div>
+          <Marquee
+            speed={50}
+            gradient={false}
+            pauseOnHover={true}
+            className="overflow-hidden"
+          >
+            {brands.map((brand, index) => renderBrandLogo(brand, index))}
+          </Marquee>
         </motion.div>
       </div>
     </section>

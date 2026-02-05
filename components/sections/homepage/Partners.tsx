@@ -63,7 +63,7 @@ export default function Partners({ partners }: PartnersProps) {
 
   return (
     <section className="relative bg-gray-50 py-12 md:py-16 lg:py-24 overflow-hidden" ref={ref}>
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="section_container mx-auto page-padding-x">
         {badges && badges.length > 0 && (
           <motion.div 
             className="flex flex-col md:grid md:grid-cols-3 max-w-4xl mx-auto mb-8 md:mb-12"

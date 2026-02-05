@@ -9,7 +9,9 @@ import WhyDifferent from '@/components/sections/about/WhyDifferent'
 import WantWorkWithUs from '@/components/sections/about/WantWorkWithUs'
 import { client } from '@/sanity/lib/client'
 import { aboutPageQuery } from '@/sanity/lib/queries'
+import { getQueryParams } from '@/sanity/lib/queryHelpers'
 import Hero from '@/components/layout/Hero'
+import type { Image as SanityImage } from 'sanity'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -42,6 +44,7 @@ interface AboutPageData {
     title?: string
     description?: string
     imageUrl?: string
+    image?: SanityImage
     imageAlt?: string
   }
   ourValues?: {
@@ -60,6 +63,7 @@ interface AboutPageData {
       specialties?: string
       funFact?: string
       imageUrl?: string
+      image?: SanityImage
     }[]
     buttonText?: string
     buttonLink?: string
@@ -88,7 +92,7 @@ interface AboutPageData {
 export default async function About() {
   const pageData: AboutPageData = await client.fetch(
     aboutPageQuery,
-    {},
+    getQueryParams({}),
     { next: { revalidate: 0 } }
   )
 

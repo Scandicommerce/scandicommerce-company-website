@@ -222,7 +222,7 @@ export default function Hero({ hero }: HeroProps) {
       <div className="absolute top-[35%] left-[25%] xl:block hidden w-40 h-40 rounded-full bg-[#1DEFFA33]"></div>
       <div className="absolute bottom-[44%] right-[32%] xl:block hidden w-[60px] h-[60px] rounded-full bg-[#1DEFFA33]"></div>
 
-      <div className="container flex flex-col justify-center items-center mx-auto px-4 sm:px-6 lg:px-8 relative z-10 gap-[42px]">
+      <div className="section_container flex flex-col justify-center items-center mx-auto page-padding-x relative z-10 gap-[42px]">
         <div className="hero-content-375-405 hero-content-402-405 hero-content-406-460 hero-content-461-470 hero-content-461-535 hero-content-461-565 hero-content-474-477 hero-content-474-492 hero-content-474-508 hero-content-536-551 hero-content-536-639 hero-content-566-598 flex flex-col justify-start items-center gap-[53px] sm:w-3/4 2xl:w-1/2 w-full">
           {titleText && (
             <h1 className="text-3xl lg:text-4xl xl:text-5xl font-bold text-center mb-4 sm:mb-6">

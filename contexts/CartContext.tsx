@@ -31,6 +31,8 @@ interface CartContextType {
   closeCart: () => void
   toggleCart: () => void
   addToCart: (variantId: string, quantity: number, productTitle: string) => Promise<{ success: boolean; error?: string }>
+  updateLineQuantity: (lineId: string, quantity: number) => Promise<{ success: boolean; error?: string }>
+  removeLine: (lineId: string) => Promise<{ success: boolean; error?: string }>
   updateCartFromResponse: (cartData: any, checkoutUrl: string) => void
   clearCart: () => void
 }
@@ -50,6 +52,10 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   const updateCartFromResponse = useCallback((cartData: any, checkoutUrl: string) => {
     if (!cartData) return
+
+    if (cartData.id) {
+      localStorage.setItem(CART_ID_KEY, cartData.id)
+    }
 
     // Handle the lines array - it's already transformed from edges/nodes in shopify.ts
     const lines = cartData.lines || []
@@ -138,6 +144,66 @@ export function CartProvider({ children }: { children: ReactNode }) {
     }
   }, [openCart, updateCartFromResponse])
 
+  const updateLineQuantity = useCallback(
+    async (lineId: string, quantity: number): Promise<{ success: boolean; error?: string }> => {
+      const cartId = cart?.id ?? localStorage.getItem(CART_ID_KEY)
+      if (!cartId) return { success: false, error: 'No cart' }
+
+      setIsLoading(true)
+      try {
+        const response = await fetch('/api/cart', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'update', cartId, lineId, quantity }),
+        })
+        const data = await response.json()
+        if (!response.ok) throw new Error(data.error || 'Failed to update')
+        if (!data.cart) throw new Error(data.error || 'Cart not returned')
+        updateCartFromResponse(data.cart, data.checkoutUrl ?? data.cart.checkoutUrl)
+        return { success: true }
+      } catch (error) {
+        console.error('Update line error:', error)
+        return {
+          success: false,
+          error: error instanceof Error ? error.message : 'Failed to update quantity',
+        }
+      } finally {
+        setIsLoading(false)
+      }
+    },
+    [cart?.id, updateCartFromResponse]
+  )
+
+  const removeLine = useCallback(
+    async (lineId: string): Promise<{ success: boolean; error?: string }> => {
+      const cartId = cart?.id ?? localStorage.getItem(CART_ID_KEY)
+      if (!cartId) return { success: false, error: 'No cart' }
+
+      setIsLoading(true)
+      try {
+        const response = await fetch('/api/cart', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'remove', cartId, lineId }),
+        })
+        const data = await response.json()
+        if (!response.ok) throw new Error(data.error || 'Failed to remove')
+        if (!data.cart) throw new Error(data.error || 'Cart not returned')
+        updateCartFromResponse(data.cart, data.checkoutUrl ?? data.cart.checkoutUrl)
+        return { success: true }
+      } catch (error) {
+        console.error('Remove line error:', error)
+        return {
+          success: false,
+          error: error instanceof Error ? error.message : 'Failed to remove item',
+        }
+      } finally {
+        setIsLoading(false)
+      }
+    },
+    [cart?.id, updateCartFromResponse]
+  )
+
   const clearCart = useCallback(() => {
     localStorage.removeItem(CART_ID_KEY)
     setCart(null)
@@ -178,6 +244,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
         closeCart,
         toggleCart,
         addToCart,
+        updateLineQuantity,
+        removeLine,
         updateCartFromResponse,
         clearCart,
       }}

@@ -1,26 +1,31 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createCart, addToCart, getCart } from '@/lib/shopify'
+import { createCart, addToCart, getCart, updateCartLine, removeCartLine } from '@/lib/shopify'
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
-    const { action, variantId, quantity = 1, cartId } = body
-
-    if (!variantId) {
-      return NextResponse.json(
-        { error: 'Variant ID is required' },
-        { status: 400 }
-      )
-    }
+    const { action, variantId, quantity: quantityRaw = 1, cartId, lineId } = body
+    const quantity = Number(quantityRaw)
 
     let result
 
-    if (action === 'add' && cartId) {
-      // Add to existing cart
-      result = await addToCart(cartId, variantId, quantity)
+    if (action === 'update' && cartId && lineId != null && !Number.isNaN(quantity)) {
+      if (quantity <= 0) {
+        result = await removeCartLine(cartId, lineId)
+      } else {
+        result = await updateCartLine(cartId, lineId, Math.floor(quantity))
+      }
+    } else if (action === 'remove' && cartId && lineId) {
+      result = await removeCartLine(cartId, lineId)
+    } else if (action === 'add' && cartId && variantId) {
+      result = await addToCart(cartId, variantId, Number.isNaN(quantity) ? 1 : Math.max(1, Math.floor(quantity)))
+    } else if (variantId) {
+      result = await createCart(variantId, Number.isNaN(quantity) ? 1 : Math.max(1, Math.floor(quantity)))
     } else {
-      // Create new cart with item
-      result = await createCart(variantId, quantity)
+      return NextResponse.json(
+        { error: 'Missing or invalid parameters for cart action' },
+        { status: 400 }
+      )
     }
 
     if (result.error) {

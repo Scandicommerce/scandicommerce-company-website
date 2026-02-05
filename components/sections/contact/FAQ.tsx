@@ -70,12 +70,12 @@ export default function FAQ({ faq }: FAQProps) {
 
   return (
     <section className="py-12 md:py-16 lg:py-24 bg-[#03C1CA]">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="section_container mx-auto page-padding-x">
         <div className="text-center mb-8 md:mb-10">
-          <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-white mb-2">
+          <h2 className="text-[5.3vw] xs:text-[3.5vw] sm:text-[3.2vw] md:text-[3.2vw] lg:text-[28px] xl:text-[34px] font-bold text-white mb-2">
             {title}
           </h2>
-          <p className="text-xs sm:text-sm text-white/80 max-w-md mx-auto">
+          <p className="text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[16px] xl:text-[18px] text-white/80 max-w-md mx-auto">
             {subtitle}
           </p>
         </div>

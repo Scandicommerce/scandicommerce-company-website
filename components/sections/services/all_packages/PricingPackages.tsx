@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import PackageAddToCart from './PackageAddToCart'
 
 interface Package {
   title: string
@@ -14,6 +15,8 @@ interface Package {
   included: string[]
   description: string
   href: string
+  shopifyVariantId?: string
+  shopifyProductTitle?: string
 }
 
 interface PackagesData {
@@ -47,7 +50,7 @@ function PackageCard({ pkg }: { pkg: Package }) {
       {/* Header - Title & Subtitle */}
       <div className="text-center mb-5 sm:mb-6">
         {pkg.title && (
-          <h3 className="text-lg sm:text-xl lg:text-2xl font-bold text-gray-900 mb-1.5 sm:mb-2">
+          <h3 className="text-[5.3vw] xs:text-[3.5vw] sm:text-[3.2vw] md:text-[3.2vw] lg:text-[28px] xl:text-[34px] font-bold text-gray-900 mb-1.5 sm:mb-2">
             {pkg.title}
           </h3>
         )}
@@ -73,7 +76,7 @@ function PackageCard({ pkg }: { pkg: Package }) {
         <div className="bg-gray-50 p-3 sm:p-4 lg:p-5">
           <div className="flex items-baseline gap-1 mb-1 flex-wrap">
             {pkg.price && (
-              <span className="text-lg sm:text-xl lg:text-2xl font-bold text-[#03C1CA] font-mono tracking-tight">
+              <span className="text-[5.3vw] xs:text-[3.5vw] sm:text-[3.2vw] md:text-[3.2vw] lg:text-[28px] xl:text-[34px] font-bold text-[#03C1CA] font-mono tracking-tight">
                 {pkg.price}
               </span>
             )}
@@ -144,12 +147,21 @@ function PackageCard({ pkg }: { pkg: Package }) {
             View Details
           </Link>
         )}
-        <Link
-          href="/contact"
-          className="border-2 border-gray-200 hover:border-gray-300 text-gray-700 text-sm lg:text-base font-semibold py-3 sm:py-3.5 px-4 text-center transition-colors duration-200 bg-white"
-        >
-          Book Call
-        </Link>
+        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+          <Link
+            href="/contact"
+            className="border-2 border-gray-200 hover:border-gray-300 text-gray-700 text-sm lg:text-base font-semibold py-3 sm:py-3.5 px-4 text-center transition-colors duration-200 bg-white flex-1"
+          >
+            Book Call
+          </Link>
+          {pkg.shopifyVariantId && pkg.shopifyProductTitle && (
+            <PackageAddToCart
+              variantId={pkg.shopifyVariantId}
+              productTitle={pkg.shopifyProductTitle}
+              className="flex-1 min-w-0"
+            />
+          )}
+        </div>
       </div>
     </div>
   )
@@ -160,7 +172,7 @@ export default function PricingPackages({ packages }: PricingPackagesProps) {
 
   return (
     <section className="bg-[#F8F8F8] pb-8 xs:pb-12 sm:pb-16 lg:pt-24 lg:pb-24">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="section_container mx-auto page-padding-x">
         {items && items.length > 0 && (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 max-w-6xl mx-auto">
             {items.map((pkg, index) => (

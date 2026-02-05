@@ -10,10 +10,33 @@
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;
-  
+
   /* Font families */
   --font-grotesque: 'Space Grotesk', sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
+
+  /* Page padding: smooth by default, stepped in 768px–1024px (two parts), origin at 896px & 1023px */
+  --page-padding-x: clamp(1rem, 4vw, 2rem);
+}
+
+/* 768px–1024px: two parts. Part 1 (768–896): reduced; Part 2 (896–1024): origin padding */
+@media (min-width: 768px) {
+  :root {
+    --page-padding-x: 1rem;
+  }
+}
+
+@media (min-width: 896px) {
+  :root {
+    --page-padding-x: 1.5rem;
+  }
+}
+
+/* 1024px and up: origin (full) padding */
+@media (min-width: 1024px) {
+  :root {
+    --page-padding-x: 2rem;
+  }
 }
 
 @media (prefers-color-scheme: dark) {
@@ -36,7 +59,12 @@ body {
   background: #ffffff;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: 'Space Grotesk', var(--font-grotesque), sans-serif;
   font-weight: 600;
 }
@@ -49,6 +77,11 @@ h1, h2, h3, h4, h5, h6 {
 code,
 pre {
   font-family: 'JetBrains Mono', var(--font-mono), monospace;
+}
+
+.section_container {
+  max-width: 1536px;
+  width: 100%;
 }
 
 /* Typography utility classes */
@@ -84,6 +117,12 @@ nav {
   font-family: 'Space Grotesk', var(--font-grotesque), sans-serif;
   font-weight: 500;
   font-size: 0.9rem;
+}
+
+/* Page horizontal padding – same everywhere, smooth with viewport */
+.page-padding-x {
+  padding-left: var(--page-padding-x);
+  padding-right: var(--page-padding-x);
 }
 
 @layer utilities {

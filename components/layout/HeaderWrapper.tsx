@@ -1,5 +1,7 @@
 import { client } from '@/sanity/lib/client'
 import { headerSettingsQuery } from '@/sanity/lib/queries'
+import { getQueryParams } from '@/sanity/lib/queryHelpers'
+import { getServerLanguage } from '@/lib/language'
 import Header from './Header'
 
 export interface HeaderSettingsData {
@@ -30,9 +32,12 @@ export interface HeaderSettingsData {
 }
 
 export default async function HeaderWrapper() {
+  // Get language from server (URL params or default)
+  const language = await getServerLanguage()
+  
   const settings: HeaderSettingsData = await client.fetch(
     headerSettingsQuery,
-    {},
+    getQueryParams({}, language),
     { next: { revalidate: 60 } } // Cache for 60 seconds
   )
 

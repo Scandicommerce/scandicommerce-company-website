@@ -43,7 +43,7 @@ export default function Newsletter({ newsletter }: NewsletterProps) {
 
   return (
     <section className="bg-[#03C1CA] py-16 lg:py-20">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="section_container mx-auto page-padding-x">
         <div className="max-w-2xl mx-auto text-center">
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-full border-2 border-white/30 mb-6">
             <HiOutlineChatBubbleOvalLeft className="w-8 h-8 text-white" />

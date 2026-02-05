@@ -19,10 +19,10 @@ export default function RealMigrationResults({ results }: RealMigrationResultsPr
 
   return (
     <section className="bg-[#F8F8F8] py-16 lg:py-24">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="section_container mx-auto page-padding-x">
         {title && (
           <div className="text-center mb-6 lg:mb-16">
-            <h2 className="text-2xl sm:text-4xl lg:text-5xl font-bold text-[#222222] lg:mb-4 mb-2">
+            <h2 className="text-[5.3vw] xs:text-[3.5vw] sm:text-[3.2vw] md:text-[3.2vw] lg:text-[28px] xl:text-[34px] font-bold text-[#222222] lg:mb-4 mb-2">
               {title}
             </h2>
           </div>
@@ -38,12 +38,12 @@ export default function RealMigrationResults({ results }: RealMigrationResultsPr
                 }`}
               >
                 {result.metric && (
-                  <div className="text-xl sm:text-2xl lg:text-3xl xl:text-[32px] font-bold text-[#03C1CA] mb-7 font-mono tracking-tight">
+                  <div className="text-[5.3vw] xs:text-[3.5vw] sm:text-[3.2vw] md:text-[3.2vw] lg:text-[28px] xl:text-[34px] font-bold text-[#03C1CA] mb-7 font-mono tracking-tight">
                     {result.metric}
                   </div>
                 )}
                 {result.title && (
-                  <h3 className="text-base sm:text-lg lg:text-xl font-bold text-[#222222] mb-2">
+                  <h3 className="text-[4.3vw] xs:text-[2.6vw] sm:text-[2.5vw] md:text-[2.2vw] lg:text-[18px] xl:text-[24px] font-bold text-[#222222] mb-2">
                     {result.title}
                   </h3>
                 )}

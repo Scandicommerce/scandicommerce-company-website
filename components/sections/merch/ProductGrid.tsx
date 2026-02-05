@@ -135,7 +135,7 @@ export default function ProductGrid({ initialProducts }: ProductGridProps) {
   if (loading) {
     return (
       <section className="bg-white py-12 lg:py-16">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="section_container mx-auto page-padding-x">
           <div className="text-center py-12">
             <p className="text-[#666666]">Loading products...</p>
           </div>
@@ -147,7 +147,7 @@ export default function ProductGrid({ initialProducts }: ProductGridProps) {
   if (products.length === 0) {
     return (
       <section className="bg-white py-12 lg:py-16">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="section_container mx-auto page-padding-x">
           <div className="text-center py-12">
             <p className="text-[#666666]">No products found.</p>
             <p className="text-sm text-[#666666] mt-2">
@@ -161,7 +161,7 @@ export default function ProductGrid({ initialProducts }: ProductGridProps) {
 
   return (
     <section className="bg-white py-12 lg:py-16">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="section_container mx-auto page-padding-x">
         <div className="border border-[#E5E5E5]">
           <div className="flex flex-col lg:flex-row lg:justify-between lg:items-stretch">
             <div className="flex overflow-x-auto border-b lg:border-b-0 border-[#E5E5E5]">
@@ -169,7 +169,7 @@ export default function ProductGrid({ initialProducts }: ProductGridProps) {
                 <button
                   key={category.key}
                   onClick={() => handleCategoryChange(category.key)}
-                  className={`px-4 sm:px-6 lg:px-8 py-3 sm:py-4 lg:py-5 text-sm font-medium transition-all duration-200 border-r border-[#E5E5E5] whitespace-nowrap flex-shrink-0 ${activeCategory === category.key
+                  className={`page-padding-x py-3 sm:py-4 lg:py-5 text-sm font-medium transition-all duration-200 border-r border-[#E5E5E5] whitespace-nowrap flex-shrink-0 ${activeCategory === category.key
                     ? 'text-[#222222]'
                     : 'text-[#666666] hover:text-[#222222]'
                     }`}

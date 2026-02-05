@@ -15,6 +15,7 @@ export { shopifyXPimPage } from "./shopifyXPimPage";
 export { shopifyXAiPage } from "./shopifyXAiPage";
 export { whyShopifyPage } from "./whyShopifyPage";
 export { partnersPage } from "./partnersPage";
+export { partnerCategory } from "./partnerCategory";
 export { packageDetailPage } from "./packageDetailPage";
 export { merchPage } from "./merchPage";
 export { merchProductSettings } from "./merchProductSettings";

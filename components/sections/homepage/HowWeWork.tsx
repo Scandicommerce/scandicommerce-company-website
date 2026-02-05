@@ -80,7 +80,7 @@ export default function HowWeWork({ process }: HowWeWorkProps) {
 
   return (
     <section className="relative bg-white py-16 lg:py-24 overflow-hidden">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="section_container mx-auto page-padding-x">
         {(title || subtitle) && (
           <motion.div 
             ref={headerRef}

@@ -40,7 +40,7 @@ export default function FeaturedArticle({ featuredArticle }: FeaturedArticleProp
 
   return (
     <section className="bg-white py-16 lg:py-24">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="section_container mx-auto page-padding-x">
         <div className="grid grid-cols-1 lg:grid-cols-2 items-center shadow-lg">
           {/* Left Column - Laptop Image */}
           <div className="relative w-full h-[400px] lg:h-[450px] xl:h-[560px]">

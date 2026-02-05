@@ -10,6 +10,7 @@ const config: Config = {
     extend: {
       screens: {
         'xs': '450px',
+        'narrow': '320px',
       },
       colors: {
         teal: {

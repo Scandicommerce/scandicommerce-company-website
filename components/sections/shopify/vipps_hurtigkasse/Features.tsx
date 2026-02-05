@@ -43,15 +43,15 @@ export default function Features({ features }: FeaturesProps) {
 
   return (
     <section className="bg-white py-16 lg:py-24">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="section_container mx-auto page-padding-x">
         <div className="max-w-6xl mx-auto">
-          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-[#222222] text-center mb-8 lg:mb-12">
+          <h2 className="text-[5.3vw] xs:text-[3.5vw] sm:text-[3.2vw] md:text-[3.2vw] lg:text-[28px] xl:text-[34px] font-bold text-[#222222] text-center mb-8 lg:mb-12">
             {title}
           </h2>
 
           <div className="space-y-6">
             {paragraphs.map((paragraph, index) => (
-              <p key={index} className="text-base lg:text-lg text-[#565454] leading-relaxed">
+              <p key={index} className="text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[16px] xl:text-[18px] text-[#565454] leading-relaxed">
                 {paragraph}
               </p>
             ))}
@@ -74,19 +74,19 @@ export default function Features({ features }: FeaturesProps) {
 
           {demoStore.url && (
             <div className="mt-10 p-6 lg:p-8 bg-[#1DEFFA15] border-l-4 border-[#03C1CA]">
-              <p className="text-base lg:text-lg text-[#222222] font-medium mb-2">
+              <p className="text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[16px] xl:text-[18px] text-[#222222] font-medium mb-2">
                 {demoStore.text}
               </p>
               <Link
                 href={demoStore.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-[#03C1CA] hover:underline font-medium break-all"
+                className="text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[16px] xl:text-[18px] text-[#03C1CA] hover:underline font-medium break-all"
               >
                 {demoStore.url}
               </Link>
               {demoStore.password && (
-                <p className="text-sm text-[#565454] mt-2">
+                <p className="text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[16px] xl:text-[18px] text-[#565454] mt-2">
                   Password: <span className="font-mono bg-gray-100 px-2 py-1">{demoStore.password}</span>
                 </p>
               )}

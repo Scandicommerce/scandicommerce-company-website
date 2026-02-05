@@ -2,6 +2,8 @@
 
 import LiquidBlob from '@/components/ui/LiquidBlob'
 
+import './Hero.css'
+
 interface Stat {
   value?: string
   label?: string
@@ -61,51 +63,58 @@ export default function Hero({
     )
   }
 
+  // ${children ? 'h-[calc(95vh-80px)]' : 'h-[calc(90vh-80px)]'}
+
+  // ${(titleText?.length || 0) < 30
+  //   ? `${(description?.length || 0) > 150
+  //     ? 'pt-12 xs:pt-20 1'
+  //     : 'pt-12 xs:pt-20 2'
+  //   } `
+  //   : (titleText?.length || 0) >= 50
+  //     ? `${(description?.length || 0) > 150
+  //       ? 'pt-12 xs:pt-20 3'
+  //       : 'pt-12 xs:pt-20 4'
+  //     }`
+  //     : `${(description?.length || 0) > 150
+  //       ? 'pt-12 xs:pt-20 5'
+  //       : 'pt-12 xs:pt-20 6'
+  //     }`
+  // }
+
   return (
     <section
-      className={`hero-section-responsive relative bg-[#F8F8F8] py-16 lg:py-24 overflow-hidden ${children ? 'min-h-[calc(95vh-80px)]' : 'min-h-[calc(90vh-80px)]'} lg:min-h-[calc(100vh-80px)] flex items-center justify-center`}
+      className={`hero-section-responsive relative bg-[#F8F8F8] py-20 lg:py-24 overflow-hidden md:min-h-[760px] md:h-[calc(100vh-80px)] flex md:items-center items-start justify-center`}
     >
       <LiquidBlob
         page="homepage"
         rotation={0}
-        className="top-[25%] xs:top-[33%] sm:top-[35%] md:top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[75%] h-[75%] md:w-[80%] md:h-[80%] lg:w-[95%] lg:h-[95%] xl:w-[90%] xl:h-[90%] 2xl:w-[95%] 2xl:h-[95%]"
+        className="top-[190px] xs:top-[190px] animation-style sm:top-[37vw] md:top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[75%] h-[72vw] xs:h-[65vw] sm:h-[70vw] md:w-[80%] md:h-[72vw] lg:w-[95%] lg:h-[95%] xl:w-[90%] xl:h-[90%] 2xl:w-[95%] 2xl:h-[95%]"
         enableMouseFollow={true}
       />
 
       <div className="absolute top-[35%] left-[25%] xl:block hidden w-40 h-40 rounded-full bg-[#1DEFFA33]"></div>
       <div className="absolute bottom-[44%] right-[32%] xl:block hidden w-[60px] h-[60px] rounded-full bg-[#1DEFFA33]"></div>
 
+
       <div
-        className={`absolute lg:static 
-          ${
-            (titleText?.length || 0) < 30
-              ? `${
-                  (description?.length || 0) > 150
-                    ? 'top-[21%] xs:top-[20%] sm:top-[23%] md:top-[36%]'
-                    : 'top-[21%] xs:top-[24%] sm:top-[25%] md:top-[38%]'
-                } `
-              : (titleText?.length || 0) >= 50
-                ? `${
-                    (description?.length || 0) > 150
-                      ? 'top-[18%] xs:top-[16%] sm:top-[17%] md:top-[35%]'
-                      : 'top-[19%] xs:top-[21%] sm:top-[23%] md:top-[38%]'
-                  }`
-                : `${
-                    (description?.length || 0) > 150
-                      ? 'top-[19%] xs:top-[18%] sm:top-[19.5%] md:top-[34%]'
-                      : 'top-[19%] xs:top-[22%] sm:top-[23%] md:top-[38%]'
-                  }`
-          } flex flex-col justify-center items-center mx-auto px-4 sm:px-6 lg:px-8 z-10 md:gap-[42px] sm:gap-[18vw] xs:gap-[21vw] gap-[12vw] pt-5`}
+        className={`static flex flex-col justify-center items-center mx-auto page-padding-x z-10 gap-6 xs:gap-8 sm:gap-[3vw] md:gap-[42px]`}
       >
-        <div className="max-w-5xl px-0 xs:px-4 sm:px-6 lg:px-8 flex flex-col justify-start items-center gap-[24vw] xs:gap-[25px] sm:gap-[25px] lg:gap-[35px] sm:w-3/4 xs:w-[75%] w-[94%]">
+        <div className={`sm:min-h-[53vw] md:min-h-[auto] max-w-5xl
+          ${(titleText?.length || 0) < 30
+            ? 'pt-[31vw] xs:pt-[22vw] gap-[25vw] hero-content-padding-top-1'
+            : (titleText?.length || 0) >= 56
+              ? 'pt-[21vw] xs:pt-[17vw] gap-[14vw] hero-content-padding-top-2'
+              : 'pt-[27vw] xs:pt-[20vw] gap-[18.5vw] hero-content-padding-top-3'
+          }
+          sm:pt-5 px-0 xs:page-padding-x flex flex-col justify-start sm:justify-center items-center sm:gap-[25px] lg:gap-[35px] sm:w-3/4 xs:w-[80%] w-[94%]`}>
           {titleText && (
-            <h1 className="text-[5.8vw] xs:text-[4.3vw] sm:text-[4.2vw] md:text-[4vw] lg:text-4xl xl:text-[42px] font-bold text-center mb-1 sm:mb-3 lg:mb-6">
+            <h1 className="text-[6vw] xs:text-[4.5vw] sm:text-[4.2vw] md:text-[4vw] lg:text-4xl xl:text-[42px] font-bold text-center mb-1 sm:mb-3 lg:mb-6">
               {renderTitle()}
             </h1>
           )}
 
           {description && (
-            <p className="text-sm xs:text-[2.4vw] sm:text-[2vw] md:text-base lg:text-lg xl:text-[#FFFFFF] text-[#222222] text-center leading-relaxed xs:px-4">
+            <p className="text-sm sm:text-[2vw] md:text-base lg:text-lg xl:text-[#FFFFFF] text-[#222222] text-center leading-relaxed xs:px-4">
               {description}
             </p>
           )}
@@ -153,10 +162,14 @@ export default function Hero({
           </div>
         )}
 
+        {
+          children && (
+            <div className="w-full flex justify-center items-center">
+              {children}
+            </div>
+          )
+        }
         {/* <div className="w-full grid xl:grid-cols-4 sm:grid-cols-2 grid-cols-1 lg:gap-4 gap-2"> */}
-        <div className="w-full flex justify-center items-center">
-          {children}
-        </div>
         {/* </div> */}
       </div>
     </section>

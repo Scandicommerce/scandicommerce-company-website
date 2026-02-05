@@ -56,7 +56,7 @@ export default function CaseStudy({
             {/* Title, Category and Tags */}
             <div className="flex sm:flex-row flex-col justify-between sm:items-center items-start sm:gap-0 gap-4">
               <div className="sm:order-1 order-2">
-                <h3 className="2xl:text-[32px] xl:text-2xl text-xl font-bold text-[#1F1D1D] mb-1">
+                <h3 className="text-[5.3vw] xs:text-[3.5vw] sm:text-[3.2vw] md:text-[3.2vw] lg:text-[28px] xl:text-[34px] font-bold text-[#1F1D1D] mb-1">
                   {title}
                 </h3>
                 <p className="2xl:text-base xl:text-sm text-xs text-[#565454]">
@@ -79,7 +79,7 @@ export default function CaseStudy({
 
             {/* Challenge */}
             <div>
-              <h4 className="2xl:text-xl xl:text-lg text-base font-semibold text-[#1F1D1D] uppercase tracking-wide mb-1">
+              <h4 className="text-[4.3vw] xs:text-[2.6vw] sm:text-[2.5vw] md:text-[2.2vw] lg:text-[18px] xl:text-[24px] font-semibold text-[#1F1D1D] uppercase tracking-wide mb-1">
                 {category}
               </h4>
               <p className="2xl:text-base xl:text-sm text-xs text-[#565454]">
@@ -89,7 +89,7 @@ export default function CaseStudy({
 
             {/* Solution */}
             <div>
-              <h4 className="2xl:text-xl xl:text-lg text-base font-semibold text-[#1F1D1D] uppercase tracking-wide mb-1">
+              <h4 className="text-[4.3vw] xs:text-[2.6vw] sm:text-[2.5vw] md:text-[2.2vw] lg:text-[18px] xl:text-[24px] font-semibold text-[#1F1D1D] uppercase tracking-wide mb-1">
                 Solution
               </h4>
               <p className="2xl:text-base xl:text-sm text-xs text-[#565454]">
@@ -101,13 +101,13 @@ export default function CaseStudy({
 
             {/* Results */}
             <div>
-              <h4 className="2xl:text-xl xl:text-lg text-base font-semibold text-[#1F1D1D] uppercase tracking-wide mb-[18px]">
+              <h4 className="text-[4.3vw] xs:text-[2.6vw] sm:text-[2.5vw] md:text-[2.2vw] lg:text-[18px] xl:text-[24px] font-semibold text-[#1F1D1D] uppercase tracking-wide mb-[18px]">
                 Results
               </h4>
               <div className="flex justify-between items-center">
                 {results.map((result, index) => (
                   <div key={index} className="flex flex-col items-center">
-                      <div className="2xl:text-[32px] xl:text-2xl text-xl font-bold !leading-[166%] text-[#03C1CA] font-mono tracking-tight">
+                      <div className="text-[5.3vw] xs:text-[3.5vw] sm:text-[3.2vw] md:text-[3.2vw] lg:text-[28px] xl:text-[34px] font-bold !leading-[166%] text-[#03C1CA] font-mono tracking-tight">
                       {result.value}
                     </div>
                     <div className="2xl:text-base xl:text-sm sm:text-xs text-[9px] text-[#565454] leading-tight font-sans">

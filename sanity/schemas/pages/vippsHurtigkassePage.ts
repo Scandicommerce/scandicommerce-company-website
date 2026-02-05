@@ -1,10 +1,16 @@
 import { defineType, defineField } from "sanity";
+import { languageField } from "../objects/language";
 
 export const vippsHurtigkassePage = defineType({
   name: "vippsHurtigkassePage",
   title: "Vipps Hurtigkasse Page",
   type: "document",
+  groups: [
+    { name: "content", title: "Content", default: true },
+    { name: "settings", title: "Settings" },
+  ],
   fields: [
+    languageField,
     defineField({
       name: "pageTitle",
       title: "Page Title",
@@ -212,11 +218,30 @@ export const vippsHurtigkassePage = defineType({
           type: "string",
           initialValue: "How much does it cost to use Quick Checkout for Vipps in Shopify",
         }),
+        // defineField({
+        //   name: "price",
+        //   title: "Price (used when no regional prices below)",
+        //   type: "string",
+        //   initialValue: "kr 399",
+        // }),
         defineField({
-          name: "price",
-          title: "Price",
-          type: "string",
-          initialValue: "kr 399",
+          name: "priceItems",
+          title: "Regional prices",
+          type: "array",
+          of: [
+            {
+              type: "object",
+              fields: [
+                { name: "priceText", type: "string", title: "Price", validation: (Rule) => Rule.required() },
+              ],
+              preview: { select: { title: "priceText" }, prepare: ({ title }) => ({ title: title || "Price" }) },
+            },
+          ],
+          initialValue: [
+            { priceText: "399 NOK" },
+            { priceText: "259 DKK" },
+            { priceText: "35 EUR" },
+          ],
         }),
         defineField({
           name: "priceNote",

@@ -7,6 +7,7 @@ import OrderForm from '@/components/sections/shopify/vipps_hurtigkasse/OrderForm
 import Support from '@/components/sections/shopify/vipps_hurtigkasse/Support'
 import { client } from '@/sanity/lib/client'
 import { vippsHurtigkassePageQuery } from '@/sanity/lib/queries'
+import { getQueryParams } from '@/sanity/lib/queryHelpers'
 import Hero from '@/components/layout/Hero'
 
 // Disable caching - always fetch fresh data from Sanity
@@ -52,7 +53,8 @@ interface VippsHurtigkassePageData {
   }
   pricing?: {
     sectionTitle?: string
-    price?: string
+    // price?: string
+    priceItems?: { priceText?: string }[]
     priceNote?: string
     supportText?: string
   }
@@ -73,7 +75,10 @@ interface VippsHurtigkassePageData {
 
 async function getPageData(): Promise<VippsHurtigkassePageData | null> {
   try {
-    const data = await client.fetch(vippsHurtigkassePageQuery)
+    const data = await client.fetch(
+      vippsHurtigkassePageQuery,
+      getQueryParams({})
+    )
     return data
   } catch (error) {
     console.error('Error fetching Vipps Hurtigkasse page data:', error)

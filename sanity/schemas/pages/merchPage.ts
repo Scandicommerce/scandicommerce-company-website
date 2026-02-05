@@ -1,10 +1,16 @@
 import { defineField, defineType, defineArrayMember } from "sanity";
+import { languageField } from "../objects/language";
 
 export const merchPage = defineType({
   name: "merchPage",
   title: "Merch Page",
   type: "document",
+  groups: [
+    { name: "content", title: "Content", default: true },
+    { name: "settings", title: "Settings" },
+  ],
   fields: [
+    languageField,
     defineField({
       name: "pageTitle",
       title: "Page Title",

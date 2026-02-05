@@ -2,6 +2,7 @@ import HeaderWrapper from '@/components/layout/HeaderWrapper'
 import FooterWrapper from '@/components/layout/FooterWrapper'
 import { client } from '@/sanity/lib/client'
 import { shopifyTcoCalculatorPageQuery } from '@/sanity/lib/queries'
+import { getQueryParams } from '@/sanity/lib/queryHelpers'
 import TCOCalculatorClient from './TCOCalculatorClient'
 
 export const dynamic = 'force-dynamic'
@@ -25,7 +26,7 @@ async function getPageData(): Promise<ShopifyTcoCalculatorPageData | null> {
   try {
     const data = await client.fetch<ShopifyTcoCalculatorPageData>(
       shopifyTcoCalculatorPageQuery,
-      {},
+      getQueryParams({}),
       { next: { revalidate: 0 } }
     )
     return data

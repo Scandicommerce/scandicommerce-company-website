@@ -1,10 +1,16 @@
 import { defineField, defineType, defineArrayMember } from "sanity";
+import { languageField } from "../objects/language";
 
 export const partnersPage = defineType({
   name: "partnersPage",
   title: "Partners Page",
   type: "document",
+  groups: [
+    { name: "content", title: "Content", default: true },
+    { name: "settings", title: "Settings" },
+  ],
   fields: [
+    languageField,
     defineField({
       name: "pageTitle",
       title: "Page Title",
@@ -78,7 +84,25 @@ export const partnersPage = defineType({
               type: "object",
               fields: [
                 defineField({ name: "name", title: "Partner Name", type: "string" }),
-                defineField({ name: "category", title: "Category", type: "string" }),
+                defineField({
+                  name: "category",
+                  title: "Primary category (legacy)",
+                  type: "string",
+                  description: "Used only if Categories is empty. Add categories in Partner Categories first, then select them here.",
+                  hidden: ({ parent }) => Array.isArray(parent?.categories) && parent.categories.length > 0,
+                }),
+                defineField({
+                  name: "categories",
+                  title: "Categories",
+                  type: "array",
+                  description: "Tag partner with one or more categories. Manage the list in Partner Categories. Partner will appear in each selected category section.",
+                  of: [
+                    {
+                      type: "reference",
+                      to: [{ type: "partnerCategory" }],
+                    },
+                  ],
+                }),
                 defineField({ name: "description", title: "Description", type: "text", rows: 2 }),
                 defineField({
                   name: "benefits",
@@ -86,14 +110,27 @@ export const partnersPage = defineType({
                   type: "array",
                   of: [defineArrayMember({ type: "string" })],
                 }),
-                defineField({ name: "image", title: "Partner Image", type: "image", options: { hotspot: true } }),
+                defineField({
+                  name: "image",
+                  title: "Partner Image",
+                  type: "image",
+                  description: "Recommended aspect ratio: 17:9 (e.g. 1700×900px) for best display in the partner card.",
+                  options: { hotspot: true },
+                }),
                 defineField({ name: "logo", title: "Partner Logo (Optional)", type: "image", options: { hotspot: true } }),
               ],
               preview: {
                 select: {
                   title: "name",
-                  subtitle: "category",
+                  categoryRefs: "categories",
+                  category: "category",
                   media: "image",
+                },
+                prepare({ title, categoryRefs, category, media }) {
+                  const subtitle = Array.isArray(categoryRefs) && categoryRefs.length > 0
+                    ? `${categoryRefs.length} categor${categoryRefs.length === 1 ? "y" : "ies"}`
+                    : category || "—";
+                  return { title, subtitle, media };
                 },
               },
             }),

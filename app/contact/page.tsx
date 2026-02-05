@@ -6,6 +6,7 @@ import MapSection from '@/components/sections/contact/MapSection'
 import FAQ from '@/components/sections/contact/FAQ'
 import { client } from '@/sanity/lib/client'
 import { contactPageQuery } from '@/sanity/lib/queries'
+import { getQueryParams } from '@/sanity/lib/queryHelpers'
 import Hero from '@/components/layout/Hero'
 
 export const dynamic = 'force-dynamic'
@@ -32,13 +33,16 @@ interface ContactPageData {
     }[]
   }
   bookingSection?: {
+    enabled?: boolean
     label?: string
     title?: string
     description?: string
     meetingTypes?: {
       title?: string
       description?: string
+      durationMinutes?: number
     }[]
+    availableSlots?: { date?: string; times?: string[] }[]
     confirmButtonText?: string
   }
   messageSection?: {
@@ -72,7 +76,7 @@ interface ContactPageData {
 export default async function Contact() {
   const pageData: ContactPageData = await client.fetch(
     contactPageQuery,
-    {},
+    getQueryParams({}),
     { next: { revalidate: 0 } }
   )
 

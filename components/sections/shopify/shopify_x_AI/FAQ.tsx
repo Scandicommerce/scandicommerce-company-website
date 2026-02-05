@@ -20,10 +20,10 @@ export default function FAQ({ faq }: FAQProps) {
 
   return (
     <section className="bg-[#F8F8F8] py-16 lg:py-24">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="section_container mx-auto page-padding-x">
         {/* Header */}
         {title && (
-          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-[#222222] text-center mb-12 lg:mb-16">
+          <h2 className="text-[5.3vw] xs:text-[3.5vw] sm:text-[3.2vw] md:text-[3.2vw] lg:text-[28px] xl:text-[34px] font-bold text-[#222222] text-center mb-12 lg:mb-16">
             {title}
           </h2>
         )}
@@ -37,12 +37,12 @@ export default function FAQ({ faq }: FAQProps) {
                 className="bg-white p-6 lg:p-8"
               >
                 {item.question && (
-                  <h3 className="text-base sm:text-lg font-semibold text-[#222222] mb-3">
+                  <h3 className="text-[4.3vw] xs:text-[2.6vw] sm:text-[2.5vw] md:text-[2.2vw] lg:text-[18px] xl:text-[24px] font-semibold text-[#222222] mb-3">
                     {item.question}
                   </h3>
                 )}
                 {item.answer && (
-                  <p className="text-sm sm:text-base text-[#565454] leading-relaxed">
+                  <p className="text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[16px] xl:text-[18px] text-[#565454] leading-relaxed">
                     {item.answer}
                   </p>
                 )}

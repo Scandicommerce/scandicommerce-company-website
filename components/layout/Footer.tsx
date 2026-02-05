@@ -1,6 +1,6 @@
 import React from 'react'
 import Logo from '@/components/ui/Logo'
-import Link from 'next/link'
+import LocalizedLink from '@/components/ui/LocalizedLink'
 import { FaLinkedinIn, FaTwitter, FaInstagram, FaFacebookF, FaYoutube, FaGithub } from 'react-icons/fa'
 
 interface FooterLink {
@@ -119,31 +119,31 @@ export default function Footer({ settings }: FooterProps) {
 
   return (
     <footer className="w-full bg-black text-white mt-auto">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 lg:py-12">
+      <div className="section_container mx-auto page-padding-x py-8 sm:py-10 lg:py-12">
         {/* Main Footer Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-6 sm:gap-8 lg:gap-4 xl:gap-6 2xl:gap-8 mb-8 sm:mb-10 lg:mb-12">
+        <div className="grid lg:flex justify-between xl:grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-10 sm:gap-12 lg:gap-2 xl:gap-6 2xl:gap-8 mb-8 sm:mb-10 lg:mb-12">
           {/* Logo - Full width on mobile, scales gradually on desktop */}
           <div className="col-span-2 sm:col-span-3 lg:col-span-1 mb-4 sm:mb-6 lg:mb-0">
-            <div className="w-auto lg:w-[120px] xl:w-[150px] 2xl:w-[185px] [&_img]:w-full [&_img]:h-auto">
+            <div className="w-[170px] lg:w-[120px] xl:w-[150px] 2xl:w-[185px]">
               <Logo logoPath='/images/footer-logo.png' />
             </div>
           </div>
 
           {/* Dynamic Columns */}
           {columns.map((column, index) => (
-            <div key={index} className="col-span-1">
+            <div key={index} className="col-span-1 lg:min-w-[130px] xl:min-w-auto">
               <h3 className="font-semibold text-sm sm:text-base mb-3 sm:mb-4 pb-2 border-b border-gray-700">
                 {column.title}
               </h3>
               <ul className="space-y-2 sm:space-y-3 text-xs sm:text-sm">
                 {column.links?.map((link, linkIndex) => (
                   <li key={linkIndex}>
-                    <Link
+                    <LocalizedLink
                       href={link.href || '#'}
                       className="text-gray-300 hover:text-teal transition-colors"
                     >
                       {link.label}
-                    </Link>
+                    </LocalizedLink>
                   </li>
                 ))}
               </ul>
@@ -215,13 +215,13 @@ export default function Footer({ settings }: FooterProps) {
             {bottomSection.legalLinks && bottomSection.legalLinks.length > 0 && (
               <div className="flex flex-wrap gap-3 sm:gap-4 lg:gap-6 text-xs sm:text-sm">
                 {bottomSection.legalLinks.map((link, index) => (
-                  <Link
+                  <LocalizedLink
                     key={index}
                     href={link.href || '#'}
                     className="text-gray-400 hover:text-teal transition-colors"
                   >
                     {link.label}
-                  </Link>
+                  </LocalizedLink>
                 ))}
               </div>
             )}

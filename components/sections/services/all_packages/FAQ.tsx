@@ -23,9 +23,9 @@ export default function FAQ({ faq }: FAQProps) {
       <div className="absolute bottom-10 sm:bottom-20 right-5 sm:right-10 w-16 sm:w-32 h-16 sm:h-32 rounded-full bg-white/5 hidden sm:block"></div>
       <div className="absolute top-1/2 left-10 sm:left-20 w-12 sm:w-24 h-12 sm:h-24 rounded-full bg-white/5 -translate-y-1/2 hidden lg:block"></div>
 
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div className="section_container mx-auto page-padding-x relative z-10">
         {title && (
-          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-white text-center mb-8 sm:mb-12">
+          <h2 className="text-[5.3vw] xs:text-[3.5vw] sm:text-[3.2vw] md:text-[3.2vw] lg:text-[28px] xl:text-[34px] font-bold text-white text-center mb-8 sm:mb-12">
             {title}
           </h2>
         )}

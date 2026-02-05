@@ -9,6 +9,7 @@ import CombinedSection from '@/components/sections/shopify/shopify_x_PIM/Combine
 import CTA from '@/components/sections/shopify/shopify_x_PIM/CTA'
 import { client } from '@/sanity/lib/client'
 import { shopifyXPimPageQuery } from '@/sanity/lib/queries'
+import { getQueryParams } from '@/sanity/lib/queryHelpers'
 import Hero from '@/components/layout/Hero'
 
 // Disable caching - always fetch fresh data from Sanity
@@ -99,7 +100,7 @@ async function getPageData(): Promise<ShopifyXPimPageData | null> {
   try {
     const data = await client.fetch<ShopifyXPimPageData>(
       shopifyXPimPageQuery,
-      {},
+      getQueryParams({}),
       { next: { revalidate: 0 } }
     )
     return data

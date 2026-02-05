@@ -76,7 +76,7 @@ export default function QualityShowcase({ products = [], qualityShowcase }: Qual
 
   return (
     <section className="bg-[#F8F8F8] py-16 lg:py-24">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="section_container mx-auto page-padding-x">
         <div className="text-center mb-12">
           <h2 className="text-2xl lg:text-3xl xl:text-4xl font-bold text-[#222222] mb-4">
             {title}
