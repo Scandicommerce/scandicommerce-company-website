@@ -7,6 +7,9 @@ import CartDrawer from '@/components/cart/CartDrawer'
 export const metadata: Metadata = {
   title: 'Scandi Commerce - Company Website',
   description: 'Scandi Commerce company website',
+  icons: {
+    icon: '/images/mainLogoIcon.svg',
+  },
 }
 
 export default function RootLayout({

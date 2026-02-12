@@ -131,8 +131,8 @@ export default function Hero({ hero }: HeroProps) {
                 {/* Shopify Plus Partner Logo */}
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src="/images/mainLogo.svg"
-                  alt="Scandi Commerce Logo"
+                  src="/images/shopifyPlus.svg"
+                  alt="Shopify Plus Partner"
                   className="h-9 sm:h-10 w-auto"
                 />
               </motion.div>
