@@ -117,14 +117,14 @@ export default function MeetTheTeam({ meetTheTeam }: MeetTheTeamProps) {
         </div>
 
         {/* CTA Button */}
-        <div className="text-center">
+        {/* <div className="text-center">
           <Link
             href={buttonLink}
             className="inline-block bg-white text-gray-900 px-8 py-3 lg:px-[110px] lg:py-4 font-semibold hover:bg-gray-100 transition-colors"
           >
             {buttonText}
           </Link>
-        </div>
+        </div> */}
       </div>
     </section>
   )
