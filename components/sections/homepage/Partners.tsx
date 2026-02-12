@@ -85,7 +85,7 @@ export default function Partners({ partners }: PartnersProps) {
                   href={badge.link || '#'}
                   className="block border-t md:border-t-0 md:border-l border-gray-300 py-4 text-center last:border-b md:last:border-b-0 md:last:border-r"
                 >
-                  <span className="text-gray-900 font-semibold text-base md:text-lg hover:text-teal transition-colors">
+                  <span className="text-gray-900 font-semibold text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[16px] xl:text-[18px] hover:text-teal transition-colors">
                     {badge.text}
                   </span>
                 </Link>
@@ -101,7 +101,7 @@ export default function Partners({ partners }: PartnersProps) {
             initial="hidden"
             animate={isInView ? "visible" : "hidden"}
           >
-            <p className="text-sm md:text-base text-gray-600 max-w-2xl mx-auto px-4 md:px-0">
+            <p className="text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[16px] xl:text-[18px] text-[#555555] max-w-2xl mx-auto px-4 md:px-0">
               {description}
             </p>
           </motion.div>

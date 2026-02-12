@@ -238,7 +238,7 @@ export default function PartnerCard({
           <button
             type="button"
             onClick={toggleExpanded}
-            className="mt-5 px-5 py-2.5 text-sm font-semibold border-2 border-[#03C1CA] text-[#03C1CA] bg-white hover:bg-[#03C1CA] hover:text-white rounded transition-colors duration-200 self-start"
+            className="w-full mt-5 px-5 py-2.5 text-sm font-semibold border-2 border-[#03C1CA] text-[#03C1CA] bg-white hover:bg-[#03C1CA] hover:text-white rounded transition-colors duration-200 self-start"
           >
             {isExpanded ? 'Read less' : 'Read more'}
           </button>

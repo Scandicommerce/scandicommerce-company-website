@@ -74,7 +74,7 @@ export default function PackageTabs({ pkg }: PackageTabsProps) {
                 ) : (
                   // Fallback to simple list
                   <div>
-                    <h3 className="text-2xl font-bold text-gray-900 mb-6">
+                    <h3 className="text-[5.3vw] xs:text-[3.5vw] sm:text-[3.2vw] md:text-[3.2vw] lg:text-[28px] xl:text-[34px] font-bold text-gray-900 mb-6">
                       What&apos;s Included
                     </h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

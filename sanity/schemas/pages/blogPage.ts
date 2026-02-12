@@ -46,13 +46,30 @@ export const blogPage = defineType({
         defineField({ name: "searchPlaceholder", title: "Search Placeholder", type: "string" }),
       ],
     }),
-    // Featured Article
+    // Featured Article (link to a Blog Post or enter manually)
     defineField({
       name: "featuredArticle",
       title: "Featured Article",
       type: "object",
       fields: [
-        defineField({ name: "image", title: "Featured Image", type: "image", options: { hotspot: true } }),
+        defineField({
+          name: "article",
+          title: "Blog Post",
+          type: "reference",
+          to: [{ type: "blogPost" }],
+          description: "Link to a blog post for title, image, date, etc. Leave empty to use manual fields below.",
+          options: {
+            filter: ({ document }) => {
+              const pageLang = document?.language ?? "en";
+              return {
+                filter:
+                  '_type == "blogPost" && (language == $pageLang || (!defined(language) && $pageLang == "en"))',
+                params: { pageLang },
+              };
+            },
+          },
+        }),
+        defineField({ name: "image", title: "Featured Image (if no post selected)", type: "image", options: { hotspot: true } }),
         defineField({
           name: "tags",
           title: "Tags",
@@ -67,15 +84,15 @@ export const blogPage = defineType({
             }),
           ],
         }),
-        defineField({ name: "title", title: "Title", type: "string" }),
-        defineField({ name: "description", title: "Description", type: "text", rows: 2 }),
-        defineField({ name: "date", title: "Date", type: "string" }),
-        defineField({ name: "readTime", title: "Read Time", type: "string" }),
-        defineField({ name: "link", title: "Article Link", type: "string" }),
+        defineField({ name: "title", title: "Title (override or manual)", type: "string" }),
+        defineField({ name: "description", title: "Description (override or manual)", type: "text", rows: 2 }),
+        defineField({ name: "date", title: "Date (override or manual)", type: "string" }),
+        defineField({ name: "readTime", title: "Read Time (override or manual)", type: "string" }),
+        defineField({ name: "link", title: "Article Link (override or manual)", type: "string" }),
         defineField({ name: "buttonText", title: "Button Text", type: "string" }),
       ],
     }),
-    // Articles Grid
+    // Articles Grid (references to Blog Posts)
     defineField({
       name: "articlesGrid",
       title: "Articles Grid",
@@ -85,23 +102,20 @@ export const blogPage = defineType({
           name: "articles",
           title: "Articles",
           type: "array",
+          description:
+            "Select blog posts to show in the grid. Only posts in this page's language are listed. Order matters.",
           of: [
             defineArrayMember({
-              type: "object",
-              fields: [
-                defineField({ name: "title", title: "Title", type: "string" }),
-                defineField({ name: "description", title: "Description", type: "text", rows: 2 }),
-                defineField({ name: "category", title: "Category", type: "string" }),
-                defineField({ name: "date", title: "Date", type: "string" }),
-                defineField({ name: "readTime", title: "Read Time", type: "string" }),
-                defineField({ name: "image", title: "Image", type: "image", options: { hotspot: true } }),
-                defineField({ name: "slug", title: "Slug", type: "string" }),
-              ],
-              preview: {
-                select: {
-                  title: "title",
-                  subtitle: "category",
-                  media: "image",
+              type: "reference",
+              to: [{ type: "blogPost" }],
+              options: {
+                filter: ({ document }) => {
+                  const pageLang = document?.language ?? "en";
+                  return {
+                    filter:
+                      '_type == "blogPost" && (language == $pageLang || (!defined(language) && $pageLang == "en"))',
+                    params: { pageLang },
+                  };
                 },
               },
             }),

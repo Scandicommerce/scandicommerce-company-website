@@ -1,5 +1,54 @@
 import { StructureBuilder } from "sanity/structure";
 import { DocumentsIcon, ComposeIcon, CogIcon } from "@sanity/icons";
+import { PageListWithDelete } from "@/sanity/components/PageListWithDelete";
+import { languages } from "@/sanity/lib/languages";
+
+function pageListWithDelete(
+  S: StructureBuilder,
+  schemaType: string,
+  title: string
+) {
+  return S.listItem()
+    .title(title)
+    .schemaType(schemaType)
+    .child(
+      S.component(PageListWithDelete)
+        .options({ schemaType, title })
+        .id(`pages-${schemaType}`)
+    );
+}
+
+/** Blog posts grouped by language; each folder uses default list so clicking a post opens it in the next pane */
+const DEFAULT_LANG_ID = "en";
+function blogPostsByLanguage(S: StructureBuilder) {
+  return S.listItem()
+    .title("Blog Posts")
+    .schemaType("blogPost")
+    .child(
+      S.list()
+        .title("Blog Posts by Language")
+        .items(
+          languages.map((lang) =>
+            S.listItem()
+              .title(lang.title)
+              .schemaType("blogPost")
+              .child(
+                S.documentList()
+                  .apiVersion("2024-01-01")
+                  .title(`Blog Posts (${lang.title})`)
+                  .schemaType("blogPost")
+                  .filter(
+                    '_type == "blogPost" && (language == $language || (!defined(language) && $isDefault))'
+                  )
+                  .params({
+                    language: lang.id,
+                    isDefault: lang.id === DEFAULT_LANG_ID,
+                  })
+              )
+          )
+        )
+    );
+}
 
 export const deskStructure = (S: StructureBuilder) =>
   S.list()
@@ -13,30 +62,13 @@ export const deskStructure = (S: StructureBuilder) =>
           S.list()
             .title("All Pages")
             .items([
-              S.listItem()
-                .title("Home Pages")
-                .schemaType("landingPage")
-                .child(S.documentTypeList("landingPage").title("Home Pages")),
-              S.listItem()
-                .title("Services Pages")
-                .schemaType("servicesPage")
-                .child(S.documentTypeList("servicesPage").title("Services Pages")),
-              S.listItem()
-                .title("About Pages")
-                .schemaType("aboutPage")
-                .child(S.documentTypeList("aboutPage").title("About Pages")),
-              S.listItem()
-                .title("Contact Pages")
-                .schemaType("contactPage")
-                .child(S.documentTypeList("contactPage").title("Contact Pages")),
-              S.listItem()
-                .title("Work Pages")
-                .schemaType("workPage")
-                .child(S.documentTypeList("workPage").title("Work Pages")),
-              S.listItem()
-                .title("Blog Pages")
-                .schemaType("blogPage")
-                .child(S.documentTypeList("blogPage").title("Blog Pages")),
+              pageListWithDelete(S, "landingPage", "Home Pages"),
+              pageListWithDelete(S, "servicesPage", "Services Pages"),
+              pageListWithDelete(S, "aboutPage", "About Pages"),
+              pageListWithDelete(S, "contactPage", "Contact Pages"),
+              pageListWithDelete(S, "workPage", "Work Pages"),
+              pageListWithDelete(S, "blogPage", "Blog Pages"),
+              blogPostsByLanguage(S),
             ])
         ),
 
@@ -159,9 +191,18 @@ export const deskStructure = (S: StructureBuilder) =>
         .child(S.documentTypeList("workPage").title("Work Pages")),
 
       S.listItem()
-        .title("Blog Page")
-        .schemaType("blogPage")
-        .child(S.documentTypeList("blogPage").title("Blog Pages")),
+        .title("Blog")
+        .child(
+          S.list()
+            .title("Blog")
+            .items([
+              S.listItem()
+                .title("Blog Page")
+                .schemaType("blogPage")
+                .child(S.documentTypeList("blogPage").title("Blog Pages")),
+              blogPostsByLanguage(S),
+            ])
+        ),
 
       S.listItem()
         .title("Partners Page")

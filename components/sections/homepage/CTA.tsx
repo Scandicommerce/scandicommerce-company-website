@@ -85,7 +85,7 @@ export default function CTA({ data }: CTAProps) {
         >
           {title && (
             <motion.h2 
-              className="text-3xl lg:text-4xl font-bold text-white leading-tight mb-4"
+              className="text-[5.3vw] xs:text-[3.5vw] sm:text-[3.2vw] md:text-[3.2vw] lg:text-[28px] xl:text-[34px] font-bold text-white leading-tight mb-4"
               variants={itemVariants}
             >
               {title}
@@ -94,7 +94,7 @@ export default function CTA({ data }: CTAProps) {
 
           {subtitle && (
             <motion.p 
-              className="text-lg text-gray-100 mb-8 lg:mb-12"
+              className="text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[16px] xl:text-[18px] text-gray-100 mb-8 lg:mb-12"
               variants={itemVariants}
             >
               {subtitle}

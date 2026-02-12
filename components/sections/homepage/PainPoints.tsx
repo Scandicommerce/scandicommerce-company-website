@@ -115,7 +115,7 @@ export default function PainPoints({ painPoints }: PainPointsProps) {
             initial="hidden"
             animate={titleInView ? "visible" : "hidden"}
           >
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 leading-tight px-2">
+            <h2 className="text-[5.3vw] xs:text-[3.5vw] sm:text-[3.2vw] md:text-[3.2vw] lg:text-[28px] xl:text-[34px] font-bold text-gray-900 leading-tight px-2">
               {renderTitle()}
             </h2>
           </motion.div>
@@ -172,7 +172,7 @@ export default function PainPoints({ painPoints }: PainPointsProps) {
               animate={bottomInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
               transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
             >
-              <p className="text-base sm:text-lg lg:text-xl text-gray-900">
+              <p className="text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[16px] xl:text-[18px] text-[#555555] max-w-2xl mx-auto">
                 {bottomText}
               </p>
             </motion.div>
@@ -191,7 +191,7 @@ export default function PainPoints({ painPoints }: PainPointsProps) {
               >
                 <Link
                   href={ctaUrl}
-                  className="inline-flex items-center gap-2 text-defaultText font-semibold text-base sm:text-lg hover:text-teal-dark transition-colors"
+                  className="inline-flex items-center gap-2 text-[#00b3bb] font-semibold text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[16px] xl:text-[18px] hover:text-teal-dark transition-colors"
                 >
                   {ctaText}
                   <motion.svg

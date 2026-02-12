@@ -72,8 +72,8 @@ export default async function Resources({ params }: { params: Promise<{ lang: st
           }}
           searchable={true}
         />
-        <FeaturedArticle featuredArticle={pageData?.featuredArticle} />
-        <ArticlesGrid articlesGrid={pageData?.articlesGrid} />
+        <FeaturedArticle featuredArticle={pageData?.featuredArticle} lang={lang} />
+        <ArticlesGrid articlesGrid={pageData?.articlesGrid} lang={lang} />
         <GetShopifyInsitesDelivered newsletterCta={pageData?.newsletterCta} />
         <FooterWrapper />
       </main>

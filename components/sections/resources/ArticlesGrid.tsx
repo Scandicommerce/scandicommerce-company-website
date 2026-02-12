@@ -21,6 +21,8 @@ interface ArticlesGridData {
 
 interface ArticlesGridProps {
   articlesGrid?: ArticlesGridData
+  /** Current locale (e.g. "en", "no") so article links work on /no/resources/blog etc. */
+  lang?: string
 }
 
 // Transform static articles from lib format to ArticleCard format
@@ -35,7 +37,7 @@ const defaultArticles = allArticles.map((article, index) => ({
   slug: article.slug,
 }))
 
-export default function ArticlesGrid({ articlesGrid }: ArticlesGridProps) {
+export default function ArticlesGrid({ articlesGrid, lang }: ArticlesGridProps) {
   const [isXlAndAbove, setIsXlAndAbove] = useState<boolean>(true)
 
   const loadMoreButtonText = articlesGrid?.loadMoreButtonText || 'Load More Articles'
@@ -87,7 +89,7 @@ export default function ArticlesGrid({ articlesGrid }: ArticlesGridProps) {
           {fullRowsOfThree > 0 && (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 mb-0">
               {fullRowsArticles.map((article, index) => (
-                <ArticleCard key={article.id || index} article={article} />
+                <ArticleCard key={article.id || index} article={article} lang={lang} />
               ))}
             </div>
           )}
@@ -98,6 +100,7 @@ export default function ArticlesGrid({ articlesGrid }: ArticlesGridProps) {
                 <ArticleCard
                   key={article.id || fullRowsOfThree * 3 + index}
                   article={article}
+                  lang={lang}
                 />
               ))}
             </div>
@@ -111,6 +114,7 @@ export default function ArticlesGrid({ articlesGrid }: ArticlesGridProps) {
             <ArticleCard
               key={article.id || fullRowsOfThree * 3 + index}
               article={article}
+              lang={lang}
             />
           ))}
         </div>

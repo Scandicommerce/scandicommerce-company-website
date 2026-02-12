@@ -173,10 +173,10 @@ export default function ServicesPackaged({ data, packages: packagesData }: Servi
           initial="hidden"
           animate={headerInView ? "visible" : "hidden"}
         >
-          <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 leading-tight mb-4">
+          <h2 className="text-[5.3vw] xs:text-[3.5vw] sm:text-[3.2vw] md:text-[3.2vw] lg:text-[28px] xl:text-[34px] font-bold text-gray-900 leading-tight mb-4">
             {renderTitle()}
           </h2>
-          <p className="text-lg text-gray-600">
+          <p className="text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[16px] xl:text-[18px] text-[#555555] max-w-2xl mx-auto">
             {subtitle}
           </p>
         </motion.div>
@@ -197,7 +197,7 @@ export default function ServicesPackaged({ data, packages: packagesData }: Servi
                 className="border-l border-r border-gray-200 px-6 lg:px-8 first:border-l-0 last:border-r-0"
               >
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-2xl font-bold text-gray-900">{category.title}</h3>
+                  <h3 className="text-[4.3vw] xs:text-[2.6vw] sm:text-[2.5vw] md:text-[2.2vw] lg:text-[18px] xl:text-[24px] font-bold text-gray-900">{category.title}</h3>
                   <motion.div 
                     className="text-teal"
                     whileHover={{ rotate: 15, scale: 1.1 }}
@@ -207,10 +207,10 @@ export default function ServicesPackaged({ data, packages: packagesData }: Servi
                   </motion.div>
                 </div>
                 {category.description && (
-                  <p className="text-gray-600 mb-4">{category.description}</p>
+                  <p className="text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[16px] xl:text-[18px] text-[#555555] mb-4">{category.description}</p>
                 )}
                 {category.price && (
-                  <p className="text-xl font-bold text-gray-900 mb-6 font-mono tracking-tight">{category.price}</p>
+                  <p className="text-[4.3vw] xs:text-[2.6vw] sm:text-[2.5vw] md:text-[2.2vw] lg:text-[18px] xl:text-[24px] font-bold text-[#03C1CA] mb-6 font-mono tracking-tight">{category.price}</p>
                 )}
                 {category.link && (
                   <motion.div whileHover={{ x: 5 }}>
@@ -261,18 +261,18 @@ export default function ServicesPackaged({ data, packages: packagesData }: Servi
               >
                 {/* Title & Subtitle */}
                 <div className="mb-4">
-                  <h4 className="text-lg font-bold text-gray-900 mb-1">
+                  <h4 className="text-[4.3vw] xs:text-[2.6vw] sm:text-[2.5vw] md:text-[2.2vw] lg:text-[18px] xl:text-[24px] font-bold text-gray-900 mb-1">
                     {pkg.title || 'Package Title'}
                   </h4>
                   {pkg.subtitle && (
-                    <p className="text-sm text-gray-600">{pkg.subtitle}</p>
+                    <p className="text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[16px] xl:text-[18px] text-[#555555]">{pkg.subtitle}</p>
                   )}
                 </div>
 
                 {/* Price */}
                 <div className="mb-4">
                   <div className="flex items-baseline gap-2">
-                    <span className="text-2xl font-bold text-teal font-mono tracking-tight">
+                    <span className="text-[4.3vw] xs:text-[2.6vw] sm:text-[2.5vw] md:text-[2.2vw] lg:text-[18px] xl:text-[24px] font-bold text-[#03C1CA] font-mono tracking-tight">
                       {pkg.price || 'Price'}
                     </span>
                     {pkg.priceType && (

@@ -99,12 +99,12 @@ export default function Results({ data }: ResultsProps) {
             animate={headerInView ? "visible" : "hidden"}
           >
             {title && (
-              <h2 className="text-3xl lg:text-4xl font-bold text-white leading-tight mb-4">
+              <h2 className="text-[5.3vw] xs:text-[3.5vw] sm:text-[3.2vw] md:text-[3.2vw] lg:text-[28px] xl:text-[34px] font-bold text-white leading-tight mb-4">
                 {title}
               </h2>
             )}
             {subtitle && (
-              <p className="text-lg text-gray-400">
+              <p className="text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[16px] xl:text-[18px] text-gray-400">
                 {subtitle}
               </p>
             )}
@@ -156,19 +156,19 @@ export default function Results({ data }: ResultsProps) {
                 <div className="mb-4">
                   {study.stat && (
                     <motion.p 
-                      className="text-4xl font-bold text-white mb-2 font-mono tracking-tight"
+                      className="text-[5.3vw] xs:text-[3.5vw] sm:text-[3.2vw] md:text-[3.2vw] lg:text-[28px] xl:text-[34px] font-bold text-white mb-2 font-mono tracking-tight"
                       variants={statVariants}
                     >
                       {study.stat}
                     </motion.p>
                   )}
                   {study.metricName && (
-                    <p className="text-white">{study.metricName}</p>
+                    <p className="text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[16px] xl:text-[18px] text-white">{study.metricName}</p>
                   )}
                 </div>
 
                 {study.description && (
-                  <p className="text-gray-400 mb-6">{study.description}</p>
+                  <p className="text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[16px] xl:text-[18px] text-gray-400 mb-6">{study.description}</p>
                 )}
 
                 {study.ctaLink && (

@@ -1,7 +1,6 @@
 'use client'
 
 import React from 'react'
-import Link from 'next/link'
 import { motion } from 'framer-motion'
 import ServiceCard from '@/components/ui/ServiceCard'
 import TorusKnotAnimation from '@/components/ui/TorusKnotAnimation'
@@ -120,17 +119,20 @@ export default function Hero({ hero }: HeroProps) {
             {badge && (
               <motion.div
                 variants={itemVariants}
-                className="inline-flex items-center gap-4 px-4 sm:px-5 py-3 sm:py-4 shadow-button relative z-10"
-                style={{ backgroundColor: 'rgba(29, 239, 250, 0.102)' }}
+                className="inline-flex items-center gap-4 px-4 sm:px-5 py-3 sm:py-4 relative z-10 backdrop-blur-md border border-[#48c5cb]/30"
+                style={{
+                  backgroundColor: 'rgba(29, 239, 250, 0.15)',
+                  // boxShadow: '0px 0px 4px 0px #48c5cb',
+                }}
               >
-                <span className="text-[10px] sm:text-sm font-bold text-defaultText uppercase tracking-wide">
+                <span className="text-[10px] sm:text-sm font-bold text-[#00b3bb] uppercase tracking-wide">
                   {badge}
                 </span>
                 {/* Shopify Plus Partner Logo */}
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
-                  src="https://www.guidance.com/hubfs/svgexport-8.svg"
-                  alt="Shopify Plus Partner"
+                  src="/images/mainLogo.svg"
+                  alt="Scandi Commerce Logo"
                   className="h-9 sm:h-10 w-auto"
                 />
               </motion.div>

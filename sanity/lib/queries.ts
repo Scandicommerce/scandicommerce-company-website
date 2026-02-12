@@ -1248,7 +1248,7 @@ export const packageDetailPageQuery = groq`
   }
 `;
 
-// Blog Page Query
+// Blog Page Query (resolves featured article and grid from blogPost references)
 export const blogPageQuery = groq`
   *[_type == "blogPage" && (language == $language || !defined(language))][0] {
     _id,
@@ -1263,27 +1263,28 @@ export const blogPageQuery = groq`
       searchPlaceholder
     },
     featuredArticle {
-      "imageUrl": image.asset->url,
+      "articleSlug": article->slug.current,
+      "imageUrl": coalesce(article->image.asset->url, image.asset->url),
       tags[] {
         label,
         isPrimary
       },
-      title,
-      description,
-      date,
-      readTime,
-      link,
+      "title": coalesce(article->title, title),
+      "description": coalesce(article->description, description),
+      "date": coalesce(article->date, date),
+      "readTime": coalesce(article->readTime, readTime),
+      "link": select(defined(article) => "/resources/" + article->slug.current, link),
       buttonText
     },
     articlesGrid {
-      articles[] {
+      "articles": articles[]-> {
         title,
         description,
         category,
         date,
         readTime,
         "imageUrl": image.asset->url,
-        slug
+        "slug": slug.current
       },
       loadMoreButtonText
     },
@@ -1297,6 +1298,69 @@ export const blogPageQuery = groq`
       metaTitle,
       metaDescription
     }
+  }
+`;
+
+// Blog Post by slug (for detail page)
+export const blogPostBySlugQuery = groq`
+  *[_type == "blogPost" && slug.current == $slug && (language == $language || !defined(language))][0] {
+    _id,
+    title,
+    titleHighlight,
+    "slug": slug.current,
+    description,
+    category,
+    date,
+    readTime,
+    "image": image.asset->url,
+    "featuredImage": coalesce(featuredImage.asset->url, image.asset->url),
+    author {
+      name,
+      role,
+      "image": image.asset->url,
+      slug
+    },
+    tableOfContents[] {
+      id,
+      title,
+      number
+    },
+    introduction,
+    sections[] {
+      id,
+      title,
+      content,
+      proTip {
+        title,
+        content
+      },
+      apps[] {
+        name,
+        category,
+        description,
+        features[]
+      }
+    },
+    "relatedArticles": relatedArticles[]-> {
+      "slug": slug.current,
+      title,
+      category,
+      readTime,
+      "image": image.asset->url
+    }
+  }
+`;
+
+// All blog post slugs (for generateStaticParams / 404)
+export const blogPostSlugsQuery = groq`
+  *[_type == "blogPost" && defined(slug.current)]{ "slug": slug.current }
+`;
+
+// Slug + language pairs so we only generate (lang, slug) that exist (avoids 404 for valid slugs)
+export const blogPostSlugLanguagePairsQuery = groq`
+  *[_type == "blogPost" && defined(slug.current)] {
+    "slug": slug.current,
+    "language": language
   }
 `;
 

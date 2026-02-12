@@ -90,12 +90,12 @@ export default function HowWeWork({ process }: HowWeWorkProps) {
             animate={headerInView ? "visible" : "hidden"}
           >
             {title && (
-              <h2 className="text-3xl lg:text-4xl font-bold text-gray-900 leading-tight mb-4">
+              <h2 className="text-[5.3vw] xs:text-[3.5vw] sm:text-[3.2vw] md:text-[3.2vw] lg:text-[28px] xl:text-[34px] font-bold text-gray-900 leading-tight mb-4">
                 {title}
               </h2>
             )}
             {subtitle && (
-              <p className="text-lg text-gray-600">
+              <p className="text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[16px] xl:text-[18px] text-[#555555]">
                 {subtitle}
               </p>
             )}
@@ -118,7 +118,7 @@ export default function HowWeWork({ process }: HowWeWorkProps) {
                 whileHover={{ y: -8, transition: { duration: 0.3 } }}
               >
                 <motion.div 
-                  className="flex items-center justify-center w-16 h-16 bg-teal rounded-full mx-auto mb-6"
+                  className="flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 bg-teal rounded-full mx-auto mb-4 sm:mb-6"
                   variants={numberVariants}
                   whileHover={{ 
                     scale: 1.1, 
@@ -126,12 +126,12 @@ export default function HowWeWork({ process }: HowWeWorkProps) {
                     transition: { duration: 0.3 }
                   }}
                 >
-                  <span className="text-2xl font-bold text-white">{step.number || index + 1}</span>
+                  <span className="text-lg sm:text-xl lg:text-2xl font-bold text-white">{step.number || index + 1}</span>
                 </motion.div>
 
                 {step.title && (
                   <motion.h3 
-                    className="text-xl font-bold text-gray-900 mb-2"
+                    className="text-[4.3vw] xs:text-[2.6vw] sm:text-[2.5vw] md:text-[2.2vw] lg:text-[18px] xl:text-[24px] font-bold text-gray-900 mb-2"
                     initial={{ opacity: 0 }}
                     animate={stepsInView ? { opacity: 1 } : { opacity: 0 }}
                     transition={{ delay: 0.4 + index * 0.1 }}

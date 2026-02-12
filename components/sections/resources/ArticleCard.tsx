@@ -16,12 +16,15 @@ interface Article {
 
 interface ArticleCardProps {
   article: Article
+  /** Current locale (e.g. "en", "no") so links work on /no/resources/blog etc. */
+  lang?: string
 }
 
-export default function ArticleCard({ article }: ArticleCardProps) {
+export default function ArticleCard({ article, lang }: ArticleCardProps) {
+  const href = lang ? `/${lang}/resources/${article.slug}` : `/resources/${article.slug}`
   return (
     <Link
-      href={`/resources/${article.slug}`}
+      href={href}
       className="bg-white overflow-hidden"
     >
       {/* Article Image */}

@@ -34,6 +34,7 @@ export const link = defineType({
         { type: "contactPage" },
         { type: "workPage" },
         { type: "blogPage" },
+        { type: "blogPost" },
       ],
       hidden: ({ parent }) => parent?.linkType !== "internal",
     }),

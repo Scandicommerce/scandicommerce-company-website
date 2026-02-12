@@ -127,7 +127,7 @@ export default function TrustedBy({ trustedBy }: TrustedByProps) {
           initial="hidden"
           animate={isInView ? "visible" : "hidden"}
         >
-          <h2 className="text-2xl lg:text-3xl font-bold text-white">
+          <h2 className="text-[5.3vw] xs:text-[3.5vw] sm:text-[3.2vw] md:text-[3.2vw] lg:text-[28px] xl:text-[34px] font-bold text-white">
             {title}
           </h2>
         </motion.div>

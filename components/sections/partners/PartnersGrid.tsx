@@ -492,7 +492,7 @@ export default function PartnersGrid({ partnersGrid, categoryList }: PartnersGri
           </div>
         </div>
       ) : (
-        <div>
+        <div className='section_container mx-auto page-padding-x mb-12'>
           {(selectedCategory === null ? uniqueGroups : [selectedCategory]).map((group, groupIndex) => {
             const groupPartners = groupedPartners[group]
             if (!groupPartners || groupPartners.length === 0) return null
@@ -504,8 +504,8 @@ export default function PartnersGrid({ partnersGrid, categoryList }: PartnersGri
                 className={groupIndex > 0 ? 'mt-16' : ''}
               >
                 {/* Category Section Divider */}
-                <div className="relative mb-10 page-padding-x">
-                  <div className="max-w-4xl mx-auto">
+                <div className="relative mb-10">
+                  <div className="mx-auto">
                     <div className="flex items-center gap-4">
                       {/* Left Line */}
                       <div className="flex-1 h-px bg-gradient-to-r from-transparent via-[#E5E5E5] to-[#03C1CA]"></div>
@@ -532,7 +532,7 @@ export default function PartnersGrid({ partnersGrid, categoryList }: PartnersGri
                 </div>
 
                 {/* Partner Cards Grid */}
-                <div className="px-2 xs:px-4 md:px-6 gap-1 xs:gap-2 md:gap-4 xl:gap-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+                <div className="gap-y-1 xs:gap-y-2 md:gap-y-4 xl:gap-y-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
                   {groupPartners.map((partner, index) => (
                     <div
                       key={partner.id}

@@ -6,7 +6,7 @@ import AuthorBio from '@/components/sections/resources/article/AuthorBio'
 import ArticleCTA from '@/components/sections/resources/article/ArticleCTA'
 import RelatedArticles from '@/components/sections/resources/article/RelatedArticles'
 import { client } from '@/sanity/lib/client'
-import { blogPostBySlugQuery, blogPostSlugsQuery } from '@/sanity/lib/queries'
+import { blogPostBySlugQuery, blogPostSlugLanguagePairsQuery } from '@/sanity/lib/queries'
 import { getQueryParams } from '@/sanity/lib/queryHelpers'
 import type { Article } from '@/lib/articles'
 import { getLanguageFromParams } from '@/lib/language'
@@ -133,7 +133,7 @@ export default async function ArticleDetailPage({
         <ArticleContent article={article} />
         <AuthorBio author={article.author} />
         <ArticleCTA />
-        <RelatedArticles articles={article.relatedArticles} />
+        <RelatedArticles articles={article.relatedArticles} lang={lang} />
       </main>
       <FooterWrapper />
     </div>
@@ -166,7 +166,17 @@ export async function generateMetadata({
 }
 
 export async function generateStaticParams() {
-  const slugs = await client.fetch<{ slug: string }[]>(blogPostSlugsQuery, getQueryParams({}))
-  const slugList = slugs ?? []
-  return slugList.flatMap((s) => LOCALE_IDS.map((lang) => ({ lang, slug: s.slug })))
+  const pairs = await client.fetch<{ slug: string; language: string | null }[]>(
+    blogPostSlugLanguagePairsQuery,
+    {}
+  )
+  const list = pairs ?? []
+  return list.flatMap((p) => {
+    const slug = p.slug
+    const lang = p.language && p.language.trim() !== '' ? p.language : null
+    if (lang) {
+      return [{ lang, slug }]
+    }
+    return LOCALE_IDS.map((l) => ({ lang: l, slug }))
+  })
 }
