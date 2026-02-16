@@ -7,6 +7,7 @@ import { client } from '@/sanity/lib/client'
 import { workPageQuery } from '@/sanity/lib/queries'
 import { getQueryParams } from '@/sanity/lib/queryHelpers'
 import { getLanguageFromParams } from '@/lib/language'
+import { getAlternateLanguagesForMetadata } from '@/lib/hreflang'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -31,6 +32,11 @@ interface WorkPageData {
   }
   cta?: { title?: string; description?: string; buttonText?: string; buttonLink?: string }
   seo?: { metaTitle?: string; metaDescription?: string }
+}
+
+export async function generateMetadata() {
+  const alternates = getAlternateLanguagesForMetadata('work')
+  return { alternates: Object.keys(alternates).length ? { languages: alternates } : undefined }
 }
 
 export default async function Work({ params }: { params: Promise<{ lang: string }> }) {

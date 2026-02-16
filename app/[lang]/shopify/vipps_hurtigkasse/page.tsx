@@ -9,6 +9,7 @@ import { client } from '@/sanity/lib/client'
 import { vippsHurtigkassePageQuery } from '@/sanity/lib/queries'
 import { getQueryParams } from '@/sanity/lib/queryHelpers'
 import { getLanguageFromParams } from '@/lib/language'
+import { getAlternateLanguagesForMetadata } from '@/lib/hreflang'
 import Hero from '@/components/layout/Hero'
 
 export const dynamic = 'force-dynamic'
@@ -71,9 +72,11 @@ export async function generateMetadata({
     .fetch(vippsHurtigkassePageQuery, getQueryParams({}, language), { next: { revalidate: 0 } })
     .catch(() => null)
 
+  const alternates = getAlternateLanguagesForMetadata('shopify/vipps_hurtigkasse')
   return {
     title: (pageData as VippsHurtigkassePageData)?.seo?.metaTitle || 'Vipps Quick Checkout for Shopify | Scandicommerce',
     description: (pageData as VippsHurtigkassePageData)?.seo?.metaDescription || 'Give your customers an easier shopping experience with Vipps Quick Checkout. Full integration with Shopify, support for capture, refund, shipping and discount codes.',
+    alternates: Object.keys(alternates).length ? { languages: alternates } : undefined,
   }
 }
 

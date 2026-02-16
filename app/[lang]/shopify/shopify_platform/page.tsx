@@ -8,6 +8,7 @@ import { client } from '@/sanity/lib/client'
 import { shopifyPlatformPageQuery } from '@/sanity/lib/queries'
 import { getQueryParams } from '@/sanity/lib/queryHelpers'
 import { getLanguageFromParams } from '@/lib/language'
+import { getAlternateLanguagesForMetadata } from '@/lib/hreflang'
 import Hero from '@/components/layout/Hero'
 
 export const dynamic = 'force-dynamic'
@@ -45,6 +46,11 @@ interface ShopifyPlatformPageData {
     subtitle?: string
     caseStudies?: Array<{ clientName?: string; heading?: string; description?: string; imageUrl?: string }>
   }
+}
+
+export async function generateMetadata() {
+  const alternates = getAlternateLanguagesForMetadata('shopify/shopify_platform')
+  return { alternates: Object.keys(alternates).length ? { languages: alternates } : undefined }
 }
 
 export default async function ShopifyPlatformPage({ params }: { params: Promise<{ lang: string }> }) {

@@ -11,6 +11,7 @@ import { client } from '@/sanity/lib/client'
 import { shopifyXAiPageQuery } from '@/sanity/lib/queries'
 import { getQueryParams } from '@/sanity/lib/queryHelpers'
 import { getLanguageFromParams } from '@/lib/language'
+import { getAlternateLanguagesForMetadata } from '@/lib/hreflang'
 import Hero from '@/components/layout/Hero'
 
 export const dynamic = 'force-dynamic'
@@ -71,6 +72,11 @@ interface ShopifyXAiPageData {
     buttonText?: string
     buttonLink?: string
   }
+}
+
+export async function generateMetadata() {
+  const alternates = getAlternateLanguagesForMetadata('shopify/shopify_x_AI')
+  return { alternates: Object.keys(alternates).length ? { languages: alternates } : undefined }
 }
 
 export default async function ShopifyXAIPage({

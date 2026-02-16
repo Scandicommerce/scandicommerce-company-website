@@ -11,6 +11,7 @@ import { client } from '@/sanity/lib/client'
 import { packageDetailPageQuery } from '@/sanity/lib/queries'
 import { getQueryParams } from '@/sanity/lib/queryHelpers'
 import { getLanguageFromParams } from '@/lib/language'
+import { getAlternateLanguagesForMetadata } from '@/lib/hreflang'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -275,8 +276,10 @@ export async function generateMetadata({
   const title = sanityData?.seo?.metaTitle || sanityData?.packageInfo?.title || staticPkg?.title
   const description = sanityData?.seo?.metaDescription || sanityData?.packageInfo?.description || staticPkg?.description
 
+  const alternates = getAlternateLanguagesForMetadata(`services/all_packages/${slug}`)
   return {
     title: `${title} Package | ScandiCommerce`,
     description: description,
+    alternates: Object.keys(alternates).length ? { languages: alternates } : undefined,
   }
 }

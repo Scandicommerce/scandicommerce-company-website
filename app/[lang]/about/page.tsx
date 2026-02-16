@@ -10,6 +10,7 @@ import { client } from '@/sanity/lib/client'
 import { aboutPageQuery } from '@/sanity/lib/queries'
 import { getQueryParams } from '@/sanity/lib/queryHelpers'
 import { getLanguageFromParams } from '@/lib/language'
+import { getAlternateLanguagesForMetadata } from '@/lib/hreflang'
 import Hero from '@/components/layout/Hero'
 import type { Image as SanityImage } from 'sanity'
 
@@ -67,6 +68,11 @@ interface AboutPageData {
     buttonLink?: string
   }
   seo?: { metaTitle?: string; metaDescription?: string }
+}
+
+export async function generateMetadata() {
+  const alternates = getAlternateLanguagesForMetadata('about')
+  return { alternates: Object.keys(alternates).length ? { languages: alternates } : undefined }
 }
 
 export default async function About({ params }: { params: Promise<{ lang: string }> }) {

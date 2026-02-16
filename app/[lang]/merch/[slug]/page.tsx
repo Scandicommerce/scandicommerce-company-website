@@ -11,6 +11,7 @@ import { client } from '@/sanity/lib/client'
 import { merchProductSettingsQuery } from '@/sanity/lib/queries'
 import { getQueryParams } from '@/sanity/lib/queryHelpers'
 import { getLanguageFromParams } from '@/lib/language'
+import { getAlternateLanguagesForMetadata } from '@/lib/hreflang'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -126,8 +127,10 @@ export async function generateMetadata({
       description: 'The product you are looking for could not be found.',
     }
   }
+  const alternates = getAlternateLanguagesForMetadata(`merch/${slug}`)
   return {
     title: `${shopifyProduct.title} | ScandiCommerce Merch`,
     description: shopifyProduct.description || `${shopifyProduct.title} from ScandiCommerce`,
+    alternates: Object.keys(alternates).length ? { languages: alternates } : undefined,
   }
 }

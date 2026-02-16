@@ -3,6 +3,7 @@ import FooterWrapper from '@/components/layout/FooterWrapper'
 import Hero from '@/components/layout/Hero'
 import MigrationCalculator from '@/components/sections/shopify/shopify_migration/MigrationCalculator'
 import { getLanguageFromParams } from '@/lib/language'
+import { getAlternateLanguagesForMetadata } from '@/lib/hreflang'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -14,6 +15,11 @@ const heroData = {
   },
   heroDescription:
     'Move your products, customers, orders, blogs, and pages to Shopify with 99.9% data accuracy and zero downtime. At ScandiCommerce, we handle the entire migration process so you can focus on what matters most: growing your business.',
+}
+
+export async function generateMetadata() {
+  const alternates = getAlternateLanguagesForMetadata('shopify/shopify_migration')
+  return { alternates: Object.keys(alternates).length ? { languages: alternates } : undefined }
 }
 
 export default async function ShopifyMigrationPage({

@@ -4,6 +4,7 @@ import { client } from '@/sanity/lib/client'
 import { homepageQuery, allPackagesPageQuery } from '@/sanity/lib/queries'
 import { getQueryParams } from '@/sanity/lib/queryHelpers'
 import { getLanguageFromParams } from '@/lib/language'
+import { getAlternateLanguagesForMetadata } from '@/lib/hreflang'
 
 import Hero from '@/components/sections/homepage/Hero'
 import TrustedBy from '@/components/sections/homepage/TrustedBy'
@@ -129,6 +130,11 @@ async function getAllPackages(language?: string): Promise<AllPackagesData | null
     console.error('Error fetching all packages:', error)
     return null
   }
+}
+
+export async function generateMetadata({ params }: { params: Promise<{ lang: string }> }) {
+  const alternates = getAlternateLanguagesForMetadata('')
+  return { alternates: Object.keys(alternates).length ? { languages: alternates } : undefined }
 }
 
 export default async function Home({

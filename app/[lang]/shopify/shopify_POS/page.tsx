@@ -7,6 +7,7 @@ import { client } from '@/sanity/lib/client'
 import { shopifyPosInfoPageQuery } from '@/sanity/lib/queries'
 import { getQueryParams } from '@/sanity/lib/queryHelpers'
 import { getLanguageFromParams } from '@/lib/language'
+import { getAlternateLanguagesForMetadata } from '@/lib/hreflang'
 import Hero from '@/components/layout/Hero'
 
 export const dynamic = 'force-dynamic'
@@ -47,6 +48,11 @@ interface ShopifyPosInfoPageData {
       submitButtonText?: string
     }
   }
+}
+
+export async function generateMetadata() {
+  const alternates = getAlternateLanguagesForMetadata('shopify/shopify_POS')
+  return { alternates: Object.keys(alternates).length ? { languages: alternates } : undefined }
 }
 
 export default async function ShopifyPOSPage({

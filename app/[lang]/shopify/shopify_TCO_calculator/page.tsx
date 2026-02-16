@@ -4,6 +4,7 @@ import { client } from '@/sanity/lib/client'
 import { shopifyTcoCalculatorPageQuery } from '@/sanity/lib/queries'
 import { getQueryParams } from '@/sanity/lib/queryHelpers'
 import { getLanguageFromParams } from '@/lib/language'
+import { getAlternateLanguagesForMetadata } from '@/lib/hreflang'
 import TCOCalculatorClient from '@/app/shopify/shopify_TCO_calculator/TCOCalculatorClient'
 
 export const dynamic = 'force-dynamic'
@@ -18,6 +19,11 @@ interface ShopifyTcoCalculatorPageData {
     heroDescription?: string
     platforms?: string[]
   }
+}
+
+export async function generateMetadata() {
+  const alternates = getAlternateLanguagesForMetadata('shopify/shopify_TCO_calculator')
+  return { alternates: Object.keys(alternates).length ? { languages: alternates } : undefined }
 }
 
 export default async function ShopifyTCOCalculatorPage({

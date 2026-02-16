@@ -8,6 +8,7 @@ import { client } from '@/sanity/lib/client'
 import { contactPageQuery } from '@/sanity/lib/queries'
 import { getQueryParams } from '@/sanity/lib/queryHelpers'
 import { getLanguageFromParams } from '@/lib/language'
+import { getAlternateLanguagesForMetadata } from '@/lib/hreflang'
 import Hero from '@/components/layout/Hero'
 
 export const dynamic = 'force-dynamic'
@@ -44,6 +45,11 @@ interface ContactPageData {
     faqs?: { question?: string; answer?: string }[]
   }
   seo?: { metaTitle?: string; metaDescription?: string }
+}
+
+export async function generateMetadata() {
+  const alternates = getAlternateLanguagesForMetadata('contact')
+  return { alternates: Object.keys(alternates).length ? { languages: alternates } : undefined }
 }
 
 export default async function Contact({ params }: { params: Promise<{ lang: string }> }) {

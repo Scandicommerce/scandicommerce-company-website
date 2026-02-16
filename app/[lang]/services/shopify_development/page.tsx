@@ -9,6 +9,7 @@ import { client } from '@/sanity/lib/client'
 import { shopifyDevelopmentPageQuery } from '@/sanity/lib/queries'
 import { getQueryParams } from '@/sanity/lib/queryHelpers'
 import { getLanguageFromParams } from '@/lib/language'
+import { getAlternateLanguagesForMetadata } from '@/lib/hreflang'
 import Hero from '@/components/layout/Hero'
 import { Button } from '@/components/ui'
 
@@ -51,6 +52,11 @@ interface ShopifyDevPageData {
     ctaButtonText?: string
     ctaButtonLink?: string
   }
+}
+
+export async function generateMetadata() {
+  const alternates = getAlternateLanguagesForMetadata('services/shopify_development')
+  return { alternates: Object.keys(alternates).length ? { languages: alternates } : undefined }
 }
 
 export default async function ServicesShopifyDevelopment({

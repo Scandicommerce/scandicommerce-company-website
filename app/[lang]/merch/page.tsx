@@ -9,6 +9,7 @@ import { client } from '@/sanity/lib/client'
 import { merchPageQuery } from '@/sanity/lib/queries'
 import { getQueryParams } from '@/sanity/lib/queryHelpers'
 import { getLanguageFromParams } from '@/lib/language'
+import { getAlternateLanguagesForMetadata } from '@/lib/hreflang'
 import Hero from '@/components/layout/Hero'
 
 export const dynamic = 'force-dynamic'
@@ -45,9 +46,11 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
     getQueryParams({}, language),
     { next: { revalidate: 0 } }
   )
+  const alternates = getAlternateLanguagesForMetadata('merch')
   return {
     title: data?.seo?.metaTitle || 'Merch | ScandiCommerce',
     description: data?.seo?.metaDescription || 'Wear the brand behind high-performance Shopify builds. Premium quality, minimal design, maximum comfort.',
+    alternates: Object.keys(alternates).length ? { languages: alternates } : undefined,
   }
 }
 

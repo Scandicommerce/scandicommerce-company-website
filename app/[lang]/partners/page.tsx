@@ -7,6 +7,7 @@ import { client } from '@/sanity/lib/client'
 import { partnersPageQuery, partnerCategoriesQuery } from '@/sanity/lib/queries'
 import { getQueryParams } from '@/sanity/lib/queryHelpers'
 import { getLanguageFromParams } from '@/lib/language'
+import { getAlternateLanguagesForMetadata } from '@/lib/hreflang'
 import Hero from '@/components/layout/Hero'
 
 export const dynamic = 'force-dynamic'
@@ -40,6 +41,11 @@ interface PartnersPageData {
   }
   cta?: { title?: string; description?: string; buttonText?: string; buttonLink?: string }
   seo?: { metaTitle?: string; metaDescription?: string }
+}
+
+export async function generateMetadata() {
+  const alternates = getAlternateLanguagesForMetadata('partners')
+  return { alternates: Object.keys(alternates).length ? { languages: alternates } : undefined }
 }
 
 export default async function Partners({ params }: { params: Promise<{ lang: string }> }) {

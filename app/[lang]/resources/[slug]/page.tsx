@@ -10,6 +10,7 @@ import { blogPostBySlugQuery, blogPostSlugLanguagePairsQuery } from '@/sanity/li
 import { getQueryParams } from '@/sanity/lib/queryHelpers'
 import type { Article } from '@/lib/articles'
 import { getLanguageFromParams } from '@/lib/language'
+import { getAlternateLanguagesForMetadata } from '@/lib/hreflang'
 import { notFound } from 'next/navigation'
 import { LOCALE_IDS } from '@/sanity/lib/languages'
 
@@ -159,9 +160,11 @@ export async function generateMetadata({
     }
   }
 
+  const alternates = getAlternateLanguagesForMetadata(`resources/${slug}`)
   return {
     title: `${post.title ?? 'Article'} | ScandiCommerce`,
     description: post.description ?? undefined,
+    alternates: Object.keys(alternates).length ? { languages: alternates } : undefined,
   }
 }
 
