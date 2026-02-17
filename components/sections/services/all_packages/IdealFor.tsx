@@ -12,7 +12,7 @@ export default function IdealFor({ idealFor }: IdealForProps) {
             key={index}
             className="bg-white p-6 rounded-lg shadow-sm border border-gray-100"
           >
-            <p className="text-gray-900 text-[4vw] xs:text-[2.6vw] sm:text-[2.5vw] md:text-[2.2vw] lg:text-[18px] xl:text-[24px]">{item}</p>
+            <p className="text-gray-900 text-[4vw] xs:text-[2.6vw] sm:text-[2.5vw] md:text-[2.2vw] lg:text-[18px] xl:text-[20px]">{item}</p>
           </div>
         ))}
       </div>

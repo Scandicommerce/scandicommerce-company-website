@@ -65,11 +65,11 @@ export default function PackageTabs({ pkg }: PackageTabsProps) {
                             key={itemIndex}
                             className="bg-white p-5 border border-gray-100 shadow-sm"
                           >
-                            <span className="text-gray-700 text-[4vw] xs:text-[2.6vw] sm:text-[2.5vw] md:text-[2.2vw] lg:text-[18px] xl:text-[24px]">{item}</span>
+                            <span className="text-gray-700 text-[4vw] xs:text-[2.6vw] sm:text-[2.5vw] md:text-[2.2vw] lg:text-[18px] xl:text-[20px]">{item}</span>
                           </div>
                         ))}
                       </div>
-                    </div>
+                    </div>  
                   ))
                 ) : (
                   // Fallback to simple list
@@ -83,7 +83,7 @@ export default function PackageTabs({ pkg }: PackageTabsProps) {
                           key={index}
                           className="bg-white p-5 border border-gray-100 shadow-sm"
                         >
-                          <span className="text-gray-700 text-[4vw] xs:text-[2.6vw] sm:text-[2.5vw] md:text-[2.2vw] lg:text-[18px] xl:text-[24px]">{item}</span>
+                          <span className="text-gray-700 text-[4vw] xs:text-[2.6vw] sm:text-[2.5vw] md:text-[2.2vw] lg:text-[18px] xl:text-[20px]">{item}</span>
                         </div>
                       ))}
                     </div>
@@ -190,7 +190,7 @@ export default function PackageTabs({ pkg }: PackageTabsProps) {
                           ))}
                         </div>
                         {/* Review Text */}
-                        <p className="text-gray-900 text-[4.3vw] xs:text-[2.6vw] sm:text-[2.5vw] md:text-[2.2vw] lg:text-[18px] xl:text-[24px] mb-4 leading-relaxed">
+                        <p className="text-gray-900 text-[4.3vw] xs:text-[2.6vw] sm:text-[2.5vw] md:text-[2.2vw] lg:text-[18px] xl:text-[20px] mb-4 leading-relaxed">
                           &quot;{review.comment}&quot;
                         </p>
                         {/* Reviewer Name */}
@@ -199,7 +199,7 @@ export default function PackageTabs({ pkg }: PackageTabsProps) {
                         </p>
                         {/* Reviewer Title/Company */}
                         {review.title && (
-                          <p className="text-gray-500 text-[4vw] xs:text-[2.6vw] sm:text-[2.5vw] md:text-[2.2vw] lg:text-[18px] xl:text-[24px]">
+                          <p className="text-gray-500 text-[4vw] xs:text-[2.6vw] sm:text-[2.5vw] md:text-[2.2vw] lg:text-[18px] xl:text-[20px]">
                             {review.title}
                           </p>
                         )}
