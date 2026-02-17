@@ -5,7 +5,7 @@ import { ReactNode, useState, useRef, useEffect, useLayoutEffect } from 'react'
 
 const COLLAPSE_DURATION_MS = 800
 const TRANSITION_DURATION_MS = 800
-const COLLAPSED_CONTENT_HEIGHT = 120
+const COLLAPSED_CONTENT_HEIGHT = 150
 
 export interface Partner {
   id: number
@@ -24,8 +24,8 @@ interface PartnerCardProps {
   imageSizes?: string
   /** Called when expand/collapse toggles so the parent can raise z-index (e.g. above other cards/sections, below header). */
   onExpandChange?: (expanded: boolean) => void
-  /** External control: whether this card should be expanded */
-  isExpanded?: boolean
+  /** When false while this card is expanded, parent has another card expanded — close this one (accordion behavior). */
+  isActiveExpanded?: boolean
 }
 
 const BENEFITS_COLLAPSED = 2
@@ -34,35 +34,19 @@ export default function PartnerCard({
   partner,
   imageSizes = '(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw',
   onExpandChange,
-  isExpanded: externalIsExpanded,
+  isActiveExpanded,
 }: PartnerCardProps) {
-  const [internalIsExpanded, setInternalIsExpanded] = useState(false)
+  const [isExpanded, setIsExpanded] = useState(false)
   const [isCollapsing, setIsCollapsing] = useState(false)
   const [expandedContentHeight, setExpandedContentHeight] = useState(0)
   const collapseTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const contentWrapperRef = useRef<HTMLDivElement>(null)
   const measureRef = useRef<HTMLDivElement>(null)
-
-  // Use external state if provided, otherwise use internal state
-  const isExpanded = externalIsExpanded ?? internalIsExpanded
-
-  // Sync external collapse with internal state
-  useEffect(() => {
-    if (externalIsExpanded === false && internalIsExpanded) {
-      // External state says we should close
-      setInternalIsExpanded(false)
-      setIsCollapsing(true)
-      if (collapseTimeoutRef.current) clearTimeout(collapseTimeoutRef.current)
-      collapseTimeoutRef.current = setTimeout(() => {
-        setIsCollapsing(false)
-        collapseTimeoutRef.current = null
-      }, COLLAPSE_DURATION_MS)
-    }
-  }, [externalIsExpanded, internalIsExpanded])
+  const prevActiveExpandedRef = useRef<boolean | undefined>(isActiveExpanded)
 
   const toggleExpanded = () => {
     if (isExpanded) {
-      setInternalIsExpanded(false)
+      setIsExpanded(false)
       setIsCollapsing(true)
       if (collapseTimeoutRef.current) clearTimeout(collapseTimeoutRef.current)
       collapseTimeoutRef.current = setTimeout(() => {
@@ -76,7 +60,7 @@ export default function PartnerCard({
         clearTimeout(collapseTimeoutRef.current)
         collapseTimeoutRef.current = null
       }
-      setInternalIsExpanded(true)
+      setIsExpanded(true)
       onExpandChange?.(true)
     }
   }
@@ -88,6 +72,23 @@ export default function PartnerCard({
       if (collapseTimeoutRef.current) clearTimeout(collapseTimeoutRef.current)
     }
   }, [])
+
+  // When another card is expanded (parent sets isActiveExpanded false), close this card (accordion behavior).
+  // Only close when isActiveExpanded transitions true → false so we don't close the card we just opened.
+  useEffect(() => {
+    const wasActive = prevActiveExpandedRef.current
+    prevActiveExpandedRef.current = isActiveExpanded
+    if (wasActive === true && isActiveExpanded === false && isExpanded) {
+      setIsExpanded(false)
+      setIsCollapsing(true)
+      if (collapseTimeoutRef.current) clearTimeout(collapseTimeoutRef.current)
+      collapseTimeoutRef.current = setTimeout(() => {
+        setIsCollapsing(false)
+        onExpandChange?.(false)
+        collapseTimeoutRef.current = null
+      }, COLLAPSE_DURATION_MS)
+    }
+  }, [isActiveExpanded, isExpanded, onExpandChange])
 
   // Measure expanded content height on mount so first open also animates (hidden clone)
   useLayoutEffect(() => {
@@ -104,7 +105,7 @@ export default function PartnerCard({
     <div className="bg-white flex flex-col">
       {/* Partner Image - aspect shrinks (4/3 → 5/3) when expanded for more content focus */}
       <div
-        className={`relative w-full min-h-[200px] sm:min-h-[240px] aspect-[17/8.95]`}
+        className={`relative w-full min-h-[150px] sm:min-h-[240px] aspect-[17/8.95] ${isPanelFloating ? 'z-5' : 'z-5'}`}
         style={{ transition: 'aspect-ratio 300ms ease-in-out' }}
       >
         <Image
@@ -133,10 +134,9 @@ export default function PartnerCard({
         )}
       </div>
 
-      <div className="relative flex-grow flex flex-col min-h-[281px] overflow-visible">
+      <div className="relative flex-grow flex flex-col min-h-[330px] overflow-visible">
         <div
-          className={`p-6 flex flex-col border border-[#565454] bg-white border-t-0 transition-[box-shadow] duration-[800ms] ease-in-out ${isPanelFloating ? 'absolute top-0 left-0 w-full z-10 shadow-xl' : ''
-            }`}
+          className={`p-6 flex flex-col border border-[#565454] bg-white border-t-0 transition-[box-shadow] duration-[800ms] ease-in-out ${isPanelFloating ? 'absolute top-0 left-0 w-full shadow-xl z-10' : 'z-10'}`}
         >
           <div className="flex items-center justify-between gap-3 mb-4 flex-wrap w-full">
             <h3 className="text-[5.3vw] xs:text-[3.5vw] sm:text-[3.2vw] md:text-[3.2vw] lg:text-[28px] xl:text-[34px] font-bold text-[#03C1CA]">

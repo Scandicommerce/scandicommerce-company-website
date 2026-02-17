@@ -35,9 +35,8 @@ export default function CaseStudy({
   return (
     <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden mb-8 lg:mb-12">
       <div
-        className={`flex flex-col ${
-          isImageLeft ? 'lg:flex-row' : 'lg:flex-row-reverse'
-        }`}
+        className={`flex flex-col ${isImageLeft ? 'lg:flex-row' : 'lg:flex-row-reverse'
+          }`}
       >
         {/* Image Section */}
         <div className="w-full lg:w-1/2 relative h-[300px] lg:h-[560px]">
@@ -65,16 +64,16 @@ export default function CaseStudy({
               </div>
 
               {/* Tags positioned top right */}
-              <div className="flex flex-wrap gap-2 justify-end sm:order-2 order-1">
-                {tags.map((tag, index) => (
-                  <span
-                    key={index}
-                    className="2xl:px-[21px] xl:px-4 px-2 py-0.5 bg-[#F5F5F5] text-[#565454] 2xl:text-sm xl:text-xs text-[10px] font-medium whitespace-nowrap"
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
+            </div>
+            <div className="flex flex-wrap gap-2 justify-end sm:order-2 order-1">
+              {tags.map((tag, index) => (
+                <span
+                  key={index}
+                  className="2xl:px-[21px] xl:px-4 px-2 py-0.5 bg-[#F5F5F5] text-[#565454] 2xl:text-sm xl:text-xs text-[10px] font-medium whitespace-nowrap"
+                >
+                  {tag}
+                </span>
+              ))}
             </div>
 
             {/* Challenge */}
@@ -107,7 +106,7 @@ export default function CaseStudy({
               <div className="flex justify-between items-center">
                 {results.map((result, index) => (
                   <div key={index} className="flex flex-col items-center">
-                      <div className="text-[5.3vw] xs:text-[3.5vw] sm:text-[3.2vw] md:text-[3.2vw] lg:text-[28px] xl:text-[34px] font-bold !leading-[166%] text-[#03C1CA] font-mono tracking-tight">
+                    <div className="text-[5.3vw] xs:text-[3.5vw] sm:text-[3.2vw] md:text-[3.2vw] lg:text-[28px] xl:text-[34px] font-bold !leading-[166%] text-[#03C1CA] font-mono tracking-tight">
                       {result.value}
                     </div>
                     <div className="2xl:text-base xl:text-sm sm:text-xs text-[9px] text-[#565454] leading-tight font-sans">

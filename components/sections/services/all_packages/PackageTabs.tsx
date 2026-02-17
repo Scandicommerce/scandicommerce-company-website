@@ -56,7 +56,7 @@ export default function PackageTabs({ pkg }: PackageTabsProps) {
                   // Categorized view
                   pkg.includedCategories.map((category, categoryIndex) => (
                     <div key={categoryIndex}>
-                      <h3 className="text-[5.3vw] xs:text-[3.5vw] sm:text-[3.2vw] md:text-[3.2vw] lg:text-[28px] xl:text-[34px] font-bold text-gray-900 mb-6">
+                      <h3 className="text-[4.3vw] xs:text-[2.6vw] sm:text-[2.5vw] md:text-[2.2vw] lg:text-[18px] xl:text-[24px] font-bold text-gray-900 mb-6">
                         {category.category}
                       </h3>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -65,7 +65,7 @@ export default function PackageTabs({ pkg }: PackageTabsProps) {
                             key={itemIndex}
                             className="bg-white p-5 border border-gray-100 shadow-sm"
                           >
-                            <span className="text-gray-700 text-[4.3vw] xs:text-[2.6vw] sm:text-[2.5vw] md:text-[2.2vw] lg:text-[18px] xl:text-[24px]">{item}</span>
+                            <span className="text-gray-700 text-[4vw] xs:text-[2.6vw] sm:text-[2.5vw] md:text-[2.2vw] lg:text-[18px] xl:text-[24px]">{item}</span>
                           </div>
                         ))}
                       </div>
@@ -74,7 +74,7 @@ export default function PackageTabs({ pkg }: PackageTabsProps) {
                 ) : (
                   // Fallback to simple list
                   <div>
-                    <h3 className="text-[5.3vw] xs:text-[3.5vw] sm:text-[3.2vw] md:text-[3.2vw] lg:text-[28px] xl:text-[34px] font-bold text-gray-900 mb-6">
+                    <h3 className="text-[4.3vw] xs:text-[2.6vw] sm:text-[2.5vw] md:text-[2.2vw] lg:text-[18px] xl:text-[24px] font-bold text-gray-900 mb-6">
                       What&apos;s Included
                     </h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -83,7 +83,7 @@ export default function PackageTabs({ pkg }: PackageTabsProps) {
                           key={index}
                           className="bg-white p-5 border border-gray-100 shadow-sm"
                         >
-                          <span className="text-gray-700 text-[4.3vw] xs:text-[2.6vw] sm:text-[2.5vw] md:text-[2.2vw] lg:text-[18px] xl:text-[24px]">{item}</span>
+                          <span className="text-gray-700 text-[4vw] xs:text-[2.6vw] sm:text-[2.5vw] md:text-[2.2vw] lg:text-[18px] xl:text-[24px]">{item}</span>
                         </div>
                       ))}
                     </div>
@@ -109,7 +109,7 @@ export default function PackageTabs({ pkg }: PackageTabsProps) {
                         </div>
                         {/* Title and description */}
                         <div className="flex-1">
-                          <h3 className="text-[5.3vw] xs:text-[3.5vw] sm:text-[3.2vw] md:text-[3.2vw] lg:text-[28px] xl:text-[34px] font-bold text-gray-900 mb-1">
+                          <h3 className="text-[4.3vw] xs:text-[2.6vw] sm:text-[2.5vw] md:text-[2.2vw] lg:text-[18px] xl:text-[24px] font-bold text-gray-900 mb-1">
                             {step.title}
                           </h3>
                           <p className="text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[14px] xl:text-[16px] text-gray-600">
@@ -149,10 +149,10 @@ export default function PackageTabs({ pkg }: PackageTabsProps) {
                         key={index}
                         className="bg-white p-6 rounded-lg shadow-sm border border-gray-100"
                       >
-                        <h4 className="text-[5.3vw] xs:text-[3.5vw] sm:text-[3.2vw] md:text-[3.2vw] lg:text-[28px] xl:text-[34px] font-bold text-gray-900 mb-3">
+                        <h4 className="text-[4.3vw] xs:text-[2.6vw] sm:text-[2.5vw] md:text-[2.2vw] lg:text-[18px] xl:text-[20px] font-bold text-gray-900 mb-3">
                           {item.question}
                         </h4>
-                        <p className="text-gray-600 text-[4.3vw] xs:text-[2.6vw] sm:text-[2.5vw] md:text-[2.2vw] lg:text-[18px] xl:text-[24px] leading-relaxed">
+                        <p className="text-gray-600 text-[4vw] xs:text-[2.6vw] sm:text-[2.5vw] md:text-[2.2vw] lg:text-[18px] xl:text-[20px] leading-relaxed">
                           {item.answer}
                         </p>
                       </div>
@@ -190,7 +190,7 @@ export default function PackageTabs({ pkg }: PackageTabsProps) {
                           ))}
                         </div>
                         {/* Review Text */}
-                        <p className="text-gray-900 text-[5.3vw] xs:text-[3.5vw] sm:text-[3.2vw] md:text-[3.2vw] lg:text-[28px] xl:text-[34px] mb-4 leading-relaxed">
+                        <p className="text-gray-900 text-[4.3vw] xs:text-[2.6vw] sm:text-[2.5vw] md:text-[2.2vw] lg:text-[18px] xl:text-[24px] mb-4 leading-relaxed">
                           &quot;{review.comment}&quot;
                         </p>
                         {/* Reviewer Name */}
@@ -199,7 +199,7 @@ export default function PackageTabs({ pkg }: PackageTabsProps) {
                         </p>
                         {/* Reviewer Title/Company */}
                         {review.title && (
-                          <p className="text-gray-500 text-[4.3vw] xs:text-[2.6vw] sm:text-[2.5vw] md:text-[2.2vw] lg:text-[18px] xl:text-[24px]">
+                          <p className="text-gray-500 text-[4vw] xs:text-[2.6vw] sm:text-[2.5vw] md:text-[2.2vw] lg:text-[18px] xl:text-[24px]">
                             {review.title}
                           </p>
                         )}

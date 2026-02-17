@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useMemo, useRef, type ComponentType } from 'react'
+import { useState, useMemo, useRef, useEffect, type ComponentType } from 'react'
 import PartnerCard, { Partner } from './PartnerCard'
 import { Search, X, ChevronDown, ChevronUp, ShoppingBag, Mail, Headphones, Star, Compass, Package, LayoutGrid, Truck, MapPin, CreditCard } from 'lucide-react'
 import { urlFor } from '@/sanity/lib/image'
@@ -236,8 +236,36 @@ export default function PartnersGrid({ partnersGrid, categoryList }: PartnersGri
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
   const [expandedPartnerId, setExpandedPartnerId] = useState<number | null>(null)
+  /** Partner id that is currently closing (accordion); keep z-index above sections until animation ends. */
+  const [closingPartnerId, setClosingPartnerId] = useState<number | null>(null)
+  const closingTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const [quickJumpExpanded, setQuickJumpExpanded] = useState(false)
+  const [categoryDropdownOpen, setCategoryDropdownOpen] = useState(false)
+  const [desktopCategoryExpanded, setDesktopCategoryExpanded] = useState(true)
+  const categoryDropdownRef = useRef<HTMLDivElement | null>(null)
   const sectionRefs = useRef<Record<string, HTMLDivElement | null>>({})
+
+  const PARTNER_COLLAPSE_DURATION_MS = 800
+  /** Duration for desktop "Jump to category or filter" expand/collapse (ms). */
+  const DESKTOP_CATEGORY_TOGGLE_DURATION_MS = 300
+
+  useEffect(() => {
+    return () => {
+      if (closingTimeoutRef.current) clearTimeout(closingTimeoutRef.current)
+    }
+  }, [])
+
+  // Close category dropdown when clicking outside (mobile)
+  useEffect(() => {
+    if (!categoryDropdownOpen) return
+    const handleClickOutside = (e: MouseEvent) => {
+      if (categoryDropdownRef.current && !categoryDropdownRef.current.contains(e.target as Node)) {
+        setCategoryDropdownOpen(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [categoryDropdownOpen])
 
   const useDynamicCategories = Array.isArray(categoryList) && categoryList.length > 0
 
@@ -401,53 +429,153 @@ export default function PartnersGrid({ partnersGrid, categoryList }: PartnersGri
 
           {/* Category Navigation */}
           <div className="flex flex-col gap-4">
-            <div className="flex items-center gap-2 text-sm text-[#565454] font-medium">
-              <ChevronDown className="w-4 h-4" />
-              <span>Jump to category or filter:</span>
+            {/* Desktop (≥426px): toggle button + grid of category buttons */}
+            <div className="hidden min-[426px]:flex flex-col gap-4">
+              <button
+                type="button"
+                onClick={() => setDesktopCategoryExpanded(!desktopCategoryExpanded)}
+                className="flex items-center gap-2 w-full sm:w-auto text-left text-sm font-semibold text-[#222222] bg-[#F5F5F5] border-2 border-[#E5E5E5] rounded px-4 py-3 hover:bg-[#E8E8E8] hover:border-[#03C1CA]/30 focus:outline-none focus:border-[#03C1CA] transition-colors duration-200"
+                style={{ transitionDuration: `${DESKTOP_CATEGORY_TOGGLE_DURATION_MS}ms` }}
+                aria-expanded={desktopCategoryExpanded}
+              >
+                <ChevronDown
+                  className={`w-4 h-4 shrink-0 text-[#03C1CA] transition-transform`}
+                  style={{
+                    transform: desktopCategoryExpanded ? 'rotate(0deg)' : 'rotate(-90deg)',
+                    transitionDuration: `${DESKTOP_CATEGORY_TOGGLE_DURATION_MS}ms`,
+                  }}
+                />
+                <span>Jump to category or filter:</span>
+              </button>
+              <div
+                className="flex flex-wrap gap-3 overflow-hidden transition-[max-height,opacity] ease-in-out"
+                style={{
+                  maxHeight: desktopCategoryExpanded ? '1000px' : '0',
+                  opacity: desktopCategoryExpanded ? 1 : 0,
+                  transitionDuration: `${DESKTOP_CATEGORY_TOGGLE_DURATION_MS}ms`,
+                }}
+              >
+                <button
+                  onClick={() => setSelectedCategory(null)}
+                  className={`px-5 py-2.5 text-sm font-semibold transition-all duration-200 flex items-center gap-2 ${selectedCategory === null
+                    ? 'bg-[#03C1CA] text-white'
+                    : 'bg-[#F5F5F5] text-[#565454] hover:bg-[#E8E8E8] hover:text-[#222222]'
+                    }`}
+                >
+                  <span className="w-4 h-4 rounded-full border-2 border-current flex items-center justify-center text-xs">
+                    {partners.length}
+                  </span>
+                  All Partners
+                </button>
+                {uniqueGroups.map(group => {
+                  const groupCount = partners.filter(p => {
+                    const tags = p.categories?.length ? p.categories : (p.category ? [p.category] : [])
+                    return tags.some(t => getGroupKey(t) === group)
+                  }).length
+                  return (
+                    <button
+                      key={group}
+                      onClick={() => setSelectedCategory(selectedCategory === group ? null : group)}
+                      onDoubleClick={() => scrollToSection(group)}
+                      title="Click to filter, double-click to jump"
+                      className={`px-5 py-2.5 text-sm font-semibold transition-all duration-200 flex items-center gap-2 ${selectedCategory === group
+                        ? 'bg-[#03C1CA] text-white'
+                        : 'bg-[#F5F5F5] text-[#565454] hover:bg-[#E8E8E8] hover:text-[#222222]'
+                        }`}
+                    >
+                      <span className={`${selectedCategory === group ? 'text-white' : 'text-[#03C1CA]'}`}>
+                        {getCategoryIconForGroup(group, 'sm')}
+                      </span>
+                      {group}
+                      <span className={`text-xs px-1.5 py-0.5 rounded-full ${selectedCategory === group
+                        ? 'bg-white/20 text-white'
+                        : 'bg-[#03C1CA]/10 text-[#03C1CA]'
+                        }`}>
+                        {groupCount}
+                      </span>
+                    </button>
+                  )
+                })}
+              </div>
             </div>
 
-            <div className="flex flex-wrap gap-3">
+            {/* Mobile (<426px): select button + dropdown with categories */}
+            <div ref={categoryDropdownRef} className="min-[426px]:hidden relative">
               <button
-                onClick={() => setSelectedCategory(null)}
-                className={`px-5 py-2.5 text-sm font-semibold transition-all duration-200 flex items-center gap-2 ${selectedCategory === null
-                  ? 'bg-[#03C1CA] text-white'
-                  : 'bg-[#F5F5F5] text-[#565454] hover:bg-[#E8E8E8] hover:text-[#222222]'
-                  }`}
+                type="button"
+                onClick={() => setCategoryDropdownOpen(!categoryDropdownOpen)}
+                className="flex items-center justify-between gap-2 w-full text-left text-sm font-semibold text-[#222222] bg-[#F5F5F5] border-2 border-[#E5E5E5] rounded px-4 py-3 hover:bg-[#E8E8E8] hover:border-[#03C1CA]/30 focus:outline-none focus:border-[#03C1CA] transition-colors duration-200"
+                aria-expanded={categoryDropdownOpen}
+                aria-haspopup="listbox"
               >
-                <span className="w-4 h-4 rounded-full border-2 border-current flex items-center justify-center text-xs">
-                  {partners.length}
+                <span className="flex items-center gap-2">
+                  <ChevronDown className={`w-4 h-4 shrink-0 text-[#03C1CA] transition-transform ${categoryDropdownOpen ? 'rotate-180' : ''}`} />
+                  Jump to category or filter:
                 </span>
-                All Partners
+                <span className="flex items-center gap-2 text-[#222222]">
+                  {selectedCategory === null ? (
+                    <>
+                      <span className="w-4 h-4 rounded-full border-2 border-[#03C1CA] flex items-center justify-center text-xs text-[#03C1CA]">
+                        {partners.length}
+                      </span>
+                      All Partners
+                    </>
+                  ) : (
+                    <>
+                      <span className="text-[#03C1CA] shrink-0">
+                        {getCategoryIconForGroup(selectedCategory, 'sm')}
+                      </span>
+                      {selectedCategory}
+                    </>
+                  )}
+                </span>
               </button>
-              {uniqueGroups.map(group => {
-                const groupCount = partners.filter(p => {
-                  const tags = p.categories?.length ? p.categories : (p.category ? [p.category] : [])
-                  return tags.some(t => getGroupKey(t) === group)
-                }).length
-                return (
+              {categoryDropdownOpen && (
+                <div
+                  className="absolute left-0 right-0 top-full mt-2 z-50 max-h-[70vh] overflow-y-auto bg-white border border-[#E5E5E5] shadow-lg py-2"
+                  role="listbox"
+                >
                   <button
-                    key={group}
-                    onClick={() => setSelectedCategory(selectedCategory === group ? null : group)}
-                    onDoubleClick={() => scrollToSection(group)}
-                    title="Click to filter, double-click to jump"
-                    className={`px-5 py-2.5 text-sm font-semibold transition-all duration-200 flex items-center gap-2 ${selectedCategory === group
+                    onClick={() => { setSelectedCategory(null); setCategoryDropdownOpen(false) }}
+                    className={`w-full px-4 py-2.5 text-sm font-semibold transition-all duration-200 flex items-center gap-2 ${selectedCategory === null
                       ? 'bg-[#03C1CA] text-white'
-                      : 'bg-[#F5F5F5] text-[#565454] hover:bg-[#E8E8E8] hover:text-[#222222]'
+                      : 'bg-white text-[#565454] hover:bg-[#F5F5F5]'
                       }`}
                   >
-                    <span className={`${selectedCategory === group ? 'text-white' : 'text-[#03C1CA]'}`}>
-                      {getCategoryIconForGroup(group, 'sm')}
+                    <span className="w-4 h-4 rounded-full border-2 border-current flex items-center justify-center text-xs shrink-0">
+                      {partners.length}
                     </span>
-                    {group}
-                    <span className={`text-xs px-1.5 py-0.5 rounded-full ${selectedCategory === group
-                      ? 'bg-white/20 text-white'
-                      : 'bg-[#03C1CA]/10 text-[#03C1CA]'
-                      }`}>
-                      {groupCount}
-                    </span>
+                    All Partners
                   </button>
-                )
-              })}
+                  {uniqueGroups.map(group => {
+                    const groupCount = partners.filter(p => {
+                      const tags = p.categories?.length ? p.categories : (p.category ? [p.category] : [])
+                      return tags.some(t => getGroupKey(t) === group)
+                    }).length
+                    return (
+                      <button
+                        key={group}
+                        onClick={() => { setSelectedCategory(selectedCategory === group ? null : group); setCategoryDropdownOpen(false) }}
+                        className={`w-full px-4 py-2.5 text-sm font-semibold transition-all duration-200 flex items-center gap-2 text-left ${selectedCategory === group
+                          ? 'bg-[#03C1CA] text-white'
+                          : 'bg-white text-[#565454] hover:bg-[#F5F5F5]'
+                          }`}
+                      >
+                        <span className={`shrink-0 ${selectedCategory === group ? 'text-white' : 'text-[#03C1CA]'}`}>
+                          {getCategoryIconForGroup(group, 'sm')}
+                        </span>
+                        {group}
+                        <span className={`text-xs px-1.5 py-0.5 rounded-full shrink-0 ${selectedCategory === group
+                          ? 'bg-white/20 text-white'
+                          : 'bg-[#03C1CA]/10 text-[#03C1CA]'
+                          }`}>
+                          {groupCount}
+                        </span>
+                      </button>
+                    )
+                  })}
+                </div>
+              )}
             </div>
 
             {hasActiveFilters && (
@@ -536,14 +664,26 @@ export default function PartnersGrid({ partnersGrid, categoryList }: PartnersGri
                   {groupPartners.map((partner, index) => (
                     <div
                       key={partner.id}
-                      className={`animate-fade-in-up opacity-0 ${expandedPartnerId === partner.id ? 'relative z-40 overflow-visible' : ''}`}
+                      className={`animate-fade-in-up opacity-0 relative ${(expandedPartnerId === partner.id || closingPartnerId === partner.id) ? 'z-40 overflow-visible' : 'z-0'}`}
                       style={{ animationDelay: `${index * 0.05}s`, animationFillMode: 'forwards' }}
                     >
                       <PartnerCard
                         partner={partner}
                         imageSizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                        isExpanded={expandedPartnerId === partner.id}
-                        onExpandChange={(expanded) => setExpandedPartnerId(expanded ? partner.id : null)}
+                        onExpandChange={(expanded) => {
+                          if (expanded) {
+                            if (expandedPartnerId != null && expandedPartnerId !== partner.id) {
+                              setClosingPartnerId(expandedPartnerId)
+                              if (closingTimeoutRef.current) clearTimeout(closingTimeoutRef.current)
+                              closingTimeoutRef.current = setTimeout(() => {
+                                setClosingPartnerId(null)
+                                closingTimeoutRef.current = null
+                              }, PARTNER_COLLAPSE_DURATION_MS)
+                            }
+                            setExpandedPartnerId(partner.id)
+                          } else if (expandedPartnerId === partner.id) setExpandedPartnerId(null)
+                        }}
+                        isActiveExpanded={expandedPartnerId === partner.id}
                       />
                     </div>
                   ))}
