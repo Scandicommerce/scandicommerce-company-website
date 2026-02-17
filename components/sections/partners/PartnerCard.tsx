@@ -24,6 +24,8 @@ interface PartnerCardProps {
   imageSizes?: string
   /** Called when expand/collapse toggles so the parent can raise z-index (e.g. above other cards/sections, below header). */
   onExpandChange?: (expanded: boolean) => void
+  /** External control: whether this card should be expanded */
+  isExpanded?: boolean
 }
 
 const BENEFITS_COLLAPSED = 2
@@ -32,17 +34,35 @@ export default function PartnerCard({
   partner,
   imageSizes = '(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw',
   onExpandChange,
+  isExpanded: externalIsExpanded,
 }: PartnerCardProps) {
-  const [isExpanded, setIsExpanded] = useState(false)
+  const [internalIsExpanded, setInternalIsExpanded] = useState(false)
   const [isCollapsing, setIsCollapsing] = useState(false)
   const [expandedContentHeight, setExpandedContentHeight] = useState(0)
   const collapseTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const contentWrapperRef = useRef<HTMLDivElement>(null)
   const measureRef = useRef<HTMLDivElement>(null)
 
+  // Use external state if provided, otherwise use internal state
+  const isExpanded = externalIsExpanded ?? internalIsExpanded
+
+  // Sync external collapse with internal state
+  useEffect(() => {
+    if (externalIsExpanded === false && internalIsExpanded) {
+      // External state says we should close
+      setInternalIsExpanded(false)
+      setIsCollapsing(true)
+      if (collapseTimeoutRef.current) clearTimeout(collapseTimeoutRef.current)
+      collapseTimeoutRef.current = setTimeout(() => {
+        setIsCollapsing(false)
+        collapseTimeoutRef.current = null
+      }, COLLAPSE_DURATION_MS)
+    }
+  }, [externalIsExpanded, internalIsExpanded])
+
   const toggleExpanded = () => {
     if (isExpanded) {
-      setIsExpanded(false)
+      setInternalIsExpanded(false)
       setIsCollapsing(true)
       if (collapseTimeoutRef.current) clearTimeout(collapseTimeoutRef.current)
       collapseTimeoutRef.current = setTimeout(() => {
@@ -56,7 +76,7 @@ export default function PartnerCard({
         clearTimeout(collapseTimeoutRef.current)
         collapseTimeoutRef.current = null
       }
-      setIsExpanded(true)
+      setInternalIsExpanded(true)
       onExpandChange?.(true)
     }
   }

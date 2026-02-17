@@ -542,6 +542,7 @@ export default function PartnersGrid({ partnersGrid, categoryList }: PartnersGri
                       <PartnerCard
                         partner={partner}
                         imageSizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                        isExpanded={expandedPartnerId === partner.id}
                         onExpandChange={(expanded) => setExpandedPartnerId(expanded ? partner.id : null)}
                       />
                     </div>
