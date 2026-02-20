@@ -6,6 +6,7 @@ import { link, button, seo, blockContent } from "./objects";
 // ============================================
 // Page Types (document types for pages)
 // ============================================
+import { calendlyBooking } from "./calendlyBooking";
 import {
   landingPage,
   servicesPage,
@@ -70,4 +71,5 @@ export const schemaTypes = [
   headerSettings,
   footerSettings,
   vippsHurtigkassePage,
+  calendlyBooking,
 ];

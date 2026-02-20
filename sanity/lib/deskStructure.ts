@@ -1,7 +1,14 @@
-import { StructureBuilder } from "sanity/structure";
-import { DocumentsIcon, ComposeIcon, CogIcon } from "@sanity/icons";
-import { PageListWithDelete } from "@/sanity/components/PageListWithDelete";
-import { languages } from "@/sanity/lib/languages";
+import { StructureBuilder } from 'sanity/structure'
+import {
+  DocumentsIcon,
+  ComposeIcon,
+  CogIcon,
+  CalendarIcon,
+  PlugIcon,
+} from '@sanity/icons'
+import { PageListWithDelete } from '@/sanity/components/PageListWithDelete'
+import { CalendlySetup } from '@/sanity/components/CalendlySetup'
+import { languages } from '@/sanity/lib/languages'
 
 function pageListWithDelete(
   S: StructureBuilder,
@@ -15,28 +22,28 @@ function pageListWithDelete(
       S.component(PageListWithDelete)
         .options({ schemaType, title })
         .id(`pages-${schemaType}`)
-    );
+    )
 }
 
 /** Blog posts grouped by language; each folder uses default list so clicking a post opens it in the next pane */
-const DEFAULT_LANG_ID = "en";
+const DEFAULT_LANG_ID = 'en'
 function blogPostsByLanguage(S: StructureBuilder) {
   return S.listItem()
-    .title("Blog Posts")
-    .schemaType("blogPost")
+    .title('Blog Posts')
+    .schemaType('blogPost')
     .child(
       S.list()
-        .title("Blog Posts by Language")
+        .title('Blog Posts by Language')
         .items(
-          languages.map((lang) =>
+          languages.map(lang =>
             S.listItem()
               .title(lang.title)
-              .schemaType("blogPost")
+              .schemaType('blogPost')
               .child(
                 S.documentList()
-                  .apiVersion("2024-01-01")
+                  .apiVersion('2024-01-01')
                   .title(`Blog Posts (${lang.title})`)
-                  .schemaType("blogPost")
+                  .schemaType('blogPost')
                   .filter(
                     '_type == "blogPost" && (language == $language || (!defined(language) && $isDefault))'
                   )
@@ -47,27 +54,27 @@ function blogPostsByLanguage(S: StructureBuilder) {
               )
           )
         )
-    );
+    )
 }
 
 export const deskStructure = (S: StructureBuilder) =>
   S.list()
-    .title("Content")
+    .title('Content')
     .items([
       // First Section: Pages Overview
       S.listItem()
-        .title("Pages")
+        .title('Pages')
         .icon(DocumentsIcon)
         .child(
           S.list()
-            .title("All Pages")
+            .title('All Pages')
             .items([
-              pageListWithDelete(S, "landingPage", "Home Pages"),
-              pageListWithDelete(S, "servicesPage", "Services Pages"),
-              pageListWithDelete(S, "aboutPage", "About Pages"),
-              pageListWithDelete(S, "contactPage", "Contact Pages"),
-              pageListWithDelete(S, "workPage", "Work Pages"),
-              pageListWithDelete(S, "blogPage", "Blog Pages"),
+              pageListWithDelete(S, 'landingPage', 'Home Pages'),
+              pageListWithDelete(S, 'servicesPage', 'Services Pages'),
+              pageListWithDelete(S, 'aboutPage', 'About Pages'),
+              pageListWithDelete(S, 'contactPage', 'Contact Pages'),
+              pageListWithDelete(S, 'workPage', 'Work Pages'),
+              pageListWithDelete(S, 'blogPage', 'Blog Pages'),
               blogPostsByLanguage(S),
             ])
         ),
@@ -76,151 +83,193 @@ export const deskStructure = (S: StructureBuilder) =>
 
       // Home Page - Quick Access
       S.listItem()
-        .title("Home Page")
+        .title('Home Page')
         .icon(ComposeIcon)
-        .schemaType("landingPage")
-        .child(S.documentTypeList("landingPage").title("Home Pages")),
+        .schemaType('landingPage')
+        .child(S.documentTypeList('landingPage').title('Home Pages')),
 
       // Service Pages - Contains sub-pages like Shopify Development
       S.listItem()
-        .title("Service Pages")
+        .title('Service Pages')
         .icon(CogIcon)
         .child(
           S.list()
-            .title("Service Pages")
+            .title('Service Pages')
             .items([
               S.listItem()
-                .title("Shopify Development Page")
-                .schemaType("shopifyDevelopmentPage")
+                .title('Shopify Development Page')
+                .schemaType('shopifyDevelopmentPage')
                 .child(
-                  S.documentTypeList("shopifyDevelopmentPage").title("Shopify Development Page")
+                  S.documentTypeList('shopifyDevelopmentPage').title(
+                    'Shopify Development Page'
+                  )
                 ),
               S.listItem()
-                .title("Migrate Page")
-                .schemaType("migratePage")
+                .title('Migrate Page')
+                .schemaType('migratePage')
+                .child(S.documentTypeList('migratePage').title('Migrate Page')),
+              S.listItem()
+                .title('Shopify POS Page')
+                .schemaType('shopifyPosPage')
                 .child(
-                  S.documentTypeList("migratePage").title("Migrate Page")
+                  S.documentTypeList('shopifyPosPage').title('Shopify POS Page')
                 ),
               S.listItem()
-                .title("Shopify POS Page")
-                .schemaType("shopifyPosPage")
+                .title('All Packages Page')
+                .schemaType('allPackagesPage')
                 .child(
-                  S.documentTypeList("shopifyPosPage").title("Shopify POS Page")
+                  S.documentTypeList('allPackagesPage').title(
+                    'All Packages Page'
+                  )
                 ),
               S.listItem()
-                .title("All Packages Page")
-                .schemaType("allPackagesPage")
+                .title('Package Detail Pages')
+                .schemaType('packageDetailPage')
                 .child(
-                  S.documentTypeList("allPackagesPage").title("All Packages Page")
-                ),
-              S.listItem()
-                .title("Package Detail Pages")
-                .schemaType("packageDetailPage")
-                .child(
-                  S.documentTypeList("packageDetailPage").title("Package Detail Pages")
+                  S.documentTypeList('packageDetailPage').title(
+                    'Package Detail Pages'
+                  )
                 ),
             ])
         ),
 
       // Shopify Pages - Contains Shopify Platform, POS Info, TCO Calculator, x PIM, x AI, Why Shopify
       S.listItem()
-        .title("Shopify Pages")
+        .title('Shopify Pages')
         .icon(CogIcon)
         .child(
           S.list()
-            .title("Shopify Pages")
+            .title('Shopify Pages')
             .items([
               S.listItem()
-                .title("Shopify Platform Page")
-                .schemaType("shopifyPlatformPage")
+                .title('Shopify Platform Page')
+                .schemaType('shopifyPlatformPage')
                 .child(
-                  S.documentTypeList("shopifyPlatformPage").title("Shopify Platform Page")
+                  S.documentTypeList('shopifyPlatformPage').title(
+                    'Shopify Platform Page'
+                  )
                 ),
               S.listItem()
-                .title("Shopify POS Info Page")
-                .schemaType("shopifyPosInfoPage")
+                .title('Shopify POS Info Page')
+                .schemaType('shopifyPosInfoPage')
                 .child(
-                  S.documentTypeList("shopifyPosInfoPage").title("Shopify POS Info Page")
+                  S.documentTypeList('shopifyPosInfoPage').title(
+                    'Shopify POS Info Page'
+                  )
                 ),
               S.listItem()
-                .title("Shopify TCO Calculator Page")
-                .schemaType("shopifyTcoCalculatorPage")
+                .title('Shopify TCO Calculator Page')
+                .schemaType('shopifyTcoCalculatorPage')
                 .child(
-                  S.documentTypeList("shopifyTcoCalculatorPage").title("Shopify TCO Calculator Page")
+                  S.documentTypeList('shopifyTcoCalculatorPage').title(
+                    'Shopify TCO Calculator Page'
+                  )
                 ),
               S.listItem()
-                .title("Shopify x PIM Page")
-                .schemaType("shopifyXPimPage")
+                .title('Shopify x PIM Page')
+                .schemaType('shopifyXPimPage')
                 .child(
-                  S.documentTypeList("shopifyXPimPage").title("Shopify x PIM Page")
+                  S.documentTypeList('shopifyXPimPage').title(
+                    'Shopify x PIM Page'
+                  )
                 ),
               S.listItem()
-                .title("Shopify x AI Page")
-                .schemaType("shopifyXAiPage")
+                .title('Shopify x AI Page')
+                .schemaType('shopifyXAiPage')
                 .child(
-                  S.documentTypeList("shopifyXAiPage").title("Shopify x AI Page")
+                  S.documentTypeList('shopifyXAiPage').title(
+                    'Shopify x AI Page'
+                  )
                 ),
               S.listItem()
-                .title("Why Shopify Page")
-                .schemaType("whyShopifyPage")
+                .title('Why Shopify Page')
+                .schemaType('whyShopifyPage')
                 .child(
-                  S.documentTypeList("whyShopifyPage").title("Why Shopify Page")
+                  S.documentTypeList('whyShopifyPage').title('Why Shopify Page')
                 ),
               S.listItem()
-                .title("Vipps Hurtigkasse Page")
-                .schemaType("vippsHurtigkassePage")
+                .title('Vipps Hurtigkasse Page')
+                .schemaType('vippsHurtigkassePage')
                 .child(
-                  S.documentTypeList("vippsHurtigkassePage").title("Vipps Hurtigkasse Page")
+                  S.documentTypeList('vippsHurtigkassePage').title(
+                    'Vipps Hurtigkasse Page'
+                  )
                 ),
             ])
         ),
 
       S.listItem()
-        .title("About Page")
-        .schemaType("aboutPage")
-        .child(S.documentTypeList("aboutPage").title("About Pages")),
+        .title('About Page')
+        .schemaType('aboutPage')
+        .child(S.documentTypeList('aboutPage').title('About Pages')),
 
       S.listItem()
-        .title("Contact Page")
-        .schemaType("contactPage")
-        .child(S.documentTypeList("contactPage").title("Contact Pages")),
+        .title('Contact Page')
+        .schemaType('contactPage')
+        .child(S.documentTypeList('contactPage').title('Contact Pages')),
 
       S.listItem()
-        .title("Work Page")
-        .schemaType("workPage")
-        .child(S.documentTypeList("workPage").title("Work Pages")),
-
-      S.listItem()
-        .title("Blog")
+        .title('Calendly Bookings')
+        .icon(CalendarIcon)
         .child(
           S.list()
-            .title("Blog")
+            .title('Calendly Bookings')
             .items([
               S.listItem()
-                .title("Blog Page")
-                .schemaType("blogPage")
-                .child(S.documentTypeList("blogPage").title("Blog Pages")),
+                .title('Sync existing meetings')
+                .icon(PlugIcon)
+                .child(S.component(CalendlySetup).id('calendly-setup')),
+              S.listItem()
+                .title('Bookings')
+                .schemaType('calendlyBooking')
+                .child(
+                  S.documentTypeList('calendlyBooking')
+                    .title('Calendly Bookings')
+                    .defaultOrdering([
+                      { field: 'startTime', direction: 'desc' },
+                    ])
+                ),
+            ])
+        ),
+
+      S.listItem()
+        .title('Work Page')
+        .schemaType('workPage')
+        .child(S.documentTypeList('workPage').title('Work Pages')),
+
+      S.listItem()
+        .title('Blog')
+        .child(
+          S.list()
+            .title('Blog')
+            .items([
+              S.listItem()
+                .title('Blog Page')
+                .schemaType('blogPage')
+                .child(S.documentTypeList('blogPage').title('Blog Pages')),
               blogPostsByLanguage(S),
             ])
         ),
 
       S.listItem()
-        .title("Partners Page")
-        .schemaType("partnersPage")
+        .title('Partners Page')
+        .schemaType('partnersPage')
         .child(
           S.list()
-            .title("Partners")
+            .title('Partners')
             .items([
               S.listItem()
-                .title("Partners Pages")
-                .schemaType("partnersPage")
-                .child(S.documentTypeList("partnersPage").title("Partners Pages")),
-              S.listItem()
-                .title("Partner Categories")
-                .schemaType("partnerCategory")
+                .title('Partners Pages')
+                .schemaType('partnersPage')
                 .child(
-                  S.documentTypeList("partnerCategory")
-                    .title("Partner Categories")
+                  S.documentTypeList('partnersPage').title('Partners Pages')
+                ),
+              S.listItem()
+                .title('Partner Categories')
+                .schemaType('partnerCategory')
+                .child(
+                  S.documentTypeList('partnerCategory')
+                    .title('Partner Categories')
                     .filter('_type == "partnerCategory"')
                 ),
             ])
@@ -228,23 +277,23 @@ export const deskStructure = (S: StructureBuilder) =>
 
       // Merch Pages
       S.listItem()
-        .title("Merch Pages")
+        .title('Merch Pages')
         .icon(CogIcon)
         .child(
           S.list()
-            .title("Merch Pages")
+            .title('Merch Pages')
             .items([
               S.listItem()
-                .title("Merch Page")
-                .schemaType("merchPage")
-                .child(
-                  S.documentTypeList("merchPage").title("Merch Page")
-                ),
+                .title('Merch Page')
+                .schemaType('merchPage')
+                .child(S.documentTypeList('merchPage').title('Merch Page')),
               S.listItem()
-                .title("Merch Product Settings")
-                .schemaType("merchProductSettings")
+                .title('Merch Product Settings')
+                .schemaType('merchProductSettings')
                 .child(
-                  S.documentTypeList("merchProductSettings").title("Merch Product Settings")
+                  S.documentTypeList('merchProductSettings').title(
+                    'Merch Product Settings'
+                  )
                 ),
             ])
         ),
@@ -253,24 +302,24 @@ export const deskStructure = (S: StructureBuilder) =>
 
       // Site Settings
       S.listItem()
-        .title("Site Settings")
+        .title('Site Settings')
         .icon(CogIcon)
         .child(
           S.list()
-            .title("Site Settings")
+            .title('Site Settings')
             .items([
               S.listItem()
-                .title("Header Settings")
-                .schemaType("headerSettings")
+                .title('Header Settings')
+                .schemaType('headerSettings')
                 .child(
-                  S.documentTypeList("headerSettings").title("Header Settings")
+                  S.documentTypeList('headerSettings').title('Header Settings')
                 ),
               S.listItem()
-                .title("Footer Settings")
-                .schemaType("footerSettings")
+                .title('Footer Settings')
+                .schemaType('footerSettings')
                 .child(
-                  S.documentTypeList("footerSettings").title("Footer Settings")
+                  S.documentTypeList('footerSettings').title('Footer Settings')
                 ),
             ])
         ),
-    ]);
+    ])

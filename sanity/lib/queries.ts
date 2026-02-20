@@ -1136,6 +1136,8 @@ export const contactPageQuery = groq`
     },
     bookingSection {
       enabled,
+      useCalendly,
+      calendlySchedulingUrl,
       label,
       title,
       description,

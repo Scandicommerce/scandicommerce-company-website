@@ -16,6 +16,8 @@ interface DateSlot {
 
 interface BookingSectionData {
   enabled?: boolean
+  useCalendly?: boolean
+  calendlySchedulingUrl?: string | null
   label?: string
   title?: string
   description?: string
@@ -554,6 +556,12 @@ export default function BookingSection({ bookingSection, messageSection, benefit
   }
 
   const bookingEnabled = bookingSection?.enabled !== false
+  const useCalendly = bookingSection?.useCalendly === true && !!bookingSection?.calendlySchedulingUrl
+  const calendlyUrl = bookingSection?.calendlySchedulingUrl?.trim() || ''
+  const embedDomain = process.env.NEXT_PUBLIC_SITE_URL || (typeof window !== 'undefined' ? window.location.origin : '')
+  const calendlyEmbedUrl = calendlyUrl
+    ? `${calendlyUrl}${calendlyUrl.includes('?') ? '&' : '?'}embed_domain=${encodeURIComponent(embedDomain)}`
+    : ''
 
   return (
     <section className="py-12 lg:py-16 bg-white">
@@ -577,90 +585,113 @@ export default function BookingSection({ bookingSection, messageSection, benefit
                   {bookingDescription}
                 </p>
 
-                <div className="bg-white p-4">
-                  <div className="space-y-4 mb-6">
-                    <h4 className="text-sm font-semibold text-gray-900">Meeting Type</h4>
-                    {meetingTypes.map((mt, index) => (
-                      <MeetingType
-                        key={index}
-                        title={mt.title || ''}
-                        description={mt.description || ''}
-                        selected={meetingType === index}
-                        onSelect={() => setMeetingType(index)}
-                      />
-                    ))}
+                {useCalendly ? (
+                  <div className="bg-white p-4 min-h-[600px]">
+                    <iframe
+                      title="Calendly scheduling"
+                      src={calendlyEmbedUrl}
+                      width="100%"
+                      height="100%"
+                      className="min-h-[600px] w-full border-0"
+                    />
+                    <p className="mt-3 text-sm text-gray-500 text-center">
+                      Or{' '}
+                      <a
+                        href={calendlyUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-[#03C1CA] underline"
+                      >
+                        open in a new tab
+                      </a>
+                    </p>
                   </div>
-
-                  <Calendar
-                    selectedDate={date}
-                    onDateSelect={loadSlots}
-                    allowedDates={allowedDates}
-                  />
-                  <TimeSlots
-                    slots={slots}
-                    selectedTime={time}
-                    onTimeSelect={setTime}
-                    loading={false}
-                  />
-
-                  <div className="mt-6 space-y-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Name *</label>
-                      <input
-                        type="text"
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                        placeholder="John Doe"
-                        required
-                        className="w-full px-3 py-2 bg-[#F5F5F5] text-sm text-black outline-none"
-                      />
+                ) : (
+                  <div className="bg-white p-4">
+                    <div className="space-y-4 mb-6">
+                      <h4 className="text-sm font-semibold text-gray-900">Meeting Type</h4>
+                      {meetingTypes.map((mt, index) => (
+                        <MeetingType
+                          key={index}
+                          title={mt.title || ''}
+                          description={mt.description || ''}
+                          selected={meetingType === index}
+                          onSelect={() => setMeetingType(index)}
+                        />
+                      ))}
                     </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Email *</label>
-                      <input
-                        type="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        placeholder="john@company.com"
-                        required
-                        className="w-full px-3 py-2 bg-[#F5F5F5] text-sm text-black outline-none"
-                      />
-                    </div>
-                  </div>
 
-                  {error && (
-                    <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded">
-                      <p className="text-sm text-red-600">{error}</p>
-                    </div>
-                  )}
+                    <Calendar
+                      selectedDate={date}
+                      onDateSelect={loadSlots}
+                      allowedDates={allowedDates}
+                    />
+                    <TimeSlots
+                      slots={slots}
+                      selectedTime={time}
+                      onTimeSelect={setTime}
+                      loading={false}
+                    />
 
-                  {success && (
-                    <div className="mt-4 p-3 bg-green-50 border border-green-200 rounded">
-                      <p className="text-sm text-green-600">
-                        Booking confirmed! A calendar invite has been sent to your email.
-                      </p>
+                    <div className="mt-6 space-y-4">
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Name *</label>
+                        <input
+                          type="text"
+                          value={name}
+                          onChange={(e) => setName(e.target.value)}
+                          placeholder="John Doe"
+                          required
+                          className="w-full px-3 py-2 bg-[#F5F5F5] text-sm text-black outline-none"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Email *</label>
+                        <input
+                          type="email"
+                          value={email}
+                          onChange={(e) => setEmail(e.target.value)}
+                          placeholder="john@company.com"
+                          required
+                          className="w-full px-3 py-2 bg-[#F5F5F5] text-sm text-black outline-none"
+                        />
+                      </div>
                     </div>
-                  )}
 
-                  <button
-                    onClick={book}
-                    disabled={loading || !date || !time || !name || !email}
-                    className={`w-full mt-6 bg-[#03C1CA] text-white py-3 font-semibold hover:bg-[#02a8b0] transition-colors ${
-                      loading || !date || !time || !name || !email
-                        ? 'opacity-50 cursor-not-allowed'
-                        : ''
-                    }`}
-                  >
-                    {loading ? (
-                      <span className="flex items-center justify-center">
-                        <FiLoader className="animate-spin mr-2" size={16} />
-                        Creating booking...
-                      </span>
-                    ) : (
-                      confirmButtonText
+                    {error && (
+                      <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded">
+                        <p className="text-sm text-red-600">{error}</p>
+                      </div>
                     )}
-                  </button>
-                </div>
+
+                    {success && (
+                      <div className="mt-4 p-3 bg-green-50 border border-green-200 rounded">
+                        <p className="text-sm text-green-600">
+                          Booking confirmed! A calendar invite has been sent to your email.
+                        </p>
+                      </div>
+                    )}
+
+                    <button
+                      onClick={book}
+                      disabled={loading || !date || !time || !name || !email}
+                      className={`w-full mt-6 bg-[#03C1CA] text-white py-3 font-semibold hover:bg-[#02a8b0] transition-colors ${
+                        loading || !date || !time || !name || !email
+                          ? 'opacity-50 cursor-not-allowed'
+                          : ''
+                      }`}
+                    >
+                      {loading ? (
+                        <span className="flex items-center justify-center">
+                          <FiLoader className="animate-spin mr-2" size={16} />
+                          Creating booking...
+                        </span>
+                      ) : (
+                        confirmButtonText
+                      )}
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
           )}

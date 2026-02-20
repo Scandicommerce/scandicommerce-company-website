@@ -24,6 +24,8 @@ interface ContactPageData {
   }
   bookingSection?: {
     enabled?: boolean
+    useCalendly?: boolean
+    calendlySchedulingUrl?: string | null
     label?: string
     title?: string
     description?: string
