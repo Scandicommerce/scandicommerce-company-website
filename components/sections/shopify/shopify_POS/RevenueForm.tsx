@@ -126,7 +126,7 @@ export default function RevenueForm({ revenueForm }: RevenueFormProps) {
               </div>
 
               {/* Bottom section with HubSpot and trust signals - on white background */}
-              <div className="mt-10 pt-8 pb-[4.5rem]">
+              <div className="mt-10 pt-8 hidden pb-[4.5rem]">
                 <div className="flex flex-col sm:flex-row items-center gap-6">
                   {/* HubSpot branding - in light gray box */}
                   <div className="bg-[#F8F8F8] px-6 py-4 flex items-center gap-4 flex-shrink-0">

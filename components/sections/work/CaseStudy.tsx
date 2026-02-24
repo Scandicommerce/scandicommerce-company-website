@@ -105,7 +105,7 @@ export default function CaseStudy({
               </h4>
               <div className="flex justify-between items-center">
                 {results.map((result, index) => (
-                  <div key={index} className="flex flex-col items-center">
+                  <div key={index} className="flex flex-col items-start">
                     <div className="text-[5.3vw] xs:text-[3.5vw] sm:text-[3.2vw] md:text-[3.2vw] lg:text-[28px] xl:text-[34px] font-bold !leading-[166%] text-[#03C1CA] font-mono tracking-tight">
                       {result.value}
                     </div>
