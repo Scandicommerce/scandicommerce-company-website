@@ -65,7 +65,7 @@ export default function CaseStudy({
 
               {/* Tags positioned top right */}
             </div>
-            <div className="flex flex-wrap gap-2 justify-end sm:order-2 order-1">
+            <div className="flex flex-wrap gap-2 justify-start sm:order-2 order-1">
               {tags.map((tag, index) => (
                 <span
                   key={index}

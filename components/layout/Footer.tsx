@@ -45,7 +45,6 @@ const defaultColumns: FooterColumn[] = [
     links: [
       { label: 'About us', href: '/about' },
       { label: 'Partners', href: '/partners' },
-      { label: 'Careers', href: '/resources/blog' },
       { label: 'Contact', href: '/contact' },
     ],
   },
