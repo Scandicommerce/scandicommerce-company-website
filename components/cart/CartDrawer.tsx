@@ -6,10 +6,14 @@ import { HiXMark, HiShoppingBag, HiMinus, HiPlus, HiTrash } from 'react-icons/hi
 import Image from 'next/image'
 import Link from 'next/link'
 import { useCart } from '@/contexts/CartContext'
+import { useLanguage } from '@/contexts/LanguageContext'
+import { defaultLanguage } from '@/sanity/lib/languages'
 
 export default function CartDrawer() {
   const { cart, isCartOpen, closeCart, isLoading, updateLineQuantity, removeLine } = useCart()
+  const language = useLanguage()
   const drawerRef = useRef<HTMLDivElement>(null)
+  const homepagePackagesHref = `/${language?.currentLanguage ?? defaultLanguage}#packages`
   const [cartError, setCartError] = useState<string | null>(null)
 
   // Close drawer when clicking outside
@@ -122,7 +126,7 @@ export default function CartDrawer() {
                     Looks like you haven&apos;t added any items to your cart yet.
                   </p>
                   <Link
-                    href="/merch"
+                    href={homepagePackagesHref}
                     onClick={closeCart}
                     className="px-6 py-3 bg-[#03C1CA] text-white font-medium hover:bg-[#02A8B0] transition-colors"
                   >

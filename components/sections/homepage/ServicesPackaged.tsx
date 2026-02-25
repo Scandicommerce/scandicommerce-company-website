@@ -164,7 +164,7 @@ export default function ServicesPackaged({ data, packages: packagesData }: Servi
   }
 
   return (
-    <section className="relative bg-white py-16 lg:py-24 overflow-hidden">
+    <section id="packages" className="relative bg-white py-16 lg:py-24 overflow-hidden">
       <div className="section_container mx-auto page-padding-x">
         <motion.div 
           ref={headerRef}

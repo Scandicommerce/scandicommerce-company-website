@@ -11,8 +11,8 @@ interface MapSectionProps {
   mapSection?: MapSectionData
 }
 
-// Static map URL - not editable via Sanity
-const MAP_URL = 'https://www.openstreetmap.org/export/embed.html?bbox=10.7202%2C59.9063%2C10.7702%2C59.9263&layer=mapnik&marker=59.9163%2C10.7452'
+// Static map URL - Drammensveien 167, 0277 Oslo
+const MAP_URL = 'https://www.openstreetmap.org/export/embed.html?bbox=10.689%2C59.914%2C10.710%2C59.934&layer=mapnik&marker=59.9242%2C10.6994'
 
 export default function MapSection({ mapSection }: MapSectionProps) {
   const title = mapSection?.title || 'Interactive map placeholder'
