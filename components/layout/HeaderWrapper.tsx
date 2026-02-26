@@ -12,6 +12,7 @@ export interface HeaderSettingsData {
     items?: {
       label?: string
       href?: string
+      slug?: string
     }[]
   }
   shopifyMenu?: {
@@ -19,15 +20,18 @@ export interface HeaderSettingsData {
     items?: {
       label?: string
       href?: string
+      slug?: string
     }[]
   }
   mainNavLinks?: {
     label?: string
     href?: string
+    slug?: string
   }[]
   ctaButton?: {
     label?: string
     href?: string
+    slug?: string
   }
 }
 

@@ -12,6 +12,7 @@ import LanguageSwitcher from '@/components/ui/LanguageSwitcher'
 interface MenuItem {
   label?: string
   href?: string
+  slug?: string
 }
 
 interface MenuSection {
@@ -26,6 +27,7 @@ interface HeaderSettings {
   ctaButton?: {
     label?: string
     href?: string
+    slug?: string
   }
 }
 
@@ -68,6 +70,15 @@ const defaultMainNavLinks: MenuItem[] = [
 const defaultCtaButton = {
   label: 'GET STARTED',
   href: '/get-started',
+}
+
+/** Build href for a nav item: use page slug when set (strip leading locale so LocalizedLink adds current lang), else use custom href */
+function getNavHref(item: MenuItem | { href?: string; slug?: string }): string {
+  if (item.slug) {
+    const path = item.slug.replace(/^[a-z]{2}\//, '')
+    return path ? `/${path}` : '#'
+  }
+  return item.href || '#'
 }
 
 export default function Header({ settings }: HeaderProps) {
@@ -205,7 +216,7 @@ export default function Header({ settings }: HeaderProps) {
                     {servicesMenu.items?.map((item, index) => (
                       <LocalizedLink
                         key={index}
-                        href={item.href || '#'}
+                        href={getNavHref(item)}
                         onClick={() => setIsServicesOpen(false)}
                         className="block px-6 py-3 text-gray-900 hover:text-teal hover:bg-gray-50 transition-colors font-medium text-base"
                       >
@@ -248,7 +259,7 @@ export default function Header({ settings }: HeaderProps) {
                     {shopifyMenu.items?.map((item, index) => (
                       <LocalizedLink
                         key={index}
-                        href={item.href || '#'}
+                        href={getNavHref(item)}
                         onClick={() => setIsShopifyOpen(false)}
                         className="block px-6 py-3 text-gray-900 hover:text-teal hover:bg-gray-50 transition-colors font-medium text-base"
                       >
@@ -263,7 +274,7 @@ export default function Header({ settings }: HeaderProps) {
               {mainNavLinks.map((link, index) => (
                 <LocalizedLink
                   key={index}
-                  href={link.href || '#'}
+                  href={getNavHref(link)}
                   className="text-gray-900 hover:text-teal transition-colors font-medium text-sm xl:text-base"
                 >
                   {link.label}
@@ -286,7 +297,7 @@ export default function Header({ settings }: HeaderProps) {
                 )}
               </button>
               <LocalizedLink
-                href={ctaButton.href || '/get-started'}
+                href={getNavHref(ctaButton)}
                 className="hidden xs:inline-block bg-teal text-white px-2 py-1.5 narrow:px-3 narrow:py-2 sm:px-6 sm:py-2.5 font-semibold hover:bg-teal-dark transition-colors shadow-button text-[11px] sm:text-base flex-shrink-0"
               >
                 {ctaButton.label}
@@ -344,7 +355,7 @@ export default function Header({ settings }: HeaderProps) {
                       {servicesMenu.items?.map((item, index) => (
                         <LocalizedLink
                           key={index}
-                          href={item.href || '#'}
+                          href={getNavHref(item)}
                           className="text-gray-600 hover:text-teal transition-colors text-base"
                           onClick={(e) => {
                             e.stopPropagation()
@@ -383,7 +394,7 @@ export default function Header({ settings }: HeaderProps) {
                       {shopifyMenu.items?.map((item, index) => (
                         <LocalizedLink
                           key={index}
-                          href={item.href || '#'}
+                          href={getNavHref(item)}
                           className="text-gray-600 hover:text-teal transition-colors text-base"
                           onClick={(e) => {
                             e.stopPropagation()
@@ -402,7 +413,7 @@ export default function Header({ settings }: HeaderProps) {
                 {mainNavLinks.map((link, index) => (
                   <LocalizedLink
                     key={index}
-                    href={link.href || '#'}
+                    href={getNavHref(link)}
                     className="text-gray-900 hover:text-teal transition-colors font-medium text-base"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
@@ -412,7 +423,7 @@ export default function Header({ settings }: HeaderProps) {
 
                 {/* Mobile CTA - only when width <= 425px */}
                 <LocalizedLink
-                  href={ctaButton.href || '/get-started'}
+                  href={getNavHref(ctaButton)}
                   className="hidden max-[425px]:inline-block bg-teal text-white px-6 py-2.5 rounded-lg font-semibold hover:bg-teal-dark transition-colors text-center shadow-button text-base mt-2"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >

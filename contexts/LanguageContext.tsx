@@ -86,13 +86,30 @@ function LanguageUrlSync({ onValue }: { onValue: (v: LanguageContextType) => voi
   }, [pathname, searchParams, currentLanguage, isPathBasedRoute, langFromPath])
 
   const setLanguage = useCallback(
-    (lang: string) => {
+    async (lang: string) => {
       setCurrentLanguageState(lang)
       if (typeof window !== 'undefined') {
         localStorage.setItem('language', lang)
         document.cookie = `language=${lang}; path=/; max-age=31536000`
       }
       if (isPathBasedRoute) {
+        // Try to resolve the slug of this page in the target language
+        const currentPath = pathWithoutLang === '/' ? '' : pathWithoutLang.replace(/^\//, '')
+        if (currentPath && currentLanguage !== lang) {
+          try {
+            const res = await fetch(
+              `/api/translate-slug?currentPath=${encodeURIComponent(currentPath)}&currentLang=${encodeURIComponent(currentLanguage)}&targetLang=${encodeURIComponent(lang)}`
+            )
+            const data: { slug: string | null } = await res.json()
+            if (data.slug) {
+              router.push(`/${lang}/${data.slug}`)
+              return
+            }
+          } catch {
+            // Fall through to default behaviour
+          }
+        }
+        // Fallback: just swap the lang prefix
         const base = pathWithoutLang === '/' ? '' : pathWithoutLang
         router.push(`/${lang}${base}`)
       } else {
@@ -101,7 +118,7 @@ function LanguageUrlSync({ onValue }: { onValue: (v: LanguageContextType) => voi
         router.push(`${pathname}?${params.toString()}`)
       }
     },
-    [pathname, pathWithoutLang, isPathBasedRoute, router, searchParams]
+    [pathname, pathWithoutLang, isPathBasedRoute, router, searchParams, currentLanguage]
   )
 
   const getLanguageTitle = useCallback(

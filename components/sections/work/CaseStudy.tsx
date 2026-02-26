@@ -120,7 +120,7 @@ export default function CaseStudy({
             {/* CTA Link */}
             <div className="pt-2">
               <Link
-                href={link}
+                href={link || '#'}
                 className="inline-flex items-center text-[#03C1CA] font-semibold 2xl:text-xl xl:text-lg sm:text-base text-sm"
               >
                 Read full case study

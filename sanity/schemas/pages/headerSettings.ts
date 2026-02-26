@@ -1,6 +1,63 @@
 import { defineField, defineType, defineArrayMember } from "sanity";
 import { languageField } from "../objects/language";
 
+const PAGE_TYPES_FOR_NAV = [
+  { type: "aboutPage" },
+  { type: "contactPage" },
+  { type: "workPage" },
+  { type: "partnersPage" },
+  { type: "blogPage" },
+  { type: "allPackagesPage" },
+  { type: "migratePage" },
+  { type: "shopifyPosPage" },
+  { type: "shopifyPosInfoPage" },
+  { type: "shopifyXAiPage" },
+  { type: "shopifyXPimPage" },
+  { type: "whyShopifyPage" },
+  { type: "shopifyPlatformPage" },
+  { type: "vippsHurtigkassePage" },
+  { type: "shopifyTcoCalculatorPage" },
+  { type: "shopifyDevelopmentPage" },
+  { type: "merchPage" },
+];
+
+/** Returns a filter that restricts page references to the same language as the header document. */
+function pageReferenceFilter({ document }: { document: Record<string, unknown> }) {
+  const lang = (document as { language?: string }).language;
+  if (!lang) return {};
+  return { filter: "language == $lang", params: { lang } };
+}
+
+const navItemFields = [
+  defineField({
+    name: "label",
+    title: "Label",
+    type: "string",
+    description: "Text shown in the menu",
+  }),
+  defineField({
+    name: "page",
+    title: "Page (recommended)",
+    type: "reference",
+    to: PAGE_TYPES_FOR_NAV,
+    description: "Link to a page. The URL will follow this page's slug – when you change the slug in Sanity, the header link updates automatically.",
+    options: { filter: pageReferenceFilter },
+  }),
+  defineField({
+    name: "href",
+    title: "Custom link",
+    type: "string",
+    description: "Used when no page is selected, or for external URLs (e.g. https://...)",
+  }),
+];
+
+const navItemPreview = {
+  select: { title: "label", href: "href" },
+  prepare({ title, href }: { title?: string; href?: string }) {
+    return { title: title || "Untitled", subtitle: href || "Page link" };
+  },
+};
+
 export const headerSettings = defineType({
   name: "headerSettings",
   title: "Header Settings",
@@ -33,13 +90,8 @@ export const headerSettings = defineType({
           of: [
             defineArrayMember({
               type: "object",
-              fields: [
-                defineField({ name: "label", title: "Label", type: "string" }),
-                defineField({ name: "href", title: "Link", type: "string" }),
-              ],
-              preview: {
-                select: { title: "label", subtitle: "href" },
-              },
+              fields: navItemFields,
+              preview: navItemPreview,
             }),
           ],
         }),
@@ -59,13 +111,8 @@ export const headerSettings = defineType({
           of: [
             defineArrayMember({
               type: "object",
-              fields: [
-                defineField({ name: "label", title: "Label", type: "string" }),
-                defineField({ name: "href", title: "Link", type: "string" }),
-              ],
-              preview: {
-                select: { title: "label", subtitle: "href" },
-              },
+              fields: navItemFields,
+              preview: navItemPreview,
             }),
           ],
         }),
@@ -79,13 +126,8 @@ export const headerSettings = defineType({
       of: [
         defineArrayMember({
           type: "object",
-          fields: [
-            defineField({ name: "label", title: "Label", type: "string" }),
-            defineField({ name: "href", title: "Link", type: "string" }),
-          ],
-          preview: {
-            select: { title: "label", subtitle: "href" },
-          },
+          fields: navItemFields,
+          preview: navItemPreview,
         }),
       ],
     }),
@@ -96,7 +138,21 @@ export const headerSettings = defineType({
       type: "object",
       fields: [
         defineField({ name: "label", title: "Label", type: "string", initialValue: "GET STARTED" }),
-        defineField({ name: "href", title: "Link", type: "string", initialValue: "/get-started" }),
+        defineField({
+          name: "page",
+          title: "Page (recommended)",
+          type: "reference",
+          to: PAGE_TYPES_FOR_NAV,
+          description: "Link to a page. The URL will follow this page's slug.",
+          options: { filter: pageReferenceFilter },
+        }),
+        defineField({
+          name: "href",
+          title: "Custom link",
+          type: "string",
+          initialValue: "/get-started",
+          description: "Used when no page is selected, or for external URLs.",
+        }),
       ],
     }),
   ],
