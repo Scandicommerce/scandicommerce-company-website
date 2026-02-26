@@ -25,7 +25,8 @@ interface AllPackagesPageData {
       bestFor: string[]
       included: string[]
       description: string
-      href: string
+      slug?: string | null
+      href?: string | null
     }>
   }
   faq?: { faqTitle?: string; faqItems?: Array<{ question: string; answer: string }> }

@@ -506,6 +506,7 @@ export const allPackagesPageQuery = groq`
         bestFor,
         included,
         description,
+        "slug": page->slug.current,
         href
       }
     },
@@ -1482,6 +1483,7 @@ export const footerSettingsQuery = groq`
       title,
       links[] {
         label,
+        "slug": page->slug.current,
         href
       }
     },
@@ -1499,6 +1501,7 @@ export const footerSettingsQuery = groq`
       orgNumber,
       legalLinks[] {
         label,
+        "slug": page->slug.current,
         href
       },
       copyrightText
@@ -1594,6 +1597,7 @@ const PAGE_TYPES_WITH_SLUG = [
   "shopifyTcoCalculatorPage",
   "shopifyDevelopmentPage",
   "merchPage",
+  "packageDetailPage",
 ];
 
 // Matches slug with or without locale prefix (e.g. "tjenester/vare_pakker" or "no/tjenester/vare_pakker")

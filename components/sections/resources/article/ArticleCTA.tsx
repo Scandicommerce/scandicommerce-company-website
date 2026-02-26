@@ -1,6 +1,6 @@
 'use client'
 
-import Link from 'next/link'
+import LocalizedLink from '@/components/ui/LocalizedLink'
 
 export default function ArticleCTA() {
   return (
@@ -14,12 +14,12 @@ export default function ArticleCTA() {
             <p className="text-white/90 text-base md:text-lg mb-8 max-w-2xl mx-auto">
               Let&apos;s audit your current setup and recommend the perfect apps for your business.
             </p>
-            <Link
+            <LocalizedLink
               href="/contact"
               className="inline-block px-8 py-3 md:px-10 md:py-4 bg-white text-[#03C1CA] font-semibold hover:bg-gray-100 transition-colors"
             >
               Book Free Consultation
-            </Link>
+            </LocalizedLink>
           </div>
         </div>
       </div>

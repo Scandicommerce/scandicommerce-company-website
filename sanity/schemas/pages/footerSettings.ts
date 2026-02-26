@@ -1,6 +1,32 @@
 import { defineField, defineType, defineArrayMember } from "sanity";
 import { languageField } from "../objects/language";
 
+const PAGE_TYPES_FOR_FOOTER = [
+  { type: "aboutPage" },
+  { type: "contactPage" },
+  { type: "workPage" },
+  { type: "partnersPage" },
+  { type: "blogPage" },
+  { type: "allPackagesPage" },
+  { type: "migratePage" },
+  { type: "shopifyPosPage" },
+  { type: "shopifyPosInfoPage" },
+  { type: "shopifyXAiPage" },
+  { type: "shopifyXPimPage" },
+  { type: "whyShopifyPage" },
+  { type: "shopifyPlatformPage" },
+  { type: "vippsHurtigkassePage" },
+  { type: "shopifyTcoCalculatorPage" },
+  { type: "shopifyDevelopmentPage" },
+  { type: "merchPage" },
+];
+
+function footerPageFilter({ document }: { document: Record<string, unknown> }) {
+  const lang = (document as { language?: string }).language;
+  if (!lang) return {};
+  return { filter: "language == $lang", params: { lang } };
+}
+
 export const footerSettings = defineType({
   name: "footerSettings",
   title: "Footer Settings",
@@ -38,7 +64,15 @@ export const footerSettings = defineType({
                   type: "object",
                   fields: [
                     defineField({ name: "label", title: "Label", type: "string" }),
-                    defineField({ name: "href", title: "Link", type: "string" }),
+                    defineField({
+                      name: "page",
+                      title: "Page (recommended)",
+                      type: "reference",
+                      to: PAGE_TYPES_FOR_FOOTER,
+                      description: "Link to a page. The URL follows this page's slug automatically.",
+                      options: { filter: footerPageFilter },
+                    }),
+                    defineField({ name: "href", title: "Custom link (fallback)", type: "string" }),
                   ],
                   preview: {
                     select: { title: "label", subtitle: "href" },
@@ -112,7 +146,15 @@ export const footerSettings = defineType({
               type: "object",
               fields: [
                 defineField({ name: "label", title: "Label", type: "string" }),
-                defineField({ name: "href", title: "Link", type: "string" }),
+                defineField({
+                  name: "page",
+                  title: "Page (recommended)",
+                  type: "reference",
+                  to: PAGE_TYPES_FOR_FOOTER,
+                  description: "Link to a page. The URL follows this page's slug automatically.",
+                  options: { filter: footerPageFilter },
+                }),
+                defineField({ name: "href", title: "Custom link (fallback)", type: "string" }),
               ],
               preview: {
                 select: { title: "label", subtitle: "href" },

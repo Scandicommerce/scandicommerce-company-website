@@ -1,5 +1,7 @@
 'use client'
 
+import LocalizedLink from '@/components/ui/LocalizedLink'
+
 const selectionCriteria = [
   'Shopify Integration Depth: Look for native, certified integrations',
   'Scalability: Choose a solution that can grow with your business',
@@ -52,9 +54,9 @@ export default function ChoosingRightPIM() {
             <p className="text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[16px] xl:text-[18px] text-[#565454] mb-6">
               We can help you evaluate your specific requirements and recommend a PIM solution that aligns perfectly with your business goals, technical environment, and budget constraints.
             </p>
-            <a href="/contact" className="text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[16px] xl:text-[18px] text-[#03C1CA] hover:underline font-medium">
+            <LocalizedLink href="/contact" className="text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[16px] xl:text-[18px] text-[#03C1CA] hover:underline font-medium">
               Find the perfect solution for your unique needs
-            </a>
+            </LocalizedLink>
           </div>
         </div>
       </div>

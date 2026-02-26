@@ -1,6 +1,6 @@
 'use client'
 
-import Link from 'next/link'
+import LocalizedLink from '@/components/ui/LocalizedLink'
 import PackageAddToCart from './PackageAddToCart'
 
 interface Package {
@@ -14,7 +14,10 @@ interface Package {
   bestFor: string[]
   included: string[]
   description: string
-  href: string
+  /** Resolved from page->slug.current (preferred) */
+  slug?: string | null
+  /** Fallback custom link set in Sanity */
+  href?: string | null
   shopifyVariantId?: string
   shopifyProductTitle?: string
 }
@@ -139,21 +142,21 @@ function PackageCard({ pkg }: { pkg: Package }) {
 
       {/* Buttons Row */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mt-auto">
-        {pkg.href && (
-          <Link
-            href={pkg.href}
+        {(pkg.slug || pkg.href) && (
+          <LocalizedLink
+            href={pkg.slug ? `/${pkg.slug}` : pkg.href!}
             className="bg-[#03C1CA] hover:bg-[#02a9b1] text-white text-sm lg:text-base font-semibold py-3 sm:py-3.5 px-4 text-center transition-colors duration-200"
           >
             View Details
-          </Link>
+          </LocalizedLink>
         )}
         <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
-          <Link
+          <LocalizedLink
             href="/contact"
             className="border-2 border-gray-200 hover:border-gray-300 text-gray-700 text-sm lg:text-base font-semibold py-3 sm:py-3.5 px-4 text-center transition-colors duration-200 bg-white flex-1"
           >
             Book Call
-          </Link>
+          </LocalizedLink>
           {pkg.shopifyVariantId && pkg.shopifyProductTitle && (
             <PackageAddToCart
               variantId={pkg.shopifyVariantId}

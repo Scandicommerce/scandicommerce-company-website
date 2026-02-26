@@ -11,7 +11,8 @@ export interface FooterSettingsData {
     title?: string
     links?: {
       label?: string
-      href?: string
+      slug?: string | null
+      href?: string | null
     }[]
   }[]
   connectSection?: {
@@ -28,7 +29,8 @@ export interface FooterSettingsData {
     orgNumber?: string
     legalLinks?: {
       label?: string
-      href?: string
+      slug?: string | null
+      href?: string | null
     }[]
     copyrightText?: string
   }

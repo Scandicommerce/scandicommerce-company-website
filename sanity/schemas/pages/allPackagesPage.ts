@@ -1,6 +1,12 @@
 import { defineArrayMember, defineField, defineType } from "sanity";
 import { languageField } from "../objects/language";
 
+function packagePageFilter({ document }: { document: Record<string, unknown> }) {
+  const lang = (document as { language?: string }).language;
+  if (!lang) return {};
+  return { filter: "language == $lang", params: { lang } };
+}
+
 export const allPackagesPage = defineType({
   name: "allPackagesPage",
   title: "All Packages Page",
@@ -94,7 +100,20 @@ export const allPackagesPage = defineType({
                   of: [defineArrayMember({ type: "string" })],
                 }),
                 defineField({ name: "description", title: "Description", type: "text", rows: 4 }),
-                defineField({ name: "href", title: "Link URL", type: "string" }),
+                defineField({
+                  name: "page",
+                  title: "Detail Page (recommended)",
+                  type: "reference",
+                  to: [{ type: "packageDetailPage" }],
+                  description: "Link to a package detail page. The URL will follow this page's slug automatically.",
+                  options: { filter: packagePageFilter },
+                }),
+                defineField({
+                  name: "href",
+                  title: "Custom Link (fallback)",
+                  type: "string",
+                  description: "Used only when no Detail Page is selected above.",
+                }),
               ],
             }),
           ],

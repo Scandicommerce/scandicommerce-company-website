@@ -1,5 +1,7 @@
 'use client'
 
+import LocalizedLink from '@/components/ui/LocalizedLink'
+
 interface Step {
   title?: string
   description?: string
@@ -113,9 +115,9 @@ export default function CombinedSection({ combinedSection }: CombinedSectionProp
                     </p>
                   )}
                   {choosingPim.linkText && (
-                    <a href="/contact" className="text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[16px] xl:text-[18px] text-[#03C1CA] hover:underline font-medium">
+                    <LocalizedLink href="/contact" className="text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[16px] xl:text-[18px] text-[#03C1CA] hover:underline font-medium">
                       {choosingPim.linkText}
-                    </a>
+                    </LocalizedLink>
                   )}
                 </div>
               </div>

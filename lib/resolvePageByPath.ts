@@ -35,7 +35,9 @@ export async function resolvePageByPath(
   )
 
   if (fullMatch?._type) {
-    return { type: fullMatch._type, slug: undefined }
+    // Detail page types need the full path as slug so their query (slug.current == $slug) works correctly
+    const needsSlug = fullMatch._type === 'packageDetailPage' || fullMatch._type === 'blogPost'
+    return { type: fullMatch._type, slug: needsSlug ? path : undefined }
   }
 
   // Detail pages: try last segment as slug (e.g. resources/article-slug -> blogPost, services/all_packages/package-slug -> packageDetailPage)
