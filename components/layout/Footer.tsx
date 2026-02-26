@@ -84,10 +84,10 @@ const defaultBottomSection = {
   badgeText: 'Shopify Plus Partner',
   orgNumber: 'Org.nr: 123 456 789',
   legalLinks: [
-    { label: 'Privacy Policy', href: '/privacy' },
-    { label: 'Terms', href: '/terms' },
-    { label: 'Cookies', href: '/cookies' },
-  ],
+    { label: 'Privacy Policy', href: '/privacy', slug: null },
+    { label: 'Terms', href: '/terms', slug: null },
+    { label: 'Cookies', href: '/cookies', slug: null },
+  ] as FooterLink[],
   copyrightText: '© 2025 ScandiCommerce. All rights reserved.',
 }
 
