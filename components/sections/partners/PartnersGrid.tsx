@@ -462,7 +462,7 @@ export default function PartnersGrid({ partnersGrid, categoryList }: PartnersGri
                     : 'bg-[#F5F5F5] text-[#565454] hover:bg-[#E8E8E8] hover:text-[#222222]'
                     }`}
                 >
-                  <span className="w-4 h-4 rounded-full border-2 border-current flex items-center justify-center text-xs">
+                  <span className="w-auto px-1 h-auto rounded-full border-2 border-current flex items-center justify-center text-xs">
                     {partners.length}
                   </span>
                   All Partners
