@@ -22,6 +22,8 @@ interface CombinedSectionData {
     impactParagraph1?: string
     impactParagraph2?: string
     linkText?: string
+    linkSlug?: string | null
+    linkHref?: string | null
   }
   gettingStarted?: {
     title?: string
@@ -114,11 +116,18 @@ export default function CombinedSection({ combinedSection }: CombinedSectionProp
                       {choosingPim.impactParagraph2}
                     </p>
                   )}
-                  {choosingPim.linkText && (
-                    <LocalizedLink href="/contact" className="text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[16px] xl:text-[18px] text-[#03C1CA] hover:underline font-medium">
-                      {choosingPim.linkText}
-                    </LocalizedLink>
-                  )}
+                  {choosingPim.linkText && (() => {
+                    const href = choosingPim.linkSlug ? `/${choosingPim.linkSlug}` : choosingPim.linkHref || '/contact'
+                    return href.startsWith('http') ? (
+                      <a href={href} target="_blank" rel="noopener noreferrer" className="text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[16px] xl:text-[18px] text-[#03C1CA] hover:underline font-medium">
+                        {choosingPim.linkText}
+                      </a>
+                    ) : (
+                      <LocalizedLink href={href} className="text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[16px] xl:text-[18px] text-[#03C1CA] hover:underline font-medium">
+                        {choosingPim.linkText}
+                      </LocalizedLink>
+                    )
+                  })()}
                 </div>
               </div>
             </div>

@@ -1,12 +1,13 @@
 'use client'
 
-import Link from 'next/link'
+import LocalizedLink from '@/components/ui/LocalizedLink'
 
 interface CTAData {
   title?: string
   description?: string
   buttonText?: string
-  buttonLink?: string
+  buttonSlug?: string | null
+  buttonLink?: string | null
 }
 
 interface CTAProps {
@@ -17,7 +18,8 @@ export default function CTA({ cta }: CTAProps) {
   const title = cta?.title
   const description = cta?.description
   const buttonText = cta?.buttonText
-  const buttonLink = cta?.buttonLink || '/contact'
+  const buttonHref = cta?.buttonSlug ? `/${cta.buttonSlug}` : cta?.buttonLink || '/contact'
+  const isExternal = buttonHref.startsWith('http')
 
   return (
     <section className="bg-white py-16 lg:py-24">
@@ -33,14 +35,23 @@ export default function CTA({ cta }: CTAProps) {
               {description}
             </p>
           )}
-          {buttonText && (
-            <Link
-              href={buttonLink}
+          {buttonText && (isExternal ? (
+            <a
+              href={buttonHref}
+              target="_blank"
+              rel="noopener noreferrer"
               className="inline-block bg-[#03C1CA] text-white px-8 py-4 font-medium hover:bg-[#03C1CA]/90 transition-colors"
             >
               {buttonText}
-            </Link>
-          )}
+            </a>
+          ) : (
+            <LocalizedLink
+              href={buttonHref}
+              className="inline-block bg-[#03C1CA] text-white px-8 py-4 font-medium hover:bg-[#03C1CA]/90 transition-colors"
+            >
+              {buttonText}
+            </LocalizedLink>
+          ))}
         </div>
       </div>
     </section>

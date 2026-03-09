@@ -13,8 +13,8 @@ interface AllPackagesPageData {
   pageTitle: string
   slug: string
   hero?: { heroTitle?: { text?: string; highlight?: string }; heroDescription?: string }
-  packages?: {
-    packagesItems?: Array<{
+    packages?: {
+      packagesItems?: Array<{
       title: string
       subtitle: string
       price: string
@@ -27,6 +27,8 @@ interface AllPackagesPageData {
       description: string
       slug?: string | null
       href?: string | null
+      bookCallSlug?: string | null
+      bookCallHref?: string | null
     }>
   }
   faq?: { faqTitle?: string; faqItems?: Array<{ question: string; answer: string }> }

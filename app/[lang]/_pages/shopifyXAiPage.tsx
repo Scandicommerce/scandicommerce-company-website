@@ -19,12 +19,12 @@ interface ShopifyXAiPageData {
   slug: string
   hero?: { heroTitle?: { text?: string; highlight?: string }; heroDescription?: string }
   enhancingWithAi?: { title?: string; paragraph1?: string; paragraph2?: string; quote?: { text?: string; author?: string } }
-  howWeLeverageAi?: { title?: string; capabilities?: Array<{ title?: string; description?: string; bgColor?: string; features?: string[]; impactTitle?: string; impactParagraph1?: string; impactParagraph2?: string; linkText?: string }> }
+  howWeLeverageAi?: { title?: string; capabilities?: Array<{ title?: string; description?: string; bgColor?: string; features?: string[]; impactTitle?: string; impactParagraph1?: string; impactParagraph2?: string; linkText?: string; linkSlug?: string | null; linkHref?: string | null }> }
   aiToolsToolkit?: { title?: string; toolCategories?: Array<{ title?: string; description?: string }>; bottomText?: string }
   howWeApplyAi?: { title?: string; applicationAreas?: Array<{ title?: string; description?: string; features?: string[]; benefit?: string }> }
   aiEnhancedProcess?: { title?: string; processSteps?: Array<{ title?: string; description?: string }> }
   faq?: { title?: string; items?: Array<{ question?: string; answer?: string }> }
-  cta?: { title?: string; description?: string; buttonText?: string; buttonLink?: string }
+  cta?: { title?: string; description?: string; buttonText?: string; buttonSlug?: string | null; buttonLink?: string | null }
 }
 
 export default async function ShopifyXAiPage({ params }: { params: Promise<{ lang: string; slug?: string }> }) {

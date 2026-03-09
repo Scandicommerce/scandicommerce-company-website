@@ -18,6 +18,10 @@ interface Package {
   slug?: string | null
   /** Fallback custom link set in Sanity */
   href?: string | null
+  /** Resolved slug from bookCallPage reference (preferred). */
+  bookCallSlug?: string | null
+  /** Custom link for Book Call when no page is selected (path or URL). */
+  bookCallHref?: string | null
   shopifyVariantId?: string
   shopifyProductTitle?: string
 }
@@ -28,6 +32,13 @@ interface PackagesData {
 
 interface PricingPackagesProps {
   packages?: PackagesData
+}
+
+/** Resolves Book Call URL: page slug (preferred), then custom href, then /contact. */
+function resolveBookCallHref(pkg: Package): string {
+  if (pkg.bookCallSlug) return `/${pkg.bookCallSlug}`
+  if (pkg.bookCallHref) return pkg.bookCallHref
+  return '/contact'
 }
 
 function StarRating({ rating }: { rating: number }) {
@@ -151,12 +162,23 @@ function PackageCard({ pkg }: { pkg: Package }) {
           </LocalizedLink>
         )}
         <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
-          <LocalizedLink
-            href="/contact"
-            className="border-2 border-gray-200 hover:border-gray-300 text-gray-700 text-sm lg:text-base font-semibold py-3 sm:py-3.5 px-4 text-center transition-colors duration-200 bg-white flex-1"
-          >
-            Book Call
-          </LocalizedLink>
+          {resolveBookCallHref(pkg)?.startsWith('http') ? (
+            <a
+              href={resolveBookCallHref(pkg)!}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="border-2 border-gray-200 hover:border-gray-300 text-gray-700 text-sm lg:text-base font-semibold py-3 sm:py-3.5 px-4 text-center transition-colors duration-200 bg-white flex-1"
+            >
+              Book Call
+            </a>
+          ) : (
+            <LocalizedLink
+              href={resolveBookCallHref(pkg) || '/contact'}
+              className="border-2 border-gray-200 hover:border-gray-300 text-gray-700 text-sm lg:text-base font-semibold py-3 sm:py-3.5 px-4 text-center transition-colors duration-200 bg-white flex-1"
+            >
+              Book Call
+            </LocalizedLink>
+          )}
           {pkg.shopifyVariantId && pkg.shopifyProductTitle && (
             <PackageAddToCart
               variantId={pkg.shopifyVariantId}

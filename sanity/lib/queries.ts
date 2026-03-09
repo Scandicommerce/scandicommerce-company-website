@@ -507,7 +507,9 @@ export const allPackagesPageQuery = groq`
         included,
         description,
         "slug": page->slug.current,
-        href
+        href,
+        "bookCallSlug": bookCallPage->slug.current,
+        bookCallHref
       }
     },
     faq {
@@ -702,7 +704,9 @@ export const shopifyXPimPageQuery = groq`
       impactTitle,
       impactParagraph1,
       impactParagraph2,
-      linkText
+      linkText,
+      "linkSlug": linkPage->slug.current,
+      linkHref
     },
     whichBusinesses {
       title,
@@ -742,7 +746,9 @@ export const shopifyXPimPageQuery = groq`
         selectionCriteria,
         impactParagraph1,
         impactParagraph2,
-        linkText
+        linkText,
+        "linkSlug": linkPage->slug.current,
+        linkHref
       },
       gettingStarted {
         title,
@@ -771,6 +777,7 @@ export const shopifyXPimPageQuery = groq`
       title,
       description,
       buttonText,
+      "buttonSlug": buttonPage->slug.current,
       buttonLink
     },
     seo {
@@ -814,7 +821,9 @@ export const shopifyXAiPageQuery = groq`
         impactTitle,
         impactParagraph1,
         impactParagraph2,
-        linkText
+        linkText,
+        "linkSlug": linkPage->slug.current,
+        linkHref
       }
     },
     aiToolsToolkit {
@@ -852,6 +861,7 @@ export const shopifyXAiPageQuery = groq`
       title,
       description,
       buttonText,
+      "buttonSlug": buttonPage->slug.current,
       buttonLink
     },
     seo {

@@ -19,12 +19,12 @@ interface ShopifyXPimPageData {
   slug: string
   hero?: { heroTitle?: { text?: string; highlight?: string }; heroDescription?: string }
   whatIsPim?: { title?: string; paragraph1?: string; paragraph2?: string; quote?: { text?: string; author?: string } }
-  integratingPim?: { title?: string; description?: string; leftColumnTitle?: string; leftColumnDescription?: string; integrationPoints?: string[]; impactTitle?: string; impactParagraph1?: string; impactParagraph2?: string; linkText?: string }
+  integratingPim?: { title?: string; description?: string; leftColumnTitle?: string; leftColumnDescription?: string; integrationPoints?: string[]; impactTitle?: string; impactParagraph1?: string; impactParagraph2?: string; linkText?: string; linkSlug?: string | null; linkHref?: string | null }
   whichBusinesses?: { title?: string; description?: string; businessCards?: Array<{ title?: string; description?: string }>; bottomNote?: string }
   timeSavings?: { title?: string; description?: string; savingsCards?: Array<{ title?: string; description?: string; hours?: string }>; summaryTitle?: string; summaryDescription?: string }
   whyGoodInvestment?: { title?: string; description?: string; benefits?: Array<{ title?: string; description?: string }>; bottomNote?: string }
-  combinedSection?: { choosingPim?: { title?: string; description?: string; leftColumnTitle?: string; leftColumnDescription?: string; selectionCriteria?: string[]; impactParagraph1?: string; impactParagraph2?: string; linkText?: string }; gettingStarted?: { title?: string; description?: string; steps?: Array<{ title?: string; description?: string }>; bottomNote?: string }; faq?: { title?: string; items?: Array<{ question?: string; answer?: string }> }; transformExperience?: { title?: string; paragraph1?: string; paragraph2?: string; quoteText?: string } }
-  cta?: { title?: string; description?: string; buttonText?: string; buttonLink?: string }
+  combinedSection?: { choosingPim?: { title?: string; description?: string; leftColumnTitle?: string; leftColumnDescription?: string; selectionCriteria?: string[]; impactParagraph1?: string; impactParagraph2?: string; linkText?: string; linkSlug?: string | null; linkHref?: string | null }; gettingStarted?: { title?: string; description?: string; steps?: Array<{ title?: string; description?: string }>; bottomNote?: string }; faq?: { title?: string; items?: Array<{ question?: string; answer?: string }> }; transformExperience?: { title?: string; paragraph1?: string; paragraph2?: string; quoteText?: string } }
+  cta?: { title?: string; description?: string; buttonText?: string; buttonSlug?: string | null; buttonLink?: string | null }
 }
 
 export default async function ShopifyXPimPage({ params }: { params: Promise<{ lang: string; slug?: string }> }) {

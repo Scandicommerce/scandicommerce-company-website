@@ -1,6 +1,23 @@
 import { defineArrayMember, defineField, defineType } from "sanity";
 import { languageField } from "../objects/language";
 
+function pageFilter({ document }: { document: Record<string, unknown> }) {
+  const lang = (document as { language?: string }).language;
+  if (!lang) return {};
+  return { filter: "language == $lang", params: { lang } };
+}
+
+const pageReferenceTypes = [
+  { type: "contactPage" },
+  { type: "landingPage" },
+  { type: "servicesPage" },
+  { type: "aboutPage" },
+  { type: "workPage" },
+  { type: "blogPage" },
+  { type: "allPackagesPage" },
+  { type: "packageDetailPage" },
+];
+
 export const shopifyXAiPage = defineType({
   name: "shopifyXAiPage",
   title: "Shopify x AI Page",
@@ -90,6 +107,20 @@ export const shopifyXAiPage = defineType({
                 defineField({ name: "impactParagraph1", title: "Impact Paragraph 1", type: "text", rows: 3 }),
                 defineField({ name: "impactParagraph2", title: "Impact Paragraph 2", type: "text", rows: 3 }),
                 defineField({ name: "linkText", title: "Link Text", type: "string" }),
+                defineField({
+                  name: "linkPage",
+                  title: "Link – Page (recommended)",
+                  type: "reference",
+                  to: pageReferenceTypes,
+                  description: "Select a page for the link.",
+                  options: { filter: pageFilter },
+                }),
+                defineField({
+                  name: "linkHref",
+                  title: "Link – Custom URL (fallback)",
+                  type: "string",
+                  description: "Used only when no page is selected.",
+                }),
               ],
             }),
           ],
@@ -205,7 +236,20 @@ export const shopifyXAiPage = defineType({
         defineField({ name: "title", title: "Title", type: "string" }),
         defineField({ name: "description", title: "Description", type: "text", rows: 2 }),
         defineField({ name: "buttonText", title: "Button Text", type: "string" }),
-        defineField({ name: "buttonLink", title: "Button Link", type: "string" }),
+        defineField({
+          name: "buttonPage",
+          title: "Button – Page (recommended)",
+          type: "reference",
+          to: pageReferenceTypes,
+          description: "Select a page for the button.",
+          options: { filter: pageFilter },
+        }),
+        defineField({
+          name: "buttonLink",
+          title: "Button – Custom URL (fallback)",
+          type: "string",
+          description: "Used only when no page is selected. Defaults to /contact.",
+        }),
       ],
     }),
     // SEO

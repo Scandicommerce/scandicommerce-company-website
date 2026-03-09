@@ -12,6 +12,8 @@ interface IntegratingPimData {
   impactParagraph1?: string
   impactParagraph2?: string
   linkText?: string
+  linkSlug?: string | null
+  linkHref?: string | null
 }
 
 interface IntegratingPIMProps {
@@ -28,6 +30,9 @@ export default function IntegratingPIM({ integratingPim }: IntegratingPIMProps) 
   const impactParagraph1 = integratingPim?.impactParagraph1
   const impactParagraph2 = integratingPim?.impactParagraph2
   const linkText = integratingPim?.linkText
+  const linkSlug = integratingPim?.linkSlug
+  const linkHref = integratingPim?.linkHref
+  const resolvedHref = linkSlug ? `/${linkSlug}` : linkHref || '/contact'
 
   return (
     <section className="bg-[#F8F8F8] py-16 lg:py-24">
@@ -86,11 +91,15 @@ export default function IntegratingPIM({ integratingPim }: IntegratingPIMProps) 
                   {impactParagraph2}
                 </p>
               )}
-              {linkText && (
-                <LocalizedLink href="/contact" className="text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[16px] xl:text-[18px] text-[#03C1CA] hover:underline font-medium">
+              {linkText && (resolvedHref.startsWith('http') ? (
+                <a href={resolvedHref} target="_blank" rel="noopener noreferrer" className="text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[16px] xl:text-[18px] text-[#03C1CA] hover:underline font-medium">
+                  {linkText}
+                </a>
+              ) : (
+                <LocalizedLink href={resolvedHref} className="text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[16px] xl:text-[18px] text-[#03C1CA] hover:underline font-medium">
                   {linkText}
                 </LocalizedLink>
-              )}
+              ))}
             </div>
           </div>
         </div>
