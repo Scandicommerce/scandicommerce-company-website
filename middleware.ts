@@ -32,10 +32,14 @@ export function middleware(request: NextRequest) {
     return response
   }
 
-  // No locale in path: redirect to /{defaultLocale}{pathname} (domain-based default)
+  // No locale in path: rewrite to /{defaultLocale}{pathname} so the browser URL stays clean
   const defaultLocale = getDefaultLocale(request.nextUrl.host)
-  const redirectPath = pathname === '/' || pathname === '' ? `/${defaultLocale}` : `/${defaultLocale}${pathname}`
-  return NextResponse.redirect(new URL(redirectPath, request.url))
+  const rewritePath = pathname === '/' || pathname === '' ? `/${defaultLocale}` : `/${defaultLocale}${pathname}`
+  const response = NextResponse.rewrite(new URL(rewritePath, request.url))
+  response.headers.set('x-locale', defaultLocale)
+  response.headers.set('x-pathname', pathname)
+  response.headers.set('x-url', request.url)
+  return response
 }
 
 export const config = {
