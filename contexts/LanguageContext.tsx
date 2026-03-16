@@ -9,7 +9,7 @@ import React, {
   ReactNode,
   Suspense,
 } from 'react'
-import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import {
   languages,
   defaultLanguage,
@@ -29,11 +29,27 @@ interface LanguageContextType {
   setLanguage: (lang: string) => void
   availableLanguages: Language[]
   getLanguageTitle: (id: string) => string
-  /** Build href for internal links so ?lang= is preserved when navigating */
   localizedHref: (href: string) => string
 }
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined)
+
+/** scandicommerce.no → "no", everything else (incl. localhost) → "en" */
+function getDomainDefaultLocale(): string {
+  if (typeof window !== 'undefined' && window.location.hostname.includes('scandicommerce.no')) {
+    return 'no'
+  }
+  return 'en'
+}
+
+const LOCALE_DOMAINS: Record<string, string> = {
+  en: 'scandicommerce.com',
+  no: 'scandicommerce.no',
+}
+
+function isProductionHost(): boolean {
+  return typeof window !== 'undefined' && window.location.hostname.includes('scandicommerce')
+}
 
 const defaultContextValue: LanguageContextType = {
   currentLanguage: defaultLanguage,
@@ -43,48 +59,40 @@ const defaultContextValue: LanguageContextType = {
   localizedHref: (href: string) => href,
 }
 
-/**
- * Syncs path-based locale (/en/..., /no/...) into context. Renders nothing.
- * Must be inside Suspense because it uses useSearchParams().
- */
 function LanguageUrlSync({ onValue }: { onValue: (v: LanguageContextType) => void }) {
   const router = useRouter()
   const pathname = usePathname() || '/'
-  const searchParams = useSearchParams()
   const [currentLanguage, setCurrentLanguageState] = useState<string>(defaultLanguage)
   const [isInitialized, setIsInitialized] = useState(false)
 
-  // Path-based: /en/about, /no/shopify/... — derive lang from first segment
-  const langFromPath = getLangFromPath(pathname)
-  const pathWithoutLang = getPathWithoutLang(pathname)
-  const isPathBasedRoute = pathname !== '/' && isLocaleId(pathname.replace(/^\/+/, '').split('/')[0] || '')
+  const firstSeg = pathname.replace(/^\/+/, '').split('/')[0] || ''
+  const hasLocaleInPath = firstSeg !== '' && isLocaleId(firstSeg.toLowerCase())
+  const langFromPath = hasLocaleInPath ? firstSeg.toLowerCase() : null
 
+  // Clean path without any locale prefix (used for slug resolution)
+  const cleanPath = hasLocaleInPath ? getPathWithoutLang(pathname) : pathname
+
+  // --- Init: determine language from path or domain ---
   useEffect(() => {
     if (!isInitialized) {
-      const lang = isPathBasedRoute ? langFromPath : (searchParams.get('lang') || (typeof window !== 'undefined' ? localStorage.getItem('language') : null) || defaultLanguage)
+      const lang = langFromPath ?? getDomainDefaultLocale()
       setCurrentLanguageState(lang)
-      if (typeof window !== 'undefined') {
-        localStorage.setItem('language', lang)
-      }
+      if (typeof window !== 'undefined') localStorage.setItem('language', lang)
       setIsInitialized(true)
     }
-  }, [searchParams, isInitialized, isPathBasedRoute, langFromPath])
+  }, [isInitialized, langFromPath])
 
+  // --- Sync on navigation: path with locale wins, else domain default ---
   useEffect(() => {
-    if (isPathBasedRoute && langFromPath !== currentLanguage) {
-      setCurrentLanguageState(langFromPath)
-      if (typeof window !== 'undefined') {
-        localStorage.setItem('language', langFromPath)
-      }
-    } else if (!isPathBasedRoute) {
-      const q = searchParams.get('lang')
-      if (q && q !== currentLanguage) {
-        setCurrentLanguageState(q)
-        if (typeof window !== 'undefined') localStorage.setItem('language', q)
-      }
+    if (!isInitialized) return
+    const lang = langFromPath ?? getDomainDefaultLocale()
+    if (lang !== currentLanguage) {
+      setCurrentLanguageState(lang)
+      if (typeof window !== 'undefined') localStorage.setItem('language', lang)
     }
-  }, [pathname, searchParams, currentLanguage, isPathBasedRoute, langFromPath])
+  }, [pathname, isInitialized, langFromPath, currentLanguage])
 
+  // --- Switch language ---
   const setLanguage = useCallback(
     async (lang: string) => {
       setCurrentLanguageState(lang)
@@ -92,33 +100,40 @@ function LanguageUrlSync({ onValue }: { onValue: (v: LanguageContextType) => voi
         localStorage.setItem('language', lang)
         document.cookie = `language=${lang}; path=/; max-age=31536000`
       }
-      if (isPathBasedRoute) {
-        // Try to resolve the slug of this page in the target language
-        const currentPath = pathWithoutLang === '/' ? '' : pathWithoutLang.replace(/^\//, '')
-        if (currentPath && currentLanguage !== lang) {
-          try {
-            const res = await fetch(
-              `/api/translate-slug?currentPath=${encodeURIComponent(currentPath)}&currentLang=${encodeURIComponent(currentLanguage)}&targetLang=${encodeURIComponent(lang)}`
-            )
-            const data: { slug: string | null } = await res.json()
-            if (data.slug) {
-              router.push(`/${lang}/${data.slug}`)
-              return
-            }
-          } catch {
-            // Fall through to default behaviour
-          }
+
+      const domainDefault = getDomainDefaultLocale()
+      const currentCleanPath = cleanPath === '/' ? '' : cleanPath.replace(/^\//, '')
+
+      // Resolve slug in target language
+      let resolvedSlug: string | null = null
+      if (currentCleanPath && currentLanguage !== lang) {
+        try {
+          const res = await fetch(
+            `/api/translate-slug?currentPath=${encodeURIComponent(currentCleanPath)}&currentLang=${encodeURIComponent(currentLanguage)}&targetLang=${encodeURIComponent(lang)}`
+          )
+          const data: { slug: string | null } = await res.json()
+          resolvedSlug = data.slug
+        } catch {
+          // Fall through
         }
-        // Fallback: just swap the lang prefix
-        const base = pathWithoutLang === '/' ? '' : pathWithoutLang
-        router.push(`/${lang}${base}`)
+      }
+
+      const targetPath = resolvedSlug ? `/${resolvedSlug}` : (cleanPath || '/')
+
+      // Production: switch domain (full navigation, not client-side push)
+      if (isProductionHost() && LOCALE_DOMAINS[lang]) {
+        window.location.href = `https://${LOCALE_DOMAINS[lang]}${targetPath}`
+        return
+      }
+
+      // Localhost / dev: use prefix-based routing
+      if (lang === domainDefault) {
+        router.push(targetPath)
       } else {
-        const params = new URLSearchParams(searchParams.toString())
-        params.set('lang', lang)
-        router.push(`${pathname}?${params.toString()}`)
+        router.push(`/${lang}${targetPath === '/' ? '' : targetPath}`)
       }
     },
-    [pathname, pathWithoutLang, isPathBasedRoute, router, searchParams, currentLanguage]
+    [pathname, cleanPath, currentLanguage, router]
   )
 
   const getLanguageTitle = useCallback(
@@ -126,17 +141,40 @@ function LanguageUrlSync({ onValue }: { onValue: (v: LanguageContextType) => voi
     []
   )
 
+  /**
+   * Build href for internal links.
+   * Production: always clean paths (domain = language, no prefix).
+   * Localhost: clean for domain default, prefixed for other locales.
+   */
   const localizedHref = useCallback(
     (href: string): string => {
       if (!href || href.startsWith('#') || href.startsWith('http') || href.startsWith('mailto:') || href.startsWith('tel:')) {
         return href
       }
       try {
-        const [path, qs] = href.split('?')
-        const clean = (path || '/').replace(/^\/+/, '') || ''
+        const [pathPart, qs] = href.split('?')
+        let clean = (pathPart || '/').replace(/^\/+/, '')
         const query = qs ? `?${qs}` : ''
-        if (clean === '' || clean === '/') return `/${currentLanguage}${query}`
-        return `/${currentLanguage}/${clean}${query}`
+
+        // Strip any existing locale prefix the caller may have left in the href
+        const hrefFirstSeg = clean.split('/')[0] || ''
+        if (isLocaleId(hrefFirstSeg.toLowerCase())) {
+          clean = clean.substring(hrefFirstSeg.length).replace(/^\/+/, '')
+        }
+
+        // Production: never add locale prefix (domain IS the language)
+        if (isProductionHost()) {
+          return clean ? `/${clean}${query}` : `/${query}`
+        }
+
+        // Localhost: prefix only for non-default locales
+        const domainDefault = getDomainDefaultLocale()
+        if (currentLanguage === domainDefault) {
+          return clean ? `/${clean}${query}` : `/${query}`
+        }
+        return clean
+          ? `/${currentLanguage}/${clean}${query}`
+          : `/${currentLanguage}${query}`
       } catch {
         return href
       }
