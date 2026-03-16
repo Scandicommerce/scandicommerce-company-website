@@ -22,27 +22,18 @@ export function getLanguageFromParams(params: { lang?: string }): string {
 export async function getServerLanguage(): Promise<string> {
   try {
     const headersList = await headers()
+
+    // x-locale is set by middleware based on domain (most reliable source)
+    const xLocale = headersList.get('x-locale')
+    if (xLocale && isLocaleId(xLocale)) {
+      return xLocale
+    }
+
+    // Fallback: try to extract from pathname
     const pathname = headersList.get('x-pathname') || headersList.get('x-url') || ''
     const pathSegment = pathname.replace(/^\/+|\/+$/g, '').split('/')[0] || ''
     if (pathSegment && isLocaleId(pathSegment)) {
       return pathSegment
-    }
-    try {
-      const referer = headersList.get('referer') || ''
-      if (referer) {
-        const url = new URL(referer)
-        const seg = url.pathname.replace(/^\/+/, '').split('/')[0] || ''
-        if (seg && isLocaleId(seg)) return seg
-        const lang = url.searchParams.get('lang')
-        if (lang) return lang
-      }
-    } catch {
-      // ignore
-    }
-    const cookieStore = await cookies()
-    const langFromCookie = cookieStore.get('language')?.value
-    if (langFromCookie && isLocaleId(langFromCookie)) {
-      return langFromCookie
     }
   } catch {
     // Fallback to default
