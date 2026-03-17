@@ -1,5 +1,6 @@
 import { defineArrayMember, defineField, defineType } from "sanity";
 import { languageField } from "../objects/language";
+import { isUniquePerLanguage } from "@/sanity/lib/slugUtils";
 
 function packagePageFilter({ document }: { document: Record<string, unknown> }) {
   const lang = (document as { language?: string }).language;
@@ -30,6 +31,7 @@ export const allPackagesPage = defineType({
       options: {
         source: "pageTitle",
         maxLength: 96,
+        isUnique: isUniquePerLanguage,
       },
       validation: (rule) => rule.required(),
     }),

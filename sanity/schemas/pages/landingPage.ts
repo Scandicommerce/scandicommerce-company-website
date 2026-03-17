@@ -8,6 +8,7 @@ import { processSection } from "../components/processSection";
 import { partnersSection } from "../components/partnersSection";
 import { ctaSection } from "../components/ctaSection";
 import { languageField } from "../objects/language";
+import { isUniquePerLanguage } from "@/sanity/lib/slugUtils";
 
 export const landingPage = defineType({
   name: "landingPage",
@@ -32,6 +33,7 @@ export const landingPage = defineType({
       options: {
         source: "pageTitle",
         maxLength: 96,
+        isUnique: isUniquePerLanguage,
       },
       validation: (rule) => rule.required(),
     }),

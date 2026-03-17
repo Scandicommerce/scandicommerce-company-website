@@ -47,6 +47,7 @@ const defaultColumns: FooterColumn[] = [
       { label: 'About us', href: '/about' },
       { label: 'Partners', href: '/partners' },
       { label: 'Contact', href: '/contact' },
+      { label: 'Sitemap', href: '/sitemap' },
     ],
   },
   {
@@ -87,6 +88,7 @@ const defaultBottomSection = {
     { label: 'Privacy Policy', href: '/privacy', slug: null },
     { label: 'Terms', href: '/terms', slug: null },
     { label: 'Cookies', href: '/cookies', slug: null },
+    { label: 'Sitemap', href: '/sitemap', slug: null },
   ] as FooterLink[],
   copyrightText: '© 2025 ScandiCommerce. All rights reserved.',
 }

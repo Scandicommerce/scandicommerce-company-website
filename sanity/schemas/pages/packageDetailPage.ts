@@ -1,5 +1,6 @@
 import { defineField, defineType, defineArrayMember } from "sanity";
 import { languageField } from "../objects/language";
+import { isUniquePerLanguage } from "@/sanity/lib/slugUtils";
 
 export const packageDetailPage = defineType({
   name: "packageDetailPage",
@@ -24,6 +25,7 @@ export const packageDetailPage = defineType({
       options: {
         source: "pageTitle",
         maxLength: 96,
+        isUnique: isUniquePerLanguage,
       },
       validation: (rule) => rule.required(),
       description: "URL slug for the package (e.g., foundation, growth, premium, enterprise)",
@@ -164,6 +166,22 @@ export const packageDetailPage = defineType({
             select: { title: "name", subtitle: "title" },
           },
         }),
+      ],
+    }),
+    // Tab Labels (translatable)
+    defineField({
+      name: "tabLabels",
+      title: "Tab Labels",
+      type: "object",
+      description: "Labels for the tabs on the detail page. Leave empty to use English defaults.",
+      fields: [
+        defineField({ name: "overview", title: "Overview", type: "string", initialValue: "Overview" }),
+        defineField({ name: "whatsIncluded", title: "What's Included", type: "string", initialValue: "What's Included" }),
+        defineField({ name: "process", title: "Process", type: "string", initialValue: "Process" }),
+        defineField({ name: "faq", title: "FAQ", type: "string", initialValue: "FAQ" }),
+        defineField({ name: "reviews", title: "Reviews", type: "string", initialValue: "Reviews" }),
+        defineField({ name: "idealFor", title: "Ideal For", type: "string", initialValue: "Ideal for:" }),
+        defineField({ name: "bestFor", title: "Best For", type: "string", initialValue: "Best for:" }),
       ],
     }),
     // Frequently Added Together (Add-ons)

@@ -1,5 +1,6 @@
 import { defineField, defineType, defineArrayMember } from "sanity";
 import { languageField } from "../objects/language";
+import { isUniquePerLanguage } from "@/sanity/lib/slugUtils";
 
 export const partnersPage = defineType({
   name: "partnersPage",
@@ -24,6 +25,7 @@ export const partnersPage = defineType({
       options: {
         source: "pageTitle",
         maxLength: 96,
+        isUnique: isUniquePerLanguage,
       },
       validation: (rule) => rule.required(),
     }),

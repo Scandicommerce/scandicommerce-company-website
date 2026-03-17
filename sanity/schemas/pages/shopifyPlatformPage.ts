@@ -1,5 +1,6 @@
 import { defineArrayMember, defineField, defineType } from "sanity";
 import { languageField } from "../objects/language";
+import { isUniquePerLanguage } from "@/sanity/lib/slugUtils";
 
 export const shopifyPlatformPage = defineType({
   name: "shopifyPlatformPage",
@@ -21,7 +22,7 @@ export const shopifyPlatformPage = defineType({
       name: "slug",
       title: "Slug",
       type: "slug",
-      options: { source: "pageTitle", maxLength: 96 },
+      options: { source: "pageTitle", maxLength: 96, isUnique: isUniquePerLanguage },
       validation: (rule) => rule.required(),
     }),
     // Hero Section

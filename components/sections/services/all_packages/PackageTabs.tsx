@@ -4,19 +4,30 @@ import { useState } from 'react'
 import { Package } from '@/lib/packages'
 import IdealFor from './IdealFor'
 
-interface PackageTabsProps {
-  pkg: Package
+interface TabLabels {
+  overview?: string
+  whatsIncluded?: string
+  process?: string
+  faq?: string
+  reviews?: string
+  idealFor?: string
+  bestFor?: string
 }
 
-export default function PackageTabs({ pkg }: PackageTabsProps) {
+interface PackageTabsProps {
+  pkg: Package
+  tabLabels?: TabLabels
+}
+
+export default function PackageTabs({ pkg, tabLabels }: PackageTabsProps) {
   const [activeTab, setActiveTab] = useState('overview')
 
   const tabs = [
-    { id: 'overview', label: 'Overview' },
-    { id: 'included', label: "What's Included" },
-    { id: 'process', label: 'Process' },
-    { id: 'faq', label: 'FAQ' },
-    { id: 'reviews', label: 'Reviews' },
+    { id: 'overview', label: tabLabels?.overview || 'Overview' },
+    { id: 'included', label: tabLabels?.whatsIncluded || "What's Included" },
+    { id: 'process', label: tabLabels?.process || 'Process' },
+    { id: 'faq', label: tabLabels?.faq || 'FAQ' },
+    { id: 'reviews', label: tabLabels?.reviews || 'Reviews' },
   ]
 
   return (
@@ -48,7 +59,7 @@ export default function PackageTabs({ pkg }: PackageTabsProps) {
               : 'bg-[#F0F9FA]'
               }`}
           >
-            {activeTab === 'overview' && <IdealFor idealFor={pkg.idealFor} />}
+            {activeTab === 'overview' && <IdealFor idealFor={pkg.idealFor} label={tabLabels?.idealFor} />}
 
             {activeTab === 'included' && (
               <div className="space-y-10">
@@ -75,7 +86,7 @@ export default function PackageTabs({ pkg }: PackageTabsProps) {
                   // Fallback to simple list
                   <div>
                     <h3 className="text-[4.3vw] xs:text-[2.6vw] sm:text-[2.5vw] md:text-[2.2vw] lg:text-[18px] xl:text-[24px] font-bold text-gray-900 mb-6">
-                      What&apos;s Included
+                      {tabLabels?.whatsIncluded || "What's Included"}
                     </h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       {pkg.included.map((item, index) => (

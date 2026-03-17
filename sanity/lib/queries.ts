@@ -28,7 +28,7 @@ const imageFragment = groq`
 // ============================================
 
 export const landingPageQuery = groq`
-  *[_type == "landingPage" && slug.current == $slug && (language == $language || !defined(language))][0] {
+  *[_type == "landingPage" && slug.current == $slug && (language == $language || !defined(language))] | order(defined(language) desc) [0] {
     _id,
     pageTitle,
     "slug": slug.current,
@@ -150,7 +150,7 @@ export const landingPageQuery = groq`
 `;
 
 export const homepageQuery = groq`
-  *[_type == "landingPage" && isHomepage == true && (language == $language || !defined(language))][0] {
+  *[_type == "landingPage" && isHomepage == true && (language == $language || !defined(language))] | order(defined(language) desc) [0] {
     _id,
     pageTitle,
     "slug": slug.current,
@@ -284,7 +284,7 @@ export const allLandingPagesQuery = groq`
 // ============================================
 
 export const servicesPageQuery = groq`
-  *[_type == "servicesPage" && slug.current == $slug && (language == $language || !defined(language))][0] {
+  *[_type == "servicesPage" && slug.current == $slug && (language == $language || !defined(language))] | order(defined(language) desc) [0] {
     _id,
     title,
     "slug": slug.current,
@@ -301,7 +301,7 @@ export const servicesPageQuery = groq`
 // ============================================
 
 export const shopifyDevelopmentPageQuery = groq`
-  *[_type == "shopifyDevelopmentPage" && (language == $language || !defined(language))][0] {
+  *[_type == "shopifyDevelopmentPage" && (language == $language || !defined(language))] | order(defined(language) desc) [0] {
     _id,
     pageTitle,
     "slug": slug.current,
@@ -368,7 +368,7 @@ export const shopifyDevelopmentPageQuery = groq`
 // ============================================
 
 export const migratePageQuery = groq`
-  *[_type == "migratePage" && (language == $language || !defined(language))][0] {
+  *[_type == "migratePage" && (language == $language || !defined(language))] | order(defined(language) desc) [0] {
     _id,
     pageTitle,
     "slug": slug.current,
@@ -437,7 +437,7 @@ export const migratePageQuery = groq`
 // ============================================
 
 export const shopifyPosPageQuery = groq`
-  *[_type == "shopifyPosPage" && (language == $language || !defined(language))][0] {
+  *[_type == "shopifyPosPage" && (language == $language || !defined(language))] | order(defined(language) desc) [0] {
     _id,
     pageTitle,
     "slug": slug.current,
@@ -483,7 +483,7 @@ export const shopifyPosPageQuery = groq`
 // ============================================
 
 export const allPackagesPageQuery = groq`
-  *[_type == "allPackagesPage" && (language == $language || !defined(language))][0] {
+  *[_type == "allPackagesPage" && (language == $language || !defined(language))] | order(defined(language) desc) [0] {
     _id,
     pageTitle,
     "slug": slug.current,
@@ -531,7 +531,7 @@ export const allPackagesPageQuery = groq`
 // ============================================
 
 export const shopifyPlatformPageQuery = groq`
-  *[_type == "shopifyPlatformPage" && (language == $language || !defined(language))][0] {
+  *[_type == "shopifyPlatformPage" && (language == $language || !defined(language))] | order(defined(language) desc) [0] {
     _id,
     pageTitle,
     "slug": slug.current,
@@ -595,7 +595,7 @@ export const shopifyPlatformPageQuery = groq`
 // ============================================
 
 export const shopifyPosInfoPageQuery = groq`
-  *[_type == "shopifyPosInfoPage" && (language == $language || !defined(language))][0] {
+  *[_type == "shopifyPosInfoPage" && (language == $language || !defined(language))] | order(defined(language) desc) [0] {
     _id,
     pageTitle,
     "slug": slug.current,
@@ -652,7 +652,7 @@ export const shopifyPosInfoPageQuery = groq`
 // ============================================
 
 export const shopifyTcoCalculatorPageQuery = groq`
-  *[_type == "shopifyTcoCalculatorPage" && (language == $language || !defined(language))][0] {
+  *[_type == "shopifyTcoCalculatorPage" && (language == $language || !defined(language))] | order(defined(language) desc) [0] {
     _id,
     pageTitle,
     "slug": slug.current,
@@ -675,7 +675,7 @@ export const shopifyTcoCalculatorPageQuery = groq`
 // Shopify x PIM Page Query
 // ============================================
 export const shopifyXPimPageQuery = groq`
-  *[_type == "shopifyXPimPage" && (language == $language || !defined(language))][0] {
+  *[_type == "shopifyXPimPage" && (language == $language || !defined(language))] | order(defined(language) desc) [0] {
     _id,
     pageTitle,
     "slug": slug.current,
@@ -791,7 +791,7 @@ export const shopifyXPimPageQuery = groq`
 // Shopify x AI Page Query
 // ============================================
 export const shopifyXAiPageQuery = groq`
-  *[_type == "shopifyXAiPage" && (language == $language || !defined(language))][0] {
+  *[_type == "shopifyXAiPage" && (language == $language || !defined(language))] | order(defined(language) desc) [0] {
     _id,
     pageTitle,
     "slug": slug.current,
@@ -875,7 +875,7 @@ export const shopifyXAiPageQuery = groq`
 // Why Shopify Page Query
 // ============================================
 export const whyShopifyPageQuery = groq`
-  *[_type == "whyShopifyPage" && (language == $language || !defined(language))][0] {
+  *[_type == "whyShopifyPage" && (language == $language || !defined(language))] | order(defined(language) desc) [0] {
     _id,
     pageTitle,
     "slug": slug.current,
@@ -939,7 +939,7 @@ export const whyShopifyPageQuery = groq`
 
 // Work Page Query
 export const workPageQuery = groq`
-  *[_type == "workPage" && (language == $language || !defined(language))][0] {
+  *[_type == "workPage" && (language == $language || !defined(language))] | order(defined(language) desc) [0] {
     _id,
     pageTitle,
     "slug": slug.current,
@@ -981,7 +981,7 @@ export const workPageQuery = groq`
 
 // About Page Query
 export const aboutPageQuery = groq`
-  *[_type == "aboutPage" && (language == $language || !defined(language))][0] {
+  *[_type == "aboutPage" && (language == $language || !defined(language))] | order(defined(language) desc) [0] {
     _id,
     pageTitle,
     "slug": slug.current,
@@ -1072,7 +1072,7 @@ export const partnerCategoriesQuery = groq`
 
 // Partners Page Query
 export const partnersPageQuery = groq`
-  *[_type == "partnersPage" && (language == $language || !defined(language))][0] {
+  *[_type == "partnersPage" && (language == $language || !defined(language))] | order(defined(language) desc) [0] {
     _id,
     pageTitle,
     "slug": slug.current,
@@ -1125,7 +1125,7 @@ export const partnersPageQuery = groq`
 
 // Contact Page Query
 export const contactPageQuery = groq`
-  *[_type == "contactPage" && (language == $language || !defined(language))][0] {
+  *[_type == "contactPage" && (language == $language || !defined(language))] | order(defined(language) desc) [0] {
     _id,
     pageTitle,
     "slug": slug.current,
@@ -1194,7 +1194,7 @@ export const contactPageQuery = groq`
 
 // Package Detail Page Query
 export const packageDetailPageQuery = groq`
-  *[_type == "packageDetailPage" && slug.current == $slug && (language == $language || !defined(language))][0] {
+  *[_type == "packageDetailPage" && slug.current == $slug && (language == $language || !defined(language))] | order(defined(language) desc) [0] {
     _id,
     pageTitle,
     "slug": slug.current,
@@ -1239,6 +1239,15 @@ export const packageDetailPageQuery = groq`
       comment,
       title
     },
+    tabLabels {
+      overview,
+      whatsIncluded,
+      process,
+      faq,
+      reviews,
+      idealFor,
+      bestFor
+    },
     addOns {
       sectionTitle,
       sectionSubtitle,
@@ -1263,7 +1272,7 @@ export const packageDetailPageQuery = groq`
 
 // Blog Page Query (resolves featured article and grid from blogPost references)
 export const blogPageQuery = groq`
-  *[_type == "blogPage" && (language == $language || !defined(language))][0] {
+  *[_type == "blogPage" && (language == $language || !defined(language))] | order(defined(language) desc) [0] {
     _id,
     pageTitle,
     "slug": slug.current,
@@ -1316,7 +1325,7 @@ export const blogPageQuery = groq`
 
 // Blog Post by slug (for detail page)
 export const blogPostBySlugQuery = groq`
-  *[_type == "blogPost" && slug.current == $slug && (language == $language || !defined(language))][0] {
+  *[_type == "blogPost" && slug.current == $slug && (language == $language || !defined(language))] | order(defined(language) desc) [0] {
     _id,
     title,
     titleHighlight,
@@ -1379,7 +1388,7 @@ export const blogPostSlugLanguagePairsQuery = groq`
 
 // Merch Page Query
 export const merchPageQuery = groq`
-  *[_type == "merchPage" && (language == $language || !defined(language))][0] {
+  *[_type == "merchPage" && (language == $language || !defined(language))] | order(defined(language) desc) [0] {
     _id,
     pageTitle,
     "slug": slug.current,
@@ -1414,7 +1423,7 @@ export const merchPageQuery = groq`
 
 // Merch Product Settings Query
 export const merchProductSettingsQuery = groq`
-  *[_type == "merchProductSettings" && (language == $language || !defined(language))][0] {
+  *[_type == "merchProductSettings" && (language == $language || !defined(language))] | order(defined(language) desc) [0] {
     _id,
     settingsTitle,
     productFeatures {
@@ -1452,7 +1461,7 @@ export const merchProductSettingsQuery = groq`
 
 // Header Settings Query – resolves page references to slug so header links follow Sanity slugs
 export const headerSettingsQuery = groq`
-  *[_type == "headerSettings" && (language == $language || !defined(language))][0] {
+  *[_type == "headerSettings" && (language == $language || !defined(language))] | order(defined(language) desc) [0] {
     _id,
     settingsTitle,
     servicesMenu {
@@ -1486,7 +1495,7 @@ export const headerSettingsQuery = groq`
 
 // Footer Settings Query
 export const footerSettingsQuery = groq`
-  *[_type == "footerSettings" && (language == $language || !defined(language))][0] {
+  *[_type == "footerSettings" && (language == $language || !defined(language))] | order(defined(language) desc) [0] {
     _id,
     settingsTitle,
     columns[] {
@@ -1523,7 +1532,7 @@ export const footerSettingsQuery = groq`
 // Vipps Hurtigkasse Page Query
 // ============================================
 export const vippsHurtigkassePageQuery = groq`
-  *[_type == "vippsHurtigkassePage" && (language == $language || !defined(language))][0] {
+  *[_type == "vippsHurtigkassePage" && (language == $language || !defined(language))] | order(defined(language) desc) [0] {
     _id,
     pageTitle,
     "slug": slug.current,
@@ -1584,6 +1593,46 @@ export const vippsHurtigkassePageQuery = groq`
 `;
 
 // ============================================
+// Sitemap: fetch all pages with slug and title for the current language
+// ============================================
+
+export const sitemapPagesQuery = groq`
+  *[_type in [
+    "landingPage",
+    "aboutPage",
+    "contactPage",
+    "workPage",
+    "partnersPage",
+    "blogPage",
+    "allPackagesPage",
+    "migratePage",
+    "shopifyPosPage",
+    "shopifyPosInfoPage",
+    "shopifyXAiPage",
+    "shopifyXPimPage",
+    "whyShopifyPage",
+    "shopifyPlatformPage",
+    "vippsHurtigkassePage",
+    "shopifyTcoCalculatorPage",
+    "shopifyDevelopmentPage",
+    "merchPage",
+    "packageDetailPage"
+  ] && defined(slug.current) && (language == $language || !defined(language))] | order(pageTitle asc) {
+    _type,
+    "title": pageTitle,
+    "slug": slug.current
+  }
+`;
+
+export const sitemapBlogPostsQuery = groq`
+  *[_type == "blogPost" && defined(slug.current) && (language == $language || !defined(language))] | order(title asc) {
+    _type,
+    title,
+    "slug": slug.current
+  }
+`;
+
+// ============================================
 // Resolve page by path (slug) + language
 // Used by app/[lang]/[[...slug]]/page.tsx for slug-driven routing.
 // Path is the URL path without locale, e.g. "about", "om-oss", "services/all_packages".
@@ -1612,7 +1661,7 @@ const PAGE_TYPES_WITH_SLUG = [
 
 // Matches slug with or without locale prefix (e.g. "tjenester/vare_pakker" or "no/tjenester/vare_pakker")
 export const resolvePageByPathQuery = groq`
-  *[_type in $pageTypes && (slug.current == $path || slug.current == $pathWithLocale) && (language == $language || !defined(language))][0] {
+  *[_type in $pageTypes && (slug.current == $path || slug.current == $pathWithLocale) && (language == $language || !defined(language))] | order(defined(language) desc) [0] {
     _type,
     _id
   }
@@ -1622,11 +1671,11 @@ export const RESOLVE_PAGE_TYPES = PAGE_TYPES_WITH_SLUG;
 
 // Resolve detail pages by last segment (e.g. blogPost by "article-slug", packageDetailPage by "package-slug")
 export const resolveBlogPostBySlugQuery = groq`
-  *[_type == "blogPost" && slug.current == $slug && (language == $language || !defined(language))][0] { _type, _id }
+  *[_type == "blogPost" && slug.current == $slug && (language == $language || !defined(language))] | order(defined(language) desc) [0] { _type, _id }
 `;
 
 export const resolvePackageDetailBySlugQuery = groq`
-  *[_type == "packageDetailPage" && slug.current == $slug && (language == $language || !defined(language))][0] { _type, _id }
+  *[_type == "packageDetailPage" && slug.current == $slug && (language == $language || !defined(language))] | order(defined(language) desc) [0] { _type, _id }
 `;
 
 // Given a page type, find its slug in a different language (for language switching)

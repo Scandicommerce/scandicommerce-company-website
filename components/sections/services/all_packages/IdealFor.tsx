@@ -1,11 +1,12 @@
 interface IdealForProps {
   idealFor: string[]
+  label?: string
 }
 
-export default function IdealFor({ idealFor }: IdealForProps) {
+export default function IdealFor({ idealFor, label }: IdealForProps) {
   return (
     <div>
-      <h3 className="text-[4.3vw] xs:text-[2.6vw] sm:text-[2.5vw] md:text-[2.2vw] lg:text-[18px] xl:text-[24px] font-bold text-gray-900 mb-6">Ideal for:</h3>
+      <h3 className="text-[4.3vw] xs:text-[2.6vw] sm:text-[2.5vw] md:text-[2.2vw] lg:text-[18px] xl:text-[24px] font-bold text-gray-900 mb-6">{label || 'Ideal for:'}</h3>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {idealFor.map((item, index) => (
           <div

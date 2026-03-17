@@ -26,6 +26,7 @@ interface PackageDetailPageData {
   processSteps?: { week?: string; title?: string; description?: string }[]
   faq?: { question?: string; answer?: string }[]
   reviews?: { name?: string; rating?: number; comment?: string; title?: string }[]
+  tabLabels?: { overview?: string; whatsIncluded?: string; process?: string; faq?: string; reviews?: string; idealFor?: string; bestFor?: string }
   addOns?: { sectionTitle?: string; sectionSubtitle?: string; items?: { title?: string; description?: string; price?: string }[] }
   heroButtons?: { primaryButtonText?: string; primaryButtonLink?: string; secondaryButtonText?: string; secondaryButtonLink?: string }
   caseStudiesBanner?: { title?: string; description?: string; buttonText?: string; buttonLink?: string }
@@ -126,7 +127,7 @@ export default async function PackageDetailPage({ params }: { params: Promise<{ 
           pkg={pkg}
           shopifyProduct={shopifyProduct ? { variantId: shopifyProduct.variants?.[0]?.id || '', productTitle: shopifyProduct.title, hasVariants: (shopifyProduct.variants?.length || 0) > 1, variants: shopifyProduct.variants || [] } : undefined}
         />
-        <PackageTabs pkg={pkg} />
+        <PackageTabs pkg={pkg} tabLabels={sanityData?.tabLabels} />
         <FrequentlyAddedTogether addOns={{ ...sanityData?.addOns, items: addOnsWithShopify }} />
         <CaseStudiesBanner packageName={pkg.title} caseStudiesBanner={sanityData?.caseStudiesBanner} />
       </main>

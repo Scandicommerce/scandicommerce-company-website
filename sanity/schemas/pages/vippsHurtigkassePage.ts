@@ -1,5 +1,6 @@
 import { defineType, defineField } from "sanity";
 import { languageField } from "../objects/language";
+import { isUniquePerLanguage } from "@/sanity/lib/slugUtils";
 
 export const vippsHurtigkassePage = defineType({
   name: "vippsHurtigkassePage",
@@ -24,6 +25,7 @@ export const vippsHurtigkassePage = defineType({
       options: {
         source: "pageTitle",
         maxLength: 96,
+        isUnique: isUniquePerLanguage,
       },
     }),
 
