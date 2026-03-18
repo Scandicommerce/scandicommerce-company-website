@@ -1,13 +1,14 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { IoMdArrowForward } from 'react-icons/io'
+import { PortableText } from '@/sanity'
 
 interface CaseStudyProps {
   title: string
   category: string
   tags: string[]
-  challenge: string
-  solution: string
+  challenge: string | unknown[] | null | undefined
+  solution: string | unknown[] | null | undefined
   results: {
     value: string
     label: string
@@ -16,6 +17,25 @@ interface CaseStudyProps {
   imageAlt: string
   imagePosition: 'left' | 'right'
   link?: string
+}
+
+function RichText({
+  value,
+  className,
+}: {
+  value: string | unknown[] | null | undefined
+  className?: string
+}) {
+  if (value == null) return null
+  if (Array.isArray(value)) {
+    if (value.length === 0) return null
+    return (
+      <div className={className}>
+        <PortableText value={value} />
+      </div>
+    )
+  }
+  return <p className={className}>{String(value)}</p>
 }
 
 export default function CaseStudy({
@@ -81,9 +101,10 @@ export default function CaseStudy({
               <h4 className="text-[4.3vw] xs:text-[2.6vw] sm:text-[2.5vw] md:text-[2.2vw] lg:text-[18px] xl:text-[24px] font-semibold text-[#1F1D1D] uppercase tracking-wide mb-1">
                 {category}
               </h4>
-              <p className="2xl:text-base xl:text-sm text-xs text-[#565454]">
-                {challenge}
-              </p>
+              <RichText
+                value={challenge}
+                className="2xl:text-base xl:text-sm text-xs text-[#565454] [&_ul]:list-disc [&_ol]:list-decimal [&_ul]:ml-4 [&_ol]:ml-4 [&_li]:my-0.5"
+              />
             </div>
 
             {/* Solution */}
@@ -91,9 +112,10 @@ export default function CaseStudy({
               <h4 className="text-[4.3vw] xs:text-[2.6vw] sm:text-[2.5vw] md:text-[2.2vw] lg:text-[18px] xl:text-[24px] font-semibold text-[#1F1D1D] uppercase tracking-wide mb-1">
                 Solution
               </h4>
-              <p className="2xl:text-base xl:text-sm text-xs text-[#565454]">
-                {solution}
-              </p>
+              <RichText
+                value={solution}
+                className="2xl:text-base xl:text-sm text-xs text-[#565454] [&_ul]:list-disc [&_ol]:list-decimal [&_ul]:ml-4 [&_ol]:ml-4 [&_li]:my-0.5"
+              />
             </div>
 
             <div className="border border-[#56545480]"></div>
@@ -103,7 +125,7 @@ export default function CaseStudy({
               <h4 className="text-[4.3vw] xs:text-[2.6vw] sm:text-[2.5vw] md:text-[2.2vw] lg:text-[18px] xl:text-[24px] font-semibold text-[#1F1D1D] uppercase tracking-wide mb-[18px]">
                 Results
               </h4>
-              <div className="flex justify-between items-center">
+              <div className="flex justify-between items-start gap-6">
                 {results.map((result, index) => (
                   <div key={index} className="flex flex-col items-start">
                     <div className="text-[5.3vw] xs:text-[3.5vw] sm:text-[3.2vw] md:text-[3.2vw] lg:text-[28px] xl:text-[34px] font-bold !leading-[166%] text-[#03C1CA] font-mono tracking-tight">

@@ -955,8 +955,30 @@ export const workPageQuery = groq`
         title,
         category,
         tags,
-        challenge,
-        solution,
+        challenge[] {
+          ...,
+          _type == "image" => {
+            ...,
+            asset-> {
+              _id,
+              url,
+              metadata { dimensions, lqip },
+              alt
+            }
+          }
+        },
+        solution[] {
+          ...,
+          _type == "image" => {
+            ...,
+            asset-> {
+              _id,
+              url,
+              metadata { dimensions, lqip },
+              alt
+            }
+          }
+        },
         results[] {
           value,
           label

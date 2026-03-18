@@ -69,8 +69,18 @@ export const workPage = defineType({
                   type: "array",
                   of: [defineArrayMember({ type: "string" })],
                 }),
-                defineField({ name: "challenge", title: "Challenge", type: "text", rows: 2 }),
-                defineField({ name: "solution", title: "Solution", type: "text", rows: 2 }),
+                defineField({
+                  name: "challenge",
+                  title: "Challenge",
+                  type: "blockContent",
+                  description: "Use the toolbar for headings, lists, bold, and links.",
+                }),
+                defineField({
+                  name: "solution",
+                  title: "Solution",
+                  type: "blockContent",
+                  description: "Use the toolbar for headings, lists, bold, and links.",
+                }),
                 defineField({
                   name: "results",
                   title: "Results",

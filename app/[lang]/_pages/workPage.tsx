@@ -18,8 +18,8 @@ interface WorkPageData {
       title?: string
       category?: string
       tags?: string[]
-      challenge?: string
-      solution?: string
+      challenge?: string | unknown[]
+      solution?: string | unknown[]
       results?: { value?: string; label?: string }[]
       imageUrl?: string
       imageAlt?: string

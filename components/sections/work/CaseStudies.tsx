@@ -11,8 +11,8 @@ interface Study {
   title?: string
   category?: string
   tags?: string[]
-  challenge?: string
-  solution?: string
+  challenge?: string | unknown[]
+  solution?: string | unknown[]
   results?: Result[]
   imageUrl?: string
   imageAlt?: string
@@ -87,8 +87,8 @@ export default function CaseStudies({ caseStudies }: CaseStudiesProps) {
             title={study.title || ''}
             category={study.category || ''}
             tags={study.tags || []}
-            challenge={study.challenge || ''}
-            solution={study.solution || ''}
+            challenge={study.challenge ?? ''}
+            solution={study.solution ?? ''}
             results={study.results?.map(r => ({
               value: r.value || '',
               label: r.label || ''
