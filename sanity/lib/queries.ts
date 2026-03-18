@@ -1654,6 +1654,47 @@ export const sitemapBlogPostsQuery = groq`
   }
 `;
 
+// All locales: for XML sitemap with hreflang (no $language filter; returns _id, language, slug, _updatedAt)
+export const sitemapPagesAllLocalesQuery = groq`
+  *[_type in [
+    "landingPage",
+    "aboutPage",
+    "contactPage",
+    "workPage",
+    "partnersPage",
+    "blogPage",
+    "allPackagesPage",
+    "migratePage",
+    "shopifyPosPage",
+    "shopifyPosInfoPage",
+    "shopifyXAiPage",
+    "shopifyXPimPage",
+    "whyShopifyPage",
+    "shopifyPlatformPage",
+    "vippsHurtigkassePage",
+    "shopifyTcoCalculatorPage",
+    "shopifyDevelopmentPage",
+    "merchPage",
+    "packageDetailPage"
+  ] && defined(slug.current)] | order(pageTitle asc) {
+    _id,
+    "language": select(defined(language) => language, "en"),
+    "slug": slug.current,
+    _type,
+    _updatedAt
+  }
+`;
+
+export const sitemapBlogPostsAllLocalesQuery = groq`
+  *[_type == "blogPost" && defined(slug.current)] | order(title asc) {
+    _id,
+    "language": select(defined(language) => language, "en"),
+    "slug": slug.current,
+    _type,
+    _updatedAt
+  }
+`;
+
 // ============================================
 // Resolve page by path (slug) + language
 // Used by app/[lang]/[[...slug]]/page.tsx for slug-driven routing.
