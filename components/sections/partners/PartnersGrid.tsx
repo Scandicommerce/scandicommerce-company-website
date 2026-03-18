@@ -235,9 +235,10 @@ const ICON_MAP: Record<string, ComponentType<{ className?: string }>> = {
 export default function PartnersGrid({ partnersGrid, categoryList }: PartnersGridProps) {
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
-  const [expandedPartnerId, setExpandedPartnerId] = useState<number | null>(null)
-  /** Partner id that is currently closing (accordion); keep z-index above sections until animation ends. */
-  const [closingPartnerId, setClosingPartnerId] = useState<number | null>(null)
+  /** Unique per card instance (group + partner.id) so the same partner in different groups has separate expand state. */
+  const [expandedCardId, setExpandedCardId] = useState<string | null>(null)
+  /** Card id that is currently closing (accordion); keep z-index above sections until animation ends. */
+  const [closingCardId, setClosingCardId] = useState<string | null>(null)
   const closingTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const [quickJumpExpanded, setQuickJumpExpanded] = useState(false)
   const [categoryDropdownOpen, setCategoryDropdownOpen] = useState(false)
@@ -661,10 +662,12 @@ export default function PartnersGrid({ partnersGrid, categoryList }: PartnersGri
 
                 {/* Partner Cards Grid */}
                 <div className="gap-y-1 xs:gap-y-2 md:gap-y-4 xl:gap-y-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-                  {groupPartners.map((partner, index) => (
+                  {groupPartners.map((partner, index) => {
+                    const cardId = `${group}-${partner.id}`
+                    return (
                     <div
-                      key={partner.id}
-                      className={`animate-fade-in-up opacity-0 relative ${(expandedPartnerId === partner.id || closingPartnerId === partner.id) ? 'z-40 overflow-visible' : 'z-0'}`}
+                      key={cardId}
+                      className={`animate-fade-in-up opacity-0 relative ${(expandedCardId === cardId || closingCardId === cardId) ? 'z-40 overflow-visible' : 'z-0'}`}
                       style={{ animationDelay: `${index * 0.05}s`, animationFillMode: 'forwards' }}
                     >
                       <PartnerCard
@@ -672,21 +675,22 @@ export default function PartnersGrid({ partnersGrid, categoryList }: PartnersGri
                         imageSizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
                         onExpandChange={(expanded) => {
                           if (expanded) {
-                            if (expandedPartnerId != null && expandedPartnerId !== partner.id) {
-                              setClosingPartnerId(expandedPartnerId)
+                            if (expandedCardId != null && expandedCardId !== cardId) {
+                              setClosingCardId(expandedCardId)
                               if (closingTimeoutRef.current) clearTimeout(closingTimeoutRef.current)
                               closingTimeoutRef.current = setTimeout(() => {
-                                setClosingPartnerId(null)
+                                setClosingCardId(null)
                                 closingTimeoutRef.current = null
                               }, PARTNER_COLLAPSE_DURATION_MS)
                             }
-                            setExpandedPartnerId(partner.id)
-                          } else if (expandedPartnerId === partner.id) setExpandedPartnerId(null)
+                            setExpandedCardId(cardId)
+                          } else if (expandedCardId === cardId) setExpandedCardId(null)
                         }}
-                        isActiveExpanded={expandedPartnerId === partner.id}
+                        isActiveExpanded={expandedCardId === cardId}
                       />
                     </div>
-                  ))}
+                    )
+                  })}
                 </div>
               </div>
             )
