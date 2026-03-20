@@ -57,6 +57,37 @@ function blogPostsByLanguage(S: StructureBuilder) {
     )
 }
 
+/** Posts (page builder) grouped by language */
+function postsByLanguage(S: StructureBuilder) {
+  return S.listItem()
+    .title('Posts (Page Builder)')
+    .schemaType('post')
+    .child(
+      S.list()
+        .title('Posts by Language')
+        .items(
+          languages.map(lang =>
+            S.listItem()
+              .title(lang.title)
+              .schemaType('post')
+              .child(
+                S.documentList()
+                  .apiVersion('2024-01-01')
+                  .title(`Posts (${lang.title})`)
+                  .schemaType('post')
+                  .filter(
+                    '_type == "post" && (language == $language || (!defined(language) && $isDefault))'
+                  )
+                  .params({
+                    language: lang.id,
+                    isDefault: lang.id === DEFAULT_LANG_ID,
+                  })
+              )
+          )
+        )
+    )
+}
+
 export const deskStructure = (S: StructureBuilder) =>
   S.list()
     .title('Content')
@@ -248,6 +279,7 @@ export const deskStructure = (S: StructureBuilder) =>
                 .schemaType('blogPage')
                 .child(S.documentTypeList('blogPage').title('Blog Pages')),
               blogPostsByLanguage(S),
+              postsByLanguage(S),
             ])
         ),
 

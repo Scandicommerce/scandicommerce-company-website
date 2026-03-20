@@ -1,6 +1,5 @@
 'use client'
 
-import { useEffect, useState } from 'react'
 import ArticleCard from './ArticleCard'
 import { articles as allArticles } from '@/lib/articles'
 
@@ -38,9 +37,20 @@ const defaultArticles = allArticles.map((article, index) => ({
 }))
 
 export default function ArticlesGrid({ articlesGrid, lang }: ArticlesGridProps) {
-  const [isXlAndAbove, setIsXlAndAbove] = useState<boolean>(true)
-
   const loadMoreButtonText = articlesGrid?.loadMoreButtonText || 'Load More Articles'
+
+  // Format ISO date (e.g. from post publishedAt) for display
+  const formatDate = (d: string | undefined) => {
+    if (!d) return ''
+    if (d.includes('T')) {
+      try {
+        return new Date(d).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })
+      } catch {
+        return d
+      }
+    }
+    return d
+  }
 
   // Use Sanity articles if available, otherwise use default articles
   const articles = articlesGrid?.articles && articlesGrid.articles.length > 0
@@ -49,76 +59,24 @@ export default function ArticlesGrid({ articlesGrid, lang }: ArticlesGridProps) 
         title: article.title || '',
         description: article.description || '',
         category: article.category || '',
-        date: article.date || '',
+        date: formatDate(article.date) || '',
         readTime: article.readTime?.replace(' read', '') || '',
         image: article.imageUrl || '',
         slug: article.slug || '',
       }))
     : defaultArticles
 
-  const fullRowsOfThree = Math.floor(articles.length / 3)
-  const remainingCards = articles.length % 3
-
-  const fullRowsArticles = articles.slice(0, fullRowsOfThree * 3)
-  const remainingArticles = articles.slice(fullRowsOfThree * 3)
-
-  const getRemainingGridClass = () => {
-    if (remainingCards === 0) return ''
-    if (remainingCards === 1) return 'grid-cols-1 md:grid-cols-1 lg:grid-cols-1'
-    if (remainingCards === 2) return 'grid-cols-1 md:grid-cols-2 lg:grid-cols-2'
-    return 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3'
-  }
-
-  useEffect(() => {
-    const updateItemsPerPage = () => {
-      const width = window.innerWidth
-      setIsXlAndAbove(width >= 1280)
-    }
-
-    updateItemsPerPage()
-
-    window.addEventListener('resize', updateItemsPerPage)
-
-    return () => window.removeEventListener('resize', updateItemsPerPage)
-  }, [])
-
   return (
     <section className="bg-white py-16 lg:py-24">
-      {isXlAndAbove && (
-        <>
-          {fullRowsOfThree > 0 && (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 mb-0">
-              {fullRowsArticles.map((article, index) => (
-                <ArticleCard key={article.id || index} article={article} lang={lang} />
-              ))}
-            </div>
-          )}
-
-          {remainingCards > 0 && (
-            <div className={`grid ${getRemainingGridClass()}`}>
-              {remainingArticles.map((article, index) => (
-                <ArticleCard
-                  key={article.id || fullRowsOfThree * 3 + index}
-                  article={article}
-                  lang={lang}
-                />
-              ))}
-            </div>
-          )}
-        </>
-      )}
-
-      {!isXlAndAbove && (
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 mb-0">
-          {articles.map((article, index) => (
-            <ArticleCard
-              key={article.id || fullRowsOfThree * 3 + index}
-              article={article}
-              lang={lang}
-            />
-          ))}
-        </div>
-      )}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 mb-0">
+        {articles.map((article, index) => (
+          <ArticleCard
+            key={article.id || index}
+            article={article}
+            lang={lang}
+          />
+        ))}
+      </div>
 
       {/* Load More Button */}
       <div className="text-center mt-12">

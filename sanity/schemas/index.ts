@@ -1,7 +1,30 @@
 // ============================================
 // Object Types (reusable schema objects)
 // ============================================
-import { link, button, seo, blockContent } from "./objects";
+import {
+  link,
+  button,
+  seo,
+  blockContent,
+  richTextBlock,
+  keyTakeawaysBlock,
+  statsRowBlock,
+  tableBlock,
+  comparisonCardsBlock,
+  calloutBlock,
+  prosConsBlock,
+  codeBlock,
+  faqBlock,
+  ctaBlock,
+  gradientTitleBlock,
+  imageBlock,
+  dividerBlock,
+} from "./objects";
+
+// ============================================
+// Document Types (e.g. post page builder)
+// ============================================
+import { post } from "./documents";
 
 // ============================================
 // Page Types (document types for pages)
@@ -44,6 +67,23 @@ export const schemaTypes = [
   button,
   seo,
   blockContent,
+  // Blog page builder blocks
+  richTextBlock,
+  keyTakeawaysBlock,
+  statsRowBlock,
+  tableBlock,
+  comparisonCardsBlock,
+  calloutBlock,
+  prosConsBlock,
+  codeBlock,
+  faqBlock,
+  ctaBlock,
+  gradientTitleBlock,
+  imageBlock,
+  dividerBlock,
+
+  // Document types
+  post,
 
   // Page types
   landingPage,

@@ -3,6 +3,7 @@ import { client } from '@/sanity/lib/client'
 import {
   sitemapPagesAllLocalesQuery,
   sitemapBlogPostsAllLocalesQuery,
+  sitemapPostsAllLocalesQuery,
 } from '@/sanity/lib/queries'
 import { getBaseUrl } from '@/lib/hreflang'
 import { LOCALE_IDS, defaultLanguage } from '@/sanity/lib/languages'
@@ -24,7 +25,7 @@ function getBaseId(id: string): string {
 }
 
 function getPath(entry: { _type: string; slug: string }): string {
-  if (entry._type === 'blogPost') return `resources/${entry.slug}`
+  if (entry._type === 'blogPost' || entry._type === 'post') return `resources/${entry.slug}`
   return entry.slug
 }
 
@@ -61,9 +62,10 @@ export async function GET() {
     )
   }
 
-  const [pages, blogPosts, shopifyProducts] = await Promise.all([
+  const [pages, blogPosts, posts, shopifyProducts] = await Promise.all([
     client.fetch<SitemapEntry[]>(sitemapPagesAllLocalesQuery, {}, { next: { revalidate: 3600 } }),
     client.fetch<SitemapEntry[]>(sitemapBlogPostsAllLocalesQuery, {}, { next: { revalidate: 3600 } }),
+    client.fetch<SitemapEntry[]>(sitemapPostsAllLocalesQuery, {}, { next: { revalidate: 3600 } }),
     getShopifyProducts().catch(() => []),
   ])
 
@@ -89,6 +91,10 @@ export async function GET() {
   }
 
   for (const entry of blogPosts || []) {
+    addEntry(entry, getPath(entry))
+  }
+
+  for (const entry of posts || []) {
     addEntry(entry, getPath(entry))
   }
 

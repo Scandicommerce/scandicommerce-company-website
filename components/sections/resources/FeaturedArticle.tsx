@@ -8,6 +8,7 @@ interface TagData {
 }
 
 interface FeaturedArticleData {
+  articleSlug?: string
   imageUrl?: string
   tags?: TagData[]
   title?: string
@@ -24,21 +25,43 @@ interface FeaturedArticleProps {
   lang?: string
 }
 
-// Default tags
-const defaultTags: TagData[] = [
-  { label: 'Shopify Tips', isPrimary: true },
-  { label: 'Featured', isPrimary: false },
-]
+function formatArticleDate(d: string | undefined): string {
+  if (!d) return 'Jan 15, 2025'
+  if (d.includes('T')) {
+    try {
+      return new Date(d).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })
+    } catch {
+      return d
+    }
+  }
+  return d
+}
 
 export default function FeaturedArticle({ featuredArticle, lang }: FeaturedArticleProps) {
   const imageUrl = featuredArticle?.imageUrl || '/images/resources/featured_article/banner.png'
-  const tags = featuredArticle?.tags && featuredArticle.tags.length > 0 ? featuredArticle.tags : defaultTags
+  const tags = (featuredArticle?.tags || []).filter((tag) => Boolean(tag?.label))
   const title = featuredArticle?.title || '10 Essential Shopify Apps for Norwegian E-commerce in 2025'
   const description = featuredArticle?.description || 'Discover the must-have apps that will transform your Norwegian Shopify store and boost conversions.'
-  const date = featuredArticle?.date || 'Jan 15, 2025'
+  const date = formatArticleDate(featuredArticle?.date) || 'Jan 15, 2025'
   const readTime = featuredArticle?.readTime || '8 min read'
-  const rawLink = featuredArticle?.link || '/resources/10-essential-shopify-apps-norwegian-ecommerce-2025'
-  const link = lang ? `/${lang}${rawLink.startsWith('/') ? rawLink : `/${rawLink}`}` : rawLink
+  const articleSlug = featuredArticle?.articleSlug?.trim()
+  const locale = lang || 'en'
+  const slugFromLink = (raw: string) => {
+    try {
+      if (raw.startsWith('http://') || raw.startsWith('https://')) {
+        const path = new URL(raw).pathname
+        const match = path.match(/\/resources\/([^/]+)/) || path.match(/\/([^/]+)$/)
+        return match ? match[1] : null
+      }
+      const path = raw.startsWith('/') ? raw : `/${raw}`
+      const match = path.match(/\/resources\/([^/]+)/) || path.match(/\/([^/]+)$/)
+      return match ? match[1] : null
+    } catch {
+      return null
+    }
+  }
+  const slug = articleSlug || (featuredArticle?.link ? slugFromLink(featuredArticle.link) : null) || '10-essential-shopify-apps-norwegian-ecommerce-2025'
+  const link = `/${locale}/resources/${slug}`
   const buttonText = featuredArticle?.buttonText || 'Read Article'
 
   return (
@@ -59,20 +82,22 @@ export default function FeaturedArticle({ featuredArticle, lang }: FeaturedArtic
           {/* Right Column - Blog Post Card */}
           <div className="bg-white p-6 lg:p-8 border border-[#5654544D] h-full w-full flex flex-col justify-center items-start gap-10">
             {/* Tags */}
-            <div className="flex flex-wrap gap-2">
-              {tags.map((tag, index) => (
-                <span
-                  key={index}
-                  className={`px-3 py-1 text-sm font-medium ${
-                    tag.isPrimary
-                      ? 'bg-[#03C1CA] text-white'
-                      : 'bg-gray-200 text-gray-700'
-                  }`}
-                >
-                  {tag.label}
-                </span>
-              ))}
-            </div>
+            {tags.length > 0 && (
+              <div className="flex flex-wrap gap-2">
+                {tags.map((tag, index) => (
+                  <span
+                    key={index}
+                    className={`px-3 py-1 text-sm font-medium ${
+                      tag.isPrimary
+                        ? 'bg-[#03C1CA] text-white'
+                        : 'bg-gray-200 text-gray-700'
+                    }`}
+                  >
+                    {tag.label}
+                  </span>
+                ))}
+              </div>
+            )}
 
             <div className="flex flex-col justify-start items-start gap-7 sm:gap-[42px]">
               <div className="flex flex-col justify-start items-start gap-5 sm:gap-[30px]">

@@ -19,6 +19,7 @@ interface BlogPageData {
     searchPlaceholder?: string
   }
   featuredArticle?: {
+    articleSlug?: string
     imageUrl?: string
     tags?: { label?: string; isPrimary?: boolean }[]
     title?: string

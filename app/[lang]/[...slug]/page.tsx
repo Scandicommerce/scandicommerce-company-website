@@ -23,6 +23,7 @@ import AllPackagesPage from '../_pages/allPackagesPage'
 import PackageDetailPage from '../_pages/packageDetailPage'
 import BlogPage from '../_pages/blogPage'
 import BlogPostPage from '../_pages/blogPostPage'
+import PostPage from '../_pages/postPage'
 import MerchProductPage from '../_pages/merchProductPage'
 
 export const dynamic = 'force-dynamic'
@@ -48,6 +49,7 @@ const PAGE_COMPONENTS: Record<string, React.ComponentType<{ params: Promise<{ la
   packageDetailPage: PackageDetailPage as React.ComponentType<{ params: Promise<{ lang: string; slug?: string }> }>,
   blogPage: BlogPage as React.ComponentType<{ params: Promise<{ lang: string; slug?: string }> }>,
   blogPost: BlogPostPage as React.ComponentType<{ params: Promise<{ lang: string; slug?: string }> }>,
+  post: PostPage as React.ComponentType<{ params: Promise<{ lang: string; slug?: string }> }>,
   merchProduct: MerchProductPage as React.ComponentType<{ params: Promise<{ lang: string; slug?: string }> }>,
 }
 

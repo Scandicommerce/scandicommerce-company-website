@@ -21,7 +21,10 @@ interface ArticleCardProps {
 }
 
 export default function ArticleCard({ article, lang }: ArticleCardProps) {
-  const href = lang ? `/${lang}/resources/${article.slug}` : `/resources/${article.slug}`
+  const locale = lang || 'en'
+  const href = article.slug ? `/${locale}/resources/${article.slug}` : '#'
+  const hasCategory = Boolean(article.category?.trim())
+  const hasReadTime = Boolean(article.readTime?.trim())
   return (
     <Link
       href={href}
@@ -41,15 +44,21 @@ export default function ArticleCard({ article, lang }: ArticleCardProps) {
       {/* Article Content */}
       <div className="p-6 border border-[#565454] h-[300px] flex flex-col justify-center items-start">
         {/* Category Tag & Read Time */}
-        <div className="flex items-center justify-start gap-9 mb-5">
-          <span className="px-5 py-1 bg-[#1F1D1D33] text-[#565454] text-xs sm:text-sm font-medium">
-            {article.category}
-          </span>
-          <div className="flex items-center gap-1 text-[10px] sm:text-xs text-[#565454]">
-            <LuClock4 className="w-5 h-5" />
-            <span>{article.readTime}</span>
+        {(hasCategory || hasReadTime) && (
+          <div className="flex items-center justify-start gap-9 mb-5">
+            {hasCategory && (
+              <span className="px-5 py-1 bg-[#1F1D1D33] text-[#565454] text-xs sm:text-sm font-medium">
+                {article.category}
+              </span>
+            )}
+            {hasReadTime && (
+              <div className="flex items-center gap-1 text-[10px] sm:text-xs text-[#565454]">
+                <LuClock4 className="w-5 h-5" />
+                <span>{article.readTime}</span>
+              </div>
+            )}
           </div>
-        </div>
+        )}
 
         {/* Title */}
         <h3 className="text-sm sm:text-lg lg:text-[15px] xl:text-xl font-bold text-[#1F1D1D] mb-5 line-clamp-2">

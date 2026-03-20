@@ -56,16 +56,16 @@ export const blogPage = defineType({
       fields: [
         defineField({
           name: "article",
-          title: "Blog Post",
+          title: "Featured Article",
           type: "reference",
-          to: [{ type: "blogPost" }],
-          description: "Link to a blog post for title, image, date, etc. Leave empty to use manual fields below.",
+          to: [{ type: "blogPost" }, { type: "post" }],
+          description: "Link to a blog post or post (page builder) for title, image, date, etc. Leave empty to use manual fields below.",
           options: {
             filter: ({ document }) => {
               const pageLang = document?.language ?? "en";
               return {
                 filter:
-                  '_type == "blogPost" && (language == $pageLang || (!defined(language) && $pageLang == "en"))',
+                  '(_type == "blogPost" || _type == "post") && (language == $pageLang || (!defined(language) && $pageLang == "en"))',
                 params: { pageLang },
               };
             },
@@ -105,17 +105,17 @@ export const blogPage = defineType({
           title: "Articles",
           type: "array",
           description:
-            "Select blog posts to show in the grid. Only posts in this page's language are listed. Order matters.",
+            "Select blog posts or posts (page builder) to show in the grid. Only items in this page's language are listed. Order matters.",
           of: [
             defineArrayMember({
               type: "reference",
-              to: [{ type: "blogPost" }],
+              to: [{ type: "blogPost" }, { type: "post" }],
               options: {
                 filter: ({ document }) => {
                   const pageLang = document?.language ?? "en";
                   return {
                     filter:
-                      '_type == "blogPost" && (language == $pageLang || (!defined(language) && $pageLang == "en"))',
+                      '(_type == "blogPost" || _type == "post") && (language == $pageLang || (!defined(language) && $pageLang == "en"))',
                     params: { pageLang },
                   };
                 },

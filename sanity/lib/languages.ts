@@ -45,6 +45,7 @@ export const TRANSLATABLE_SCHEMA_TYPES = [
   "workPage",
   "blogPage",
   "blogPost",
+  "post",
   "shopifyDevelopmentPage",
   "migratePage",
   "shopifyPosPage",

@@ -1309,24 +1309,22 @@ export const blogPageQuery = groq`
     featuredArticle {
       "articleSlug": article->slug.current,
       "imageUrl": coalesce(article->image.asset->url, image.asset->url),
-      tags[] {
-        label,
-        isPrimary
-      },
+      "tags": coalesce(article->tags[]{ label, isPrimary }, tags[]{ label, isPrimary }),
       "title": coalesce(article->title, title),
-      "description": coalesce(article->description, description),
-      "date": coalesce(article->date, date),
+      "description": coalesce(article->description, article->excerpt, description),
+      "date": coalesce(article->date, article->publishedAt, date),
       "readTime": coalesce(article->readTime, readTime),
       "link": select(defined(article) => "/resources/" + article->slug.current, link),
       buttonText
     },
     articlesGrid {
       "articles": articles[]-> {
+        _type,
         title,
-        description,
-        category,
-        date,
-        readTime,
+        "description": select(_type == "post" => excerpt, description),
+        "date": select(_type == "post" => publishedAt, date),
+        "readTime": select(_type == "post" => null, readTime),
+        "category": select(_type == "post" => coalesce(tags[isPrimary == true][0].label, tags[0].label), category),
         "imageUrl": image.asset->url,
         "slug": slug.current
       },
@@ -1403,6 +1401,136 @@ export const blogPostSlugsQuery = groq`
 // Slug + language pairs so we only generate (lang, slug) that exist (avoids 404 for valid slugs)
 export const blogPostSlugLanguagePairsQuery = groq`
   *[_type == "blogPost" && defined(slug.current)] {
+    "slug": slug.current,
+    "language": language
+  }
+`;
+
+// ============================================
+// Post (Page Builder) Queries
+// ============================================
+
+export const postBySlugQuery = groq`
+  *[_type == "post" && slug.current == $slug && (language == $language || !defined(language))] | order(defined(language) desc) [0] {
+    _id,
+    _type,
+    title,
+    "slug": slug.current,
+    excerpt,
+    publishedAt,
+    "image": image.asset->url,
+    tags[] { label, isPrimary },
+    content[] {
+      _type,
+      _key,
+      // richTextBlock (portable text; expand images in body)
+      (_type == "richTextBlock") => {
+        body[] {
+          ...,
+          _type == "image" => {
+            "asset": asset->{ _id, url, metadata { dimensions, lqip } },
+            alt,
+            caption
+          }
+        }
+      },
+      // keyTakeawaysBlock (rich text + colors)
+      (_type == "keyTakeawaysBlock") => {
+        content[] {
+          ...,
+          _type == "image" => {
+            "asset": asset->{ _id, url, metadata { dimensions, lqip } },
+            alt,
+            caption
+          }
+        },
+        backgroundColor,
+        borderColor,
+        topBorderColor,
+        topBorderColorEnd
+      },
+      // statsRowBlock
+      (_type == "statsRowBlock") => { stats[] { value, label } },
+      // tableBlock
+      (_type == "tableBlock") => { title, columns, rows[] { cells } },
+      // comparisonCardsBlock
+      (_type == "comparisonCardsBlock") => {
+        leftCard {
+          title,
+          body[] {
+            ...,
+            _type == "image" => {
+              "asset": asset->{ _id, url, metadata { dimensions, lqip } },
+              alt,
+              caption
+            }
+          }
+        },
+        rightCard {
+          title,
+          body[] {
+            ...,
+            _type == "image" => {
+              "asset": asset->{ _id, url, metadata { dimensions, lqip } },
+              alt,
+              caption
+            }
+          }
+        }
+      },
+      // calloutBlock
+      (_type == "calloutBlock") => { variant, title, content },
+      // prosConsBlock
+      (_type == "prosConsBlock") => { consTitle, cons, prosTitle, pros },
+      // codeBlock
+      (_type == "codeBlock") => { language, code },
+      // faqBlock
+      (_type == "faqBlock") => { title, items[] { question, answer } },
+      // ctaBlock (rich text body)
+      (_type == "ctaBlock") => {
+        heading,
+        body[] {
+          ...,
+          _type == "image" => {
+            "asset": asset->{ _id, url, metadata { dimensions, lqip } },
+            alt,
+            caption
+          }
+        },
+        buttons[] {
+          label,
+          url,
+          variant
+        },
+        buttonLabel,
+        buttonUrl
+      },
+      // gradientTitleBlock
+      (_type == "gradientTitleBlock") => { title, highlightPrefix },
+      // imageBlock
+      (_type == "imageBlock") => {
+        image { ${imageFragment} },
+        alt,
+        caption
+      },
+      // dividerBlock
+      (_type == "dividerBlock") => { spacing },
+    }
+  }
+`;
+
+// Resolve post by slug (for routing)
+export const resolvePostBySlugQuery = groq`
+  *[_type == "post" && slug.current == $slug && (language == $language || !defined(language))] | order(defined(language) desc) [0] { _type, _id }
+`;
+
+// All post slugs (for sitemap / static params)
+export const postSlugsQuery = groq`
+  *[_type == "post" && defined(slug.current)]{ "slug": slug.current }
+`;
+
+export const postSlugLanguagePairsQuery = groq`
+  *[_type == "post" && defined(slug.current)] {
     "slug": slug.current,
     "language": language
   }
@@ -1687,6 +1815,16 @@ export const sitemapPagesAllLocalesQuery = groq`
 
 export const sitemapBlogPostsAllLocalesQuery = groq`
   *[_type == "blogPost" && defined(slug.current)] | order(title asc) {
+    _id,
+    "language": select(defined(language) => language, "en"),
+    "slug": slug.current,
+    _type,
+    _updatedAt
+  }
+`;
+
+export const sitemapPostsAllLocalesQuery = groq`
+  *[_type == "post" && defined(slug.current)] | order(title asc) {
     _id,
     "language": select(defined(language) => language, "en"),
     "slug": slug.current,

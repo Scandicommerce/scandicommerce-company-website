@@ -44,10 +44,8 @@ export function middleware(request: NextRequest) {
       return NextResponse.redirect(new URL(`https://${targetDomain}${cleanPath}`))
     }
 
-    // Localhost / dev: strip default locale prefix, keep non-default working
-    if (segLower === defaultLocale) {
-      return NextResponse.redirect(new URL(cleanPath, request.url))
-    }
+    // Localhost / dev: allow /[locale]/... URLs to stay as-is (e.g. /en/resources/slug)
+    // Only normalize case (e.g. /EN/... → /en/...)
     if (seg !== segLower) {
       return NextResponse.redirect(new URL(`/${segLower}${cleanPath === '/' ? '' : cleanPath}`, request.url))
     }

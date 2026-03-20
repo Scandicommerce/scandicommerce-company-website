@@ -1,6 +1,7 @@
 import { client } from '@/sanity/lib/client'
 import {
   resolvePageByPathQuery,
+  resolvePostBySlugQuery,
   resolveBlogPostBySlugQuery,
   resolvePackageDetailBySlugQuery,
   RESOLVE_PAGE_TYPES,
@@ -9,6 +10,7 @@ import { getQueryParams } from '@/sanity/lib/queryHelpers'
 
 export type ResolvedPage =
   | { type: string; slug?: string }
+  | { type: 'post'; slug: string }
   | { type: 'blogPost'; slug: string }
   | { type: 'packageDetailPage'; slug: string }
   | null
@@ -36,13 +38,20 @@ export async function resolvePageByPath(
 
   if (fullMatch?._type) {
     // Detail page types need the full path as slug so their query (slug.current == $slug) works correctly
-    const needsSlug = fullMatch._type === 'packageDetailPage' || fullMatch._type === 'blogPost'
+    const needsSlug = fullMatch._type === 'packageDetailPage' || fullMatch._type === 'blogPost' || fullMatch._type === 'post'
     return { type: fullMatch._type, slug: needsSlug ? path : undefined }
   }
 
-  // Detail pages: try last segment as slug (e.g. resources/article-slug -> blogPost, services/all_packages/package-slug -> packageDetailPage)
+  // Detail pages: try last segment as slug (e.g. resources/article-slug -> post or blogPost, services/all_packages/package-slug -> packageDetailPage)
   const lastSegment = segments[segments.length - 1]
   if (segments.length >= 2) {
+    const post = await client.fetch<{ _type: string; _id: string } | null>(
+      resolvePostBySlugQuery,
+      getQueryParams({ slug: lastSegment }, language),
+      { next: { revalidate: 0 } }
+    )
+    if (post?._type) return { type: 'post', slug: lastSegment }
+
     const blogPost = await client.fetch<{ _type: string; _id: string } | null>(
       resolveBlogPostBySlugQuery,
       getQueryParams({ slug: lastSegment }, language),
