@@ -477,7 +477,7 @@ export interface ShopifyCart {
 }
 
 interface ShopifyResponse<T> {
-  data?: T
+  data: T
   errors?: Array<{ message: string }>
 }
 
@@ -645,18 +645,8 @@ async function shopifyFetch<T>(query: string, variables?: Record<string, any>): 
 
     const result: ShopifyResponse<T> = await response.json()
 
-    if (result.errors?.length) {
-      const errorText = result.errors.map(e => e.message).join(', ')
-      // Keep request alive when Shopify returns partial data with GraphQL errors.
-      if (result.data) {
-        console.warn(`Shopify GraphQL returned partial errors: ${errorText}`)
-      } else {
-        throw new Error(`Shopify GraphQL errors: ${errorText}`)
-      }
-    }
-
-    if (!result.data) {
-      throw new Error('Shopify GraphQL response did not include data')
+    if (result.errors) {
+      throw new Error(`Shopify GraphQL errors: ${result.errors.map(e => e.message).join(', ')}`)
     }
 
     return result.data
@@ -681,8 +671,7 @@ export async function getShopifyProducts(limit: number = 250): Promise<ShopifyPr
 
       const edges = data.products.edges
       for (const edge of edges) {
-        const node = edge?.node
-        if (!node) continue
+        const node = edge.node
         const image = node.images.edges[0]?.node
         const collections = node.collections.edges.map(collectionEdge => ({
           id: collectionEdge.node.id,
@@ -796,12 +785,8 @@ export async function getShopifyProductByHandle(handle: string): Promise<Shopify
 
     const product = data.product
     const image = product.images.edges[0]?.node
-    const allImages = product.images.edges
-      .map(imgEdge => imgEdge?.node?.url)
-      .filter((url): url is string => Boolean(url))
-    const collections = product.collections.edges
-      .filter(collectionEdge => Boolean(collectionEdge?.node))
-      .map(collectionEdge => ({
+    const allImages = product.images.edges.map(imgEdge => imgEdge.node.url)
+    const collections = product.collections.edges.map(collectionEdge => ({
       id: collectionEdge.node.id,
       title: collectionEdge.node.title,
       handle: collectionEdge.node.handle,
@@ -812,15 +797,13 @@ export async function getShopifyProductByHandle(handle: string): Promise<Shopify
       product.tags
     )
 
-    const variants: ShopifyVariant[] = product.variants.edges
-      .filter(edge => Boolean(edge?.node))
-      .map(edge => ({
-        id: edge.node.id,
-        title: edge.node.title,
-        price: parseFloat(edge.node.price.amount),
-        currencyCode: edge.node.price.currencyCode,
-        availableForSale: edge.node.availableForSale,
-      }))
+    const variants: ShopifyVariant[] = product.variants.edges.map(edge => ({
+      id: edge.node.id,
+      title: edge.node.title,
+      price: parseFloat(edge.node.price.amount),
+      currencyCode: edge.node.price.currencyCode,
+      availableForSale: edge.node.availableForSale,
+    }))
 
     return {
       id: product.id,
