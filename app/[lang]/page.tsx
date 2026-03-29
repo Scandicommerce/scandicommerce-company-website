@@ -14,6 +14,13 @@ import Results from '@/components/sections/homepage/Results'
 import HowWeWork from '@/components/sections/homepage/HowWeWork'
 import Partners from '@/components/sections/homepage/Partners'
 import CTA from '@/components/sections/homepage/CTA'
+import SchemaMarkup from '@/components/SchemaMarkup'
+import {
+  buildWebSiteSchema,
+  getSchemaInLanguageTag,
+  getSchemaPageUrl,
+  getSchemaSiteOrigin,
+} from '@/lib/schema'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -147,8 +154,20 @@ export default async function Home({
   const homepage = await getHomepage(language)
   const allPackages = await getAllPackages(language)
 
+  const origin = await getSchemaSiteOrigin()
+  const pageUrl = await getSchemaPageUrl()
+  const webSiteSchema =
+    origin && pageUrl
+      ? buildWebSiteSchema({
+          origin,
+          url: pageUrl,
+          inLanguage: getSchemaInLanguageTag(lang),
+        })
+      : null
+
   return (
     <div className="flex flex-col min-h-screen">
+      {webSiteSchema ? <SchemaMarkup schema={webSiteSchema} /> : null}
       <HeaderWrapper />
       <main className="flex-grow">
         <Hero hero={homepage?.hero} />

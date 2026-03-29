@@ -12,6 +12,13 @@ import { getQueryParams } from '@/sanity/lib/queryHelpers'
 import { getLanguageFromParams } from '@/lib/language'
 import Hero from '@/components/layout/Hero'
 import type { Image as SanityImage } from 'sanity'
+import SchemaMarkup from '@/components/SchemaMarkup'
+import { urlFor } from '@/sanity/lib/image'
+import {
+  buildPersonSchemasForTeam,
+  getSchemaSiteOrigin,
+  type TeamMemberForSchema,
+} from '@/lib/schema'
 
 interface AboutPageData {
   _id: string
@@ -75,8 +82,23 @@ export default async function AboutPage({ params }: { params: Promise<{ lang: st
     { next: { revalidate: 0 } }
   )
 
+  const origin = await getSchemaSiteOrigin()
+  const cmsMembers =
+    pageData?.meetTheTeam?.teamMembers?.filter((m) => m.name?.trim()) ?? []
+
+  const teamForSchema: TeamMemberForSchema[] = cmsMembers.map((member) => ({
+    name: member.name,
+    role: member.role,
+    imageUrl: member.image
+      ? urlFor(member.image as SanityImage).width(800).url()
+      : member.imageUrl,
+  }))
+
+  const personSchemas = buildPersonSchemasForTeam(teamForSchema, origin)
+
   return (
     <div className="flex flex-col min-h-screen">
+      {personSchemas.length > 0 ? <SchemaMarkup schema={personSchemas} /> : null}
       <HeaderWrapper />
       <main className="flex-grow">
         <Hero hero={pageData?.hero} isStats={true} />

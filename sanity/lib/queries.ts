@@ -1347,6 +1347,9 @@ export const blogPageQuery = groq`
 export const blogPostBySlugQuery = groq`
   *[_type == "blogPost" && slug.current == $slug && (language == $language || !defined(language))] | order(defined(language) desc) [0] {
     _id,
+    _createdAt,
+    _updatedAt,
+    language,
     title,
     titleHighlight,
     "slug": slug.current,
@@ -1414,6 +1417,8 @@ export const postBySlugQuery = groq`
   *[_type == "post" && slug.current == $slug && (language == $language || !defined(language))] | order(defined(language) desc) [0] {
     _id,
     _type,
+    _updatedAt,
+    language,
     title,
     "slug": slug.current,
     excerpt,

@@ -11,8 +11,19 @@ import { getQueryParams } from '@/sanity/lib/queryHelpers'
 import type { Article } from '@/lib/articles'
 import { getLanguageFromParams } from '@/lib/language'
 import { notFound } from 'next/navigation'
+import SchemaMarkup from '@/components/SchemaMarkup'
+import {
+  buildBlogPostingSchema,
+  estimateWordCountFromSections,
+  getSchemaInLanguageTag,
+  getSchemaPageUrl,
+  getSchemaSiteOrigin,
+} from '@/lib/schema'
 
 interface SanityBlogPost {
+  _createdAt?: string | null
+  _updatedAt?: string | null
+  language?: string | null
   slug?: string | null
   title?: string | null
   titleHighlight?: string | null
@@ -93,10 +104,32 @@ export default async function BlogPostPage({ params }: { params: Promise<{ lang:
     { next: { revalidate: 0 } }
   )
   const article = mapSanityPostToArticle(post)
-  if (!article) notFound()
+  if (!article || !post) notFound()
+
+  const origin = await getSchemaSiteOrigin()
+  const pageUrl = await getSchemaPageUrl()
+  const docLang = post.language || lang
+  const wordCount = estimateWordCountFromSections(post.introduction, post.sections ?? undefined)
+  const blogPostingSchema =
+    origin && pageUrl
+      ? buildBlogPostingSchema({
+          origin,
+          url: pageUrl,
+          headline: article.title,
+          description: article.description,
+          datePublished: post._createdAt ?? undefined,
+          dateModified: post._updatedAt ?? undefined,
+          imageUrl: article.featuredImage || article.image || null,
+          keywords: post.category ? [post.category] : undefined,
+          inLanguage: getSchemaInLanguageTag(typeof docLang === 'string' ? docLang : lang),
+          wordCount: wordCount ?? undefined,
+          authorName: article.author?.name || null,
+        })
+      : null
 
   return (
     <div className="flex flex-col min-h-screen">
+      {blogPostingSchema ? <SchemaMarkup schema={blogPostingSchema} /> : null}
       <HeaderWrapper />
       <main className="flex-grow">
         <ArticleHero article={article} />

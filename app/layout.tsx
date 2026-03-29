@@ -5,6 +5,7 @@ import './globals.css'
 import { CartProvider } from '@/contexts/CartContext'
 import { LanguageProvider } from '@/contexts/LanguageContext'
 import CartDrawer from '@/components/cart/CartDrawer'
+import OrganizationJsonLd from '@/components/OrganizationJsonLd'
 
 const GTM_ID = process.env.NEXT_PUBLIC_GTM_ID || 'GTM-W9VS4NHX'
 
@@ -51,6 +52,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         </noscript>
         <LanguageProvider>
           <CartProvider>
+            <OrganizationJsonLd />
             {children}
             <CartDrawer />
           </CartProvider>

@@ -10,6 +10,11 @@ export interface Post {
   slug: string;
   excerpt?: string | null;
   publishedAt?: string | null;
+  _updatedAt?: string | null;
+  language?: string | null;
+  /** Featured / card image URL from Sanity */
+  image?: string | null;
+  tags?: Array<{ label?: string | null; isPrimary?: boolean | null }> | null;
   content?: PostBlock[] | null;
 }
 
