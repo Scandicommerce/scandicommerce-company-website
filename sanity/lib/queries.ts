@@ -1354,7 +1354,10 @@ export const blogPostBySlugQuery = groq`
     titleHighlight,
     "slug": slug.current,
     description,
+    "metaDescription": coalesce(seo.metaDescription, description),
     category,
+    tags,
+    publishedAt,
     date,
     readTime,
     "image": image.asset->url,
@@ -1422,6 +1425,7 @@ export const postBySlugQuery = groq`
     title,
     "slug": slug.current,
     excerpt,
+    "metaDescription": coalesce(seo.metaDescription, excerpt),
     publishedAt,
     "image": image.asset->url,
     tags[] { label, isPrimary },
@@ -1874,6 +1878,19 @@ export const resolvePageByPathQuery = groq`
 `;
 
 export const RESOLVE_PAGE_TYPES = PAGE_TYPES_WITH_SLUG;
+
+// Breadcrumb JSON-LD: titles for slugs that match cumulative path, locale-prefixed path, or leaf slug (packages, posts).
+export const breadcrumbTitlesQuery = groq`
+  *[
+    _type in $types
+    && defined(slug.current)
+    && slug.current in $slugs
+    && (language == $language || !defined(language))
+  ] | order(defined(language) desc) {
+    "slug": slug.current,
+    "title": coalesce(pageTitle, title)
+  }
+`;
 
 // Resolve detail pages by last segment (e.g. blogPost by "article-slug", packageDetailPage by "package-slug")
 export const resolveBlogPostBySlugQuery = groq`

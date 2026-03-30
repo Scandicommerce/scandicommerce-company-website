@@ -6,12 +6,15 @@ import { CartProvider } from '@/contexts/CartContext'
 import { LanguageProvider } from '@/contexts/LanguageContext'
 import CartDrawer from '@/components/cart/CartDrawer'
 import OrganizationJsonLd from '@/components/OrganizationJsonLd'
+import BreadcrumbListJsonLd from '@/components/BreadcrumbListJsonLd'
+import RouteJsonLd from '@/components/RouteJsonLd'
 
 const GTM_ID = process.env.NEXT_PUBLIC_GTM_ID || 'GTM-W9VS4NHX'
 
 export const metadata: Metadata = {
-  title: 'Scandi Commerce - Company Website',
-  description: 'Scandi Commerce company website',
+  title: 'scandicommerce — Shopify Plus partner agency in Oslo, Norway',
+  description:
+    'scandicommerce is a Shopify Plus partner agency in Oslo, Norway, serving Norway and the Nordics with headed Shopify themes and headless commerce using Sanity, the Shopify Storefront API, Hydrogen, Klaviyo, and Make.',
   icons: {
     icon: '/images/mainLogoIcon.svg',
   },
@@ -39,6 +42,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','${GTM_ID}');`,
           }}
         />
+        <OrganizationJsonLd />
+        <BreadcrumbListJsonLd />
+        <RouteJsonLd />
       </head>
       <body>
         {/* GTM noscript fallback for users without JavaScript */}
@@ -52,7 +58,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         </noscript>
         <LanguageProvider>
           <CartProvider>
-            <OrganizationJsonLd />
             {children}
             <CartDrawer />
           </CartProvider>

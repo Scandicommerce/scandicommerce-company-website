@@ -1,15 +1,8 @@
 import { normalizeHttpUrl } from './urls'
 
-/** Org / ProfessionalService copy. Social: `NEXT_PUBLIC_ORGANIZATION_SAME_AS` (comma-separated https URLs). */
-export const ORGANIZATION_NAME = 'Scandi Commerce'
-
-export const ORGANIZATION_DESCRIPTION =
-  'Shopify Plus partner helping merchants design, build, and grow ecommerce on Shopify.'
-
-export const PROFESSIONAL_SERVICE_AREAS = [
-  { '@type': 'Country', name: 'Norway' },
-  { '@type': 'Country', name: 'Sweden' },
-  { '@type': 'Country', name: 'Denmark' },
+/** Verified company profile; append Instagram etc. via NEXT_PUBLIC_ORGANIZATION_SAME_AS. */
+const ORGANIZATION_SAME_AS_PRESET = [
+  'https://www.linkedin.com/company/scandicommerce',
 ] as const
 
 export function parseSameAsFromEnv(): string[] {
@@ -19,4 +12,11 @@ export function parseSameAsFromEnv(): string[] {
     .split(',')
     .map((s) => normalizeHttpUrl(s.trim()))
     .filter((s): s is string => Boolean(s))
+}
+
+export function getOrganizationSameAs(): string[] {
+  const preset = ORGANIZATION_SAME_AS_PRESET.map((u) => normalizeHttpUrl(u)).filter(
+    (u): u is string => Boolean(u)
+  )
+  return [...new Set([...preset, ...parseSameAsFromEnv()])]
 }

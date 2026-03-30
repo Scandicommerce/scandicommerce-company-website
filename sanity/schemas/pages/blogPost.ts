@@ -56,6 +56,21 @@ export const blogPost = defineType({
       group: "content",
     }),
     defineField({
+      name: "tags",
+      title: "Tags",
+      type: "array",
+      group: "content",
+      description: "Used for SEO keywords (JSON-LD); optional.",
+      of: [defineArrayMember({ type: "string" })],
+    }),
+    defineField({
+      name: "publishedAt",
+      title: "Published at",
+      type: "datetime",
+      group: "content",
+      description: "ISO date for SEO / structured data. Falls back to document created time if empty.",
+    }),
+    defineField({
       name: "date",
       title: "Date",
       type: "string",
@@ -186,6 +201,21 @@ export const blogPost = defineType({
         defineArrayMember({
           type: "reference",
           to: [{ type: "blogPost" }],
+        }),
+      ],
+    }),
+    defineField({
+      name: "seo",
+      title: "SEO",
+      type: "object",
+      group: "settings",
+      fields: [
+        defineField({ name: "metaTitle", title: "Meta Title", type: "string" }),
+        defineField({
+          name: "metaDescription",
+          title: "Meta Description",
+          type: "text",
+          rows: 3,
         }),
       ],
     }),

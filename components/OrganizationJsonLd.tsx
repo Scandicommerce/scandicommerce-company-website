@@ -3,7 +3,7 @@ import { buildOrganizationAndProfessionalService } from '@/lib/schema/organizati
 import { shouldSuppressMarketingJsonLd } from '@/lib/schema/marketingSchema'
 import { getSchemaSiteOrigin } from '@/lib/schema/request'
 
-/** Organization + ProfessionalService in one @graph (root layout; skipped on /studio). */
+/** Single JSON-LD node: @type ProfessionalService + Organization (root layout; skipped on /studio). */
 export default async function OrganizationJsonLd() {
   if (await shouldSuppressMarketingJsonLd()) return null
   const origin = await getSchemaSiteOrigin()

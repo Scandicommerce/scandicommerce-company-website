@@ -7,9 +7,6 @@ import { allPackagesPageQuery } from '@/sanity/lib/queries'
 import { getQueryParams } from '@/sanity/lib/queryHelpers'
 import { getLanguageFromParams } from '@/lib/language'
 import Hero from '@/components/layout/Hero'
-import SchemaMarkup from '@/components/SchemaMarkup'
-import { buildFaqPageSchema, getSchemaPageUrl } from '@/lib/schema'
-
 interface AllPackagesPageData {
   _id: string
   pageTitle: string
@@ -45,12 +42,8 @@ export default async function AllPackagesPage({ params }: { params: Promise<{ la
     { next: { revalidate: 0 } }
   )
 
-  const pageUrl = await getSchemaPageUrl()
-  const faqSchema = buildFaqPageSchema(pageData?.faq?.faqItems, pageUrl)
-
   return (
     <div className="flex flex-col min-h-screen">
-      {faqSchema ? <SchemaMarkup schema={faqSchema} /> : null}
       <HeaderWrapper />
       <main className="flex-grow">
         <Hero hero={{ ...pageData?.hero }} />

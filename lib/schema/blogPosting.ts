@@ -3,7 +3,23 @@ import { SCHEMA_ORG_CONTEXT } from './types'
 import { toSchemaDateTime } from './dates'
 import { toPlainTextForSchema } from './plainText'
 import { organizationSchemaId } from './organization'
+import { ORGANIZATION_BRAND_NAME, ORGANIZATION_LOGO_PATH } from './organizationConfig'
 import { normalizeHttpUrl, normalizeSiteOrigin, toAbsoluteUrl } from './urls'
+
+const BLOG_POSTING_DEFAULT_LANGUAGE = 'nb-NO'
+
+/** Single natural-language `keywords` string for BlogPosting (avoid comma-separated tag soup). */
+export function blogPostingKeywordsSentenceFromTopics(
+  topics: string[] | null | undefined
+): string | undefined {
+  const t = (topics ?? []).map((x) => x.trim()).filter(Boolean)
+  if (!t.length) return undefined
+  const phrase =
+    t.length === 1
+      ? t[0]!
+      : `${t.slice(0, -1).join(', ')}, and ${t[t.length - 1]!}`
+  return `This article discusses ${phrase} for merchants in Norway and the wider Nordics. scandicommerce connects these themes to delivery work on headed Shopify Online Store themes and headless commerce with Sanity, the Shopify Storefront API, and Hydrogen, including automation with Klaviyo and Make.`
+}
 
 export interface BlogPostingSchemaInput {
   origin: string
@@ -16,17 +32,24 @@ export interface BlogPostingSchemaInput {
   keywords?: string[] | null
   inLanguage?: string | null
   wordCount?: number | null
-  authorName?: string | null
 }
 
 export function estimateWordCountFromSections(
   introduction: string | null | undefined,
-  sections: Array<{ content?: string | null }> | null | undefined
+  sections:
+    | Array<{
+        content?: string | null
+        proTip?: { title?: string | null; content?: string | null } | null
+      }>
+    | null
+    | undefined
 ): number | undefined {
   const parts: string[] = []
   if (introduction) parts.push(introduction)
   for (const s of sections ?? []) {
     if (s?.content) parts.push(s.content)
+    if (s?.proTip?.title) parts.push(s.proTip.title)
+    if (s?.proTip?.content) parts.push(s.proTip.content)
   }
   const text = parts.join(' ')
   if (!text.trim()) return undefined
@@ -46,7 +69,6 @@ export function buildBlogPostingSchema(input: BlogPostingSchemaInput): JsonLdObj
     keywords,
     inLanguage,
     wordCount,
-    authorName,
   } = input
 
   const o = normalizeSiteOrigin(origin)
@@ -56,25 +78,42 @@ export function buildBlogPostingSchema(input: BlogPostingSchemaInput): JsonLdObj
   const published = toSchemaDateTime(datePublished ?? undefined)
   const modified = toSchemaDateTime(dateModified ?? undefined)
 
+  const orgId = organizationSchemaId(o)
+  const logoUrl = normalizeHttpUrl(`${o}${ORGANIZATION_LOGO_PATH}`)
+
+  const publisher: JsonLdObject = {
+    '@type': 'Organization',
+    '@id': orgId,
+    name: ORGANIZATION_BRAND_NAME,
+  }
+  if (logoUrl) {
+    publisher.logo = {
+      '@type': 'ImageObject',
+      url: logoUrl,
+    }
+  }
+
   const schema: JsonLdObject = {
     '@context': SCHEMA_ORG_CONTEXT,
     '@type': 'BlogPosting',
-    '@id': `${canonical}#blogposting`,
     headline: headline.trim(),
     url: canonical,
+    author: {
+      '@type': 'Organization',
+      '@id': orgId,
+      name: ORGANIZATION_BRAND_NAME,
+    },
+    publisher,
     mainEntityOfPage: {
       '@type': 'WebPage',
       '@id': canonical,
     },
-    publisher: {
-      '@type': 'Organization',
-      '@id': organizationSchemaId(o),
-    },
+    inLanguage: inLanguage?.trim() || BLOG_POSTING_DEFAULT_LANGUAGE,
   }
 
   const absImage = toAbsoluteUrl(o, imageUrl ?? undefined)
   if (absImage) {
-    schema.image = [{ '@type': 'ImageObject', url: absImage }]
+    schema.image = absImage
   }
 
   const desc = description?.trim() ? toPlainTextForSchema(description.trim(), 5000) : undefined
@@ -83,20 +122,12 @@ export function buildBlogPostingSchema(input: BlogPostingSchemaInput): JsonLdObj
   if (published) schema.datePublished = published
   if (modified) schema.dateModified = modified
 
-  if (inLanguage?.trim()) schema.inLanguage = inLanguage.trim()
-
   const kw = (keywords ?? []).map((k) => k.trim()).filter(Boolean)
-  if (kw.length) schema.keywords = kw.join(', ')
+  const kwSentence = blogPostingKeywordsSentenceFromTopics(kw)
+  if (kwSentence) schema.keywords = kwSentence
 
   if (typeof wordCount === 'number' && Number.isInteger(wordCount) && wordCount > 0) {
     schema.wordCount = wordCount
-  }
-
-  if (authorName?.trim()) {
-    schema.author = {
-      '@type': 'Person',
-      name: authorName.trim(),
-    }
   }
 
   return schema

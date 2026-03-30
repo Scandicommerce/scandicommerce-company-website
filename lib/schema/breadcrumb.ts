@@ -12,11 +12,50 @@ export interface BreadcrumbSchemaInput {
   origin: string
   pathWithoutLang: string
   homeLabel?: string
+  /** Sanity slug → title (cumulative path, `lang/path`, or leaf slug). */
+  titleBySlug?: ReadonlyMap<string, string>
+  /** Sanity `language` id (e.g. no, en) for `no/...` slug keys. */
+  sanityLanguage?: string
   overrides?: BreadcrumbTitleOverrides
 }
 
+function resolveBreadcrumbSegmentName(
+  segmentIndex: number,
+  segments: string[],
+  titleBySlug: ReadonlyMap<string, string> | undefined,
+  sanityLanguage: string,
+  position: number,
+  overrides: BreadcrumbTitleOverrides | undefined,
+  segment: string
+): string {
+  const fromOverridePos = overrides?.byPosition?.[position]
+  const fromOverrideLast =
+    segmentIndex === segments.length - 1 && segment
+      ? overrides?.byLastSegment?.[segment]
+      : undefined
+  if (fromOverridePos?.trim()) return fromOverridePos.trim()
+  if (fromOverrideLast?.trim()) return fromOverrideLast.trim()
+
+  const cumulative = segments.slice(0, segmentIndex + 1).join('/')
+  const tryKeys = [cumulative, `${sanityLanguage}/${cumulative}`]
+  if (segmentIndex === segments.length - 1) tryKeys.push(segment)
+  for (const k of tryKeys) {
+    const t = titleBySlug?.get(k)
+    if (t?.trim()) return t.trim()
+  }
+
+  return humanizeSegment(segment)
+}
+
 export function buildBreadcrumbListSchema(input: BreadcrumbSchemaInput): JsonLdObject | null {
-  const { origin, pathWithoutLang, homeLabel = 'Home', overrides } = input
+  const {
+    origin,
+    pathWithoutLang,
+    homeLabel = 'Home',
+    titleBySlug,
+    sanityLanguage = 'en',
+    overrides,
+  } = input
   const homeUrl = normalizeSiteOrigin(origin)
   if (!homeUrl) return null
 
@@ -44,10 +83,15 @@ export function buildBreadcrumbListSchema(input: BreadcrumbSchemaInput): JsonLdO
     const enc = encodeURIComponent(seg)
     cumulativeEncoded = cumulativeEncoded ? `${cumulativeEncoded}/${enc}` : enc
     const position = i + 2
-    const fromOverridePos = overrides?.byPosition?.[position]
-    const fromOverrideLast =
-      i === segments.length - 1 && seg ? overrides?.byLastSegment?.[seg] : undefined
-    const name = fromOverridePos || fromOverrideLast || humanizeSegment(seg)
+    const name = resolveBreadcrumbSegmentName(
+      i,
+      segments,
+      titleBySlug,
+      sanityLanguage,
+      position,
+      overrides,
+      seg
+    )
 
     const itemUrl = normalizeHttpUrl(`${homeUrl}/${cumulativeEncoded}`)
     if (!itemUrl) return null

@@ -125,6 +125,21 @@ export const post = defineType({
         defineArrayMember({ type: dividerBlock.name }),
       ],
     }),
+    defineField({
+      name: "seo",
+      title: "SEO",
+      type: "object",
+      group: "settings",
+      fields: [
+        defineField({ name: "metaTitle", title: "Meta Title", type: "string" }),
+        defineField({
+          name: "metaDescription",
+          title: "Meta Description",
+          type: "text",
+          rows: 3,
+        }),
+      ],
+    }),
   ],
   preview: {
     select: {

@@ -6,19 +6,10 @@ import OurValues from '@/components/sections/about/OurValues'
 import TrustedPartnerships from '@/components/sections/about/TrustedPartnerships'
 import WhyDifferent from '@/components/sections/about/WhyDifferent'
 import WantWorkWithUs from '@/components/sections/about/WantWorkWithUs'
-import { client } from '@/sanity/lib/client'
-import { aboutPageQuery } from '@/sanity/lib/queries'
-import { getQueryParams } from '@/sanity/lib/queryHelpers'
+import { getAboutPageDocumentCached } from '@/lib/sanity/cachedDocuments'
 import { getLanguageFromParams } from '@/lib/language'
 import Hero from '@/components/layout/Hero'
 import type { Image as SanityImage } from 'sanity'
-import SchemaMarkup from '@/components/SchemaMarkup'
-import { urlFor } from '@/sanity/lib/image'
-import {
-  buildPersonSchemasForTeam,
-  getSchemaSiteOrigin,
-  type TeamMemberForSchema,
-} from '@/lib/schema'
 
 interface AboutPageData {
   _id: string
@@ -76,29 +67,10 @@ interface AboutPageData {
 export default async function AboutPage({ params }: { params: Promise<{ lang: string; slug?: string }> }) {
   const { lang } = await params
   const language = getLanguageFromParams({ lang })
-  const pageData: AboutPageData = await client.fetch(
-    aboutPageQuery,
-    getQueryParams({}, language),
-    { next: { revalidate: 0 } }
-  )
-
-  const origin = await getSchemaSiteOrigin()
-  const cmsMembers =
-    pageData?.meetTheTeam?.teamMembers?.filter((m) => m.name?.trim()) ?? []
-
-  const teamForSchema: TeamMemberForSchema[] = cmsMembers.map((member) => ({
-    name: member.name,
-    role: member.role,
-    imageUrl: member.image
-      ? urlFor(member.image as SanityImage).width(800).url()
-      : member.imageUrl,
-  }))
-
-  const personSchemas = buildPersonSchemasForTeam(teamForSchema, origin)
+  const pageData = (await getAboutPageDocumentCached(language)) as AboutPageData | null
 
   return (
     <div className="flex flex-col min-h-screen">
-      {personSchemas.length > 0 ? <SchemaMarkup schema={personSchemas} /> : null}
       <HeaderWrapper />
       <main className="flex-grow">
         <Hero hero={pageData?.hero} isStats={true} />

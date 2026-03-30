@@ -1,6 +1,5 @@
 import { notFound } from 'next/navigation'
 import { LOCALE_IDS } from '@/sanity/lib/languages'
-import BreadcrumbListJsonLd from '@/components/BreadcrumbListJsonLd'
 
 export default async function LangLayout({
   children,
@@ -15,10 +14,5 @@ export default async function LangLayout({
     notFound()
   }
 
-  return (
-    <>
-      <BreadcrumbListJsonLd />
-      {children}
-    </>
-  )
+  return <>{children}</>
 }

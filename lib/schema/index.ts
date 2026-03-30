@@ -27,6 +27,19 @@ export {
   humanizeSegment,
 } from './breadcrumbLabels'
 export { buildFaqPageSchema } from './faq'
-export { buildBlogPostingSchema, estimateWordCountFromSections } from './blogPosting'
-export { buildPersonSchemaForTeamMember, buildPersonSchemasForTeam } from './person'
-export type { TeamMemberForSchema } from './person'
+export type { FaqItem } from './faq'
+export { ALL_PACKAGES_FAQ_JSON_LD_ITEMS } from './allPackagesFaqSchema'
+export {
+  blogPostingKeywordsSentenceFromTopics,
+  buildBlogPostingSchema,
+  estimateWordCountFromSections,
+} from './blogPosting'
+export {
+  buildPersonSchemaForTeamMember,
+  buildPersonSchemasForTeam,
+} from './person'
+export type {
+  BuildPersonSchemaOptions,
+  BuildPersonSchemasForTeamOptions,
+  TeamMemberForSchema,
+} from './person'

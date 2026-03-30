@@ -9,6 +9,8 @@ export interface Post {
   title: string;
   slug: string;
   excerpt?: string | null;
+  /** SEO meta description; coalesced from Sanity `seo.metaDescription` or excerpt in GROQ */
+  metaDescription?: string | null;
   publishedAt?: string | null;
   _updatedAt?: string | null;
   language?: string | null;
@@ -177,4 +179,107 @@ export function getBlockKey(block: PostBlock): string {
   return "_key" in block && typeof (block as { _key?: string })._key === "string"
     ? (block as { _key: string })._key
     : String(Math.random());
+}
+
+function portableTextBlocksToPlain(blocks: unknown): string {
+  if (!Array.isArray(blocks)) return "";
+  const out: string[] = [];
+  for (const block of blocks) {
+    if (!block || typeof block !== "object") continue;
+    const b = block as { _type?: string; children?: unknown[] };
+    if (b._type === "block" && Array.isArray(b.children)) {
+      for (const c of b.children) {
+        if (c && typeof c === "object" && "text" in c) {
+          const t = (c as { text?: string }).text;
+          if (t) out.push(t);
+        }
+      }
+    }
+  }
+  return out.join(" ");
+}
+
+function textFromPostBlock(block: PostBlock): string {
+  switch (block._type) {
+    case "richTextBlock":
+      return portableTextBlocksToPlain(block.body);
+    case "keyTakeawaysBlock":
+      return portableTextBlocksToPlain(block.content);
+    case "comparisonCardsBlock": {
+      const parts: string[] = [];
+      if (block.leftCard?.title) parts.push(block.leftCard.title);
+      parts.push(portableTextBlocksToPlain(block.leftCard?.body));
+      if (block.rightCard?.title) parts.push(block.rightCard.title);
+      parts.push(portableTextBlocksToPlain(block.rightCard?.body));
+      return parts.join(" ");
+    }
+    case "ctaBlock": {
+      const parts: string[] = [];
+      if (block.heading) parts.push(block.heading);
+      parts.push(portableTextBlocksToPlain(block.body));
+      for (const btn of block.buttons ?? []) {
+        if (btn?.label) parts.push(btn.label);
+      }
+      if (block.buttonLabel) parts.push(block.buttonLabel);
+      return parts.join(" ");
+    }
+    case "calloutBlock":
+      return [block.title, block.content].filter(Boolean).join(" ");
+    case "statsRowBlock":
+      return (block.stats ?? [])
+        .map((s) => [s?.value, s?.label].filter(Boolean).join(" "))
+        .join(" ");
+    case "tableBlock": {
+      const parts: string[] = [];
+      if (block.title) parts.push(block.title);
+      if (block.columns) parts.push(block.columns.filter(Boolean).join(" "));
+      for (const row of block.rows ?? []) {
+        parts.push((row.cells ?? []).filter(Boolean).join(" "));
+      }
+      return parts.join(" ");
+    }
+    case "prosConsBlock":
+      return [
+        block.consTitle,
+        block.prosTitle,
+        ...(block.cons ?? []).filter(Boolean),
+        ...(block.pros ?? []).filter(Boolean),
+      ]
+        .filter(Boolean)
+        .join(" ");
+    case "codeBlock":
+      return block.code ?? "";
+    case "faqBlock": {
+      const parts: string[] = [];
+      if (block.title) parts.push(block.title);
+      for (const it of block.items ?? []) {
+        parts.push(it?.question ?? "", it?.answer ?? "");
+      }
+      return parts.join(" ");
+    }
+    case "gradientTitleBlock":
+      return [block.title, block.highlightPrefix].filter(Boolean).join(" ");
+    case "imageBlock":
+      return [block.alt, block.caption].filter(Boolean).join(" ");
+    case "dividerBlock":
+      return "";
+    default:
+      return "";
+  }
+}
+
+/** Approximate word count from excerpt + page-builder blocks (BlogPosting JSON-LD). */
+export function estimateWordCountFromPostContent(
+  post: Pick<Post, "content" | "excerpt">
+): number | undefined {
+  const parts: string[] = [];
+  if (post.excerpt?.trim()) parts.push(post.excerpt.trim());
+  for (const block of post.content ?? []) {
+    const t = textFromPostBlock(block).trim();
+    if (t) parts.push(t);
+  }
+  const text = parts.join(" ");
+  if (!text.trim()) return undefined;
+  const words = text.trim().split(/\s+/).filter(Boolean).length;
+  return words > 0 ? words : undefined;
 }

@@ -2,19 +2,10 @@ import HeaderWrapper from "@/components/layout/HeaderWrapper";
 import FooterWrapper from "@/components/layout/FooterWrapper";
 import { BlogContent } from "@/components/sections/blog";
 import ArticleCTA from "@/components/sections/resources/article/ArticleCTA";
-import { client } from "@/sanity/lib/client";
-import { postBySlugQuery } from "@/sanity/lib/queries";
-import { getQueryParams } from "@/sanity/lib/queryHelpers";
-import type { Post } from "@/lib/blogBuilder";
+import { getPostBySlugCached } from "@/lib/sanity/cachedDocuments";
+import { type Post } from "@/lib/blogBuilder";
 import { getLanguageFromParams } from "@/lib/language";
 import { notFound } from "next/navigation";
-import SchemaMarkup from "@/components/SchemaMarkup";
-import {
-  buildBlogPostingSchema,
-  getSchemaInLanguageTag,
-  getSchemaPageUrl,
-  getSchemaSiteOrigin,
-} from "@/lib/schema";
 
 export default async function PostPage({
   params,
@@ -23,38 +14,10 @@ export default async function PostPage({
 }) {
   const { lang, slug } = await params;
   if (!slug) notFound();
-  getLanguageFromParams({ lang });
+  const language = getLanguageFromParams({ lang });
 
-  const post = await client.fetch<Post | null>(
-    postBySlugQuery,
-    getQueryParams({ slug }, lang),
-    { next: { revalidate: 0 } }
-  );
+  const post = (await getPostBySlugCached(slug, language)) as Post | null;
   if (!post) notFound();
-
-  const origin = await getSchemaSiteOrigin();
-  const pageUrl = await getSchemaPageUrl();
-  const docLang = post.language || lang;
-  const keywords =
-    post.tags?.map((t) => t.label).filter((label): label is string => Boolean(label && String(label).trim())) ??
-    [];
-  const blogPostingSchema =
-    origin && pageUrl
-      ? buildBlogPostingSchema({
-          origin,
-          url: pageUrl,
-          headline: post.title,
-          description: post.excerpt ?? null,
-          datePublished: post.publishedAt ?? undefined,
-          dateModified: post._updatedAt ?? undefined,
-          imageUrl: post.image ?? null,
-          keywords: keywords.length ? keywords : undefined,
-          inLanguage: getSchemaInLanguageTag(
-            typeof docLang === "string" ? docLang : lang
-          ),
-          authorName: null,
-        })
-      : null;
 
   const publishedLabel = post.publishedAt
     ? new Date(post.publishedAt).toLocaleDateString("en-US", {
@@ -66,7 +29,6 @@ export default async function PostPage({
 
   return (
     <div className="flex flex-col min-h-screen">
-      {blogPostingSchema ? <SchemaMarkup schema={blogPostingSchema} /> : null}
       <HeaderWrapper />
       <main className="flex-grow bg-[#EFEFEF]">
         <section className="bg-[#F8F8F8] py-12 lg:py-16 border-b border-gray-200">

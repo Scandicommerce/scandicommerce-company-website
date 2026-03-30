@@ -1,20 +1,38 @@
 import type { JsonLdObject } from './types'
 import { SCHEMA_ORG_CONTEXT } from './types'
-import { ORGANIZATION_NAME } from './constants'
+import {
+  ORGANIZATION_BRAND_NAME,
+  WEB_SITE_ALTERNATE_NAME,
+  WEB_SITE_DESCRIPTION,
+  WEB_SITE_IN_LANGUAGE,
+} from './organizationConfig'
 import { organizationSchemaId } from './organization'
 import { normalizeHttpUrl, normalizeSiteOrigin } from './urls'
 
-/** Gate for `WebSite.potentialAction` / SearchAction — only when a real search results route exists. */
-export const SITE_SEARCH_ROUTE_ENABLED = false as const
+/**
+ * Enable only when a real `/search` page exists; otherwise Google may flag SearchAction as invalid.
+ * Set via env after shipping search: `NEXT_PUBLIC_SITE_SEARCH_ENABLED=true`
+ */
+export const SITE_SEARCH_ROUTE_ENABLED = process.env.NEXT_PUBLIC_SITE_SEARCH_ENABLED === 'true'
 
 export interface WebSiteSchemaInput {
   origin: string
   url: string
-  inLanguage?: string
+}
+
+function buildSearchActionBlock(origin: string): JsonLdObject | undefined {
+  if (!SITE_SEARCH_ROUTE_ENABLED) return undefined
+  const target = normalizeHttpUrl(`${origin}/search?q={search_term_string}`)
+  if (!target) return undefined
+  return {
+    '@type': 'SearchAction',
+    target,
+    'query-input': 'required name=search_term_string',
+  }
 }
 
 export function buildWebSiteSchema(input: WebSiteSchemaInput): JsonLdObject | null {
-  const { origin, url, inLanguage } = input
+  const { origin, url } = input
   const o = normalizeSiteOrigin(origin)
   const page = normalizeHttpUrl(url)
   if (!o || !page) return null
@@ -23,12 +41,16 @@ export function buildWebSiteSchema(input: WebSiteSchemaInput): JsonLdObject | nu
     '@context': SCHEMA_ORG_CONTEXT,
     '@type': 'WebSite',
     '@id': `${o}/#website`,
+    name: ORGANIZATION_BRAND_NAME,
+    alternateName: WEB_SITE_ALTERNATE_NAME,
+    description: WEB_SITE_DESCRIPTION,
     url: page,
-    name: ORGANIZATION_NAME,
     publisher: { '@id': organizationSchemaId(o) },
+    inLanguage: [...WEB_SITE_IN_LANGUAGE],
   }
 
-  if (inLanguage?.trim()) schema.inLanguage = inLanguage.trim()
+  const searchAction = buildSearchActionBlock(o)
+  if (searchAction) schema.potentialAction = searchAction
 
   return schema
 }

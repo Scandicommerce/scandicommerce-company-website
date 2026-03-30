@@ -6,6 +6,8 @@ export type JsonLdObject = Record<string, unknown>
 export interface SchemaOrgImageObject {
   '@type': 'ImageObject'
   url: string
+  width?: number
+  height?: number
 }
 
 export interface BreadcrumbListItem {

@@ -5,20 +5,10 @@ import ArticleContent from '@/components/sections/resources/article/ArticleConte
 import AuthorBio from '@/components/sections/resources/article/AuthorBio'
 import ArticleCTA from '@/components/sections/resources/article/ArticleCTA'
 import RelatedArticles from '@/components/sections/resources/article/RelatedArticles'
-import { client } from '@/sanity/lib/client'
-import { blogPostBySlugQuery } from '@/sanity/lib/queries'
-import { getQueryParams } from '@/sanity/lib/queryHelpers'
 import type { Article } from '@/lib/articles'
 import { getLanguageFromParams } from '@/lib/language'
 import { notFound } from 'next/navigation'
-import SchemaMarkup from '@/components/SchemaMarkup'
-import {
-  buildBlogPostingSchema,
-  estimateWordCountFromSections,
-  getSchemaInLanguageTag,
-  getSchemaPageUrl,
-  getSchemaSiteOrigin,
-} from '@/lib/schema'
+import { getBlogPostBySlugCached } from '@/lib/sanity/cachedDocuments'
 
 interface SanityBlogPost {
   _createdAt?: string | null
@@ -28,7 +18,10 @@ interface SanityBlogPost {
   title?: string | null
   titleHighlight?: string | null
   description?: string | null
+  metaDescription?: string | null
   category?: string | null
+  tags?: (string | null)[] | null
+  publishedAt?: string | null
   date?: string | null
   readTime?: string | null
   image?: string | null
@@ -96,40 +89,14 @@ function mapSanityPostToArticle(post: SanityBlogPost | null): Article | null {
 export default async function BlogPostPage({ params }: { params: Promise<{ lang: string; slug?: string }> }) {
   const { lang, slug } = await params
   if (!slug) notFound()
-  getLanguageFromParams({ lang })
+  const language = getLanguageFromParams({ lang })
 
-  const post = await client.fetch<SanityBlogPost | null>(
-    blogPostBySlugQuery,
-    getQueryParams({ slug }, lang),
-    { next: { revalidate: 0 } }
-  )
-  const article = mapSanityPostToArticle(post)
+  const post = await getBlogPostBySlugCached(slug, language)
+  const article = mapSanityPostToArticle(post as SanityBlogPost | null)
   if (!article || !post) notFound()
-
-  const origin = await getSchemaSiteOrigin()
-  const pageUrl = await getSchemaPageUrl()
-  const docLang = post.language || lang
-  const wordCount = estimateWordCountFromSections(post.introduction, post.sections ?? undefined)
-  const blogPostingSchema =
-    origin && pageUrl
-      ? buildBlogPostingSchema({
-          origin,
-          url: pageUrl,
-          headline: article.title,
-          description: article.description,
-          datePublished: post._createdAt ?? undefined,
-          dateModified: post._updatedAt ?? undefined,
-          imageUrl: article.featuredImage || article.image || null,
-          keywords: post.category ? [post.category] : undefined,
-          inLanguage: getSchemaInLanguageTag(typeof docLang === 'string' ? docLang : lang),
-          wordCount: wordCount ?? undefined,
-          authorName: article.author?.name || null,
-        })
-      : null
 
   return (
     <div className="flex flex-col min-h-screen">
-      {blogPostingSchema ? <SchemaMarkup schema={blogPostingSchema} /> : null}
       <HeaderWrapper />
       <main className="flex-grow">
         <ArticleHero article={article} />
