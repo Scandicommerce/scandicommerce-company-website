@@ -1,0 +1,32 @@
+# Scandicommerce Project Rules
+
+## Project
+This is a Next.js + Sanity CMS v3 website for scandicommerce.no, a Shopify Plus partner agency in Norway.
+The site has landing pages in 5 languages: Norwegian (no), English (en), German (de), Danish (da), Swedish (sv).
+
+## Architecture
+- Sanity schemas: `sanity/schemas/`
+- Section component schemas: `sanity/schemas/components/`
+- Landing page schema: `sanity/schemas/documents/landingPage.ts`
+- Frontend components: check `components/` or `app/` directory
+- GROQ queries: check for `.groq` files or inline queries in page components
+
+## Coding Standards
+- TypeScript strict mode
+- Use `defineType`, `defineField` from `sanity` for all schema definitions
+- Follow existing naming conventions (camelCase for schema names)
+- Use existing CSS/styling approach — do not introduce new styling libraries
+- Preserve existing component interfaces when refactoring
+
+## Important Context
+- The site is in production with real client data
+- All 5 language versions share the same schema but can have different content
+- Section components already exist and work — we are changing how they connect to pages, not rebuilding them
+- The teal (#00d4aa) and dark (#0d1117) color scheme is the brand identity — do not change it
+
+## When Making Changes
+- Always work on a feature branch
+- Explain what you are about to change before doing it
+- After schema changes, verify Sanity Studio still loads
+- After frontend changes, verify the dev server still renders
+- If a section component expects data in a specific format, preserve that format in the SectionRenderer

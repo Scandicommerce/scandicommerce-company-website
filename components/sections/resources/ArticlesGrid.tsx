@@ -8,9 +8,9 @@ interface ArticleData {
   description?: string
   category?: string
   date?: string
-  readTime?: string
-  imageUrl?: string
-  slug?: string
+  readTime?: string | null
+  imageUrl?: string | null
+  slug?: string | null
 }
 
 interface ArticlesGridData {
@@ -18,8 +18,14 @@ interface ArticlesGridData {
   loadMoreButtonText?: string
 }
 
+const CARD_IMAGE_PLACEHOLDER = '/images/resources/featured_article/banner.png'
+
 interface ArticlesGridProps {
   articlesGrid?: ArticlesGridData
+  /** When non-empty, replaces manual grid refs — lists every published post for the locale */
+  articlesListing?: ArticleData[]
+  /** Omit this slug from the grid when it is already shown as the featured article */
+  featuredArticleSlug?: string
   /** Current locale (e.g. "en", "no") so article links work on /no/resources/blog etc. */
   lang?: string
 }
@@ -36,7 +42,12 @@ const defaultArticles = allArticles.map((article, index) => ({
   slug: article.slug,
 }))
 
-export default function ArticlesGrid({ articlesGrid, lang }: ArticlesGridProps) {
+export default function ArticlesGrid({
+  articlesGrid,
+  articlesListing,
+  featuredArticleSlug,
+  lang,
+}: ArticlesGridProps) {
   const loadMoreButtonText = articlesGrid?.loadMoreButtonText || 'Load More Articles'
 
   // Format ISO date (e.g. from post publishedAt) for display
@@ -52,19 +63,34 @@ export default function ArticlesGrid({ articlesGrid, lang }: ArticlesGridProps) 
     return d
   }
 
-  // Use Sanity articles if available, otherwise use default articles
-  const articles = articlesGrid?.articles && articlesGrid.articles.length > 0
-    ? articlesGrid.articles.map((article, index) => ({
-        id: index + 1,
-        title: article.title || '',
-        description: article.description || '',
-        category: article.category || '',
-        date: formatDate(article.date) || '',
-        readTime: article.readTime?.replace(' read', '') || '',
-        image: article.imageUrl || '',
-        slug: article.slug || '',
-      }))
-    : defaultArticles
+  const mapSanityToCards = (raw: ArticleData[], startId: number) =>
+    raw.map((article, index) => ({
+      id: startId + index,
+      title: article.title || '',
+      description: article.description || '',
+      category: article.category || '',
+      date: formatDate(article.date) || '',
+      readTime:
+        article.readTime != null && article.readTime !== ''
+          ? String(article.readTime).replace(' read', '')
+          : '',
+      image: article.imageUrl || CARD_IMAGE_PLACEHOLDER,
+      slug: article.slug || '',
+    }))
+
+  const featuredSlug = featuredArticleSlug?.trim()
+  const rawListing = articlesListing ?? []
+  const listingFiltered = rawListing.filter(
+    (a) => !featuredSlug || (a.slug && a.slug !== featuredSlug)
+  )
+
+  // Prefer full locale listing from GROQ so the index is not limited to manual grid references
+  const hasCmsListing = rawListing.length > 0
+  const articles = hasCmsListing
+    ? mapSanityToCards(listingFiltered, 0)
+    : articlesGrid?.articles && articlesGrid.articles.length > 0
+      ? mapSanityToCards(articlesGrid.articles, 0)
+      : defaultArticles
 
   return (
     <section className="bg-white py-16 lg:py-24">

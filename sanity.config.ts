@@ -5,6 +5,8 @@ import { documentInternationalization } from "@sanity/document-internationalizat
 import { assist } from "@sanity/assist";
 import { schemaTypes } from "@/sanity/schemas";
 import { deskStructure } from "@/sanity/lib/deskStructure";
+import { populateLandingPageSectionsAction } from "@/sanity/actions/populateLandingPageSectionsAction";
+import { blogWorkflowTemplates } from "@/sanity/lib/postDocumentTemplates";
 import {
   supportedLanguages,
   TRANSLATABLE_SCHEMA_TYPES,
@@ -60,5 +62,13 @@ export default defineConfig({
 
   schema: {
     types: schemaTypes,
+    templates: (prev) => [...prev, ...blogWorkflowTemplates],
+  },
+
+  document: {
+    actions: (prev, { schemaType }) =>
+      schemaType === "landingPage"
+        ? [...prev, populateLandingPageSectionsAction]
+        : prev,
   },
 });

@@ -1,9 +1,11 @@
-// Section Components as defineField exports
-export { heroSection } from "./heroSection";
-export { trustedBySection } from "./trustedBySection";
-export { painPointsSection } from "./painPointsSection";
-export { servicesShowcaseSection } from "./servicesShowcaseSection";
-export { resultsSection } from "./resultsSection";
-export { processSection } from "./processSection";
-export { partnersSection } from "./partnersSection";
-export { ctaSection } from "./ctaSection";
+export { heroSection, heroSectionType } from "./heroSection";
+export { trustedBySectionType } from "./trustedBySection";
+export { painPointsSectionType } from "./painPointsSection";
+export { servicesShowcaseSectionType } from "./servicesShowcaseSection";
+export { resultsSectionType } from "./resultsSection";
+export { processSectionType } from "./processSection";
+export { partnersSectionType } from "./partnersSection";
+export { ctaSection, ctaSectionType } from "./ctaSection";
+export { technicalDepthSectionType } from "./technicalDepthSection";
+export { testimonialSectionType } from "./testimonialSection";
+export { latestInsightsSectionType } from "./latestInsightsSection";

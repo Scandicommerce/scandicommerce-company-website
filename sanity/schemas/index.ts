@@ -21,6 +21,20 @@ import {
   dividerBlock,
 } from "./objects";
 
+import {
+  heroSectionType,
+  trustedBySectionType,
+  painPointsSectionType,
+  servicesShowcaseSectionType,
+  resultsSectionType,
+  processSectionType,
+  partnersSectionType,
+  ctaSectionType,
+  technicalDepthSectionType,
+  testimonialSectionType,
+  latestInsightsSectionType,
+} from "./components";
+
 // ============================================
 // Document Types (e.g. post page builder)
 // ============================================
@@ -81,6 +95,19 @@ export const schemaTypes = [
   gradientTitleBlock,
   imageBlock,
   dividerBlock,
+
+  // Landing page section object types (page builder)
+  heroSectionType,
+  trustedBySectionType,
+  painPointsSectionType,
+  servicesShowcaseSectionType,
+  resultsSectionType,
+  processSectionType,
+  partnersSectionType,
+  ctaSectionType,
+  technicalDepthSectionType,
+  testimonialSectionType,
+  latestInsightsSectionType,
 
   // Document types
   post,

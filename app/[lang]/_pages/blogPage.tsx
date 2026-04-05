@@ -41,6 +41,16 @@ interface BlogPageData {
     }[]
     loadMoreButtonText?: string
   }
+  /** All published blogPost + post docs for this locale (sorted newest first) */
+  articlesListing?: {
+    title?: string
+    description?: string
+    category?: string
+    date?: string
+    readTime?: string | null
+    imageUrl?: string | null
+    slug?: string | null
+  }[]
   newsletterCta?: {
     title?: string
     description?: string
@@ -68,7 +78,12 @@ export default async function BlogPage({ params }: { params: Promise<{ lang: str
           searchable={true}
         />
         <FeaturedArticle featuredArticle={pageData?.featuredArticle} lang={lang} />
-        <ArticlesGrid articlesGrid={pageData?.articlesGrid} lang={lang} />
+        <ArticlesGrid
+          articlesGrid={pageData?.articlesGrid}
+          articlesListing={pageData?.articlesListing}
+          featuredArticleSlug={pageData?.featuredArticle?.articleSlug}
+          lang={lang}
+        />
         <GetShopifyInsitesDelivered newsletterCta={pageData?.newsletterCta} />
         <FooterWrapper />
       </main>

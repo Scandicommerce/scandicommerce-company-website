@@ -17,6 +17,263 @@ const imageFragment = groq`
   alt
 `;
 
+/** Page-builder blocks + legacy top-level fields (pre-migration documents). */
+const landingPageSectionsArray = groq`
+  sections[] {
+    _key,
+    _type,
+    ...select(
+      _type == "heroSection" => {
+        heroBadge,
+        heroTitle {
+          text,
+          highlight
+        },
+        heroDescription,
+        heroButtons[] {
+          text,
+          link,
+          variant
+        },
+        heroTagline,
+        heroPackages[] {
+          title,
+          price
+        }
+      },
+      _type == "trustedBySection" => {
+        title,
+        brands[] {
+          name,
+          logo { ${imageFragment} },
+          alt,
+          link
+        }
+      },
+      _type == "painPointsSection" => {
+        painPointsTitle {
+          text,
+          highlight
+        },
+        painPointsItems[] {
+          text
+        },
+        painPointsBottomText,
+        painPointsCta {
+          text,
+          url
+        }
+      },
+      _type == "servicesShowcaseSection" => {
+        title {
+          text,
+          highlight
+        },
+        subtitle,
+        categories[] {
+          title,
+          icon,
+          description,
+          price,
+          link,
+          linkText
+        },
+        packages[] {
+          title,
+          subtitle,
+          price,
+          priceType,
+          timeline,
+          rating,
+          ratingValue,
+          bestFor,
+          buttonText,
+          buttonLink
+        }
+      },
+      _type == "resultsSection" => {
+        title,
+        subtitle,
+        items[] {
+          clientImage { ${imageFragment} },
+          clientName,
+          stat,
+          metricName,
+          description,
+          ctaText,
+          ctaLink
+        },
+        theme
+      },
+      _type == "processSection" => {
+        processTitle,
+        processSubtitle,
+        processSteps[] {
+          number,
+          title,
+          description
+        }
+      },
+      _type == "partnersSection" => {
+        partnersBadges[] {
+          text,
+          link
+        },
+        partnersDescription
+      },
+      _type == "ctaSection" => {
+        title,
+        subtitle,
+        buttons[] {
+          text,
+          link,
+          variant
+        },
+        backgroundColor
+      },
+      _type == "technicalDepthSection" => {
+        title,
+        subtitle,
+        capabilities[] {
+          icon,
+          title,
+          description,
+          tags
+        }
+      },
+      _type == "testimonialSection" => {
+        theme,
+        testimonials[] {
+          quote,
+          authorName,
+          authorRole,
+          companyName,
+          companyLogo { ${imageFragment} }
+        }
+      },
+      _type == "latestInsightsSection" => {
+        title,
+        subtitle,
+        maxPosts,
+        filterByTag,
+        ctaText,
+        ctaLink
+      }
+    )
+  }
+`;
+
+const landingPageLegacyFields = groq`
+  hero {
+    heroBadge,
+    heroTitle {
+      text,
+      highlight
+    },
+    heroDescription,
+    heroButtons[] {
+      text,
+      link,
+      variant
+    },
+    heroTagline,
+    heroPackages[] {
+      title,
+      price
+    }
+  },
+  trustedBy {
+    title,
+    brands[] {
+      name,
+      logo { ${imageFragment} },
+      alt,
+      link
+    }
+  },
+  painPoints {
+    painPointsTitle {
+      text,
+      highlight
+    },
+    painPointsItems[] {
+      text
+    },
+    painPointsBottomText,
+    painPointsCta {
+      text,
+      url
+    }
+  },
+  servicesShowcase {
+    title {
+      text,
+      highlight
+    },
+    subtitle,
+    categories[] {
+      title,
+      icon,
+      description,
+      price,
+      link,
+      linkText
+    },
+    packages[] {
+      title,
+      subtitle,
+      price,
+      priceType,
+      timeline,
+      rating,
+      ratingValue,
+      bestFor,
+      buttonText,
+      buttonLink
+    }
+  },
+  results {
+    title,
+    subtitle,
+    items[] {
+      clientImage { ${imageFragment} },
+      clientName,
+      stat,
+      metricName,
+      description,
+      ctaText,
+      ctaLink
+    },
+    theme
+  },
+  process {
+    processTitle,
+    processSubtitle,
+    processSteps[] {
+      number,
+      title,
+      description
+    }
+  },
+  partners {
+    partnersBadges[] {
+      text,
+      link
+    },
+    partnersDescription
+  },
+  cta {
+    title,
+    subtitle,
+    buttons[] {
+      text,
+      link,
+      variant
+    },
+    backgroundColor
+  }
+`;
+
 // ============================================
 // Helper: Language filter
 // ============================================
@@ -33,114 +290,8 @@ export const landingPageQuery = groq`
     pageTitle,
     "slug": slug.current,
     isHomepage,
-    hero {
-      heroBadge,
-      heroTitle {
-        text,
-        highlight
-      },
-      heroDescription,
-      heroButtons[] {
-        text,
-        link,
-        variant
-      },
-      heroTagline,
-      heroPackages[] {
-        title,
-        price
-      }
-    },
-    trustedBy {
-      title,
-      brands[] {
-        name,
-        logo { ${imageFragment} },
-        alt,
-        link
-      }
-    },
-    painPoints {
-      painPointsTitle {
-        text,
-        highlight
-      },
-      painPointsItems[] {
-        text
-      },
-      painPointsBottomText,
-      painPointsCta {
-        text,
-        url
-      }
-    },
-    servicesShowcase {
-      title {
-        text,
-        highlight
-      },
-      subtitle,
-      categories[] {
-        title,
-        icon,
-        description,
-        price,
-        link,
-        linkText
-      },
-      packages[] {
-        title,
-        subtitle,
-        price,
-        priceType,
-        timeline,
-        rating,
-        ratingValue,
-        bestFor,
-        buttonText,
-        buttonLink
-      }
-    },
-    results {
-      title,
-      subtitle,
-      items[] {
-        clientImage { ${imageFragment} },
-        clientName,
-        stat,
-        metricName,
-        description,
-        ctaText,
-        ctaLink
-      },
-      theme
-    },
-    process {
-      processTitle,
-      processSubtitle,
-      processSteps[] {
-        number,
-        title,
-        description
-      }
-    },
-    partners {
-      partnersBadges[] {
-        text,
-        link
-      },
-      partnersDescription
-    },
-    cta {
-      title,
-      subtitle,
-      buttons[] {
-        text,
-        link,
-        variant
-      },
-      backgroundColor
-    },
+    ${landingPageSectionsArray},
+    ${landingPageLegacyFields},
     seo {
       metaTitle,
       metaDescription,
@@ -154,119 +305,45 @@ export const homepageQuery = groq`
     _id,
     pageTitle,
     "slug": slug.current,
-    hero {
-      heroBadge,
-      heroTitle {
-        text,
-        highlight
-      },
-      heroDescription,
-      heroButtons[] {
-        text,
-        link,
-        variant
-      },
-      heroTagline,
-      heroPackages[] {
-        title,
-        price
-      }
-    },
-    trustedBy {
-      title,
-      brands[] {
-        name,
-        logo { ${imageFragment} },
-        alt,
-        link
-      }
-    },
-    painPoints {
-      painPointsTitle {
-        text,
-        highlight
-      },
-      painPointsItems[] {
-        text
-      },
-      painPointsBottomText,
-      painPointsCta {
-        text,
-        url
-      }
-    },
-    servicesShowcase {
-      title {
-        text,
-        highlight
-      },
-      subtitle,
-      categories[] {
-        title,
-        icon,
-        description,
-        price,
-        link,
-        linkText
-      },
-      packages[] {
-        title,
-        subtitle,
-        price,
-        priceType,
-        timeline,
-        rating,
-        ratingValue,
-        bestFor,
-        buttonText,
-        buttonLink
-      }
-    },
-    results {
-      title,
-      subtitle,
-      items[] {
-        clientImage { ${imageFragment} },
-        clientName,
-        stat,
-        metricName,
-        description,
-        ctaText,
-        ctaLink
-      },
-      theme
-    },
-    process {
-      processTitle,
-      processSubtitle,
-      processSteps[] {
-        number,
-        title,
-        description
-      }
-    },
-    partners {
-      partnersBadges[] {
-        text,
-        link
-      },
-      partnersDescription
-    },
-    cta {
-      title,
-      subtitle,
-      buttons[] {
-        text,
-        link,
-        variant
-      },
-      backgroundColor
-    },
+    ${landingPageSectionsArray},
+    ${landingPageLegacyFields},
     seo {
       metaTitle,
       metaDescription,
       ogImage { ${imageFragment} }
     }
+  }
+`;
+
+/** Resolves cards for homepage `latestInsightsSection` (classic + page-builder posts). */
+export const latestInsightsPostsQuery = groq`
+  *[
+    _type in ["blogPost", "post"] &&
+    defined(slug.current) &&
+    (language == $language || (!defined(language) && $language == "en")) &&
+    (
+      $filterTag == "" ||
+      (_type == "blogPost" && $filterTag in coalesce(tags, [])) ||
+      (_type == "post" && count(coalesce(tags, [])[label == $filterTag]) > 0)
+    )
+  ] | order(coalesce(publishedAt, _createdAt) desc) [0...$maxPosts] {
+    _type,
+    title,
+    "slug": slug.current,
+    "excerpt": select(_type == "post" => excerpt, description),
+    publishedAt,
+    "imageUrl": select(
+      _type == "post" => image.asset->url,
+      coalesce(featuredImage.asset->url, image.asset->url)
+    ),
+    "readTime": select(
+      _type == "post" => string(max(1, round(length(pt::text(content)) / 5 / 200))) + " min",
+      readTime
+    ),
+    "tagLabel": select(
+      _type == "post" => coalesce(tags[isPrimary == true][0].label, tags[0].label),
+      tags[0]
+    )
   }
 `;
 
@@ -1325,10 +1402,37 @@ export const blogPageQuery = groq`
         "date": select(_type == "post" => publishedAt, date),
         "readTime": select(_type == "post" => null, readTime),
         "category": select(_type == "post" => coalesce(tags[isPrimary == true][0].label, tags[0].label), category),
-        "imageUrl": image.asset->url,
+        "imageUrl": select(
+          _type == "post" => image.asset->url,
+          coalesce(featuredImage.asset->url, image.asset->url)
+        ),
         "slug": slug.current
       },
       loadMoreButtonText
+    },
+    // All published posts for this locale (not limited to manual grid references)
+    "articlesListing": *[
+      _type in ["blogPost", "post"] &&
+      defined(slug.current) &&
+      (language == $language || (!defined(language) && $language == "en"))
+    ] | order(coalesce(publishedAt, _createdAt) desc) {
+      _type,
+      title,
+      "description": select(_type == "post" => excerpt, description),
+      "date": coalesce(publishedAt, date),
+      "readTime": select(
+        _type == "post" => string(max(1, round(length(pt::text(content)) / 5 / 200))) + " min",
+        readTime
+      ),
+      "category": select(
+        _type == "post" => coalesce(tags[isPrimary == true][0].label, tags[0].label),
+        coalesce(category, tags[0])
+      ),
+      "imageUrl": select(
+        _type == "post" => image.asset->url,
+        coalesce(featuredImage.asset->url, image.asset->url)
+      ),
+      "slug": slug.current
     },
     newsletterCta {
       title,
