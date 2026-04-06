@@ -7,7 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "migrate:landing-sections": "node scripts/migrate-landing-page-sections.mjs",
+    "migrate:all-page-sections": "node scripts/migrate-all-page-sections.mjs"
   },
   "dependencies": {
     "@portabletext/react": "^6.0.2",

@@ -1,7 +1,7 @@
-import { defineArrayMember, defineField } from "sanity";
+import { defineArrayMember, defineField, defineType } from "sanity";
 
-export const processSection = defineField({
-  name: "process",
+export const processSection = defineType({
+  name: "processSection",
   title: "Process Section",
   type: "object",
   fields: [
@@ -49,4 +49,10 @@ export const processSection = defineField({
       validation: (rule) => rule.max(6),
     }),
   ],
+  preview: {
+    select: { title: "processTitle", subtitle: "processSubtitle" },
+    prepare({ title, subtitle }) {
+      return { title: title || "Process", subtitle };
+    },
+  },
 });

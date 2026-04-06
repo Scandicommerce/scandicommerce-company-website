@@ -1,37 +1,22 @@
 import HeaderWrapper from '@/components/layout/HeaderWrapper'
 import FooterWrapper from '@/components/layout/FooterWrapper'
-import ProductGrid from '@/components/sections/merch/ProductGrid'
-import QualityShowcase from '@/components/sections/merch/QualityShowcase'
-import Newsletter from '@/components/sections/merch/Newsletter'
+import { MerchPageSectionRenderer } from '@/components/pageSectionRenderers/MerchPageSectionRenderer'
 import { getShopifyProducts } from '@/lib/shopify'
 import { Product } from '@/components/sections/merch/ProductCard'
 import { client } from '@/sanity/lib/client'
 import { merchPageQuery } from '@/sanity/lib/queries'
 import { getQueryParams } from '@/sanity/lib/queryHelpers'
 import { getLanguageFromParams } from '@/lib/language'
-import Hero from '@/components/layout/Hero'
+import { normalizePageSections } from '@/lib/sanity/pageBuilderLegacy'
 
 interface MerchPageData {
   _id: string
   pageTitle?: string
   slug?: string
-  hero?: {
-    heroTitle?: { text?: string; highlight?: string }
-    heroDescription?: string
-  }
-  qualityShowcase?: {
-    title?: string
-    description?: string
-    products?: { handle?: string; name?: string }[]
-  }
-  newsletter?: {
-    title?: string
-    description?: string
-    emailPlaceholder?: string
-    buttonText?: string
-    successMessage?: string
-  }
-  seo?: { metaTitle?: string; metaDescription?: string }
+  sections?: Array<{ _type: string; _key: string } & Record<string, unknown>>
+  hero?: Record<string, unknown>
+  qualityShowcase?: Record<string, unknown>
+  newsletter?: Record<string, unknown>
 }
 
 export default async function MerchPage({ params }: { params: Promise<{ lang: string; slug?: string }> }) {
@@ -39,7 +24,7 @@ export default async function MerchPage({ params }: { params: Promise<{ lang: st
   const language = getLanguageFromParams({ lang })
   let shopifyProducts: Product[] = []
 
-  const pageData: MerchPageData = await client.fetch(
+  const pageData: MerchPageData | null = await client.fetch(
     merchPageQuery,
     getQueryParams({}, language),
     { next: { revalidate: 0 } }
@@ -65,14 +50,13 @@ export default async function MerchPage({ params }: { params: Promise<{ lang: st
     console.error('Error fetching Shopify products:', error)
   }
 
+  const sections = normalizePageSections('merchPage', pageData)
+
   return (
     <div className="flex flex-col min-h-screen">
       <HeaderWrapper />
       <main className="flex-grow">
-        <Hero hero={pageData.hero} />
-        <ProductGrid initialProducts={shopifyProducts} />
-        <QualityShowcase products={shopifyProducts} qualityShowcase={pageData?.qualityShowcase} />
-        <Newsletter newsletter={pageData?.newsletter} />
+        <MerchPageSectionRenderer sections={sections} shopifyProducts={shopifyProducts} />
         <FooterWrapper />
       </main>
     </div>

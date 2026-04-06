@@ -1,17 +1,17 @@
 import FooterWrapper from '@/components/layout/FooterWrapper'
 import HeaderWrapper from '@/components/layout/HeaderWrapper'
-import CaseStudies from '@/components/sections/work/CaseStudies'
-import CTA from '@/components/sections/work/CTA'
-import Hero from '@/components/layout/Hero'
+import { WorkPageSectionRenderer } from '@/components/pageSectionRenderers/WorkPageSectionRenderer'
 import { client } from '@/sanity/lib/client'
 import { workPageQuery } from '@/sanity/lib/queries'
 import { getQueryParams } from '@/sanity/lib/queryHelpers'
 import { getLanguageFromParams } from '@/lib/language'
+import { normalizePageSections } from '@/lib/sanity/pageBuilderLegacy'
 
 interface WorkPageData {
   _id: string
   pageTitle?: string
   slug?: string
+  sections?: Array<{ _type: string; _key: string } & Record<string, unknown>>
   hero?: { heroTitle?: { text?: string; highlight?: string }; heroDescription?: string }
   caseStudies?: {
     studies?: {
@@ -39,13 +39,13 @@ export default async function WorkPage({ params }: { params: Promise<{ lang: str
     { next: { revalidate: 0 } }
   )
 
+  const sections = normalizePageSections('workPage', pageData)
+
   return (
     <div className="flex flex-col min-h-screen">
       <HeaderWrapper />
       <main className="flex-grow">
-        <Hero hero={pageData?.hero} />
-        <CaseStudies caseStudies={pageData?.caseStudies} />
-        <CTA cta={pageData?.cta} />
+        <WorkPageSectionRenderer sections={sections} />
         <FooterWrapper />
       </main>
     </div>

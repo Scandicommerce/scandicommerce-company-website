@@ -1,7 +1,7 @@
-import { defineArrayMember, defineField } from "sanity";
+import { defineArrayMember, defineField, defineType } from "sanity";
 
-export const trustedBySection = defineField({
-  name: "trustedBy",
+export const trustedBySection = defineType({
+  name: "trustedBySection",
   title: "Trusted By Section",
   type: "object",
   description: "Brand logos section showing trusted partners",
@@ -56,4 +56,10 @@ export const trustedBySection = defineField({
       ],
     }),
   ],
+  preview: {
+    select: { title: "title" },
+    prepare({ title }) {
+      return { title: title || "Trusted by" };
+    },
+  },
 });

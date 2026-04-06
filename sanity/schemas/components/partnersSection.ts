@@ -1,7 +1,7 @@
-import { defineArrayMember, defineField } from "sanity";
+import { defineArrayMember, defineField, defineType } from "sanity";
 
-export const partnersSection = defineField({
-  name: "partners",
+export const partnersSection = defineType({
+  name: "partnersSection",
   title: "Partners Section",
   type: "object",
   fields: [
@@ -40,4 +40,9 @@ export const partnersSection = defineField({
       description: "Text below the badges (e.g., 'Official Shopify partner since 2018...')",
     }),
   ],
+  preview: {
+    prepare() {
+      return { title: "Partners" };
+    },
+  },
 });

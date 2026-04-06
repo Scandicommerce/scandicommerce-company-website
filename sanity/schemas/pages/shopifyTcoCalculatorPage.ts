@@ -2,6 +2,37 @@ import { defineArrayMember, defineField, defineType } from "sanity";
 import { languageField } from "../objects/language";
 import { isUniquePerLanguage } from "@/sanity/lib/slugUtils";
 
+export const shopifyTcoCalculatorPageHeroSection = defineType({
+  name: "shopifyTcoCalculatorPageHeroSection",
+  title: "Hero",
+  type: "object",
+  fields: [
+    defineField({
+      name: "heroTitle",
+      title: "Hero Title",
+      type: "object",
+      fields: [
+        defineField({ name: "text", title: "Main Text", type: "string" }),
+        defineField({ name: "highlight", title: "Highlighted Text", type: "string" }),
+      ],
+    }),
+    defineField({ name: "heroDescription", title: "Hero Description", type: "text", rows: 4 }),
+    defineField({
+      name: "platforms",
+      title: "Platform Buttons",
+      type: "array",
+      of: [defineArrayMember({ type: "string" })],
+      description: "List of platform names for selection buttons (e.g., 'Woocommerce', 'Adobe (Magento)')",
+    }),
+  ],
+  preview: {
+    select: { t: "heroTitle.text" },
+    prepare({ t }: { t?: string }) {
+      return { title: t || "Hero" };
+    },
+  },
+});
+
 export const shopifyTcoCalculatorPage = defineType({
   name: "shopifyTcoCalculatorPage",
   title: "Shopify TCO Calculator Page",
@@ -25,32 +56,13 @@ export const shopifyTcoCalculatorPage = defineType({
       options: { source: "pageTitle", maxLength: 96, isUnique: isUniquePerLanguage },
       validation: (rule) => rule.required(),
     }),
-    // Hero Section
     defineField({
-      name: "hero",
-      title: "Hero Section",
-      type: "object",
-      fields: [
-        defineField({
-          name: "heroTitle",
-          title: "Hero Title",
-          type: "object",
-          fields: [
-            defineField({ name: "text", title: "Main Text", type: "string" }),
-            defineField({ name: "highlight", title: "Highlighted Text", type: "string" }),
-          ],
-        }),
-        defineField({ name: "heroDescription", title: "Hero Description", type: "text", rows: 4 }),
-        defineField({
-          name: "platforms",
-          title: "Platform Buttons",
-          type: "array",
-          of: [defineArrayMember({ type: "string" })],
-          description: "List of platform names for selection buttons (e.g., 'Woocommerce', 'Adobe (Magento)')",
-        }),
-      ],
+      name: "sections",
+      title: "Page content",
+      type: "array",
+      description: "Drag to reorder sections.",
+      of: [defineArrayMember({ type: "shopifyTcoCalculatorPageHeroSection" })],
     }),
-    // SEO
     defineField({
       name: "seo",
       title: "SEO",

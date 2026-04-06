@@ -1,12 +1,4 @@
-import { defineField, defineType } from "sanity";
-import { heroSection } from "../components/heroSection";
-import { trustedBySection } from "../components/trustedBySection";
-import { painPointsSection } from "../components/painPointsSection";
-import { servicesShowcaseSection } from "../components/servicesShowcaseSection";
-import { resultsSection } from "../components/resultsSection";
-import { processSection } from "../components/processSection";
-import { partnersSection } from "../components/partnersSection";
-import { ctaSection } from "../components/ctaSection";
+import { defineField, defineType, defineArrayMember } from "sanity";
 import { languageField } from "../objects/language";
 import { isUniquePerLanguage } from "@/sanity/lib/slugUtils";
 
@@ -44,15 +36,23 @@ export const landingPage = defineType({
       description: "Set this as the main homepage",
       initialValue: false,
     }),
-    // Section Components
-    heroSection,
-    trustedBySection,
-    painPointsSection,
-    servicesShowcaseSection,
-    resultsSection,
-    processSection,
-    partnersSection,
-    ctaSection,
+    defineField({
+      name: "sections",
+      title: "Page content",
+      type: "array",
+      description: "Drag to reorder. Add or remove sections per page.",
+      of: [
+        defineArrayMember({ type: "heroSection" }),
+        defineArrayMember({ type: "trustedBySection" }),
+        defineArrayMember({ type: "painPointsSection" }),
+        defineArrayMember({ type: "servicesShowcaseSection" }),
+        defineArrayMember({ type: "resultsSection" }),
+        defineArrayMember({ type: "processSection" }),
+        defineArrayMember({ type: "partnersSection" }),
+        defineArrayMember({ type: "ctaSection" }),
+        defineArrayMember({ type: "technicalDepthSection" }),
+      ],
+    }),
     // SEO
     defineField({
       name: "seo",

@@ -19,6 +19,235 @@ const pageReferenceTypes = [
   { type: "packageDetailPage" },
 ];
 
+export const shopifyXAiPageHeroSection = defineType({
+  name: "shopifyXAiPageHeroSection",
+  title: "Hero",
+  type: "object",
+  fields: [
+    defineField({
+      name: "heroTitle",
+      title: "Hero Title",
+      type: "object",
+      fields: [
+        defineField({ name: "text", title: "Main Text", type: "string" }),
+        defineField({ name: "highlight", title: "Highlighted Text", type: "string" }),
+      ],
+    }),
+    defineField({ name: "heroDescription", title: "Hero Description", type: "text", rows: 3 }),
+  ],
+  preview: {
+    select: { t: "heroTitle.text" },
+    prepare({ t }: { t?: string }) {
+      return { title: t || "Hero" };
+    },
+  },
+});
+
+export const shopifyXAiPageEnhancingWithAiSection = defineType({
+  name: "shopifyXAiPageEnhancingWithAiSection",
+  title: "Enhancing with AI",
+  type: "object",
+  fields: [
+    defineField({ name: "title", title: "Section Title", type: "string" }),
+    defineField({ name: "paragraph1", title: "Paragraph 1", type: "text", rows: 4 }),
+    defineField({ name: "paragraph2", title: "Paragraph 2", type: "text", rows: 4 }),
+    defineField({
+      name: "quote",
+      title: "Quote Block",
+      type: "object",
+      fields: [
+        defineField({ name: "text", title: "Quote Text", type: "text", rows: 3 }),
+        defineField({ name: "author", title: "Author", type: "string" }),
+      ],
+    }),
+  ],
+  preview: { prepare: () => ({ title: "Enhancing with AI" }) },
+});
+
+export const shopifyXAiPageHowWeLeverageAiSection = defineType({
+  name: "shopifyXAiPageHowWeLeverageAiSection",
+  title: "How we leverage AI",
+  type: "object",
+  fields: [
+    defineField({ name: "title", title: "Section Title", type: "string" }),
+    defineField({
+      name: "capabilities",
+      title: "AI Capabilities",
+      type: "array",
+      of: [
+        defineArrayMember({
+          type: "object",
+          fields: [
+            defineField({ name: "title", title: "Title", type: "string" }),
+            defineField({ name: "description", title: "Description", type: "text", rows: 2 }),
+            defineField({
+              name: "bgColor",
+              title: "Background Color",
+              type: "string",
+              description: "e.g., bg-[#03C1CA] or bg-[#1F1D1D]",
+            }),
+            defineField({
+              name: "features",
+              title: "Features",
+              type: "array",
+              of: [defineArrayMember({ type: "string" })],
+            }),
+            defineField({ name: "impactTitle", title: "Impact Title", type: "string" }),
+            defineField({ name: "impactParagraph1", title: "Impact Paragraph 1", type: "text", rows: 3 }),
+            defineField({ name: "impactParagraph2", title: "Impact Paragraph 2", type: "text", rows: 3 }),
+            defineField({ name: "linkText", title: "Link Text", type: "string" }),
+            defineField({
+              name: "linkPage",
+              title: "Link – Page (recommended)",
+              type: "reference",
+              to: pageReferenceTypes,
+              description: "Select a page for the link.",
+              options: { filter: pageFilter },
+            }),
+            defineField({
+              name: "linkHref",
+              title: "Link – Custom URL (fallback)",
+              type: "string",
+              description: "Used only when no page is selected.",
+            }),
+          ],
+        }),
+      ],
+    }),
+  ],
+  preview: { prepare: () => ({ title: "How we leverage AI" }) },
+});
+
+export const shopifyXAiPageAiToolsToolkitSection = defineType({
+  name: "shopifyXAiPageAiToolsToolkitSection",
+  title: "AI tools toolkit",
+  type: "object",
+  fields: [
+    defineField({ name: "title", title: "Section Title", type: "string" }),
+    defineField({
+      name: "toolCategories",
+      title: "Tool Categories",
+      type: "array",
+      of: [
+        defineArrayMember({
+          type: "object",
+          fields: [
+            defineField({ name: "title", title: "Title", type: "string" }),
+            defineField({ name: "description", title: "Description", type: "text", rows: 3 }),
+          ],
+        }),
+      ],
+    }),
+    defineField({ name: "bottomText", title: "Bottom Text", type: "text", rows: 3 }),
+  ],
+  preview: { prepare: () => ({ title: "AI tools toolkit" }) },
+});
+
+export const shopifyXAiPageHowWeApplyAiSection = defineType({
+  name: "shopifyXAiPageHowWeApplyAiSection",
+  title: "How we apply AI",
+  type: "object",
+  fields: [
+    defineField({ name: "title", title: "Section Title", type: "string" }),
+    defineField({
+      name: "applicationAreas",
+      title: "Application Areas",
+      type: "array",
+      of: [
+        defineArrayMember({
+          type: "object",
+          fields: [
+            defineField({ name: "title", title: "Title", type: "string" }),
+            defineField({ name: "description", title: "Description", type: "text", rows: 2 }),
+            defineField({
+              name: "features",
+              title: "Features",
+              type: "array",
+              of: [defineArrayMember({ type: "string" })],
+            }),
+            defineField({ name: "benefit", title: "Benefit", type: "string" }),
+          ],
+        }),
+      ],
+    }),
+  ],
+  preview: { prepare: () => ({ title: "How we apply AI" }) },
+});
+
+export const shopifyXAiPageAiEnhancedProcessSection = defineType({
+  name: "shopifyXAiPageAiEnhancedProcessSection",
+  title: "AI enhanced process",
+  type: "object",
+  fields: [
+    defineField({ name: "title", title: "Section Title", type: "string" }),
+    defineField({
+      name: "processSteps",
+      title: "Process Steps",
+      type: "array",
+      of: [
+        defineArrayMember({
+          type: "object",
+          fields: [
+            defineField({ name: "title", title: "Title", type: "string" }),
+            defineField({ name: "description", title: "Description", type: "text", rows: 3 }),
+          ],
+        }),
+      ],
+    }),
+  ],
+  preview: { prepare: () => ({ title: "AI enhanced process" }) },
+});
+
+export const shopifyXAiPageFaqSection = defineType({
+  name: "shopifyXAiPageFaqSection",
+  title: "FAQ",
+  type: "object",
+  fields: [
+    defineField({ name: "title", title: "Section Title", type: "string" }),
+    defineField({
+      name: "items",
+      title: "FAQ Items",
+      type: "array",
+      of: [
+        defineArrayMember({
+          type: "object",
+          fields: [
+            defineField({ name: "question", title: "Question", type: "string" }),
+            defineField({ name: "answer", title: "Answer", type: "text", rows: 4 }),
+          ],
+        }),
+      ],
+    }),
+  ],
+  preview: { prepare: () => ({ title: "FAQ" }) },
+});
+
+export const shopifyXAiPageCtaSection = defineType({
+  name: "shopifyXAiPageCtaSection",
+  title: "CTA",
+  type: "object",
+  fields: [
+    defineField({ name: "title", title: "Title", type: "string" }),
+    defineField({ name: "description", title: "Description", type: "text", rows: 2 }),
+    defineField({ name: "buttonText", title: "Button Text", type: "string" }),
+    defineField({
+      name: "buttonPage",
+      title: "Button – Page (recommended)",
+      type: "reference",
+      to: pageReferenceTypes,
+      description: "Select a page for the button.",
+      options: { filter: pageFilter },
+    }),
+    defineField({
+      name: "buttonLink",
+      title: "Button – Custom URL (fallback)",
+      type: "string",
+      description: "Used only when no page is selected. Defaults to /contact.",
+    }),
+  ],
+  preview: { prepare: () => ({ title: "CTA" }) },
+});
+
 export const shopifyXAiPage = defineType({
   name: "shopifyXAiPage",
   title: "Shopify x AI Page",
@@ -42,218 +271,22 @@ export const shopifyXAiPage = defineType({
       options: { source: "pageTitle", maxLength: 96, isUnique: isUniquePerLanguage },
       validation: (rule) => rule.required(),
     }),
-    // Hero Section
     defineField({
-      name: "hero",
-      title: "Hero Section",
-      type: "object",
-      fields: [
-        defineField({
-          name: "heroTitle",
-          title: "Hero Title",
-          type: "object",
-          fields: [
-            defineField({ name: "text", title: "Main Text", type: "string" }),
-            defineField({ name: "highlight", title: "Highlighted Text", type: "string" }),
-          ],
-        }),
-        defineField({ name: "heroDescription", title: "Hero Description", type: "text", rows: 3 }),
+      name: "sections",
+      title: "Page content",
+      type: "array",
+      description: "Drag to reorder sections.",
+      of: [
+        defineArrayMember({ type: "shopifyXAiPageHeroSection" }),
+        defineArrayMember({ type: "shopifyXAiPageEnhancingWithAiSection" }),
+        defineArrayMember({ type: "shopifyXAiPageHowWeLeverageAiSection" }),
+        defineArrayMember({ type: "shopifyXAiPageAiToolsToolkitSection" }),
+        defineArrayMember({ type: "shopifyXAiPageHowWeApplyAiSection" }),
+        defineArrayMember({ type: "shopifyXAiPageAiEnhancedProcessSection" }),
+        defineArrayMember({ type: "shopifyXAiPageFaqSection" }),
+        defineArrayMember({ type: "shopifyXAiPageCtaSection" }),
       ],
     }),
-    // Enhancing With AI Section
-    defineField({
-      name: "enhancingWithAi",
-      title: "Enhancing With AI Section",
-      type: "object",
-      fields: [
-        defineField({ name: "title", title: "Section Title", type: "string" }),
-        defineField({ name: "paragraph1", title: "Paragraph 1", type: "text", rows: 4 }),
-        defineField({ name: "paragraph2", title: "Paragraph 2", type: "text", rows: 4 }),
-        defineField({
-          name: "quote",
-          title: "Quote Block",
-          type: "object",
-          fields: [
-            defineField({ name: "text", title: "Quote Text", type: "text", rows: 3 }),
-            defineField({ name: "author", title: "Author", type: "string" }),
-          ],
-        }),
-      ],
-    }),
-    // How We Leverage AI Section
-    defineField({
-      name: "howWeLeverageAi",
-      title: "How We Leverage AI Section",
-      type: "object",
-      fields: [
-        defineField({ name: "title", title: "Section Title", type: "string" }),
-        defineField({
-          name: "capabilities",
-          title: "AI Capabilities",
-          type: "array",
-          of: [
-            defineArrayMember({
-              type: "object",
-              fields: [
-                defineField({ name: "title", title: "Title", type: "string" }),
-                defineField({ name: "description", title: "Description", type: "text", rows: 2 }),
-                defineField({ name: "bgColor", title: "Background Color", type: "string", description: "e.g., bg-[#03C1CA] or bg-[#1F1D1D]" }),
-                defineField({
-                  name: "features",
-                  title: "Features",
-                  type: "array",
-                  of: [defineArrayMember({ type: "string" })],
-                }),
-                defineField({ name: "impactTitle", title: "Impact Title", type: "string" }),
-                defineField({ name: "impactParagraph1", title: "Impact Paragraph 1", type: "text", rows: 3 }),
-                defineField({ name: "impactParagraph2", title: "Impact Paragraph 2", type: "text", rows: 3 }),
-                defineField({ name: "linkText", title: "Link Text", type: "string" }),
-                defineField({
-                  name: "linkPage",
-                  title: "Link – Page (recommended)",
-                  type: "reference",
-                  to: pageReferenceTypes,
-                  description: "Select a page for the link.",
-                  options: { filter: pageFilter },
-                }),
-                defineField({
-                  name: "linkHref",
-                  title: "Link – Custom URL (fallback)",
-                  type: "string",
-                  description: "Used only when no page is selected.",
-                }),
-              ],
-            }),
-          ],
-        }),
-      ],
-    }),
-    // AI Tools Toolkit Section
-    defineField({
-      name: "aiToolsToolkit",
-      title: "AI Tools Toolkit Section",
-      type: "object",
-      fields: [
-        defineField({ name: "title", title: "Section Title", type: "string" }),
-        defineField({
-          name: "toolCategories",
-          title: "Tool Categories",
-          type: "array",
-          of: [
-            defineArrayMember({
-              type: "object",
-              fields: [
-                defineField({ name: "title", title: "Title", type: "string" }),
-                defineField({ name: "description", title: "Description", type: "text", rows: 3 }),
-              ],
-            }),
-          ],
-        }),
-        defineField({ name: "bottomText", title: "Bottom Text", type: "text", rows: 3 }),
-      ],
-    }),
-    // How We Apply AI Section
-    defineField({
-      name: "howWeApplyAi",
-      title: "How We Apply AI Section",
-      type: "object",
-      fields: [
-        defineField({ name: "title", title: "Section Title", type: "string" }),
-        defineField({
-          name: "applicationAreas",
-          title: "Application Areas",
-          type: "array",
-          of: [
-            defineArrayMember({
-              type: "object",
-              fields: [
-                defineField({ name: "title", title: "Title", type: "string" }),
-                defineField({ name: "description", title: "Description", type: "text", rows: 2 }),
-                defineField({
-                  name: "features",
-                  title: "Features",
-                  type: "array",
-                  of: [defineArrayMember({ type: "string" })],
-                }),
-                defineField({ name: "benefit", title: "Benefit", type: "string" }),
-              ],
-            }),
-          ],
-        }),
-      ],
-    }),
-    // AI Enhanced Process Section
-    defineField({
-      name: "aiEnhancedProcess",
-      title: "AI Enhanced Process Section",
-      type: "object",
-      fields: [
-        defineField({ name: "title", title: "Section Title", type: "string" }),
-        defineField({
-          name: "processSteps",
-          title: "Process Steps",
-          type: "array",
-          of: [
-            defineArrayMember({
-              type: "object",
-              fields: [
-                defineField({ name: "title", title: "Title", type: "string" }),
-                defineField({ name: "description", title: "Description", type: "text", rows: 3 }),
-              ],
-            }),
-          ],
-        }),
-      ],
-    }),
-    // FAQ Section
-    defineField({
-      name: "faq",
-      title: "FAQ Section",
-      type: "object",
-      fields: [
-        defineField({ name: "title", title: "Section Title", type: "string" }),
-        defineField({
-          name: "items",
-          title: "FAQ Items",
-          type: "array",
-          of: [
-            defineArrayMember({
-              type: "object",
-              fields: [
-                defineField({ name: "question", title: "Question", type: "string" }),
-                defineField({ name: "answer", title: "Answer", type: "text", rows: 4 }),
-              ],
-            }),
-          ],
-        }),
-      ],
-    }),
-    // CTA Section
-    defineField({
-      name: "cta",
-      title: "CTA Section",
-      type: "object",
-      fields: [
-        defineField({ name: "title", title: "Title", type: "string" }),
-        defineField({ name: "description", title: "Description", type: "text", rows: 2 }),
-        defineField({ name: "buttonText", title: "Button Text", type: "string" }),
-        defineField({
-          name: "buttonPage",
-          title: "Button – Page (recommended)",
-          type: "reference",
-          to: pageReferenceTypes,
-          description: "Select a page for the button.",
-          options: { filter: pageFilter },
-        }),
-        defineField({
-          name: "buttonLink",
-          title: "Button – Custom URL (fallback)",
-          type: "string",
-          description: "Used only when no page is selected. Defaults to /contact.",
-        }),
-      ],
-    }),
-    // SEO
     defineField({
       name: "seo",
       title: "SEO",

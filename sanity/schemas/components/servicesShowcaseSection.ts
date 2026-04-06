@@ -1,7 +1,7 @@
-import { defineArrayMember, defineField } from "sanity";
+import { defineArrayMember, defineField, defineType } from "sanity";
 
-export const servicesShowcaseSection = defineField({
-  name: "servicesShowcase",
+export const servicesShowcaseSection = defineType({
+  name: "servicesShowcaseSection",
   title: "Services Showcase Section",
   type: "object",
   description: "Shopify services packaged like products.",
@@ -175,4 +175,10 @@ export const servicesShowcaseSection = defineField({
       ],
     }),
   ],
+  preview: {
+    select: { title: "title.text", subtitle: "subtitle" },
+    prepare({ title, subtitle }) {
+      return { title: title || "Services showcase", subtitle };
+    },
+  },
 });

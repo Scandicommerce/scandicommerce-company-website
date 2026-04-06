@@ -33,6 +33,122 @@ export const landingPageQuery = groq`
     pageTitle,
     "slug": slug.current,
     isHomepage,
+    sections[] {
+      _type,
+      _key,
+      _type == "heroSection" => {
+        heroBadge,
+        heroTitle {
+          text,
+          highlight
+        },
+        heroDescription,
+        heroButtons[] {
+          text,
+          link,
+          variant
+        },
+        heroTagline,
+        heroPackages[] {
+          title,
+          price
+        }
+      },
+      _type == "trustedBySection" => {
+        title,
+        brands[] {
+          name,
+          logo { ${imageFragment} },
+          alt,
+          link
+        }
+      },
+      _type == "painPointsSection" => {
+        painPointsTitle {
+          text,
+          highlight
+        },
+        painPointsItems[] {
+          text
+        },
+        painPointsBottomText,
+        painPointsCta {
+          text,
+          url
+        }
+      },
+      _type == "servicesShowcaseSection" => {
+        title {
+          text,
+          highlight
+        },
+        subtitle,
+        categories[] {
+          title,
+          icon,
+          description,
+          price,
+          link,
+          linkText
+        },
+        packages[] {
+          title,
+          subtitle,
+          price,
+          priceType,
+          timeline,
+          rating,
+          ratingValue,
+          bestFor,
+          buttonText,
+          buttonLink
+        }
+      },
+      _type == "resultsSection" => {
+        title,
+        subtitle,
+        items[] {
+          clientImage { ${imageFragment} },
+          clientName,
+          stat,
+          metricName,
+          description,
+          ctaText,
+          ctaLink
+        },
+        theme
+      },
+      _type == "processSection" => {
+        processTitle,
+        processSubtitle,
+        processSteps[] {
+          number,
+          title,
+          description
+        }
+      },
+      _type == "partnersSection" => {
+        partnersBadges[] {
+          text,
+          link
+        },
+        partnersDescription
+      },
+      _type == "ctaSection" => {
+        title,
+        subtitle,
+        buttons[] {
+          text,
+          link,
+          variant
+        },
+        backgroundColor
+      },
+      _type == "technicalDepthSection" => {
+        headline,
+        body
+      }
+    },
     hero {
       heroBadge,
       heroTitle {
@@ -154,6 +270,122 @@ export const homepageQuery = groq`
     _id,
     pageTitle,
     "slug": slug.current,
+    sections[] {
+      _type,
+      _key,
+      _type == "heroSection" => {
+        heroBadge,
+        heroTitle {
+          text,
+          highlight
+        },
+        heroDescription,
+        heroButtons[] {
+          text,
+          link,
+          variant
+        },
+        heroTagline,
+        heroPackages[] {
+          title,
+          price
+        }
+      },
+      _type == "trustedBySection" => {
+        title,
+        brands[] {
+          name,
+          logo { ${imageFragment} },
+          alt,
+          link
+        }
+      },
+      _type == "painPointsSection" => {
+        painPointsTitle {
+          text,
+          highlight
+        },
+        painPointsItems[] {
+          text
+        },
+        painPointsBottomText,
+        painPointsCta {
+          text,
+          url
+        }
+      },
+      _type == "servicesShowcaseSection" => {
+        title {
+          text,
+          highlight
+        },
+        subtitle,
+        categories[] {
+          title,
+          icon,
+          description,
+          price,
+          link,
+          linkText
+        },
+        packages[] {
+          title,
+          subtitle,
+          price,
+          priceType,
+          timeline,
+          rating,
+          ratingValue,
+          bestFor,
+          buttonText,
+          buttonLink
+        }
+      },
+      _type == "resultsSection" => {
+        title,
+        subtitle,
+        items[] {
+          clientImage { ${imageFragment} },
+          clientName,
+          stat,
+          metricName,
+          description,
+          ctaText,
+          ctaLink
+        },
+        theme
+      },
+      _type == "processSection" => {
+        processTitle,
+        processSubtitle,
+        processSteps[] {
+          number,
+          title,
+          description
+        }
+      },
+      _type == "partnersSection" => {
+        partnersBadges[] {
+          text,
+          link
+        },
+        partnersDescription
+      },
+      _type == "ctaSection" => {
+        title,
+        subtitle,
+        buttons[] {
+          text,
+          link,
+          variant
+        },
+        backgroundColor
+      },
+      _type == "technicalDepthSection" => {
+        headline,
+        body
+      }
+    },
     hero {
       heroBadge,
       heroTitle {
@@ -305,6 +537,42 @@ export const shopifyDevelopmentPageQuery = groq`
     _id,
     pageTitle,
     "slug": slug.current,
+    sections[] {
+      _type,
+      _key,
+      _type == "shopifyDevelopmentPageHeroSection" => {
+        heroTitle { text, highlight },
+        heroDescription,
+        heroButtons[] { text, link, variant }
+      },
+      _type == "shopifyDevelopmentPageWhyShopifySection" => {
+        whyShopifyTitle,
+        whyShopifySubtitle,
+        whyShopifyFeatures[] { title, description, icon }
+      },
+      _type == "shopifyDevelopmentPageScenariosSection" => {
+        scenariosTitle,
+        scenariosItems[] { title, description, link }
+      },
+      _type == "shopifyDevelopmentPageHowWeWorkSection" => {
+        howWeWorkTitle,
+        howWeWorkSteps[] { number, title, description }
+      },
+      _type == "shopifyDevelopmentPageTestimonialSection" => {
+        testimonialRating,
+        testimonialQuote,
+        testimonialAuthorName,
+        testimonialAuthorTitle,
+        testimonialButtonText,
+        testimonialButtonLink
+      },
+      _type == "shopifyDevelopmentPageCtaSection" => {
+        ctaTitle,
+        ctaDescription,
+        ctaButtonText,
+        ctaButtonLink
+      }
+    },
     hero {
       heroTitle {
         text,
@@ -372,6 +640,40 @@ export const migratePageQuery = groq`
     _id,
     pageTitle,
     "slug": slug.current,
+    sections[] {
+      _type,
+      _key,
+      _type == "migratePageHeroSection" => {
+        heroTitle { text, highlight },
+        heroDescription,
+        heroButtons[] { text, link, variant }
+      },
+      _type == "migratePagePlatformsSection" => {
+        platformsTitle,
+        platformsItems[] { name, duration }
+      },
+      _type == "migratePageRisksProtectionSection" => {
+        risksTitle,
+        risksItems[] { text },
+        protectionTitle,
+        protectionItems[] { title, description }
+      },
+      _type == "migratePageProcessSection" => {
+        processTitle,
+        processSubtitle,
+        processPhases[] { week, title, activities }
+      },
+      _type == "migratePageResultsSection" => {
+        resultsTitle,
+        resultsItems[] { metric, title, description }
+      },
+      _type == "migratePageCtaSection" => {
+        ctaTitle,
+        ctaDescription,
+        ctaButtonText,
+        ctaButtonLink
+      }
+    },
     hero {
       heroTitle {
         text,
@@ -441,6 +743,30 @@ export const shopifyPosPageQuery = groq`
     _id,
     pageTitle,
     "slug": slug.current,
+    sections[] {
+      _type,
+      _key,
+      _type == "shopifyPosPageHeroSection" => {
+        heroTitle { text, highlight },
+        heroDescription,
+        heroButtonText,
+        heroButtonLink
+      },
+      _type == "shopifyPosPageFeaturesSection" => {
+        featuresTitle,
+        featuresItems[] { title, description, icon }
+      },
+      _type == "shopifyPosPagePerfectForSection" => {
+        perfectForTitle,
+        perfectForItems[] { title, description }
+      },
+      _type == "shopifyPosPageCtaSection" => {
+        ctaTitle,
+        ctaDescription,
+        ctaButtonText,
+        ctaButtonLink
+      }
+    },
     hero {
       heroTitle {
         text,
@@ -487,6 +813,36 @@ export const allPackagesPageQuery = groq`
     _id,
     pageTitle,
     "slug": slug.current,
+    sections[] {
+      _type,
+      _key,
+      _type == "allPackagesPageHeroSection" => {
+        heroTitle { text, highlight },
+        heroDescription
+      },
+      _type == "allPackagesPagePackagesSection" => {
+        packagesItems[] {
+          title,
+          subtitle,
+          price,
+          priceType,
+          timeline,
+          rating,
+          ratingValue,
+          bestFor,
+          included,
+          description,
+          "slug": page->slug.current,
+          href,
+          "bookCallSlug": bookCallPage->slug.current,
+          bookCallHref
+        }
+      },
+      _type == "allPackagesPageFaqSection" => {
+        faqTitle,
+        faqItems[] { question, answer }
+      }
+    },
     hero {
       heroTitle {
         text,
@@ -535,6 +891,51 @@ export const shopifyPlatformPageQuery = groq`
     _id,
     pageTitle,
     "slug": slug.current,
+    sections[] {
+      _type,
+      _key,
+      _type == "shopifyPlatformPageHeroSection" => {
+        heroTitle { text, highlight },
+        heroDescription
+      },
+      _type == "shopifyPlatformPageBleedingMoneySection" => {
+        title,
+        leftPoints,
+        rightPoints,
+        bottomPoint
+      },
+      _type == "shopifyPlatformPageShopifyEmpiresSection" => {
+        title,
+        features[] { title, description, highlight }
+      },
+      _type == "shopifyPlatformPageRevenueFormSection" => {
+        title,
+        subtitle,
+        testimonial {
+          quote,
+          authorName,
+          authorRole,
+          authorCompany,
+          "authorImageUrl": authorImage.asset->url
+        },
+        form {
+          formTitle,
+          formSubtitle,
+          formDescription,
+          submitButtonText
+        }
+      },
+      _type == "shopifyPlatformPageSuccessStoriesSection" => {
+        title,
+        subtitle,
+        caseStudies[] {
+          clientName,
+          heading,
+          description,
+          "imageUrl": image.asset->url
+        }
+      }
+    },
     hero {
       heroTitle {
         text,
@@ -599,6 +1000,41 @@ export const shopifyPosInfoPageQuery = groq`
     _id,
     pageTitle,
     "slug": slug.current,
+    sections[] {
+      _type,
+      _key,
+      _type == "shopifyPosInfoPageHeroSection" => {
+        heroTitle { text, highlight },
+        heroDescription,
+        stats[] { value, label }
+      },
+      _type == "shopifyPosInfoPageBleedingMoneySection" => {
+        title,
+        leftPoints,
+        rightPoints
+      },
+      _type == "shopifyPosInfoPageOmnichannelFeaturesSection" => {
+        title,
+        features[] { title, description, highlight }
+      },
+      _type == "shopifyPosInfoPageRevenueFormSection" => {
+        title,
+        subtitle,
+        testimonial {
+          quote,
+          authorName,
+          authorRole,
+          authorCompany,
+          "authorImageUrl": authorImage.asset->url
+        },
+        form {
+          formTitle,
+          formSubtitle,
+          formDescription,
+          submitButtonText
+        }
+      }
+    },
     hero {
       heroTitle {
         text,
@@ -656,6 +1092,15 @@ export const shopifyTcoCalculatorPageQuery = groq`
     _id,
     pageTitle,
     "slug": slug.current,
+    sections[] {
+      _type,
+      _key,
+      _type == "shopifyTcoCalculatorPageHeroSection" => {
+        heroTitle { text, highlight },
+        heroDescription,
+        platforms
+      }
+    },
     hero {
       heroTitle {
         text,
@@ -679,6 +1124,89 @@ export const shopifyXPimPageQuery = groq`
     _id,
     pageTitle,
     "slug": slug.current,
+    sections[] {
+      _type,
+      _key,
+      _type == "shopifyXPimPageHeroSection" => {
+        heroTitle { text, highlight },
+        heroDescription
+      },
+      _type == "shopifyXPimPageWhatIsPimSection" => {
+        title,
+        paragraph1,
+        paragraph2,
+        quote { text, author }
+      },
+      _type == "shopifyXPimPageIntegratingPimSection" => {
+        title,
+        description,
+        leftColumnTitle,
+        leftColumnDescription,
+        integrationPoints,
+        impactTitle,
+        impactParagraph1,
+        impactParagraph2,
+        linkText,
+        "linkSlug": linkPage->slug.current,
+        linkHref
+      },
+      _type == "shopifyXPimPageWhichBusinessesSection" => {
+        title,
+        description,
+        businessCards[] { title, description },
+        bottomNote
+      },
+      _type == "shopifyXPimPageTimeSavingsSection" => {
+        title,
+        description,
+        savingsCards[] { title, description, hours },
+        summaryTitle,
+        summaryDescription
+      },
+      _type == "shopifyXPimPageWhyGoodInvestmentSection" => {
+        title,
+        description,
+        benefits[] { title, description },
+        bottomNote
+      },
+      _type == "shopifyXPimCombinedSection" => {
+        choosingPim {
+          title,
+          description,
+          leftColumnTitle,
+          leftColumnDescription,
+          selectionCriteria,
+          impactParagraph1,
+          impactParagraph2,
+          linkText,
+          "linkSlug": linkPage->slug.current,
+          linkHref
+        },
+        gettingStarted {
+          title,
+          description,
+          steps[] { title, description },
+          bottomNote
+        },
+        faq {
+          title,
+          items[] { question, answer }
+        },
+        transformExperience {
+          title,
+          paragraph1,
+          paragraph2,
+          quoteText
+        }
+      },
+      _type == "shopifyXPimPageCtaSection" => {
+        title,
+        description,
+        buttonText,
+        "buttonSlug": buttonPage->slug.current,
+        buttonLink
+      }
+    },
     hero {
       heroTitle {
         text,
@@ -795,6 +1323,59 @@ export const shopifyXAiPageQuery = groq`
     _id,
     pageTitle,
     "slug": slug.current,
+    sections[] {
+      _type,
+      _key,
+      _type == "shopifyXAiPageHeroSection" => {
+        heroTitle { text, highlight },
+        heroDescription
+      },
+      _type == "shopifyXAiPageEnhancingWithAiSection" => {
+        title,
+        paragraph1,
+        paragraph2,
+        quote { text, author }
+      },
+      _type == "shopifyXAiPageHowWeLeverageAiSection" => {
+        title,
+        capabilities[] {
+          title,
+          description,
+          bgColor,
+          features,
+          impactTitle,
+          impactParagraph1,
+          impactParagraph2,
+          linkText,
+          "linkSlug": linkPage->slug.current,
+          linkHref
+        }
+      },
+      _type == "shopifyXAiPageAiToolsToolkitSection" => {
+        title,
+        toolCategories[] { title, description },
+        bottomText
+      },
+      _type == "shopifyXAiPageHowWeApplyAiSection" => {
+        title,
+        applicationAreas[] { title, description, features, benefit }
+      },
+      _type == "shopifyXAiPageAiEnhancedProcessSection" => {
+        title,
+        processSteps[] { title, description }
+      },
+      _type == "shopifyXAiPageFaqSection" => {
+        title,
+        items[] { question, answer }
+      },
+      _type == "shopifyXAiPageCtaSection" => {
+        title,
+        description,
+        buttonText,
+        "buttonSlug": buttonPage->slug.current,
+        buttonLink
+      }
+    },
     hero {
       heroTitle {
         text,
@@ -879,6 +1460,43 @@ export const whyShopifyPageQuery = groq`
     _id,
     pageTitle,
     "slug": slug.current,
+    sections[] {
+      _type,
+      _key,
+      _type == "whyShopifyPageHeroSection" => {
+        heroTitle { text, highlight },
+        heroDescription
+      },
+      _type == "whyShopifyPageWhatIsShopifySection" => {
+        title,
+        paragraph1,
+        paragraph2
+      },
+      _type == "whyShopifyPageShopifyFactsSection" => {
+        title,
+        facts[] { statistic, description, source }
+      },
+      _type == "whyShopifyPageWhyBusinessesChooseSection" => {
+        title,
+        reasons[] { title, description, bulletPoints, concludingParagraph }
+      },
+      _type == "whyShopifyPageWhyScandicommerceSpecializesSection" => {
+        title,
+        description,
+        specializations[] { title, description }
+      },
+      _type == "whyShopifyPageShopifyAiSection" => {
+        title,
+        description,
+        aiSolutions[] { title, description }
+      },
+      _type == "whyShopifyPageCtaSection" => {
+        title,
+        description,
+        buttonText,
+        buttonLink
+      }
+    },
     hero {
       heroTitle {
         text,
@@ -943,6 +1561,61 @@ export const workPageQuery = groq`
     _id,
     pageTitle,
     "slug": slug.current,
+    sections[] {
+      _type,
+      _key,
+      _type == "workPageHeroSection" => {
+        heroTitle {
+          text,
+          highlight
+        },
+        heroDescription
+      },
+      _type == "workPageCaseStudiesSection" => {
+        studies[] {
+          title,
+          category,
+          tags,
+          challenge[] {
+            ...,
+            _type == "image" => {
+              ...,
+              asset-> {
+                _id,
+                url,
+                metadata { dimensions, lqip },
+                alt
+              }
+            }
+          },
+          solution[] {
+            ...,
+            _type == "image" => {
+              ...,
+              asset-> {
+                _id,
+                url,
+                metadata { dimensions, lqip },
+                alt
+              }
+            }
+          },
+          results[] {
+            value,
+            label
+          },
+          "imageUrl": image.asset->url,
+          imageAlt,
+          link
+        }
+      },
+      _type == "workPageCtaSection" => {
+        title,
+        description,
+        buttonText,
+        buttonLink
+      }
+    },
     hero {
       heroTitle {
         text,
@@ -1007,6 +1680,79 @@ export const aboutPageQuery = groq`
     _id,
     pageTitle,
     "slug": slug.current,
+    sections[] {
+      _type,
+      _key,
+      _type == "aboutPageHeroSection" => {
+        heroTitle {
+          text,
+          highlight
+        },
+        heroDescription,
+        stats[] {
+          value,
+          label
+        }
+      },
+      _type == "aboutPageWhyDifferentSection" => {
+        title,
+        subtitle,
+        features[] {
+          icon,
+          title,
+          description
+        }
+      },
+      _type == "aboutPageOurStorySection" => {
+        title,
+        description,
+        "image": image {
+          "asset": asset->,
+          crop,
+          hotspot
+        },
+        imageAlt
+      },
+      _type == "aboutPageOurValuesSection" => {
+        title,
+        values[] {
+          title,
+          description
+        }
+      },
+      _type == "aboutPageMeetTheTeamSection" => {
+        title,
+        subtitle,
+        teamMembers[] {
+          name,
+          role,
+          specialties,
+          funFact,
+          "image": image {
+            "asset": asset->,
+            crop,
+            hotspot
+          }
+        },
+        buttonText,
+        buttonLink
+      },
+      _type == "aboutPageTrustedPartnershipsSection" => {
+        title,
+        subtitle,
+        partnerships[] {
+          name,
+          status,
+          logoIcon
+        }
+      },
+      _type == "aboutPageCtaSection" => {
+        title,
+        description,
+        buttonText,
+        buttonLink
+      }
+    },
     hero {
       heroTitle {
         text,
@@ -1098,6 +1844,50 @@ export const partnersPageQuery = groq`
     _id,
     pageTitle,
     "slug": slug.current,
+    sections[] {
+      _type,
+      _key,
+      _type == "partnersPageHeroSection" => {
+        heroTitle {
+          text,
+          highlight
+        },
+        heroDescription
+      },
+      _type == "partnersPageWhyOurPartnershipSection" => {
+        title,
+        features[] {
+          icon,
+          title,
+          description
+        }
+      },
+      _type == "partnersPagePartnersGridSection" => {
+        partners[] {
+          name,
+          category,
+          "categories": categories[]->{ _id, title, icon },
+          description,
+          benefits,
+          "image": image {
+            "asset": asset->,
+            crop,
+            hotspot
+          },
+          "logo": logo {
+            "asset": asset->,
+            crop,
+            hotspot
+          }
+        }
+      },
+      _type == "partnersPageCtaSection" => {
+        title,
+        description,
+        buttonText,
+        buttonLink
+      }
+    },
     hero {
       heroTitle {
         text,
@@ -1151,6 +1941,68 @@ export const contactPageQuery = groq`
     _id,
     pageTitle,
     "slug": slug.current,
+    sections[] {
+      _type,
+      _key,
+      _type == "contactPageHeroSection" => {
+        heroTitle {
+          text,
+          highlight
+        },
+        heroDescription
+      },
+      _type == "contactPageCardsSection" => {
+        cards[] {
+          icon,
+          title,
+          subtitle,
+          detail,
+          href
+        }
+      },
+      _type == "contactPageBookingGroupSection" => {
+        bookingSection {
+          enabled,
+          useCalendly,
+          calendlySchedulingUrl,
+          label,
+          title,
+          description,
+          meetingTypes[] {
+            title,
+            description,
+            durationMinutes
+          },
+          availableSlots[] {
+            date,
+            times
+          },
+          confirmButtonText
+        },
+        messageSection {
+          label,
+          title,
+          description,
+          submitButtonText
+        },
+        benefits[] {
+          icon,
+          text
+        }
+      },
+      _type == "contactPageMapSection" => {
+        title,
+        description
+      },
+      _type == "contactPageFaqSection" => {
+        title,
+        subtitle,
+        faqs[] {
+          question,
+          answer
+        }
+      }
+    },
     hero {
       heroTitle {
         text,
@@ -1220,6 +2072,74 @@ export const packageDetailPageQuery = groq`
     _id,
     pageTitle,
     "slug": slug.current,
+    sections[] {
+      _type,
+      _key,
+      _type == "packageDetailPagePackageInfoSection" => {
+        title,
+        subtitle,
+        price,
+        priceType,
+        timeline,
+        rating,
+        ratingValue,
+        reviewCount,
+        description
+      },
+      _type == "packageDetailPageHeroButtonsSection" => {
+        primaryButtonText,
+        primaryButtonLink,
+        secondaryButtonText,
+        secondaryButtonLink
+      },
+      _type == "packageDetailPageBestForSection" => {
+        bestFor
+      },
+      _type == "packageDetailPageIdealForSection" => {
+        idealFor
+      },
+      _type == "packageDetailPageHighlightsSection" => {
+        highlights
+      },
+      _type == "packageDetailPageMoreDeliverablesSection" => {
+        moreDeliverablesCount
+      },
+      _type == "packageDetailPageIncludedListSection" => {
+        included
+      },
+      _type == "packageDetailPageIncludedCategoriesSection" => {
+        includedCategories[] { category, items }
+      },
+      _type == "packageDetailPageProcessStepsSection" => {
+        processSteps[] { week, title, description }
+      },
+      _type == "packageDetailPageFaqListSection" => {
+        faq[] { question, answer }
+      },
+      _type == "packageDetailPageReviewsListSection" => {
+        reviews[] { name, rating, comment, title }
+      },
+      _type == "packageDetailPageTabLabelsSection" => {
+        overview,
+        whatsIncluded,
+        process,
+        faq,
+        reviews,
+        idealFor,
+        bestFor
+      },
+      _type == "packageDetailPageAddOnsSection" => {
+        sectionTitle,
+        sectionSubtitle,
+        items[] { title, description, price }
+      },
+      _type == "packageDetailPageCaseStudiesBannerSection" => {
+        title,
+        description,
+        buttonText,
+        buttonLink
+      }
+    },
     packageInfo {
       title,
       subtitle,
@@ -1298,6 +2218,45 @@ export const blogPageQuery = groq`
     _id,
     pageTitle,
     "slug": slug.current,
+    sections[] {
+      _type,
+      _key,
+      _type == "blogPageHeroSection" => {
+        heroTitle { highlight, text },
+        heroDescription,
+        searchPlaceholder
+      },
+      _type == "blogPageFeaturedArticleSection" => {
+        "articleSlug": article->slug.current,
+        "imageUrl": coalesce(article->image.asset->url, image.asset->url),
+        "tags": coalesce(article->tags[]{ label, isPrimary }, tags[]{ label, isPrimary }),
+        "title": coalesce(article->title, title),
+        "description": coalesce(article->description, article->excerpt, description),
+        "date": coalesce(article->date, article->publishedAt, date),
+        "readTime": coalesce(article->readTime, readTime),
+        "link": select(defined(article) => "/resources/" + article->slug.current, link),
+        buttonText
+      },
+      _type == "blogPageArticlesGridSection" => {
+        "articles": articles[]-> {
+          _type,
+          title,
+          "description": select(_type == "post" => excerpt, description),
+          "date": select(_type == "post" => publishedAt, date),
+          "readTime": select(_type == "post" => null, readTime),
+          "category": select(_type == "post" => coalesce(tags[isPrimary == true][0].label, tags[0].label), category),
+          "imageUrl": image.asset->url,
+          "slug": slug.current
+        },
+        loadMoreButtonText
+      },
+      _type == "blogPageNewsletterCtaSection" => {
+        title,
+        description,
+        emailPlaceholder,
+        buttonText
+      }
+    },
     hero {
       heroTitle {
         highlight,
@@ -1551,6 +2510,26 @@ export const merchPageQuery = groq`
     _id,
     pageTitle,
     "slug": slug.current,
+    sections[] {
+      _type,
+      _key,
+      _type == "merchPageHeroSection" => {
+        heroTitle { text, highlight },
+        heroDescription
+      },
+      _type == "merchPageQualityShowcaseSection" => {
+        title,
+        description,
+        products[] { handle, name }
+      },
+      _type == "merchPageNewsletterSection" => {
+        title,
+        description,
+        emailPlaceholder,
+        buttonText,
+        successMessage
+      }
+    },
     hero {
       heroTitle {
         text,
@@ -1695,6 +2674,43 @@ export const vippsHurtigkassePageQuery = groq`
     _id,
     pageTitle,
     "slug": slug.current,
+    sections[] {
+      _type,
+      _key,
+      _type == "vippsHurtigkassePageHeroSection" => {
+        heroTitle { text, highlight },
+        heroDescription,
+        heroButtons[] { text, link, variant }
+      },
+      _type == "vippsHurtigkassePageFeaturesSection" => {
+        title,
+        paragraphs,
+        demoStore { text, url, password },
+        productImage {
+          "src": image.asset->url,
+          alt
+        }
+      },
+      _type == "vippsHurtigkassePageHowToGetStartedSection" => {
+        title,
+        steps[] { title, description, subSteps }
+      },
+      _type == "vippsHurtigkassePagePricingSection" => {
+        sectionTitle,
+        priceItems[] { priceText },
+        priceNote,
+        supportText
+      },
+      _type == "vippsHurtigkassePageOrderFormSection" => {
+        title,
+        description
+      },
+      _type == "vippsHurtigkassePageSupportSection" => {
+        title,
+        buttonText,
+        buttonLink
+      }
+    },
     hero {
       heroTitle {
         text,

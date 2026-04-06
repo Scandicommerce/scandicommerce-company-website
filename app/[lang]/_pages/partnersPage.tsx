@@ -1,24 +1,18 @@
 import FooterWrapper from '@/components/layout/FooterWrapper'
 import HeaderWrapper from '@/components/layout/HeaderWrapper'
-import WhyOurPartnership from '@/components/sections/partners/WhyOurPartnership'
-import PartnersGrid from '@/components/sections/partners/PartnersGrid'
-import BecomeAPartner from '@/components/sections/partners/BecomeAPartner'
 import { client } from '@/sanity/lib/client'
 import { partnersPageQuery, partnerCategoriesQuery } from '@/sanity/lib/queries'
 import { getQueryParams } from '@/sanity/lib/queryHelpers'
 import { getLanguageFromParams } from '@/lib/language'
-import Hero from '@/components/layout/Hero'
-
-export interface PartnerCategoryItem {
-  _id: string
-  title: string
-  icon?: string
-}
+import { PartnersPageSectionRenderer } from '@/components/pageSectionRenderers/PartnersPageSectionRenderer'
+import { normalizePageSections } from '@/lib/sanity/pageBuilderLegacy'
+import type { PartnerCategoryItem } from '@/lib/partnersCategories'
 
 interface PartnersPageData {
   _id: string
   pageTitle?: string
   slug?: string
+  sections?: Array<{ _type: string; _key: string } & Record<string, unknown>>
   hero?: { heroTitle?: { text?: string; highlight?: string }; heroDescription?: string }
   whyOurPartnership?: {
     title?: string
@@ -47,14 +41,13 @@ export default async function PartnersPage({ params }: { params: Promise<{ lang:
     client.fetch<PartnerCategoryItem[]>(partnerCategoriesQuery, {}, { next: { revalidate: 0 } }),
   ])
 
+  const sections = normalizePageSections('partnersPage', pageData)
+
   return (
     <div className="flex flex-col min-h-screen">
       <HeaderWrapper />
       <main className="flex-grow">
-        <Hero hero={pageData?.hero} />
-        <WhyOurPartnership whyOurPartnership={pageData?.whyOurPartnership} />
-        <PartnersGrid partnersGrid={pageData?.partnersGrid} categoryList={categoryList ?? undefined} />
-        <BecomeAPartner cta={pageData?.cta} />
+        <PartnersPageSectionRenderer sections={sections} categoryList={categoryList ?? undefined} />
         <FooterWrapper />
       </main>
     </div>

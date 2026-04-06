@@ -1,7 +1,7 @@
-import { defineArrayMember, defineField } from "sanity";
+import { defineArrayMember, defineField, defineType } from "sanity";
 
-export const resultsSection = defineField({
-  name: "results",
+export const resultsSection = defineType({
+  name: "resultsSection",
   title: "Results Section",
   type: "object",
   fields: [
@@ -84,4 +84,10 @@ export const resultsSection = defineField({
       initialValue: "dark",
     }),
   ],
+  preview: {
+    select: { title: "title", subtitle: "subtitle" },
+    prepare({ title, subtitle }) {
+      return { title: title || "Results", subtitle };
+    },
+  },
 });

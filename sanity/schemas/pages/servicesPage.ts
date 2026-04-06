@@ -1,6 +1,4 @@
 import { defineField, defineType, defineArrayMember } from "sanity";
-import { heroSection } from "../components/heroSection";
-import { ctaSection } from "../components/ctaSection";
 import { languageField } from "../objects/language";
 import { isUniquePerLanguage } from "@/sanity/lib/slugUtils";
 
@@ -31,8 +29,11 @@ export const servicesPage = defineType({
       },
       validation: (rule) => rule.required(),
     }),
-    // Hero Section
-    heroSection,
+    defineField({
+      name: "hero",
+      title: "Hero Section",
+      type: "heroSection",
+    }),
     // Introduction
     defineField({
       name: "introduction",
@@ -70,8 +71,11 @@ export const servicesPage = defineType({
         }),
       ],
     }),
-    // CTA Section
-    ctaSection,
+    defineField({
+      name: "cta",
+      title: "CTA Section",
+      type: "ctaSection",
+    }),
     // SEO
     defineField({
       name: "seo",
