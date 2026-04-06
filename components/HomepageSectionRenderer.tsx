@@ -7,6 +7,7 @@ import HowWeWork from '@/components/sections/homepage/HowWeWork'
 import Partners from '@/components/sections/homepage/Partners'
 import CTA from '@/components/sections/homepage/CTA'
 import TechnicalDepth from '@/components/sections/homepage/TechnicalDepth'
+import Testimonial from '@/components/sections/services/shopify_development/Testimonial'
 import type { HomepageSectionBlock, HomepageServicesShowcasePayload } from '@/lib/homepageSections'
 
 type PackagesFallback = {
@@ -81,6 +82,13 @@ export function HomepageSectionRenderer({
             )
           case 'resultsSection':
             return <Results key={_key} data={rest as Parameters<typeof Results>[0]['data']} />
+          case 'homepageTestimonialSection':
+            return (
+              <Testimonial
+                key={_key}
+                testimonial={rest as Parameters<typeof Testimonial>[0]['testimonial']}
+              />
+            )
           case 'processSection':
             return <HowWeWork key={_key} process={rest as Parameters<typeof HowWeWork>[0]['process']} />
           case 'partnersSection':

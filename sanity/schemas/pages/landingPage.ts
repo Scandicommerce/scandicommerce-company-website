@@ -47,6 +47,7 @@ export const landingPage = defineType({
         defineArrayMember({ type: "painPointsSection" }),
         defineArrayMember({ type: "servicesShowcaseSection" }),
         defineArrayMember({ type: "resultsSection" }),
+        defineArrayMember({ type: "homepageTestimonialSection" }),
         defineArrayMember({ type: "processSection" }),
         defineArrayMember({ type: "partnersSection" }),
         defineArrayMember({ type: "ctaSection" }),

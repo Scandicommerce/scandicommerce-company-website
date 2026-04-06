@@ -118,6 +118,14 @@ export const landingPageQuery = groq`
         },
         theme
       },
+      _type == "homepageTestimonialSection" => {
+        testimonialRating,
+        testimonialQuote,
+        testimonialAuthorName,
+        testimonialAuthorTitle,
+        testimonialButtonText,
+        testimonialButtonLink
+      },
       _type == "processSection" => {
         processTitle,
         processSubtitle,
@@ -354,6 +362,14 @@ export const homepageQuery = groq`
           ctaLink
         },
         theme
+      },
+      _type == "homepageTestimonialSection" => {
+        testimonialRating,
+        testimonialQuote,
+        testimonialAuthorName,
+        testimonialAuthorTitle,
+        testimonialButtonText,
+        testimonialButtonLink
       },
       _type == "processSection" => {
         processTitle,

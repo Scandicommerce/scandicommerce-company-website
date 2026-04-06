@@ -8,3 +8,4 @@ export { processSection } from "./processSection";
 export { partnersSection } from "./partnersSection";
 export { ctaSection } from "./ctaSection";
 export { technicalDepthSection } from "./technicalDepthSection";
+export { homepageTestimonialSection } from "./homepageTestimonialSection";

@@ -8,6 +8,7 @@ export type HomepageSectionBlock =
   | ({ _type: "painPointsSection"; _key: string } & HomepagePainPointsPayload)
   | ({ _type: "servicesShowcaseSection"; _key: string } & HomepageServicesShowcasePayload)
   | ({ _type: "resultsSection"; _key: string } & HomepageResultsPayload)
+  | ({ _type: "homepageTestimonialSection"; _key: string } & HomepageTestimonialPayload)
   | ({ _type: "processSection"; _key: string } & HomepageProcessPayload)
   | ({ _type: "partnersSection"; _key: string } & HomepagePartnersPayload)
   | ({ _type: "ctaSection"; _key: string } & HomepageCtaPayload)
@@ -77,6 +78,15 @@ export interface HomepageResultsPayload {
     ctaText?: string
     ctaLink?: string
   }>
+}
+
+export interface HomepageTestimonialPayload {
+  testimonialRating?: number
+  testimonialQuote?: string
+  testimonialAuthorName?: string
+  testimonialAuthorTitle?: string
+  testimonialButtonText?: string
+  testimonialButtonLink?: string
 }
 
 export interface HomepageProcessPayload {

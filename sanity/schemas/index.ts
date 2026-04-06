@@ -40,6 +40,7 @@ import {
   partnersSection,
   ctaSection,
   technicalDepthSection,
+  homepageTestimonialSection,
 } from "./components";
 import {
   workPageHeroSection,
@@ -240,6 +241,7 @@ export const schemaTypes = [
   partnersSection,
   ctaSection,
   technicalDepthSection,
+  homepageTestimonialSection,
 
   workPageHeroSection,
   workPageCaseStudiesSection,
