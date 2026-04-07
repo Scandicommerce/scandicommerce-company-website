@@ -4,6 +4,7 @@ import {
   resolvePostBySlugQuery,
   resolveBlogPostBySlugQuery,
   resolvePackageDetailBySlugQuery,
+  resolveCaseStudyBySlugQuery,
   RESOLVE_PAGE_TYPES,
 } from '@/sanity/lib/queries'
 import { getQueryParams } from '@/sanity/lib/queryHelpers'
@@ -12,6 +13,7 @@ export type ResolvedPage =
   | { type: string; slug?: string }
   | { type: 'post'; slug: string }
   | { type: 'blogPost'; slug: string }
+  | { type: 'caseStudy'; slug: string }
   | { type: 'packageDetailPage'; slug: string }
   | null
 
@@ -38,7 +40,7 @@ export async function resolvePageByPath(
 
   if (fullMatch?._type) {
     // Detail page types need the full path as slug so their query (slug.current == $slug) works correctly
-    const needsSlug = fullMatch._type === 'packageDetailPage' || fullMatch._type === 'blogPost' || fullMatch._type === 'post'
+    const needsSlug = fullMatch._type === 'packageDetailPage' || fullMatch._type === 'blogPost' || fullMatch._type === 'post' || fullMatch._type === 'caseStudy'
     return { type: fullMatch._type, slug: needsSlug ? path : undefined }
   }
 
@@ -58,6 +60,13 @@ export async function resolvePageByPath(
       { next: { revalidate: 0 } }
     )
     if (blogPost?._type) return { type: 'blogPost', slug: lastSegment }
+
+    const caseStudyDoc = await client.fetch<{ _type: string; _id: string } | null>(
+      resolveCaseStudyBySlugQuery,
+      getQueryParams({ slug: lastSegment }, language),
+      { next: { revalidate: 0 } }
+    )
+    if (caseStudyDoc?._type) return { type: 'caseStudy', slug: lastSegment }
 
     if (segments.length >= 3) {
       const pkg = await client.fetch<{ _type: string; _id: string } | null>(

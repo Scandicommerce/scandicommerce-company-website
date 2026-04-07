@@ -41,14 +41,14 @@ export const blogPageFeaturedArticleSection = defineType({
       name: "article",
       title: "Featured Article",
       type: "reference",
-      to: [{ type: "blogPost" }, { type: "post" }],
-      description: "Link to a blog post or post (page builder) for title, image, date, etc. Leave empty to use manual fields below.",
+      to: [{ type: "blogPost" }, { type: "post" }, { type: "caseStudy" }],
+      description: "Link to a blog post, post (page builder), or case study. Leave empty to use manual fields below.",
       options: {
         filter: ({ document }) => {
           const pageLang = document?.language ?? "en";
           return {
             filter:
-              '(_type == "blogPost" || _type == "post") && (language == $pageLang || (!defined(language) && $pageLang == "en"))',
+              '(_type == "blogPost" || _type == "post" || _type == "caseStudy") && (language == $pageLang || (!defined(language) && $pageLang == "en"))',
             params: { pageLang },
           };
         },
@@ -99,17 +99,17 @@ export const blogPageArticlesGridSection = defineType({
       title: "Articles",
       type: "array",
       description:
-        "Select blog posts or posts (page builder) to show in the grid. Only items in this page's language are listed. Order matters.",
+        "Select blog posts, posts (page builder), or case studies to show in the grid. Only items in this page's language are listed. Order matters.",
       of: [
         defineArrayMember({
           type: "reference",
-          to: [{ type: "blogPost" }, { type: "post" }],
+          to: [{ type: "blogPost" }, { type: "post" }, { type: "caseStudy" }],
           options: {
             filter: ({ document }) => {
               const pageLang = document?.language ?? "en";
               return {
                 filter:
-                  '(_type == "blogPost" || _type == "post") && (language == $pageLang || (!defined(language) && $pageLang == "en"))',
+                  '(_type == "blogPost" || _type == "post" || _type == "caseStudy") && (language == $pageLang || (!defined(language) && $pageLang == "en"))',
                 params: { pageLang },
               };
             },

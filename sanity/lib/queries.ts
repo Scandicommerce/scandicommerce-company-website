@@ -2244,11 +2244,12 @@ export const blogPageQuery = groq`
       },
       _type == "blogPageFeaturedArticleSection" => {
         "articleSlug": article->slug.current,
-        "imageUrl": coalesce(article->image.asset->url, image.asset->url),
+        "articleType": article->_type,
+        "imageUrl": coalesce(article->heroImage.asset->url, article->image.asset->url, image.asset->url),
         "tags": coalesce(article->tags[]{ label, isPrimary }, tags[]{ label, isPrimary }),
         "title": coalesce(article->title, title),
-        "description": coalesce(article->description, article->excerpt, description),
-        "date": coalesce(article->date, article->publishedAt, date),
+        "description": coalesce(article->excerpt, article->description, description),
+        "date": coalesce(article->publishedAt, article->date, date),
         "readTime": coalesce(article->readTime, readTime),
         "link": select(defined(article) => "/resources/" + article->slug.current, link),
         buttonText
@@ -2257,11 +2258,26 @@ export const blogPageQuery = groq`
         "articles": articles[]-> {
           _type,
           title,
-          "description": select(_type == "post" => excerpt, description),
-          "date": select(_type == "post" => publishedAt, date),
-          "readTime": select(_type == "post" => null, readTime),
-          "category": select(_type == "post" => coalesce(tags[isPrimary == true][0].label, tags[0].label), category),
-          "imageUrl": image.asset->url,
+          "description": select(
+            _type == "caseStudy" => excerpt,
+            _type == "post" => excerpt,
+            description
+          ),
+          "date": select(
+            _type == "caseStudy" => publishedAt,
+            _type == "post" => publishedAt,
+            date
+          ),
+          "readTime": select(_type == "blogPost" => readTime, null),
+          "category": select(
+            _type == "caseStudy" => coalesce(industry, "Case Study"),
+            _type == "post" => coalesce(tags[isPrimary == true][0].label, tags[0].label),
+            category
+          ),
+          "imageUrl": select(
+            _type == "caseStudy" => heroImage.asset->url,
+            image.asset->url
+          ),
           "slug": slug.current
         },
         loadMoreButtonText
@@ -2283,11 +2299,12 @@ export const blogPageQuery = groq`
     },
     featuredArticle {
       "articleSlug": article->slug.current,
-      "imageUrl": coalesce(article->image.asset->url, image.asset->url),
+      "articleType": article->_type,
+      "imageUrl": coalesce(article->heroImage.asset->url, article->image.asset->url, image.asset->url),
       "tags": coalesce(article->tags[]{ label, isPrimary }, tags[]{ label, isPrimary }),
       "title": coalesce(article->title, title),
-      "description": coalesce(article->description, article->excerpt, description),
-      "date": coalesce(article->date, article->publishedAt, date),
+      "description": coalesce(article->excerpt, article->description, description),
+      "date": coalesce(article->publishedAt, article->date, date),
       "readTime": coalesce(article->readTime, readTime),
       "link": select(defined(article) => "/resources/" + article->slug.current, link),
       buttonText
@@ -2296,11 +2313,26 @@ export const blogPageQuery = groq`
       "articles": articles[]-> {
         _type,
         title,
-        "description": select(_type == "post" => excerpt, description),
-        "date": select(_type == "post" => publishedAt, date),
-        "readTime": select(_type == "post" => null, readTime),
-        "category": select(_type == "post" => coalesce(tags[isPrimary == true][0].label, tags[0].label), category),
-        "imageUrl": image.asset->url,
+        "description": select(
+          _type == "caseStudy" => excerpt,
+          _type == "post" => excerpt,
+          description
+        ),
+        "date": select(
+          _type == "caseStudy" => publishedAt,
+          _type == "post" => publishedAt,
+          date
+        ),
+        "readTime": select(_type == "blogPost" => readTime, null),
+        "category": select(
+          _type == "caseStudy" => coalesce(industry, "Case Study"),
+          _type == "post" => coalesce(tags[isPrimary == true][0].label, tags[0].label),
+          category
+        ),
+        "imageUrl": select(
+          _type == "caseStudy" => heroImage.asset->url,
+          image.asset->url
+        ),
         "slug": slug.current
       },
       loadMoreButtonText
@@ -2936,4 +2968,79 @@ export const resolvePackageDetailBySlugQuery = groq`
 // Given a page type, find its slug in a different language (for language switching)
 export const resolveTranslatedSlugQuery = groq`
   *[_type == $type && language == $targetLang][0] { "slug": slug.current }
+`;
+
+// ============================================
+// Case Study by slug
+// ============================================
+export const caseStudyBySlugQuery = groq`
+  *[_type == "caseStudy" && slug.current == $slug && (language == $language || !defined(language))] | order(defined(language) desc) [0] {
+    _id,
+    _type,
+    _updatedAt,
+    language,
+    title,
+    "slug": slug.current,
+    excerpt,
+    "metaDescription": coalesce(seo.metaDescription, excerpt),
+    publishedAt,
+    "heroImage": heroImage {
+      asset->{ _id, url, metadata { dimensions, lqip } },
+      alt
+    },
+    "clientLogo": clientLogo {
+      asset->{ _id, url, metadata { dimensions, lqip } },
+      alt
+    },
+    tags,
+    industry,
+    partner,
+    previousPlatform,
+    products,
+    sections[] {
+      _type,
+      _key,
+      (_type == "caseStudyIntroSection") => {
+        text[] { ..., },
+        metrics[] { text }
+      },
+      (_type == "caseStudyContentSection") => {
+        heading,
+        body[] { ..., },
+        bullets[] { lead, text }
+      },
+      (_type == "caseStudyTestimonialSection") => {
+        quote,
+        company,
+        authorName,
+        authorRole
+      },
+      (_type == "caseStudyStatsSection") => {
+        headline,
+        stats[] { value, label }
+      },
+      (_type == "caseStudyRelatedSection") => {
+        headline,
+        brands[] {
+          name,
+          "logo": logo { asset->{ _id, url, metadata { dimensions, lqip } }, alt },
+          url
+        }
+      }
+    }
+  }
+`;
+
+export const resolveCaseStudyBySlugQuery = groq`
+  *[_type == "caseStudy" && slug.current == $slug && (language == $language || !defined(language))] | order(defined(language) desc) [0] { _type, _id }
+`;
+
+export const sitemapCaseStudiesAllLocalesQuery = groq`
+  *[_type == "caseStudy" && defined(slug.current)] | order(title asc) {
+    _id,
+    "language": select(defined(language) => language, "en"),
+    "slug": slug.current,
+    _type,
+    _updatedAt
+  }
 `;

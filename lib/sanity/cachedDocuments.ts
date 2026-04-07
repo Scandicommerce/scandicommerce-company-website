@@ -4,6 +4,7 @@ import {
   aboutPageQuery,
   blogPostBySlugQuery,
   postBySlugQuery,
+  caseStudyBySlugQuery,
 } from '@/sanity/lib/queries'
 import { getQueryParams } from '@/sanity/lib/queryHelpers'
 
@@ -21,6 +22,12 @@ export const getBlogPostBySlugCached = cache(async (slug: string, language: stri
 
 export const getPostBySlugCached = cache(async (slug: string, language: string) =>
   client.fetch(postBySlugQuery, getQueryParams({ slug }, language), {
+    next: { revalidate: 0 },
+  })
+)
+
+export const getCaseStudyBySlugCached = cache(async (slug: string, language: string) =>
+  client.fetch(caseStudyBySlugQuery, getQueryParams({ slug }, language), {
     next: { revalidate: 0 },
   })
 )

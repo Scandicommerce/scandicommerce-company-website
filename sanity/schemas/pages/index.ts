@@ -23,3 +23,11 @@ export { merchProductSettings } from "./merchProductSettings";
 export { headerSettings } from "./headerSettings";
 export { footerSettings } from "./footerSettings";
 export { vippsHurtigkassePage } from "./vippsHurtigkassePage";
+export {
+  caseStudy,
+  caseStudyIntroSection,
+  caseStudyContentSection,
+  caseStudyTestimonialSection,
+  caseStudyStatsSection,
+  caseStudyRelatedSection,
+} from "./caseStudy";

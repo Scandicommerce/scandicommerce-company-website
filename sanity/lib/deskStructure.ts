@@ -57,6 +57,37 @@ function blogPostsByLanguage(S: StructureBuilder) {
     )
 }
 
+/** Case Studies grouped by language */
+function caseStudiesByLanguage(S: StructureBuilder) {
+  return S.listItem()
+    .title('Case Studies')
+    .schemaType('caseStudy')
+    .child(
+      S.list()
+        .title('Case Studies by Language')
+        .items(
+          languages.map(lang =>
+            S.listItem()
+              .title(lang.title)
+              .schemaType('caseStudy')
+              .child(
+                S.documentList()
+                  .apiVersion('2024-01-01')
+                  .title(`Case Studies (${lang.title})`)
+                  .schemaType('caseStudy')
+                  .filter(
+                    '_type == "caseStudy" && (language == $language || (!defined(language) && $isDefault))'
+                  )
+                  .params({
+                    language: lang.id,
+                    isDefault: lang.id === DEFAULT_LANG_ID,
+                  })
+              )
+          )
+        )
+    )
+}
+
 /** Posts (page builder) grouped by language */
 function postsByLanguage(S: StructureBuilder) {
   return S.listItem()
@@ -280,6 +311,7 @@ export const deskStructure = (S: StructureBuilder) =>
                 .child(S.documentTypeList('blogPage').title('Blog Pages')),
               blogPostsByLanguage(S),
               postsByLanguage(S),
+              caseStudiesByLanguage(S),
             ])
         ),
 

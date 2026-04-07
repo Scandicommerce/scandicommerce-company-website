@@ -202,6 +202,12 @@ import {
   headerSettings,
   footerSettings,
   vippsHurtigkassePage,
+  caseStudy,
+  caseStudyIntroSection,
+  caseStudyContentSection,
+  caseStudyTestimonialSection,
+  caseStudyStatsSection,
+  caseStudyRelatedSection,
 } from "./pages";
 
 // ============================================
@@ -345,6 +351,13 @@ export const schemaTypes = [
   whyShopifyPageShopifyAiSection,
   whyShopifyPageCtaSection,
 
+  // Case Study section object types
+  caseStudyIntroSection,
+  caseStudyContentSection,
+  caseStudyTestimonialSection,
+  caseStudyStatsSection,
+  caseStudyRelatedSection,
+
   // Page types
   landingPage,
   servicesPage,
@@ -371,5 +384,6 @@ export const schemaTypes = [
   headerSettings,
   footerSettings,
   vippsHurtigkassePage,
+  caseStudy,
   calendlyBooking,
 ];
