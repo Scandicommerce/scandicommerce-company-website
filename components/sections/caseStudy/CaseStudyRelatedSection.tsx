@@ -1,7 +1,5 @@
 "use client";
 
-import Image from "next/image";
-
 interface Brand {
   name?: string | null;
   logo?: { url?: string | null; alt?: string | null } | null;
@@ -33,11 +31,10 @@ export default function CaseStudyRelatedSection({ section }: CaseStudyRelatedSec
               const inner = (
                 <div className="flex items-center justify-center">
                   {brand.logo?.url ? (
-                    <Image
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
                       src={brand.logo.url}
                       alt={brand.logo.alt ?? brand.name ?? "Brand logo"}
-                      width={140}
-                      height={56}
                       className="object-contain h-12 md:h-14 w-auto"
                       style={{ maxHeight: 56, width: "auto" }}
                     />

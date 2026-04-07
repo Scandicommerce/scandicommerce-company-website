@@ -3023,7 +3023,10 @@ export const caseStudyBySlugQuery = groq`
         headline,
         brands[] {
           name,
-          "logo": logo { asset->{ _id, url, metadata { dimensions, lqip } }, alt },
+          "logo": {
+            "url": logo.asset->url,
+            "alt": logo.alt
+          },
           url
         }
       }
