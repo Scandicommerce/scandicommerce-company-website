@@ -52,3 +52,13 @@ export function getLanguageFromSearchParams(searchParams: { [key: string]: strin
   }
   return defaultLanguage
 }
+
+/** Map header / BCP-47 locale to Sanity `language` field values (en, no, sv, da, de). */
+export function toSanityLanguageId(localeHeader: string): string {
+  const raw = (localeHeader || '').trim()
+  if (!raw) return defaultLanguage
+  const base = raw.split('-')[0]?.toLowerCase() ?? defaultLanguage
+  if (base === 'nb' || base === 'nn') return 'no'
+  if (isLocaleId(base)) return base
+  return defaultLanguage
+}

@@ -24,7 +24,7 @@ import {
 // ============================================
 // Document Types (e.g. post page builder)
 // ============================================
-import { post } from "./documents";
+import { post, siteSettings, redirect } from "./documents";
 
 // ============================================
 // Page Types (document types for pages)
@@ -386,4 +386,8 @@ export const schemaTypes = [
   vippsHurtigkassePage,
   caseStudy,
   calendlyBooking,
+
+  // Global / site-wide document types
+  siteSettings,
+  redirect,
 ];

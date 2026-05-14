@@ -1,3 +1,5 @@
+const { fetchRedirects } = require('./lib/sanity/fetchRedirects')
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
@@ -26,7 +28,7 @@ const nextConfig = {
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
   },
   async redirects() {
-    return [
+    const hardcoded = [
       // Products (old /products/*) → merch or package pages
       { source: '/products/premium-unisex-pullover-hoodie-justhoods-jh001', destination: '/merch/premium-unisex-pullover-hoodie-justhoods-jh001', permanent: true },
       { source: '/products/organic-unisex-crewneck-sweatshirt', destination: '/merch/organic-unisex-crewneck-sweatshirt', permanent: true },
@@ -87,6 +89,17 @@ const nextConfig = {
       { source: '/blogs/how-we-work/level-up-fra-hobby-til-utfordrer', destination: '/blogg', permanent: true },
       { source: '/blogs/how-we-work/slik-jobber-vi-med-shopify-plus-kunder', destination: '/blogg', permanent: true },
     ]
+
+    // Sanity-managed redirects (editorial). Fail-safe: returns [] on any error
+    // so the build can never break because of CMS issues. A Sanity entry whose
+    // `source` matches a hardcoded one wins (the later entry overrides).
+    const fromSanity = await fetchRedirects()
+    const sanitySources = new Set(fromSanity.map((r) => r.source))
+    const merged = [
+      ...hardcoded.filter((r) => !sanitySources.has(r.source)),
+      ...fromSanity,
+    ]
+    return merged
   },
 }
 

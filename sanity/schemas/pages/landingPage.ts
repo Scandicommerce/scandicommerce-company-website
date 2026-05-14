@@ -1,5 +1,9 @@
 import { defineField, defineType, defineArrayMember } from "sanity";
 import { languageField } from "../objects/language";
+import {
+  seoExtendedField,
+  legacySeoFieldWithOgImage,
+} from "../_shared/seoFields";
 import { isUniquePerLanguage } from "@/sanity/lib/slugUtils";
 
 export const landingPage = defineType({
@@ -54,30 +58,8 @@ export const landingPage = defineType({
         defineArrayMember({ type: "technicalDepthSection" }),
       ],
     }),
-    // SEO
-    defineField({
-      name: "seo",
-      title: "SEO",
-      type: "object",
-      fields: [
-        defineField({
-          name: "metaTitle",
-          title: "Meta Title",
-          type: "string",
-        }),
-        defineField({
-          name: "metaDescription",
-          title: "Meta Description",
-          type: "text",
-          rows: 3,
-        }),
-        defineField({
-          name: "ogImage",
-          title: "Open Graph Image",
-          type: "image",
-        }),
-      ],
-    }),
+    seoExtendedField,
+    legacySeoFieldWithOgImage,
   ],
   preview: {
     select: {

@@ -17,6 +17,7 @@ export interface LegacyBlogPostDocumentForJsonLd {
   image?: string | null
   featuredImage?: string | null
   introduction?: string | null
+  author?: { name?: string | null; slug?: string | null } | null
   sections?: Array<{
     content?: string | null
     proTip?: { title?: string | null; content?: string | null } | null

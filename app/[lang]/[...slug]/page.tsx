@@ -1,8 +1,10 @@
+import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { getLanguageFromParams } from '@/lib/language'
-import { getAlternateLanguagesForMetadata } from '@/lib/hreflang'
 import { resolvePageByPath } from '@/lib/resolvePageByPath'
 import type { ResolvedPage } from '@/lib/resolvePageByPath'
+import { coalescePageSeo, getPageSeo, getSiteSettings } from '@/lib/sanity/pageSeo'
+import { buildMetadata } from '@/lib/seo/buildMetadata'
 
 import AboutPage from '../_pages/aboutPage'
 import ContactPage from '../_pages/contactPage'
@@ -59,14 +61,32 @@ export async function generateMetadata({
   params,
 }: {
   params: Promise<{ lang: string; slug: string[] }>
-}) {
+}): Promise<Metadata> {
   const { lang, slug } = await params
   const language = getLanguageFromParams({ lang })
   const path = slug.join('/')
   const resolved = await resolvePageByPath(path, language)
   if (!resolved) return {}
-  const alternates = getAlternateLanguagesForMetadata(path)
-  return { alternates: Object.keys(alternates).length ? { languages: alternates } : undefined }
+
+  // For detail-page types (blogPost / post / caseStudy / packageDetailPage)
+  // the resolved slug is the URL-trailing segment, not the full path. For
+  // section-style pages the slug stored in Sanity is the full localized path.
+  // resolvePageByPath already returns `slug` only when needed; otherwise we
+  // fall back to the full path.
+  const seoSlug = resolved.slug ?? path
+
+  const [doc, settings] = await Promise.all([
+    getPageSeo({ type: resolved.type, slug: seoSlug, language }),
+    getSiteSettings(language),
+  ])
+  const seo = coalescePageSeo(doc, settings)
+  return buildMetadata({
+    seo,
+    settings,
+    language,
+    pathWithoutLang: path,
+    docType: resolved.type,
+  })
 }
 
 export default async function SlugPage({

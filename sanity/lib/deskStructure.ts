@@ -5,6 +5,8 @@ import {
   CogIcon,
   CalendarIcon,
   PlugIcon,
+  EarthGlobeIcon,
+  LinkIcon,
 } from '@sanity/icons'
 import { PageListWithDelete } from '@/sanity/components/PageListWithDelete'
 import { CalendlySetup } from '@/sanity/components/CalendlySetup'
@@ -373,6 +375,28 @@ export const deskStructure = (S: StructureBuilder) =>
             .title('Site Settings')
             .items([
               S.listItem()
+                .title('Site Settings (Global)')
+                .icon(EarthGlobeIcon)
+                .schemaType('siteSettings')
+                .child(
+                  S.list()
+                    .title('Site Settings by language')
+                    .items(
+                      languages.map(lang =>
+                        S.listItem()
+                          .id(`siteSettings-${lang.id}`)
+                          .title(lang.title)
+                          .schemaType('siteSettings')
+                          .child(
+                            S.editor()
+                              .id(`siteSettings-${lang.id}`)
+                              .schemaType('siteSettings')
+                              .documentId(`siteSettings-${lang.id}`)
+                          )
+                      )
+                    )
+                ),
+              S.listItem()
                 .title('Header Settings')
                 .schemaType('headerSettings')
                 .child(
@@ -383,6 +407,15 @@ export const deskStructure = (S: StructureBuilder) =>
                 .schemaType('footerSettings')
                 .child(
                   S.documentTypeList('footerSettings').title('Footer Settings')
+                ),
+              S.listItem()
+                .title('Redirects')
+                .icon(LinkIcon)
+                .schemaType('redirect')
+                .child(
+                  S.documentTypeList('redirect')
+                    .title('Redirects')
+                    .defaultOrdering([{ field: 'source', direction: 'asc' }])
                 ),
             ])
         ),

@@ -1,5 +1,9 @@
 import { defineField, defineType, defineArrayMember } from "sanity";
 import { languageField } from "../objects/language";
+import {
+  seoExtendedField,
+  legacySeoFieldMinimal,
+} from "../_shared/seoFields";
 import { isUniquePerLanguage } from "@/sanity/lib/slugUtils";
 import {
   richTextBlock,
@@ -125,21 +129,8 @@ export const post = defineType({
         defineArrayMember({ type: dividerBlock.name }),
       ],
     }),
-    defineField({
-      name: "seo",
-      title: "SEO",
-      type: "object",
-      group: "settings",
-      fields: [
-        defineField({ name: "metaTitle", title: "Meta Title", type: "string" }),
-        defineField({
-          name: "metaDescription",
-          title: "Meta Description",
-          type: "text",
-          rows: 3,
-        }),
-      ],
-    }),
+    { ...seoExtendedField, group: "settings" },
+    { ...legacySeoFieldMinimal, group: "settings" },
   ],
   preview: {
     select: {

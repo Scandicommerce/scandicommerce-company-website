@@ -5,8 +5,8 @@ import {
   sitemapBlogPostsAllLocalesQuery,
   sitemapPostsAllLocalesQuery,
 } from '@/sanity/lib/queries'
-import { getBaseUrl } from '@/lib/hreflang'
-import { LOCALE_IDS, defaultLanguage } from '@/sanity/lib/languages'
+import { buildLocaleUrl, getBaseUrl, X_DEFAULT_LANGUAGE } from '@/lib/hreflang'
+import { LOCALE_IDS } from '@/sanity/lib/languages'
 import { getShopifyProducts } from '@/lib/shopify'
 
 const SITEMAP_NS = 'http://www.sitemaps.org/schemas/sitemap/0.9'
@@ -187,15 +187,27 @@ export async function GET() {
   ]
 
   for (const { locale, path, lastmod, changefreq, priority, alternates: alt } of urlEntries) {
-    const pathSegment = path ? `/${path}` : ''
-    const loc = `${baseUrl}/${locale}${pathSegment}`
+    // Use the locale-aware URL builder so the sitemap reflects the production
+    // domain split: NO → scandicommerce.no (no /no prefix), EN → scandicommerce.com
+    // (no /en prefix), SV/DA/DE → scandicommerce.com/{locale}/...
+    const loc = buildLocaleUrl(locale, path)
+    if (!loc) continue
     xmlLines.push('  <url>')
     xmlLines.push(`    <loc>${escapeXml(loc)}</loc>`)
     for (const [lang, { path: p }] of Object.entries(alt)) {
-      const href = `${baseUrl}/${lang}${p ? `/${p}` : ''}`
+      const href = buildLocaleUrl(lang, p)
+      if (!href) continue
       xmlLines.push(`    <xhtml:link rel="alternate" hreflang="${lang}" href="${escapeXml(href)}" />`)
     }
-    xmlLines.push(`    <xhtml:link rel="alternate" hreflang="x-default" href="${escapeXml(`${baseUrl}/${defaultLanguage}${pathSegment}`)}" />`)
+    // x-default points at the EN URL (project decision; falls back to whatever
+    // locale-specific path is present for the canonical entry).
+    const xDefaultAlt = alt[X_DEFAULT_LANGUAGE]
+    const xDefaultUrl = xDefaultAlt
+      ? buildLocaleUrl(X_DEFAULT_LANGUAGE, xDefaultAlt.path)
+      : buildLocaleUrl(X_DEFAULT_LANGUAGE, path)
+    if (xDefaultUrl) {
+      xmlLines.push(`    <xhtml:link rel="alternate" hreflang="x-default" href="${escapeXml(xDefaultUrl)}" />`)
+    }
     xmlLines.push(`    <lastmod>${lastmod}</lastmod>`)
     xmlLines.push(`    <changefreq>${changefreq}</changefreq>`)
     xmlLines.push(`    <priority>${priority}</priority>`)

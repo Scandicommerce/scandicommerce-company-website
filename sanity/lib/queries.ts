@@ -2856,6 +2856,7 @@ export const sitemapBlogPostsQuery = groq`
 `;
 
 // All locales: for XML sitemap with hreflang (no $language filter; returns _id, language, slug, _updatedAt)
+// Excludes documents marked noindex via the new seoExtended.noIndex or the legacy seo.noIndex.
 export const sitemapPagesAllLocalesQuery = groq`
   *[_type in [
     "landingPage",
@@ -2877,7 +2878,10 @@ export const sitemapPagesAllLocalesQuery = groq`
     "shopifyDevelopmentPage",
     "merchPage",
     "packageDetailPage"
-  ] && defined(slug.current)] | order(pageTitle asc) {
+  ] && defined(slug.current)
+    && seoExtended.noIndex != true
+    && seo.noIndex != true
+  ] | order(pageTitle asc) {
     _id,
     "language": select(defined(language) => language, "en"),
     "slug": slug.current,
@@ -2887,7 +2891,10 @@ export const sitemapPagesAllLocalesQuery = groq`
 `;
 
 export const sitemapBlogPostsAllLocalesQuery = groq`
-  *[_type == "blogPost" && defined(slug.current)] | order(title asc) {
+  *[_type == "blogPost" && defined(slug.current)
+    && seoExtended.noIndex != true
+    && seo.noIndex != true
+  ] | order(title asc) {
     _id,
     "language": select(defined(language) => language, "en"),
     "slug": slug.current,
@@ -2897,7 +2904,10 @@ export const sitemapBlogPostsAllLocalesQuery = groq`
 `;
 
 export const sitemapPostsAllLocalesQuery = groq`
-  *[_type == "post" && defined(slug.current)] | order(title asc) {
+  *[_type == "post" && defined(slug.current)
+    && seoExtended.noIndex != true
+    && seo.noIndex != true
+  ] | order(title asc) {
     _id,
     "language": select(defined(language) => language, "en"),
     "slug": slug.current,
@@ -3039,11 +3049,168 @@ export const resolveCaseStudyBySlugQuery = groq`
 `;
 
 export const sitemapCaseStudiesAllLocalesQuery = groq`
-  *[_type == "caseStudy" && defined(slug.current)] | order(title asc) {
+  *[_type == "caseStudy" && defined(slug.current)
+    && seo.noIndex != true
+  ] | order(title asc) {
     _id,
     "language": select(defined(language) => language, "en"),
     "slug": slug.current,
     _type,
     _updatedAt
+  }
+`;
+
+// ============================================
+// Per-page SEO fetch (generateMetadata)
+// ============================================
+// Returns the new `seoExtended` object plus legacy `seo` fallback shape,
+// scoped to a specific page document. Consumed by lib/sanity/pageSeo.ts.
+// The page is identified by ($type, $slug, $language). When $slug is empty
+// the query matches the homepage landingPage (slug.current == "home" OR
+// isHomepage == true).
+//
+// Also projects `translations` — the translated siblings via the
+// `@sanity/document-internationalization` `translation.metadata` document.
+// Each entry carries _key (language id) + the resolved doc's slug/isHomepage/
+// noIndex so the frontend can build hreflang URLs without an extra round-trip.
+export const pageSeoQuery = groq`
+  *[
+    _type == $type
+    && (
+      ($slug == "" && (slug.current == "home" || isHomepage == true))
+      || slug.current == $slug
+    )
+    && (language == $language || !defined(language))
+  ] | order(defined(language) desc) [0] {
+    _id,
+    _type,
+    "language": coalesce(language, "en"),
+    "pageTitle": coalesce(pageTitle, title),
+    "slug": slug.current,
+    "isHomepage": coalesce(isHomepage, false),
+    "seoExtended": seoExtended {
+      metaTitle,
+      metaDescription,
+      canonical,
+      ogTitle,
+      ogDescription,
+      ogImage,
+      ogImageAlt,
+      structuredDataType,
+      noIndex,
+      noFollow
+    },
+    "seo": seo {
+      metaTitle,
+      metaDescription,
+      ogImage
+    },
+    "faqItems": coalesce(select(
+      _type == "allPackagesPage" => coalesce(sections[_type == "allPackagesPageFaqSection"][0].faqItems[]{ question, answer }, []),
+      _type == "contactPage" => coalesce(sections[_type == "contactPageFaqSection"][0].faqs[]{ question, answer }, []),
+      _type == "shopifyXAiPage" => coalesce(sections[_type == "shopifyXAiPageFaqSection"][0].items[]{ question, answer }, []),
+      _type == "packageDetailPage" => coalesce(sections[_type == "packageDetailPageFaqListSection"][0].faq[]{ question, answer }, []),
+      _type == "post" => coalesce(content[_type == "faqBlock"][0].items[]{ question, answer }, []),
+      _type == "shopifyXPimPage" => coalesce(sections[_type == "shopifyXPimCombinedSection"][0].faq.items[]{ question, answer }, [])
+    ), []),
+    "translations": *[_type == "translation.metadata" && references(^._id)][0]{
+      translations[] {
+        _key,
+        "doc": value->{
+          _id,
+          _type,
+          "language": coalesce(language, _key),
+          "slug": slug.current,
+          "isHomepage": coalesce(isHomepage, false),
+          "noIndex": coalesce(seoExtended.noIndex, seo.noIndex, false)
+        }
+      }
+    }.translations
+  }
+`;
+
+// Per-page SEO fetch by slug only (when document _type is not known up front).
+// Used for blog post / case study / package detail style routes where the slug
+// is unique across the site.
+export const pageSeoBySlugQuery = groq`
+  *[
+    _type in $types
+    && slug.current == $slug
+    && (language == $language || !defined(language))
+  ] | order(defined(language) desc) [0] {
+    _id,
+    _type,
+    "language": coalesce(language, "en"),
+    "pageTitle": coalesce(pageTitle, title),
+    "slug": slug.current,
+    "isHomepage": coalesce(isHomepage, false),
+    "seoExtended": seoExtended {
+      metaTitle,
+      metaDescription,
+      canonical,
+      ogTitle,
+      ogDescription,
+      ogImage,
+      ogImageAlt,
+      structuredDataType,
+      noIndex,
+      noFollow
+    },
+    "seo": seo {
+      metaTitle,
+      metaDescription,
+      ogImage
+    },
+    "faqItems": coalesce(select(
+      _type == "allPackagesPage" => coalesce(sections[_type == "allPackagesPageFaqSection"][0].faqItems[]{ question, answer }, []),
+      _type == "contactPage" => coalesce(sections[_type == "contactPageFaqSection"][0].faqs[]{ question, answer }, []),
+      _type == "shopifyXAiPage" => coalesce(sections[_type == "shopifyXAiPageFaqSection"][0].items[]{ question, answer }, []),
+      _type == "packageDetailPage" => coalesce(sections[_type == "packageDetailPageFaqListSection"][0].faq[]{ question, answer }, []),
+      _type == "post" => coalesce(content[_type == "faqBlock"][0].items[]{ question, answer }, []),
+      _type == "shopifyXPimPage" => coalesce(sections[_type == "shopifyXPimCombinedSection"][0].faq.items[]{ question, answer }, [])
+    ), []),
+    "translations": *[_type == "translation.metadata" && references(^._id)][0]{
+      translations[] {
+        _key,
+        "doc": value->{
+          _id,
+          _type,
+          "language": coalesce(language, _key),
+          "slug": slug.current,
+          "isHomepage": coalesce(isHomepage, false),
+          "noIndex": coalesce(seoExtended.noIndex, seo.noIndex, false)
+        }
+      }
+    }.translations
+  }
+`;
+
+// ============================================
+// Site settings (per language)
+// ============================================
+// Used to drive site-wide defaults (title template, default OG image,
+// verification, robots kill switch) in generateMetadata and robots.ts.
+export const siteSettingsQuery = groq`
+  *[_type == "siteSettings" && language == $language] | order(_updatedAt desc) [0] {
+    siteName,
+    titleTemplate,
+    defaultMetaDescription,
+    favicon,
+    logo,
+    defaultOgImage,
+    defaultOgImageAlt,
+    verification,
+    robots,
+    socialProfiles,
+    organization
+  }
+`;
+
+// Robots kill switch lookup (used by app/robots.ts). Falls back across languages
+// so the toggle works regardless of which siteSettings doc the editor flips.
+export const siteSettingsRobotsQuery = groq`
+  *[_type == "siteSettings" && defined(robots.noIndexEntireSite)] | order(_updatedAt desc) {
+    language,
+    "noIndexEntireSite": robots.noIndexEntireSite
   }
 `;

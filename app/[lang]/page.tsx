@@ -1,10 +1,12 @@
+import type { Metadata } from 'next'
 import HeaderWrapper from '@/components/layout/HeaderWrapper'
 import FooterWrapper from '@/components/layout/FooterWrapper'
 import { client } from '@/sanity/lib/client'
 import { homepageQuery, allPackagesPageQuery } from '@/sanity/lib/queries'
 import { getQueryParams } from '@/sanity/lib/queryHelpers'
 import { getLanguageFromParams } from '@/lib/language'
-import { getAlternateLanguagesForMetadata } from '@/lib/hreflang'
+import { coalescePageSeo, getPageSeo, getSiteSettings } from '@/lib/sanity/pageSeo'
+import { buildMetadata } from '@/lib/seo/buildMetadata'
 import { HomepageSectionRenderer } from '@/components/HomepageSectionRenderer'
 import type { HomepageFromSanity, HomepageSectionBlock } from '@/lib/homepageSections'
 import { normalizePageSections } from '@/lib/sanity/pageBuilderLegacy'
@@ -64,9 +66,25 @@ async function getAllPackages(language?: string): Promise<AllPackagesData | null
   }
 }
 
-export async function generateMetadata({ params }: { params: Promise<{ lang: string }> }) {
-  const alternates = getAlternateLanguagesForMetadata('')
-  return { alternates: Object.keys(alternates).length ? { languages: alternates } : undefined }
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ lang: string }>
+}): Promise<Metadata> {
+  const { lang } = await params
+  const language = getLanguageFromParams({ lang })
+  const [doc, settings] = await Promise.all([
+    getPageSeo({ type: 'landingPage', slug: '', language }),
+    getSiteSettings(language),
+  ])
+  const seo = coalescePageSeo(doc, settings)
+  return buildMetadata({
+    seo,
+    settings,
+    language,
+    pathWithoutLang: '',
+    docType: 'landingPage',
+  })
 }
 
 export default async function Home({

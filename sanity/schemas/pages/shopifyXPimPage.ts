@@ -1,5 +1,9 @@
 import { defineArrayMember, defineField, defineType } from "sanity";
 import { languageField } from "../objects/language";
+import {
+  seoExtendedField,
+  legacySeoFieldMinimal,
+} from "../_shared/seoFields";
 import { isUniquePerLanguage } from "@/sanity/lib/slugUtils";
 
 function pageFilter({ document }: { document: Record<string, unknown> }) {
@@ -346,15 +350,8 @@ export const shopifyXPimPage = defineType({
         defineArrayMember({ type: "shopifyXPimPageCtaSection" }),
       ],
     }),
-    defineField({
-      name: "seo",
-      title: "SEO",
-      type: "object",
-      fields: [
-        defineField({ name: "metaTitle", title: "Meta Title", type: "string" }),
-        defineField({ name: "metaDescription", title: "Meta Description", type: "text", rows: 3 }),
-      ],
-    }),
+    seoExtendedField,
+    legacySeoFieldMinimal,
   ],
   preview: { select: { title: "pageTitle" } },
 });
