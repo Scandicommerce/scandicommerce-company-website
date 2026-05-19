@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 import { LOCALE_IDS } from '@/sanity/lib/languages'
 import { isComOnlyLocale, segmentToLanguageId } from '@/lib/hreflang'
-import { translatePath } from '@/lib/translatePath'
+import { isNoSlugEnglishificationRedirect, translatePath } from '@/lib/translatePath'
 
 const COM_HOST = 'scandicommerce.com'
 const NO_HOST = 'scandicommerce.no'
@@ -134,15 +134,23 @@ export async function middleware(request: NextRequest) {
       ? hit.destination
       : new URL(hit.destination, request.url).toString()
 
-    // .com → .no (or .no → .com): swap slug when destination path matches source
-    const targetHost = new URL(target).host
-    if (isComHost(host) && isNoHost(targetHost)) {
-      target = await localizeCrossDomainRedirect(target, pathname, 'en', 'no')
-    } else if (isNoHost(host) && isComHost(targetHost)) {
-      target = await localizeCrossDomainRedirect(target, pathname, 'no', 'en')
-    }
+    // Never replace a valid Norwegian slug with its English equivalent on .no
+    if (
+      isNoHost(host) &&
+      (await isNoSlugEnglishificationRedirect(pathname, target))
+    ) {
+      // Skip this redirect — continue to locale rewrite below
+    } else {
+      // .com → .no (or .no → .com): swap slug when destination path matches source
+      const targetHost = new URL(target).host
+      if (isComHost(host) && isNoHost(targetHost)) {
+        target = await localizeCrossDomainRedirect(target, pathname, 'en', 'no')
+      } else if (isNoHost(host) && isComHost(targetHost)) {
+        target = await localizeCrossDomainRedirect(target, pathname, 'no', 'en')
+      }
 
-    return NextResponse.redirect(target, hit.permanent ? 308 : 307)
+      return NextResponse.redirect(target, hit.permanent ? 308 : 307)
+    }
   }
   const seg = firstSegment(pathname)
   const segLower = seg.toLowerCase()
