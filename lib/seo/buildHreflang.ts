@@ -5,6 +5,15 @@ import {
 } from "@/lib/hreflang";
 import type { PageSeoTranslation } from "@/lib/sanity/pageSeo";
 
+/** Locale-specific blog index slug (matches the renamed index routes). */
+const BLOG_INDEX_SLUG: Record<string, string> = {
+  no: "blogg",
+  en: "blog",
+  sv: "blogg",
+  da: "blog",
+  de: "blog",
+};
+
 /**
  * Hreflang + canonical from `translation.metadata` siblings.
  *
@@ -92,7 +101,8 @@ export function slugForRoute(doc: {
     return "";
   }
   if (doc._type === "blogPost" || doc._type === "post") {
-    return `resources/${rawSlug}`;
+    const indexSlug = BLOG_INDEX_SLUG[doc.language ?? ""] ?? "blog";
+    return `${indexSlug}/${rawSlug}`;
   }
   return rawSlug;
 }

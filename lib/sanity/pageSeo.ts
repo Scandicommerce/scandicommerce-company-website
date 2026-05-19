@@ -5,6 +5,7 @@ import {
   siteSettingsQuery,
 } from "@/sanity/lib/queries";
 import { defaultLanguage } from "@/sanity/lib/languages";
+import { stegaClean } from "@sanity/client/stega";
 
 /**
  * Server-side helpers for `generateMetadata`. All fetches use the published
@@ -179,25 +180,30 @@ export function coalescePageSeo(
   const legacy = doc?.seo ?? undefined;
   const pageTitle = doc?.pageTitle;
 
-  const metaTitle = ext?.metaTitle ?? legacy?.metaTitle ?? pageTitle ?? "";
+  // stegaClean strips invisible Vercel Visual Editing markers that can leak
+  // into <title> / <meta> tags when the client doesn't explicitly disable stega.
+  const clean = (v: string | undefined | null): string =>
+    stegaClean(v ?? "") as string;
+
+  const metaTitle = clean(ext?.metaTitle) || clean(legacy?.metaTitle) || clean(pageTitle) || "";
   const metaDescription =
-    ext?.metaDescription ??
-    legacy?.metaDescription ??
-    settings?.defaultMetaDescription ??
+    clean(ext?.metaDescription) ||
+    clean(legacy?.metaDescription) ||
+    clean(settings?.defaultMetaDescription) ||
     "";
 
   return {
     metaTitle,
     metaDescription,
-    canonical: ext?.canonical,
-    ogTitle: ext?.ogTitle ?? metaTitle,
-    ogDescription: ext?.ogDescription ?? metaDescription,
+    canonical: clean(ext?.canonical) || undefined,
+    ogTitle: clean(ext?.ogTitle) || metaTitle,
+    ogDescription: clean(ext?.ogDescription) || metaDescription,
     ogImage: ext?.ogImage ?? legacy?.ogImage ?? settings?.defaultOgImage,
-    ogImageAlt: ext?.ogImageAlt ?? settings?.defaultOgImageAlt,
-    structuredDataType: ext?.structuredDataType ?? "none",
+    ogImageAlt: clean(ext?.ogImageAlt) || clean(settings?.defaultOgImageAlt) || undefined,
+    structuredDataType: clean(ext?.structuredDataType) || "none",
     noIndex: Boolean(ext?.noIndex),
     noFollow: Boolean(ext?.noFollow),
-    pageTitle,
+    pageTitle: clean(pageTitle),
     isHomepage: Boolean(doc?.isHomepage),
     translations: doc?.translations ?? null,
     docLanguage: doc?.language,

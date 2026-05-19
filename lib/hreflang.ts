@@ -93,40 +93,46 @@ export function getHomepagePrefixForLocale(locale: string): string {
 
 /**
  * Normalize a Sanity slug path into the public URL path for a locale.
- * Strips country-code segments (se/, dk/) and applies /{sv|da|de}/ on .com.
+ * Strips ALL leading locale/country-code segments (se/, dk/, sv/, no/, …)
+ * and applies the correct prefix for the target locale.
+ *
+ * Production URL shape:
+ *   NO → scandicommerce.no/<path>          (no /no prefix)
+ *   EN → scandicommerce.com/<path>         (no /en prefix)
+ *   SV/DA/DE → scandicommerce.com/{locale}/<path>
  */
 export function pathForPublicUrl(locale: string, rawPath: string): string {
-  const cleaned = rawPath.replace(/^\/+|\/+$/g, '')
+  const segments = rawPath.replace(/^\/+|\/+$/g, '').split('/').filter(Boolean)
 
-  if (!isDomainSplitActive()) {
-    if (!cleaned) return locale === defaultLanguage ? '' : locale
-    if (locale === defaultLanguage) return cleaned
-    return `${locale}/${cleaned}`
+  // Strip ALL leading segments that are locale ids or country codes.
+  // Sanity slugs may carry one or both (e.g. "sv/se/contact" or "se/contact").
+  while (
+    segments.length > 0 &&
+    (LOCALE_IDS.includes(segments[0]) || segments[0] in COUNTRY_SEGMENT_TO_LOCALE)
+  ) {
+    segments.shift()
   }
 
-  // Norwegian and English: path is the slug as-is (no /no or /en prefix).
+  const rest = segments.join('/')
+
+  // NO and EN: bare path (their domain already signals the locale)
   if (locale === 'no' || locale === 'en') {
-    const segments = cleaned.split('/').filter(Boolean)
-    if (segments[0] && (LOCALE_IDS.includes(segments[0]) || segments[0] in COUNTRY_SEGMENT_TO_LOCALE)) {
-      segments.shift()
-    }
-    return segments.join('/')
+    return rest
   }
 
-  // SV / DA / DE on .com only: /{locale}/...
+  // SV / DA / DE: always /{locale}/...
   if (LOCALES_WITH_PATH_PREFIX.has(locale)) {
-    const segments = cleaned.split('/').filter(Boolean)
-    if (segments[0] === locale) segments.shift()
-    else if (segments[0] && COUNTRY_SEGMENT_TO_LOCALE[segments[0]] === locale) {
-      segments.shift()
-    } else if (segments[0] && LOCALE_IDS.includes(segments[0])) {
-      segments.shift()
-    }
-    const rest = segments.join('/')
     return rest ? `${locale}/${rest}` : locale
   }
 
-  return cleaned
+  // Fallback for any unknown locale (shouldn't happen in practice)
+  if (!isDomainSplitActive()) {
+    if (!rest) return locale === defaultLanguage ? '' : locale
+    if (locale === defaultLanguage) return rest
+    return `${locale}/${rest}`
+  }
+
+  return rest
 }
 
 /**

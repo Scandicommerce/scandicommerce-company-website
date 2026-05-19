@@ -6,6 +6,46 @@ import { isComOnlyLocale, segmentToLanguageId } from '@/lib/hreflang'
 const COM_HOST = 'scandicommerce.com'
 const NO_HOST = 'scandicommerce.no'
 
+// ---------------------------------------------------------------------------
+// Sanity-managed redirects (fetched at request time with in-memory cache)
+// ---------------------------------------------------------------------------
+type RedirectEntry = { destination: string; permanent: boolean }
+let _redirectMap: Map<string, RedirectEntry> | null = null
+let _lastFetch = 0
+const REDIRECT_TTL = 60_000 // 60 s
+
+async function getRedirectMap(): Promise<Map<string, RedirectEntry>> {
+  const now = Date.now()
+  if (_redirectMap && now - _lastFetch < REDIRECT_TTL) return _redirectMap
+
+  const projectId = process.env.NEXT_PUBLIC_SANITY_PROJECT_ID
+  const dataset = process.env.NEXT_PUBLIC_SANITY_DATASET
+  if (!projectId || !dataset) return _redirectMap ?? new Map()
+
+  try {
+    const query = encodeURIComponent(
+      '*[_type == "redirect" && isEnabled == true]{source, destination, "permanent": coalesce(permanent, true)}'
+    )
+    const res = await fetch(
+      `https://${projectId}.apicdn.sanity.io/v2024-01-01/data/query/${dataset}?query=${query}`
+    )
+    if (!res.ok) throw new Error(`Sanity ${res.status}`)
+    const { result } = (await res.json()) as { result: Array<{ source: string; destination: string; permanent: boolean }> }
+
+    const map = new Map<string, RedirectEntry>()
+    for (const r of result ?? []) {
+      if (typeof r.source === 'string' && r.source.startsWith('/') && typeof r.destination === 'string') {
+        map.set(r.source, { destination: r.destination, permanent: r.permanent !== false })
+      }
+    }
+    _redirectMap = map
+    _lastFetch = now
+    return map
+  } catch {
+    return _redirectMap ?? new Map()
+  }
+}
+
 function firstSegment(pathname: string): string {
   return pathname.replace(/^\/+|\/+$/g, '').split('/')[0] || ''
 }
@@ -46,9 +86,19 @@ function comLocalePath(locale: string, restSegments: string): string {
   return `/${locale}/${rest}`
 }
 
-export function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname
   const host = request.nextUrl.host
+  
+  // --- Sanity-managed redirects (checked before any locale logic) ---
+  const redirectMap = await getRedirectMap()
+  const hit = redirectMap.get(pathname)
+  if (hit) {
+    const target = hit.destination.startsWith('http')
+      ? hit.destination
+      : new URL(hit.destination, request.url).toString()
+    return NextResponse.redirect(target, hit.permanent ? 308 : 307)
+  }
   const seg = firstSegment(pathname)
   const segLower = seg.toLowerCase()
   const hasLocale = LOCALE_IDS.includes(segLower)
