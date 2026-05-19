@@ -1,7 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { resolvePageByPath } from '@/lib/resolvePageByPath'
-import { client } from '@/sanity/lib/client'
-import { resolveTranslatedSlugQuery } from '@/sanity/lib/queries'
+import { translatePath } from '@/lib/translatePath'
 
 export const dynamic = 'force-dynamic'
 
@@ -10,7 +8,7 @@ export const dynamic = 'force-dynamic'
  *
  * Resolves the slug of the current page in the target language.
  * Used by the language switcher to navigate to the correct slug-based URL.
- * Returns { slug: "tjenester/vare-pakker" } or { slug: null } if not found.
+ * Returns { slug: "tjenester/alle-pakker" } or { slug: null } if not found.
  */
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url)
@@ -23,18 +21,8 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const resolved = await resolvePageByPath(currentPath, currentLang)
-    if (!resolved) {
-      return NextResponse.json({ slug: null })
-    }
-
-    const translation = await client.fetch<{ slug: string | null } | null>(
-      resolveTranslatedSlugQuery,
-      { type: resolved.type, targetLang },
-      { next: { revalidate: 60 } }
-    )
-
-    return NextResponse.json({ slug: translation?.slug ?? null })
+    const slug = await translatePath(currentPath, currentLang, targetLang)
+    return NextResponse.json({ slug })
   } catch {
     return NextResponse.json({ slug: null })
   }

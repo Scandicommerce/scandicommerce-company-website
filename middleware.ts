@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 import { LOCALE_IDS } from '@/sanity/lib/languages'
 import { isComOnlyLocale, segmentToLanguageId } from '@/lib/hreflang'
+import { translatePath } from '@/lib/translatePath'
 
 const COM_HOST = 'scandicommerce.com'
 const NO_HOST = 'scandicommerce.no'
@@ -86,17 +87,61 @@ function comLocalePath(locale: string, restSegments: string): string {
   return `/${locale}/${rest}`
 }
 
+/** Normalize path for comparison (no leading/trailing slashes). */
+function normalizePath(p: string): string {
+  return p.replace(/^\/+|\/+$/g, '')
+}
+
+/**
+ * When redirecting .com → .no (or the reverse), replace the English slug with
+ * the localized slug from Sanity when the destination still mirrors the source.
+ */
+async function localizeCrossDomainRedirect(
+  targetUrl: string,
+  sourcePathname: string,
+  sourceLang: string,
+  targetLang: string
+): Promise<string> {
+  if (sourceLang === targetLang) return targetUrl
+
+  let target: URL
+  try {
+    target = new URL(targetUrl)
+  } catch {
+    return targetUrl
+  }
+
+  const sourceClean = normalizePath(sourcePathname)
+  const destClean = normalizePath(target.pathname)
+  if (!sourceClean || destClean !== sourceClean) return targetUrl
+
+  const translated = await translatePath(sourceClean, sourceLang, targetLang)
+  if (!translated) return targetUrl
+
+  target.pathname = `/${translated}`
+  return target.toString()
+}
+
 export async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname
   const host = request.nextUrl.host
-  
+
   // --- Sanity-managed redirects (checked before any locale logic) ---
   const redirectMap = await getRedirectMap()
   const hit = redirectMap.get(pathname)
   if (hit) {
-    const target = hit.destination.startsWith('http')
+    let target = hit.destination.startsWith('http')
       ? hit.destination
       : new URL(hit.destination, request.url).toString()
+
+    // .com → .no (or .no → .com): swap slug when destination path matches source
+    const targetHost = new URL(target).host
+    if (isComHost(host) && isNoHost(targetHost)) {
+      target = await localizeCrossDomainRedirect(target, pathname, 'en', 'no')
+    } else if (isNoHost(host) && isComHost(targetHost)) {
+      target = await localizeCrossDomainRedirect(target, pathname, 'no', 'en')
+    }
+
     return NextResponse.redirect(target, hit.permanent ? 308 : 307)
   }
   const seg = firstSegment(pathname)
@@ -127,7 +172,20 @@ export async function middleware(request: NextRequest) {
     // Production: en/no locale prefixes in URL → redirect to bare domain path
     if (isProductionHost(host) && LOCALE_DOMAINS[segLower]) {
       const targetDomain = LOCALE_DOMAINS[segLower]
-      return NextResponse.redirect(new URL(`https://${targetDomain}${cleanPath}`))
+      const sourceLang = isNoHost(host) ? 'no' : 'en'
+      const targetLang = segLower
+      let finalPath = cleanPath
+
+      if (sourceLang !== targetLang && cleanPath !== '/') {
+        const translated = await translatePath(
+          normalizePath(cleanPath),
+          sourceLang,
+          targetLang
+        )
+        if (translated) finalPath = `/${translated}`
+      }
+
+      return NextResponse.redirect(new URL(`https://${targetDomain}${finalPath}`))
     }
 
     // Dev: normalize case on /[locale]/...

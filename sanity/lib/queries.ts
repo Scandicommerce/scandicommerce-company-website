@@ -2975,9 +2975,11 @@ export const resolvePackageDetailBySlugQuery = groq`
   *[_type == "packageDetailPage" && slug.current == $slug && (language == $language || !defined(language))] | order(defined(language) desc) [0] { _type, _id }
 `;
 
-// Given a page type, find its slug in a different language (for language switching)
+// Given a document _id, find its translated sibling slug (for language switching)
 export const resolveTranslatedSlugQuery = groq`
-  *[_type == $type && language == $targetLang][0] { "slug": slug.current }
+  *[_type == "translation.metadata" && references($docId)][0]{
+    "slug": translations[_key == $targetLang][0].value->slug.current
+  }
 `;
 
 // ============================================
