@@ -72,10 +72,17 @@ const defaultCtaButton = {
   href: '/get-started',
 }
 
-/** Build href for a nav item: use page slug when set (strip leading locale so LocalizedLink adds current lang), else use custom href */
+const LOCALE_IDS_SET = new Set(['en', 'no', 'sv', 'da', 'de'])
+const COUNTRY_SEGMENTS_SET = new Set(['se', 'dk', 'de'])
+
+/** Build href for a nav item: use page slug when set (strip leading locale/country segments so LocalizedLink adds current lang), else use custom href */
 function getNavHref(item: MenuItem | { href?: string; slug?: string }): string {
   if (item.slug) {
-    const path = item.slug.replace(/^[a-z]{2}\//, '')
+    const parts = item.slug.replace(/^\/+/, '').split('/')
+    while (parts.length > 1 && (LOCALE_IDS_SET.has(parts[0]) || COUNTRY_SEGMENTS_SET.has(parts[0]))) {
+      parts.shift()
+    }
+    const path = parts.join('/')
     return path ? `/${path}` : '#'
   }
   return item.href || '#'
