@@ -59,7 +59,7 @@ const defaultColumns: FooterColumn[] = [
   {
     title: 'Resources',
     links: [
-      { label: 'Blog & Articles', href: '/resources/blog' },
+      { label: 'Blog & Articles', href: '/blog' },
     ],
   },
   {
