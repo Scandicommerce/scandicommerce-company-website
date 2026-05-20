@@ -93,16 +93,19 @@ function normalizePath(p: string): string {
 }
 
 /**
- * When redirecting .com → .no (or the reverse), replace the English slug with
- * the localized slug from Sanity when the destination still mirrors the source.
+ * Cross-domain redirect: prefer translated slug from Sanity (overrides wrong
+ * CMS destination paths like /work → /resources).
  */
-async function localizeCrossDomainRedirect(
+async function resolveCrossDomainTarget(
   targetUrl: string,
   sourcePathname: string,
   sourceLang: string,
   targetLang: string
 ): Promise<string> {
   if (sourceLang === targetLang) return targetUrl
+
+  const sourceClean = normalizePath(sourcePathname)
+  if (!sourceClean) return targetUrl
 
   let target: URL
   try {
@@ -111,15 +114,13 @@ async function localizeCrossDomainRedirect(
     return targetUrl
   }
 
-  const sourceClean = normalizePath(sourcePathname)
-  const destClean = normalizePath(target.pathname)
-  if (!sourceClean || destClean !== sourceClean) return targetUrl
-
   const translated = await translatePath(sourceClean, sourceLang, targetLang)
-  if (!translated) return targetUrl
+  if (translated) {
+    target.pathname = `/${translated}`
+    return target.toString()
+  }
 
-  target.pathname = `/${translated}`
-  return target.toString()
+  return targetUrl
 }
 
 export async function middleware(request: NextRequest) {
@@ -141,12 +142,12 @@ export async function middleware(request: NextRequest) {
     ) {
       // Skip this redirect — continue to locale rewrite below
     } else {
-      // .com → .no (or .no → .com): swap slug when destination path matches source
+      // .com ↔ .no: always use translated slug (e.g. /work → /prosjekter)
       const targetHost = new URL(target).host
       if (isComHost(host) && isNoHost(targetHost)) {
-        target = await localizeCrossDomainRedirect(target, pathname, 'en', 'no')
+        target = await resolveCrossDomainTarget(target, pathname, 'en', 'no')
       } else if (isNoHost(host) && isComHost(targetHost)) {
-        target = await localizeCrossDomainRedirect(target, pathname, 'no', 'en')
+        target = await resolveCrossDomainTarget(target, pathname, 'no', 'en')
       }
 
       return NextResponse.redirect(target, hit.permanent ? 308 : 307)
