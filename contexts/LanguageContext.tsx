@@ -47,6 +47,9 @@ const LOCALE_DOMAINS: Record<string, string> = {
   no: 'scandicommerce.no',
 }
 
+/** Locales served on .com with a /{locale}/ path prefix (no dedicated domain). */
+const LOCALES_WITH_PATH_PREFIX = new Set(['sv', 'da', 'de'])
+
 function isProductionHost(): boolean {
   return typeof window !== 'undefined' && window.location.hostname.includes('scandicommerce')
 }
@@ -120,10 +123,17 @@ function LanguageUrlSync({ onValue }: { onValue: (v: LanguageContextType) => voi
 
       const targetPath = resolvedSlug ? `/${resolvedSlug}` : (cleanPath || '/')
 
-      // Production: switch domain (full navigation, not client-side push)
-      if (isProductionHost() && LOCALE_DOMAINS[lang]) {
-        window.location.href = `https://${LOCALE_DOMAINS[lang]}${targetPath}`
-        return
+      // Production: switch domain or add path prefix
+      if (isProductionHost()) {
+        if (LOCALE_DOMAINS[lang]) {
+          window.location.href = `https://${LOCALE_DOMAINS[lang]}${targetPath}`
+          return
+        }
+        if (LOCALES_WITH_PATH_PREFIX.has(lang)) {
+          const prefixed = targetPath === '/' ? `/${lang}` : `/${lang}${targetPath}`
+          window.location.href = `https://scandicommerce.com${prefixed}`
+          return
+        }
       }
 
       // Localhost / dev: use prefix-based routing
@@ -162,8 +172,14 @@ function LanguageUrlSync({ onValue }: { onValue: (v: LanguageContextType) => voi
           clean = clean.substring(hrefFirstSeg.length).replace(/^\/+/, '')
         }
 
-        // Production: never add locale prefix (domain IS the language)
+        // Production: en/no need no prefix (domain IS the language).
+        // sv/da/de live on .com with a /{locale}/ path prefix.
         if (isProductionHost()) {
+          if (LOCALES_WITH_PATH_PREFIX.has(currentLanguage)) {
+            return clean
+              ? `/${currentLanguage}/${clean}${query}`
+              : `/${currentLanguage}${query}`
+          }
           return clean ? `/${clean}${query}` : `/${query}`
         }
 
