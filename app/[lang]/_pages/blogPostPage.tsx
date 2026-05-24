@@ -3,7 +3,6 @@ import FooterWrapper from '@/components/layout/FooterWrapper'
 import ArticleHero from '@/components/sections/resources/article/ArticleHero'
 import ArticleContent from '@/components/sections/resources/article/ArticleContent'
 import AuthorBio from '@/components/sections/resources/article/AuthorBio'
-import ArticleCTA from '@/components/sections/resources/article/ArticleCTA'
 import RelatedArticles from '@/components/sections/resources/article/RelatedArticles'
 import type { Article } from '@/lib/articles'
 import { getLanguageFromParams } from '@/lib/language'
@@ -102,7 +101,6 @@ export default async function BlogPostPage({ params }: { params: Promise<{ lang:
         <ArticleHero article={article} />
         <ArticleContent article={article} />
         <AuthorBio author={article.author} />
-        <ArticleCTA />
         <RelatedArticles articles={article.relatedArticles} lang={lang} />
       </main>
       <FooterWrapper />

@@ -1,7 +1,6 @@
 import HeaderWrapper from "@/components/layout/HeaderWrapper";
 import FooterWrapper from "@/components/layout/FooterWrapper";
 import { BlogContent } from "@/components/sections/blog";
-import ArticleCTA from "@/components/sections/resources/article/ArticleCTA";
 import { getPostBySlugCached } from "@/lib/sanity/cachedDocuments";
 import { type Post } from "@/lib/blogBuilder";
 import { getLanguageFromParams } from "@/lib/language";
@@ -49,7 +48,6 @@ export default async function PostPage({
           </div>
         </section>
         <BlogContent content={post.content} />
-        <ArticleCTA />
       </main>
       <FooterWrapper />
     </div>

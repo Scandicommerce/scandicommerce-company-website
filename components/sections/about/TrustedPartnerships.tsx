@@ -1,8 +1,17 @@
 'use client'
 
+import Image from 'next/image'
+import { urlFor } from '@/sanity/lib/image'
+import type { Image as SanityImage } from 'sanity'
+
+interface PartnershipLogo extends SanityImage {
+  alt?: string
+}
+
 interface Partnership {
   name?: string
   status?: string
+  logo?: PartnershipLogo
   logoIcon?: string
 }
 
@@ -109,7 +118,19 @@ export default function TrustedPartnerships({ trustedPartnerships }: TrustedPart
               className="bg-white shadow-md p-6 lg:p-8 flex flex-col items-center text-center"
             >
               {/* Logo */}
-              <div className="mb-4">{getPartnerLogo(partnership.logoIcon)}</div>
+              <div className="mb-4">
+                {partnership.logo?.asset ? (
+                  <Image
+                    src={urlFor(partnership.logo).width(80).height(80).url()}
+                    alt={partnership.logo.alt || partnership.name || ''}
+                    width={80}
+                    height={80}
+                    className="object-contain"
+                  />
+                ) : (
+                  getPartnerLogo(partnership.logoIcon)
+                )}
+              </div>
 
               {/* Company Name */}
               <h3 className="text-sm md:text-base lg:text-base xl:text-lg 2xl:text-xl font-bold text-[#565454] mb-2">
