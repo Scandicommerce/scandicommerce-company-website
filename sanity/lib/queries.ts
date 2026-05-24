@@ -1588,6 +1588,7 @@ export const workPageQuery = groq`
         heroDescription
       },
       _type == "workPageCaseStudiesSection" => {
+        ctaText,
         studies[] {
           title,
           category,

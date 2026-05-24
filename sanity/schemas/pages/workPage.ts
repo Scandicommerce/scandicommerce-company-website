@@ -40,6 +40,7 @@ export const workPageCaseStudiesSection = defineType({
   title: "Case studies",
   type: "object",
   fields: [
+    defineField({ name: "ctaText", title: "Case Study Link Text", type: "string", description: "e.g. 'Les hele case studien' or 'Read full case study'" }),
     defineField({
       name: "studies",
       title: "Case Studies",

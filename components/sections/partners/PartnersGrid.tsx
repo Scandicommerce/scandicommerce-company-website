@@ -313,7 +313,11 @@ export default function PartnersGrid({ partnersGrid, categoryList }: PartnersGri
         tags.forEach(t => { countByTitle[t] = (countByTitle[t] ?? 0) + 1 })
       })
       return [...categoryList]
-        .sort((a, b) => (countByTitle[b.title] ?? 0) - (countByTitle[a.title] ?? 0))
+        .sort((a, b) => {
+          if (a.title === 'Platform') return -1
+          if (b.title === 'Platform') return 1
+          return (countByTitle[b.title] ?? 0) - (countByTitle[a.title] ?? 0)
+        })
         .map(c => c.title)
     }
     const groups = new Set<string>()

@@ -20,6 +20,7 @@ interface Study {
 }
 
 interface CaseStudiesData {
+  ctaText?: string
   studies?: Study[]
 }
 
@@ -77,6 +78,7 @@ export default function CaseStudies({ caseStudies }: CaseStudiesProps) {
   const studies = caseStudies?.studies && caseStudies.studies.length > 0
     ? caseStudies.studies
     : defaultStudies
+  const ctaText = caseStudies?.ctaText || 'Read full case study'
 
   return (
     <section className="bg-white py-16 lg:py-24">
@@ -97,6 +99,7 @@ export default function CaseStudies({ caseStudies }: CaseStudiesProps) {
             imageAlt={study.imageAlt || ''}
             imagePosition={index % 2 === 0 ? 'left' : 'right'}
             link={study.link}
+            ctaText={ctaText}
           />
         ))}
       </div>

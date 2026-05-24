@@ -17,6 +17,7 @@ interface CaseStudyProps {
   imageAlt: string
   imagePosition: 'left' | 'right'
   link?: string
+  ctaText?: string
 }
 
 function RichText({
@@ -49,6 +50,7 @@ export default function CaseStudy({
   imageAlt,
   imagePosition,
   link = '#',
+  ctaText = 'Read full case study',
 }: CaseStudyProps) {
   const isImageLeft = imagePosition === 'left'
 
@@ -145,7 +147,7 @@ export default function CaseStudy({
                 href={link || '#'}
                 className="inline-flex items-center text-[#03C1CA] font-semibold 2xl:text-xl xl:text-lg sm:text-base text-sm"
               >
-                Read full case study
+                {ctaText}
                 <span className="ml-2">
                   <IoMdArrowForward />
                 </span>
