@@ -4,6 +4,7 @@ import Link from 'next/link'
 
 interface ScenariosData {
   scenariosTitle?: string
+  scenariosLinkText?: string
   scenariosItems?: Array<{
     title: string
     description: string
@@ -18,6 +19,7 @@ interface CommonScenariosProps {
 export default function CommonScenarios({ scenarios }: CommonScenariosProps) {
   // Content variables from Sanity
   const title = scenarios?.scenariosTitle
+  const linkText = scenarios?.scenariosLinkText || 'See how we help'
   const items = scenarios?.scenariosItems
 
   return (
@@ -63,7 +65,7 @@ export default function CommonScenarios({ scenarios }: CommonScenariosProps) {
                     href={scenario.link}
                     className="inline-flex items-center text-[#03C1CA] text-xs sm:text-sm font-semibold hover:underline"
                   >
-                    See how we help
+                    {linkText}
                     <svg
                       className="ml-1.5 sm:ml-2 w-3.5 h-3.5 sm:w-4 sm:h-4"
                       fill="none"

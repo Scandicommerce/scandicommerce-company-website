@@ -568,6 +568,7 @@ export const shopifyDevelopmentPageQuery = groq`
       },
       _type == "shopifyDevelopmentPageScenariosSection" => {
         scenariosTitle,
+        scenariosLinkText,
         scenariosItems[] { title, description, link }
       },
       _type == "shopifyDevelopmentPageHowWeWorkSection" => {
@@ -612,6 +613,7 @@ export const shopifyDevelopmentPageQuery = groq`
     },
     scenarios {
       scenariosTitle,
+      scenariosLinkText,
       scenariosItems[] {
         title,
         description,

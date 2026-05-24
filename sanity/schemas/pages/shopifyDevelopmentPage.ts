@@ -102,6 +102,7 @@ export const shopifyDevelopmentPageScenariosSection = defineType({
   type: "object",
   fields: [
     defineField({ name: "scenariosTitle", title: "Title", type: "string" }),
+    defineField({ name: "scenariosLinkText", title: "Scenario Link Text", type: "string", description: "e.g. 'Se hvordan vi hjelper' or 'See how we help'" }),
     defineField({
       name: "scenariosItems",
       title: "Scenario Items",
