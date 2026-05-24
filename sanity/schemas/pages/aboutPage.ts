@@ -179,7 +179,21 @@ export const aboutPageTrustedPartnershipsSection = defineType({
           fields: [
             defineField({ name: "name", title: "Company Name", type: "string" }),
             defineField({ name: "status", title: "Partnership Status", type: "string" }),
-            defineField({ name: "logoIcon", title: "Logo Icon Name", type: "string", description: "e.g., shopify, klaviyo, google, meta" }),
+            defineField({
+              name: "logo",
+              title: "Logo Image",
+              type: "image",
+              options: { hotspot: true },
+              fields: [
+                defineField({ name: "alt", title: "Alt Text", type: "string" }),
+              ],
+            }),
+            defineField({
+              name: "logoIcon",
+              title: "Logo Icon Name (fallback)",
+              type: "string",
+              description: "Fallback icon key used when no Logo Image is uploaded. e.g., shopify, klaviyo, google, meta",
+            }),
           ],
         }),
       ],

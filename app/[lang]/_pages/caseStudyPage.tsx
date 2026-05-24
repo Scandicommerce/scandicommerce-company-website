@@ -2,7 +2,6 @@ import HeaderWrapper from "@/components/layout/HeaderWrapper";
 import FooterWrapper from "@/components/layout/FooterWrapper";
 import CaseStudyHero from "@/components/sections/caseStudy/CaseStudyHero";
 import { CaseStudyPageSectionRenderer } from "@/components/pageSectionRenderers/CaseStudyPageSectionRenderer";
-import ArticleCTA from "@/components/sections/resources/article/ArticleCTA";
 import { getCaseStudyBySlugCached } from "@/lib/sanity/cachedDocuments";
 import { getLanguageFromParams } from "@/lib/language";
 import { notFound } from "next/navigation";
@@ -78,7 +77,6 @@ export default async function CaseStudyPage({
           previousPlatform={data.previousPlatform}
           products={data.products}
         />
-        <ArticleCTA />
       </main>
       <FooterWrapper />
     </div>
