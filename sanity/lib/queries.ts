@@ -1759,6 +1759,10 @@ export const aboutPageQuery = groq`
         partnerships[] {
           name,
           status,
+          logo {
+            ...,
+            asset->
+          },
           logoIcon
         }
       },
@@ -1829,6 +1833,10 @@ export const aboutPageQuery = groq`
       partnerships[] {
         name,
         status,
+        logo {
+          ...,
+          asset->
+        },
         logoIcon
       }
     },
