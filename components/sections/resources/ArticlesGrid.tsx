@@ -91,6 +91,7 @@ export default function ArticlesGrid({ articlesGrid, lang }: ArticlesGridProps) 
   const locale = lang || 'en'
   const isNorwegian = locale === 'no' || locale === 'nb-NO' || locale.startsWith('nb')
   const [activeCategory, setActiveCategory] = useState('All')
+  const [searchQuery, setSearchQuery] = useState('')
 
   const articles: NormalizedArticle[] = useMemo(() => {
     const raw =
@@ -134,9 +135,17 @@ export default function ArticlesGrid({ articlesGrid, lang }: ArticlesGridProps) 
   }, [archive])
 
   const filteredArchive = useMemo(() => {
-    if (activeCategory === 'All') return archive
-    return archive.filter((a) => a.category === activeCategory)
-  }, [archive, activeCategory])
+    const q = searchQuery.toLowerCase().trim()
+    return archive.filter((a) => {
+      const matchesCategory = activeCategory === 'All' || a.category === activeCategory
+      const matchesSearch =
+        !q ||
+        a.title.toLowerCase().includes(q) ||
+        a.description.toLowerCase().includes(q) ||
+        a.category.toLowerCase().includes(q)
+      return matchesCategory && matchesSearch
+    })
+  }, [archive, activeCategory, searchQuery])
 
   const totalCount = articles.length
   const allLabel = isNorwegian ? 'Alle' : 'All'
@@ -219,11 +228,30 @@ export default function ArticlesGrid({ articlesGrid, lang }: ArticlesGridProps) 
       {/* Archive */}
       {archive.length > 0 && (
         <div className="section_container mx-auto page-padding-x pt-16">
-          {/* Header + category tabs */}
-          <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-4 mb-8">
-            <span className="text-[11px] font-bold uppercase tracking-[0.12em] text-[#11848C]">
-              {isNorwegian ? 'Arkiv' : 'Archive'}
-            </span>
+          {/* Header + search + category tabs */}
+          <div className="flex flex-col gap-5 mb-8">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <span className="text-[11px] font-bold uppercase tracking-[0.12em] text-[#11848C]">
+                {isNorwegian ? 'Arkiv' : 'Archive'}
+              </span>
+              {/* Search input */}
+              <div className="relative sm:w-72">
+                <svg
+                  className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400 pointer-events-none"
+                  fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder={isNorwegian ? 'Søk i arkivet…' : 'Search archive…'}
+                  className="w-full pl-9 pr-4 py-2 text-sm border border-neutral-200 bg-white text-neutral-900 placeholder-neutral-400 focus:outline-none focus:ring-1 focus:ring-teal"
+                />
+              </div>
+            </div>
+            {/* Category tabs */}
             {categories.length > 1 && (
               <div className="flex flex-wrap gap-2">
                 {categories.map((cat) => (

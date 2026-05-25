@@ -1,4 +1,3 @@
-import Hero from '@/components/layout/Hero'
 import FeaturedArticle from '@/components/sections/resources/FeaturedArticle'
 import ArticlesGrid from '@/components/sections/resources/ArticlesGrid'
 import GetShopifyInsitesDelivered from '@/components/sections/resources/GetShopifyInsitesDelivered'
@@ -16,16 +15,10 @@ export function BlogPageSectionRenderer({
       {sections.map((section) => {
         const { _type, _key, ...rest } = section
         switch (_type) {
-          case 'blogPageHeroSection': {
-            const hero = rest as Parameters<typeof Hero>[0]['hero'] & { searchPlaceholder?: string }
-            return (
-              <Hero
-                key={_key}
-                hero={{ ...hero, searchPlaceholder: hero.searchPlaceholder ?? 'Search for a package' }}
-                searchable={true}
-              />
-            )
-          }
+          case 'blogPageHeroSection':
+            // Suppressed — the Variant A page header inside FeaturedArticle replaces the hero.
+            // The search has moved into the archive section of ArticlesGrid.
+            return null
           case 'blogPageFeaturedArticleSection':
             return (
               <FeaturedArticle
