@@ -1,6 +1,8 @@
+'use client'
+
 import Image from 'next/image'
 import Link from 'next/link'
-import { HiCalendar, HiClock } from 'react-icons/hi2'
+import { ArrowRight } from 'lucide-react'
 
 interface TagData {
   label?: string
@@ -21,122 +23,82 @@ interface FeaturedArticleData {
 
 interface FeaturedArticleProps {
   featuredArticle?: FeaturedArticleData
-  /** Current locale (e.g. "en", "no") so links work on /no/resources/blog etc. */
   lang?: string
 }
 
-function formatArticleDate(d: string | undefined): string {
-  if (!d) return 'Jan 15, 2025'
-  if (d.includes('T')) {
-    try {
-      return new Date(d).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })
-    } catch {
-      return d
-    }
+function formatCoverDate(d: string | undefined): string {
+  if (!d) return ''
+  try {
+    return new Date(d).toLocaleDateString('nb-NO', { day: 'numeric', month: 'short', year: 'numeric' })
+  } catch {
+    return d
   }
-  return d
 }
 
 export default function FeaturedArticle({ featuredArticle, lang }: FeaturedArticleProps) {
   const imageUrl = featuredArticle?.imageUrl || '/images/resources/featured_article/banner.png'
-  const tags = (featuredArticle?.tags || []).filter((tag) => Boolean(tag?.label))
-  const title = featuredArticle?.title || '10 Essential Shopify Apps for Norwegian E-commerce in 2025'
-  const description = featuredArticle?.description || 'Discover the must-have apps that will transform your Norwegian Shopify store and boost conversions.'
-  const date = formatArticleDate(featuredArticle?.date) || 'Jan 15, 2025'
-  const readTime = featuredArticle?.readTime || '8 min read'
-  const articleSlug = featuredArticle?.articleSlug?.trim()
+  const title = featuredArticle?.title || ''
+  const date = formatCoverDate(featuredArticle?.date)
+  const readTime = featuredArticle?.readTime || ''
+  const tags = featuredArticle?.tags || []
+  const primaryTag = tags.find((t) => t.isPrimary) ?? tags[0]
+  const category = primaryTag?.label?.toUpperCase() || ''
+
   const locale = lang || 'en'
-  const slugFromLink = (raw: string) => {
-    try {
-      if (raw.startsWith('http://') || raw.startsWith('https://')) {
-        const path = new URL(raw).pathname
-        const match = path.match(/\/resources\/([^/]+)/) || path.match(/\/([^/]+)$/)
-        return match ? match[1] : null
-      }
-      const path = raw.startsWith('/') ? raw : `/${raw}`
-      const match = path.match(/\/resources\/([^/]+)/) || path.match(/\/([^/]+)$/)
-      return match ? match[1] : null
-    } catch {
-      return null
-    }
-  }
-  const slug = articleSlug || (featuredArticle?.link ? slugFromLink(featuredArticle.link) : null) || '10-essential-shopify-apps-norwegian-ecommerce-2025'
-  const link = `/${locale}/resources/${slug}`
-  const buttonText = featuredArticle?.buttonText || 'Read Article'
+  const articleSlug = featuredArticle?.articleSlug?.trim()
+  const link =
+    featuredArticle?.link ||
+    (articleSlug ? `/${locale}/resources/${articleSlug}` : '#')
 
   return (
-    <section className="bg-white py-16 lg:py-24">
-      <div className="section_container mx-auto page-padding-x">
-        <div className="grid grid-cols-1 lg:grid-cols-2 items-center shadow-lg">
-          {/* Left Column - Laptop Image */}
-          <div className="relative w-full h-[400px] lg:h-[450px] xl:h-[560px]">
-            <Image
-              src={imageUrl}
-              alt={title}
-              fill
-              className="object-cover"
-              sizes="(max-width: 1024px) 100vw, 50vw"
-            />
-          </div>
+    <div className="section_container mx-auto page-padding-x pb-16 lg:pb-20">
+      <Link
+        href={link}
+        className="block relative overflow-hidden group"
+        style={{ aspectRatio: '21 / 9' }}
+      >
+        {/* Image */}
+        <Image
+          src={imageUrl}
+          alt={title}
+          fill
+          className="object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+          sizes="(max-width: 1536px) 100vw, 1536px"
+          priority
+        />
 
-          {/* Right Column - Blog Post Card */}
-          <div className="bg-white p-6 lg:p-8 border border-[#5654544D] h-full w-full flex flex-col justify-center items-start gap-10">
-            {/* Tags */}
-            {tags.length > 0 && (
-              <div className="flex flex-wrap gap-2">
-                {tags.map((tag, index) => (
-                  <span
-                    key={index}
-                    className={`px-3 py-1 text-sm font-medium ${
-                      tag.isPrimary
-                        ? 'bg-[#03C1CA] text-white'
-                        : 'bg-gray-200 text-gray-700'
-                    }`}
-                  >
-                    {tag.label}
-                  </span>
-                ))}
-              </div>
-            )}
+        {/* Gradient overlay */}
+        <div
+          className="absolute inset-0"
+          style={{ background: 'linear-gradient(180deg, rgba(0,0,0,0) 30%, rgba(0,0,0,0.55) 100%)' }}
+        />
 
-            <div className="flex flex-col justify-start items-start gap-7 sm:gap-[42px]">
-              <div className="flex flex-col justify-start items-start gap-5 sm:gap-[30px]">
-                {/* Headline */}
-                <h2 className="text-lg sm:text-xl xl:text-2xl 2xl:text-[32px] font-bold text-[#1F1D1D]">
-                  {title}
-                </h2>
-
-                {/* Description */}
-                <p className="text-xs sm:text-sm xl:text-sm 2xl:text-base text-[#565454] leading-relaxed">
-                  {description}
-                </p>
-              </div>
-
-              <div className="flex flex-col justify-start items-start gap-4 sm:gap-[33px]">
-                {/* Metadata */}
-                <div className="flex flex-wrap gap-4 text-sm text-[#565454]">
-                  <div className="flex items-center gap-2">
-                    <HiCalendar className="w-4 h-4" />
-                    <span>{date}</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <HiClock className="w-4 h-4" />
-                    <span>{readTime}</span>
-                  </div>
-                </div>
-
-                {/* CTA Button */}
-                <Link
-                  href={link}
-                  className="inline-block bg-black text-base text-white px-6 py-3 lg:px-8 lg:py-4 font-semibold hover:bg-gray-800 transition-colors"
-                >
-                  {buttonText}
-                </Link>
-              </div>
-            </div>
-          </div>
+        {/* Top-left: FEATURED · date */}
+        <div className="absolute top-6 left-7 text-white/80 text-[10px] font-mono tracking-[0.18em] uppercase select-none">
+          FEATURED{date ? ` · ${date}` : ''}
         </div>
-      </div>
-    </section>
+
+        {/* Top-right: readTime · category */}
+        {(readTime || category) && (
+          <div className="absolute top-6 right-7 text-white/80 text-[10px] font-mono tracking-[0.18em] uppercase select-none">
+            {[readTime, category].filter(Boolean).join(' · ')}
+          </div>
+        )}
+
+        {/* Bottom: title + CTA */}
+        <div className="absolute bottom-7 left-8 right-8 flex items-end justify-between gap-8">
+          <h2
+            className="text-white font-bold max-w-3xl"
+            style={{ fontSize: 'clamp(24px, 3vw, 40px)', lineHeight: 1.1, letterSpacing: '-0.02em' }}
+          >
+            {title}
+          </h2>
+          <span className="inline-flex items-center gap-2.5 px-5 py-3 font-bold uppercase tracking-[0.10em] text-xs text-[#1F1D1D] flex-shrink-0 bg-[#1EEFFA] shadow-button">
+            READ
+            <ArrowRight className="w-3.5 h-3.5" strokeWidth={2.5} />
+          </span>
+        </div>
+      </Link>
+    </div>
   )
 }
