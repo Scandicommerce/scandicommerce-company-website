@@ -11,7 +11,7 @@ export { shopifyPosPage } from "./shopifyPosPage";
 export { allPackagesPage } from "./allPackagesPage";
 export { shopifyPlatformPage } from "./shopifyPlatformPage";
 export { shopifyPosInfoPage } from "./shopifyPosInfoPage";
-export { shopifyTcoCalculatorPage } from "./shopifyTcoCalculatorPage";
+export { shopifyTcoCalculatorPage, shopifyTcoCalculatorPageCalculatorSection } from "./shopifyTcoCalculatorPage";
 export { shopifyXPimPage } from "./shopifyXPimPage";
 export { shopifyXAiPage } from "./shopifyXAiPage";
 export { whyShopifyPage } from "./whyShopifyPage";

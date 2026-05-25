@@ -82,9 +82,10 @@ function sanityToPackage(sanityData: PackageDetailPageData, slug: string): Packa
 }
 
 export default async function PackageDetailPage({ params }: { params: Promise<{ lang: string; slug?: string }> }) {
-  const { slug } = await params
+  const resolvedParams = await params
+  const { slug, lang } = resolvedParams
   if (!slug) notFound()
-  const language = getLanguageFromParams(await params)
+  const language = getLanguageFromParams(resolvedParams)
 
   const raw = await client.fetch<PackageDetailPageData | null>(
     packageDetailPageQuery,
@@ -181,6 +182,7 @@ export default async function PackageDetailPage({ params }: { params: Promise<{ 
           tabLabels={sanityData?.tabLabels}
           addOns={{ ...sanityData?.addOns, items: addOnsWithShopify }}
           caseStudiesBanner={sanityData?.caseStudiesBanner}
+          lang={lang}
         />
       </main>
       <FooterWrapper />

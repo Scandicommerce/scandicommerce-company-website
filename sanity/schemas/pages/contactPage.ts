@@ -227,6 +227,20 @@ export const contactPageMapSection = defineType({
   fields: [
     defineField({ name: "title", title: "Title", type: "string" }),
     defineField({ name: "description", title: "Description", type: "text", rows: 2 }),
+    defineField({
+      name: "latitude",
+      title: "Latitude",
+      type: "number",
+      description: "e.g. 59.9242 — find your coordinates at maps.google.com (right-click → What's here?)",
+      validation: (rule) => rule.min(-90).max(90),
+    }),
+    defineField({
+      name: "longitude",
+      title: "Longitude",
+      type: "number",
+      description: "e.g. 10.6994",
+      validation: (rule) => rule.min(-180).max(180),
+    }),
   ],
   preview: { select: { title: "title" }, prepare: ({ title }: { title?: string }) => ({ title: title || "Map" }) },
 });

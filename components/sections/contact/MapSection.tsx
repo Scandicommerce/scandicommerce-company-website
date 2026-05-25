@@ -5,18 +5,25 @@ import React from 'react'
 interface MapSectionData {
   title?: string
   description?: string
+  latitude?: number
+  longitude?: number
 }
 
 interface MapSectionProps {
   mapSection?: MapSectionData
 }
 
-// Static map URL - Drammensveien 167, 0277 Oslo
-const MAP_URL = 'https://www.openstreetmap.org/export/embed.html?bbox=10.689%2C59.914%2C10.710%2C59.934&layer=mapnik&marker=59.9242%2C10.6994'
+function buildMapUrl(lat: number, lng: number): string {
+  const delta = 0.010
+  return `https://www.openstreetmap.org/export/embed.html?bbox=${lng - delta}%2C${lat - delta}%2C${lng + delta}%2C${lat + delta}&layer=mapnik&marker=${lat}%2C${lng}`
+}
 
 export default function MapSection({ mapSection }: MapSectionProps) {
-  const title = mapSection?.title || 'Interactive map placeholder'
-  const description = mapSection?.description || "Choose a time that works for you. We'll discuss your goals and create a custom plan."
+  const title = mapSection?.title || 'Our location'
+  const description = mapSection?.description || ''
+  const lat = mapSection?.latitude ?? 59.9242
+  const lng = mapSection?.longitude ?? 10.6994
+  const MAP_URL = buildMapUrl(lat, lng)
 
   return (
     <section className="py-12 lg:py-16 bg-white">

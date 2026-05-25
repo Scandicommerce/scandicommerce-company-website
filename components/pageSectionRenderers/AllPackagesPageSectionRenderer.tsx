@@ -3,7 +3,7 @@ import PricingPackages from '@/components/sections/services/all_packages/Pricing
 import FAQ from '@/components/sections/services/all_packages/FAQ'
 import type { SanitySectionItem } from '@/lib/sanity/normalizeDocumentSections'
 
-export function AllPackagesPageSectionRenderer({ sections }: { sections: SanitySectionItem[] }) {
+export function AllPackagesPageSectionRenderer({ sections, lang }: { sections: SanitySectionItem[]; lang?: string }) {
   return (
     <>
       {sections.map((section) => {
@@ -12,7 +12,7 @@ export function AllPackagesPageSectionRenderer({ sections }: { sections: SanityS
           case 'allPackagesPageHeroSection':
             return <Hero key={_key} hero={rest as Parameters<typeof Hero>[0]['hero']} />
           case 'allPackagesPagePackagesSection':
-            return <PricingPackages key={_key} packages={rest as Parameters<typeof PricingPackages>[0]['packages']} />
+            return <PricingPackages key={_key} packages={rest as Parameters<typeof PricingPackages>[0]['packages']} lang={lang} />
           case 'allPackagesPageFaqSection':
             return <FAQ key={_key} faq={rest as Parameters<typeof FAQ>[0]['faq']} />
           default:

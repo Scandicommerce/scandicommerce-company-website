@@ -14,14 +14,18 @@ interface TCOCalculatorClientProps {
     heroDescription?: string
     platforms?: string[]
   }
+  calculatorConfig?: {
+    formTitle?: string
+    hubspotPortalId?: string
+    hubspotFormId?: string
+  }
 }
 
-export default function TCOCalculatorClient({ hero }: TCOCalculatorClientProps) {
+export default function TCOCalculatorClient({ hero, calculatorConfig }: TCOCalculatorClientProps) {
   const [selectedPlatform, setSelectedPlatform] = useState<string>('WooCommerce')
 
   const handlePlatformSelect = (platform: string) => {
     setSelectedPlatform(platform)
-    // Scroll to calculator form
     const formElement = document.getElementById('calculator-form')
     if (formElement) {
       formElement.scrollIntoView({ behavior: 'smooth' })
@@ -43,7 +47,12 @@ export default function TCOCalculatorClient({ hero }: TCOCalculatorClientProps) 
         </div>
       </Hero>
       <div id="calculator-form">
-        <CalculatorForm selectedPlatform={selectedPlatform} />
+        <CalculatorForm
+          selectedPlatform={selectedPlatform}
+          formTitle={calculatorConfig?.formTitle}
+          hubspotPortalId={calculatorConfig?.hubspotPortalId}
+          hubspotFormId={calculatorConfig?.hubspotFormId}
+        />
       </div>
     </>
   )

@@ -1117,6 +1117,11 @@ export const shopifyTcoCalculatorPageQuery = groq`
         heroTitle { text, highlight },
         heroDescription,
         platforms
+      },
+      _type == "shopifyTcoCalculatorPageCalculatorSection" => {
+        formTitle,
+        hubspotPortalId,
+        hubspotFormId
       }
     },
     hero {
@@ -2023,7 +2028,9 @@ export const contactPageQuery = groq`
       },
       _type == "contactPageMapSection" => {
         title,
-        description
+        description,
+        latitude,
+        longitude
       },
       _type == "contactPageFaqSection" => {
         title,
@@ -2080,7 +2087,9 @@ export const contactPageQuery = groq`
     },
     mapSection {
       title,
-      description
+      description,
+      latitude,
+      longitude
     },
     faq {
       title,

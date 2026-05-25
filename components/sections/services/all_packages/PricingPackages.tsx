@@ -32,6 +32,7 @@ interface PackagesData {
 
 interface PricingPackagesProps {
   packages?: PackagesData
+  lang?: string
 }
 
 /** Resolves Book Call URL: page slug (preferred), then custom href, then /contact. */
@@ -58,7 +59,15 @@ function StarRating({ rating }: { rating: number }) {
   )
 }
 
-function PackageCard({ pkg }: { pkg: Package }) {
+interface Labels {
+  viewDetails: string
+  bookCall: string
+  bestFor: string
+  whatsIncluded: string
+  timeline: string
+}
+
+function PackageCard({ pkg, labels }: { pkg: Package; labels: Labels }) {
   return (
     <div className="bg-white p-5 sm:p-6 lg:p-8 shadow-lg hover:shadow-xl transition-shadow duration-300 flex flex-col">
       {/* Header - Title & Subtitle */}
@@ -100,7 +109,7 @@ function PackageCard({ pkg }: { pkg: Package }) {
           </div>
           {pkg.timeline && (
             <p className="text-xs sm:text-sm text-gray-600">
-              Timeline: {pkg.timeline}
+              {labels.timeline}: {pkg.timeline}
             </p>
           )}
         </div>
@@ -122,7 +131,7 @@ function PackageCard({ pkg }: { pkg: Package }) {
         {pkg.bestFor && pkg.bestFor.length > 0 && (
           <div className="bg-gray-50 p-3 sm:p-4 lg:p-5">
             <h4 className="text-xs sm:text-sm lg:text-base font-semibold text-gray-900 mb-2 sm:mb-3">
-              Best for:
+              {labels.bestFor}
             </h4>
             <ul className="space-y-1.5 sm:space-y-2">
               {pkg.bestFor.map((item, index) => (
@@ -138,7 +147,7 @@ function PackageCard({ pkg }: { pkg: Package }) {
         {pkg.included && pkg.included.length > 0 && (
           <div className="bg-gray-50 p-3 sm:p-4 lg:p-5">
             <h4 className="text-xs sm:text-sm lg:text-base font-semibold text-gray-900 mb-2 sm:mb-3">
-              What&apos;s included:
+              {labels.whatsIncluded}
             </h4>
             <ul className="space-y-1.5 sm:space-y-2">
               {pkg.included.map((item, index) => (
@@ -158,7 +167,7 @@ function PackageCard({ pkg }: { pkg: Package }) {
             href={pkg.slug ? `/${pkg.slug}` : pkg.href!}
             className="bg-[#03C1CA] hover:bg-[#02a9b1] text-white text-sm lg:text-base font-semibold py-3 sm:py-3.5 px-4 text-center transition-colors duration-200"
           >
-            View Details
+            {labels.viewDetails}
           </LocalizedLink>
         )}
         <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
@@ -169,14 +178,14 @@ function PackageCard({ pkg }: { pkg: Package }) {
               rel="noopener noreferrer"
               className="border-2 border-gray-200 hover:border-gray-300 text-gray-700 text-sm lg:text-base font-semibold py-3 sm:py-3.5 px-4 text-center transition-colors duration-200 bg-white flex-1"
             >
-              Book Call
+              {labels.bookCall}
             </a>
           ) : (
             <LocalizedLink
               href={resolveBookCallHref(pkg) || '/contact'}
               className="border-2 border-gray-200 hover:border-gray-300 text-gray-700 text-sm lg:text-base font-semibold py-3 sm:py-3.5 px-4 text-center transition-colors duration-200 bg-white flex-1"
             >
-              Book Call
+              {labels.bookCall}
             </LocalizedLink>
           )}
           {pkg.shopifyVariantId && pkg.shopifyProductTitle && (
@@ -192,8 +201,17 @@ function PackageCard({ pkg }: { pkg: Package }) {
   )
 }
 
-export default function PricingPackages({ packages }: PricingPackagesProps) {
+export default function PricingPackages({ packages, lang }: PricingPackagesProps) {
   const items = packages?.packagesItems
+  const isNo = lang === 'no' || lang === 'nb-NO' || (lang ?? '').startsWith('nb')
+
+  const labels: Labels = {
+    viewDetails: isNo ? 'Se detaljer' : 'View Details',
+    bookCall: isNo ? 'Book et møte' : 'Book Call',
+    bestFor: isNo ? 'Passer for:' : 'Best for:',
+    whatsIncluded: isNo ? 'Hva som er inkludert:' : "What's included:",
+    timeline: isNo ? 'Tidsramme' : 'Timeline',
+  }
 
   return (
     <section className="bg-[#F8F8F8] pb-8 xs:pb-12 sm:pb-16 lg:pt-24 lg:pb-24">
@@ -201,7 +219,7 @@ export default function PricingPackages({ packages }: PricingPackagesProps) {
         {items && items.length > 0 && (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 max-w-6xl mx-auto">
             {items.map((pkg, index) => (
-              <PackageCard key={index} pkg={pkg} />
+              <PackageCard key={index} pkg={pkg} labels={labels} />
             ))}
           </div>
         )}

@@ -18,7 +18,8 @@ interface AllPackagesPageData {
 }
 
 export default async function AllPackagesPage({ params }: { params: Promise<{ lang: string; slug?: string }> }) {
-  const language = getLanguageFromParams(await params)
+  const resolvedParams = await params
+  const language = getLanguageFromParams(resolvedParams)
   const pageData = await client.fetch<AllPackagesPageData>(
     allPackagesPageQuery,
     getQueryParams({}, language),
@@ -31,7 +32,7 @@ export default async function AllPackagesPage({ params }: { params: Promise<{ la
     <div className="flex flex-col min-h-screen">
       <HeaderWrapper />
       <main className="flex-grow">
-        <AllPackagesPageSectionRenderer sections={sections} />
+        <AllPackagesPageSectionRenderer sections={sections} lang={resolvedParams.lang} />
         <FooterWrapper />
       </main>
     </div>

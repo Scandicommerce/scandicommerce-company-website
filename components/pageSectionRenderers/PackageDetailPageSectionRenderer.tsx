@@ -16,6 +16,7 @@ export function PackageDetailPageSectionRenderer({
   tabLabels,
   addOns,
   caseStudiesBanner,
+  lang,
 }: {
   sections: SanitySectionItem[]
   pkg: Package
@@ -23,12 +24,13 @@ export function PackageDetailPageSectionRenderer({
   tabLabels?: Parameters<typeof PackageTabs>[0]['tabLabels']
   addOns?: AddOnsProp
   caseStudiesBanner?: Parameters<typeof CaseStudiesBanner>[0]['caseStudiesBanner']
+  lang?: string
 }) {
   void sections
   return (
     <>
       <PackageHero pkg={pkg} shopifyProduct={shopifyProduct} />
-      <PackageTabs pkg={pkg} tabLabels={tabLabels} />
+      <PackageTabs pkg={pkg} tabLabels={tabLabels} lang={lang} />
       <FrequentlyAddedTogether addOns={addOns} />
       <CaseStudiesBanner packageName={pkg.title} caseStudiesBanner={caseStudiesBanner} />
     </>

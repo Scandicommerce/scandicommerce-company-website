@@ -146,7 +146,7 @@ import {
   shopifyPosInfoPageOmnichannelFeaturesSection,
   shopifyPosInfoPageRevenueFormSection,
 } from "./pages/shopifyPosInfoPage";
-import { shopifyTcoCalculatorPageHeroSection } from "./pages/shopifyTcoCalculatorPage";
+import { shopifyTcoCalculatorPageHeroSection, shopifyTcoCalculatorPageCalculatorSection } from "./pages/shopifyTcoCalculatorPage";
 import {
   shopifyXPimPageHeroSection,
   shopifyXPimPageWhatIsPimSection,
@@ -328,6 +328,7 @@ export const schemaTypes = [
   shopifyPosInfoPageOmnichannelFeaturesSection,
   shopifyPosInfoPageRevenueFormSection,
   shopifyTcoCalculatorPageHeroSection,
+  shopifyTcoCalculatorPageCalculatorSection,
   shopifyXPimPageHeroSection,
   shopifyXPimPageWhatIsPimSection,
   shopifyXPimPageIntegratingPimSection,

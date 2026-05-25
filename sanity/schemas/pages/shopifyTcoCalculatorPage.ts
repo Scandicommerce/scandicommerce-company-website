@@ -37,6 +37,33 @@ export const shopifyTcoCalculatorPageHeroSection = defineType({
   },
 });
 
+export const shopifyTcoCalculatorPageCalculatorSection = defineType({
+  name: "shopifyTcoCalculatorPageCalculatorSection",
+  title: "Calculator / HubSpot Form",
+  type: "object",
+  fields: [
+    defineField({
+      name: "formTitle",
+      title: "Form Title",
+      type: "string",
+      description: "e.g. '3-Year ROI Calculator'",
+    }),
+    defineField({
+      name: "hubspotPortalId",
+      title: "HubSpot Portal ID",
+      type: "string",
+      description: "Numeric portal ID from your HubSpot account, e.g. 49119369",
+    }),
+    defineField({
+      name: "hubspotFormId",
+      title: "HubSpot Form ID",
+      type: "string",
+      description: "Form ID from HubSpot embed code, e.g. 10642b03-8cb9-4e6b-8fee-b000f8ccd434",
+    }),
+  ],
+  preview: { prepare: () => ({ title: "Calculator / HubSpot Form" }) },
+});
+
 export const shopifyTcoCalculatorPage = defineType({
   name: "shopifyTcoCalculatorPage",
   title: "Shopify TCO Calculator Page",
@@ -65,7 +92,10 @@ export const shopifyTcoCalculatorPage = defineType({
       title: "Page content",
       type: "array",
       description: "Drag to reorder sections.",
-      of: [defineArrayMember({ type: "shopifyTcoCalculatorPageHeroSection" })],
+      of: [
+        defineArrayMember({ type: "shopifyTcoCalculatorPageHeroSection" }),
+        defineArrayMember({ type: "shopifyTcoCalculatorPageCalculatorSection" }),
+      ],
     }),
     seoExtendedField,
     legacySeoFieldMinimal,

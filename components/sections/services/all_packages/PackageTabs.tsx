@@ -17,17 +17,19 @@ interface TabLabels {
 interface PackageTabsProps {
   pkg: Package
   tabLabels?: TabLabels
+  lang?: string
 }
 
-export default function PackageTabs({ pkg, tabLabels }: PackageTabsProps) {
+export default function PackageTabs({ pkg, tabLabels, lang }: PackageTabsProps) {
   const [activeTab, setActiveTab] = useState('overview')
+  const isNo = lang === 'no' || lang === 'nb-NO' || (lang ?? '').startsWith('nb')
 
   const tabs = [
-    { id: 'overview', label: tabLabels?.overview || 'Overview' },
-    { id: 'included', label: tabLabels?.whatsIncluded || "What's Included" },
-    { id: 'process', label: tabLabels?.process || 'Process' },
+    { id: 'overview', label: tabLabels?.overview || (isNo ? 'Oversikt' : 'Overview') },
+    { id: 'included', label: tabLabels?.whatsIncluded || (isNo ? 'Hva er inkludert' : "What's Included") },
+    { id: 'process', label: tabLabels?.process || (isNo ? 'Prosess' : 'Process') },
     { id: 'faq', label: tabLabels?.faq || 'FAQ' },
-    { id: 'reviews', label: tabLabels?.reviews || 'Reviews' },
+    { id: 'reviews', label: tabLabels?.reviews || (isNo ? 'Anmeldelser' : 'Reviews') },
   ]
 
   return (
@@ -86,7 +88,7 @@ export default function PackageTabs({ pkg, tabLabels }: PackageTabsProps) {
                   // Fallback to simple list
                   <div>
                     <h3 className="text-[4.3vw] xs:text-[2.6vw] sm:text-[2.5vw] md:text-[2.2vw] lg:text-[18px] xl:text-[24px] font-bold text-gray-900 mb-6">
-                      {tabLabels?.whatsIncluded || "What's Included"}
+                      {tabLabels?.whatsIncluded || (isNo ? 'Hva er inkludert' : "What's Included")}
                     </h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       {pkg.included.map((item, index) => (
