@@ -24,6 +24,8 @@ interface FeaturedArticleData {
   readTime?: string
   link?: string
   buttonText?: string
+  pageHeaderEyebrow?: string
+  pageHeaderTitle?: string
   author?: AuthorData
 }
 
@@ -53,9 +55,12 @@ export default function FeaturedArticle({ featuredArticle, lang }: FeaturedArtic
   const category = primaryTag?.label?.toUpperCase() || ''
   const description = featuredArticle?.description || ''
   const author = featuredArticle?.author
-  const buttonText = featuredArticle?.buttonText || 'READ THE POST'
-
   const locale = lang || 'en'
+  const isNorwegian = locale === 'no' || locale === 'nb-NO' || locale.startsWith('nb')
+
+  const buttonText = featuredArticle?.buttonText || (isNorwegian ? 'LES ARTIKKELEN' : 'READ THE POST')
+  const eyebrow = featuredArticle?.pageHeaderEyebrow || (isNorwegian ? 'Notater fra studioet' : 'Notes from the studio')
+  const pageTitle = featuredArticle?.pageHeaderTitle || (isNorwegian ? 'Hva vi sendte\nog lærte.' : 'What we\nshipped & learned.')
   const articleSlug = featuredArticle?.articleSlug?.trim()
   const link = featuredArticle?.link || (articleSlug ? `/${locale}/resources/${articleSlug}` : '#')
 
@@ -66,13 +71,13 @@ export default function FeaturedArticle({ featuredArticle, lang }: FeaturedArtic
       <div className="section_container mx-auto page-padding-x pt-20 pb-14 flex flex-col md:flex-row md:items-end justify-between gap-8">
         <div>
           <div className="text-[11px] font-bold uppercase tracking-[0.12em] text-[#11848C] mb-5">
-            Notes from the studio
+            {eyebrow}
           </div>
           <h1
-            className="font-bold text-[#1F1D1D]"
+            className="font-bold text-[#1F1D1D] whitespace-pre-line"
             style={{ fontSize: 'clamp(40px, 5.5vw, 72px)', lineHeight: 1.04, letterSpacing: '-0.025em' }}
           >
-            What we<br />shipped &amp; learned.
+            {pageTitle}
           </h1>
         </div>
         <div className="flex items-center gap-5 text-sm text-neutral-500 font-mono pb-1 flex-shrink-0">

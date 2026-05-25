@@ -88,7 +88,24 @@ export const blogPageFeaturedArticleSection = defineType({
     defineField({ name: "date", title: "Date (override or manual)", type: "string" }),
     defineField({ name: "readTime", title: "Read Time (override or manual)", type: "string" }),
     defineField({ name: "link", title: "Article Link (override or manual)", type: "string" }),
-    defineField({ name: "buttonText", title: "Button Text", type: "string" }),
+    defineField({
+      name: "buttonText",
+      title: "CTA Button Text",
+      type: "string",
+      description: 'e.g. "READ THE POST" / "LES ARTIKKELEN"',
+    }),
+    defineField({
+      name: "pageHeaderEyebrow",
+      title: "Page Header — Eyebrow",
+      type: "string",
+      description: 'Small label above the page title. e.g. "Notes from the studio" / "Notater fra studioet"',
+    }),
+    defineField({
+      name: "pageHeaderTitle",
+      title: "Page Header — Title",
+      type: "string",
+      description: 'Large h1 at the top of the blog page. e.g. "What we shipped & learned." / "Hva vi sendte og lærte."',
+    }),
   ],
   preview: { prepare: () => ({ title: "Featured article" }) },
 });
@@ -121,7 +138,24 @@ export const blogPageArticlesGridSection = defineType({
         }),
       ],
     }),
-    defineField({ name: "loadMoreButtonText", title: "Load More Button Text", type: "string" }),
+    defineField({
+      name: "latestPostsLabel",
+      title: "Latest Posts Label",
+      type: "string",
+      description: 'Heading above the top 3 article cards. e.g. "Latest posts" / "Siste innlegg"',
+    }),
+    defineField({
+      name: "archiveLabel",
+      title: "Archive Label",
+      type: "string",
+      description: 'Heading above the filterable archive list. e.g. "Archive" / "Arkiv"',
+    }),
+    defineField({
+      name: "searchPlaceholder",
+      title: "Search Placeholder",
+      type: "string",
+      description: 'Placeholder in the archive search field. e.g. "Search archive…" / "Søk i arkivet…"',
+    }),
   ],
   preview: { prepare: () => ({ title: "Articles grid" }) },
 });

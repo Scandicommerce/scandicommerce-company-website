@@ -25,6 +25,9 @@ interface ArticleData {
 interface ArticlesGridData {
   articles?: ArticleData[]
   loadMoreButtonText?: string
+  latestPostsLabel?: string
+  archiveLabel?: string
+  searchPlaceholder?: string
 }
 
 interface ArticlesGridProps {
@@ -90,6 +93,10 @@ function getMonthLabel(d: Date, locale: string): string {
 export default function ArticlesGrid({ articlesGrid, lang }: ArticlesGridProps) {
   const locale = lang || 'en'
   const isNorwegian = locale === 'no' || locale === 'nb-NO' || locale.startsWith('nb')
+  const latestLabel = articlesGrid?.latestPostsLabel || (isNorwegian ? 'Siste innlegg' : 'Latest posts')
+  const archiveLabel = articlesGrid?.archiveLabel || (isNorwegian ? 'Arkiv' : 'Archive')
+  const searchPlaceholderText = articlesGrid?.searchPlaceholder || (isNorwegian ? 'Søk i arkivet…' : 'Search archive…')
+  const allLabel = isNorwegian ? 'Alle' : 'All'
   const [activeCategory, setActiveCategory] = useState('All')
   const [searchQuery, setSearchQuery] = useState('')
 
@@ -148,7 +155,6 @@ export default function ArticlesGrid({ articlesGrid, lang }: ArticlesGridProps) 
   }, [archive, activeCategory, searchQuery])
 
   const totalCount = articles.length
-  const allLabel = isNorwegian ? 'Alle' : 'All'
 
   return (
     <section className="bg-white pb-24">
@@ -160,7 +166,7 @@ export default function ArticlesGrid({ articlesGrid, lang }: ArticlesGridProps) 
             <div className="flex items-baseline justify-between mb-10">
               <div className="flex items-baseline gap-4">
                 <span className="text-[11px] font-bold uppercase tracking-[0.12em] text-[#11848C]">
-                  {isNorwegian ? 'Nyeste innlegg' : 'Latest posts'}
+                  {latestLabel}
                 </span>
                 {deckMonthLabel && (
                   <span className="text-xs text-neutral-400 font-mono">/ {deckMonthLabel}</span>
@@ -232,7 +238,7 @@ export default function ArticlesGrid({ articlesGrid, lang }: ArticlesGridProps) 
           <div className="flex flex-col gap-5 mb-8">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <span className="text-[11px] font-bold uppercase tracking-[0.12em] text-[#11848C]">
-                {isNorwegian ? 'Arkiv' : 'Archive'}
+                {archiveLabel}
               </span>
               {/* Search input */}
               <div className="relative sm:w-72">
@@ -246,7 +252,7 @@ export default function ArticlesGrid({ articlesGrid, lang }: ArticlesGridProps) 
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder={isNorwegian ? 'Søk i arkivet…' : 'Search archive…'}
+                  placeholder={searchPlaceholderText}
                   className="w-full pl-9 pr-4 py-2 text-sm border border-neutral-200 bg-white text-neutral-900 placeholder-neutral-400 focus:outline-none focus:ring-1 focus:ring-teal"
                 />
               </div>
