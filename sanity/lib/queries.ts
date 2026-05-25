@@ -2263,35 +2263,27 @@ export const blogPageQuery = groq`
         "date": coalesce(article->publishedAt, article->date, date),
         "readTime": coalesce(article->readTime, readTime),
         "link": select(defined(article) => "/resources/" + article->slug.current, link),
-        buttonText
+        buttonText,
+        "author": article->author {
+          name,
+          "imageUrl": image.asset->url
+        }
       },
       _type == "blogPageArticlesGridSection" => {
-        "articles": articles[]-> {
+        "articles": *[_type == "blogPost" && (language == $language || !defined(language))] | order(coalesce(publishedAt, date) desc) {
           _type,
           title,
-          "description": select(
-            _type == "caseStudy" => excerpt,
-            _type == "post" => excerpt,
-            description
-          ),
-          "date": select(
-            _type == "caseStudy" => publishedAt,
-            _type == "post" => publishedAt,
-            date
-          ),
-          "readTime": select(_type == "blogPost" => readTime, null),
-          "category": select(
-            _type == "caseStudy" => coalesce(industry, "Case Study"),
-            _type == "post" => coalesce(tags[isPrimary == true][0].label, tags[0].label),
-            category
-          ),
-          "imageUrl": select(
-            _type == "caseStudy" => heroImage.asset->url,
-            image.asset->url
-          ),
-          "slug": slug.current
-        },
-        loadMoreButtonText
+          "description": description,
+          "date": coalesce(publishedAt, date),
+          readTime,
+          "category": category,
+          "imageUrl": coalesce(featuredImage.asset->url, image.asset->url),
+          "slug": slug.current,
+          "author": author {
+            name,
+            "imageUrl": image.asset->url
+          }
+        }
       },
       _type == "blogPageNewsletterCtaSection" => {
         title,
@@ -2318,35 +2310,27 @@ export const blogPageQuery = groq`
       "date": coalesce(article->publishedAt, article->date, date),
       "readTime": coalesce(article->readTime, readTime),
       "link": select(defined(article) => "/resources/" + article->slug.current, link),
-      buttonText
+      buttonText,
+      "author": article->author {
+        name,
+        "imageUrl": image.asset->url
+      }
     },
     articlesGrid {
-      "articles": articles[]-> {
+      "articles": *[_type == "blogPost" && (language == $language || !defined(language))] | order(coalesce(publishedAt, date) desc) {
         _type,
         title,
-        "description": select(
-          _type == "caseStudy" => excerpt,
-          _type == "post" => excerpt,
-          description
-        ),
-        "date": select(
-          _type == "caseStudy" => publishedAt,
-          _type == "post" => publishedAt,
-          date
-        ),
-        "readTime": select(_type == "blogPost" => readTime, null),
-        "category": select(
-          _type == "caseStudy" => coalesce(industry, "Case Study"),
-          _type == "post" => coalesce(tags[isPrimary == true][0].label, tags[0].label),
-          category
-        ),
-        "imageUrl": select(
-          _type == "caseStudy" => heroImage.asset->url,
-          image.asset->url
-        ),
-        "slug": slug.current
-      },
-      loadMoreButtonText
+        "description": description,
+        "date": coalesce(publishedAt, date),
+        readTime,
+        "category": category,
+        "imageUrl": coalesce(featuredImage.asset->url, image.asset->url),
+        "slug": slug.current,
+        "author": author {
+          name,
+          "imageUrl": image.asset->url
+        }
+      }
     },
     newsletterCta {
       title,

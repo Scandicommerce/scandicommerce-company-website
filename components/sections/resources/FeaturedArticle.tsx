@@ -4,6 +4,11 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
 
+interface AuthorData {
+  name?: string
+  imageUrl?: string
+}
+
 interface TagData {
   label?: string
   isPrimary?: boolean
@@ -19,6 +24,7 @@ interface FeaturedArticleData {
   readTime?: string
   link?: string
   buttonText?: string
+  author?: AuthorData
 }
 
 interface FeaturedArticleProps {
@@ -26,10 +32,12 @@ interface FeaturedArticleProps {
   lang?: string
 }
 
-function formatCoverDate(d: string | undefined): string {
+function formatDate(d: string | undefined): string {
   if (!d) return ''
   try {
-    return new Date(d).toLocaleDateString('nb-NO', { day: 'numeric', month: 'short', year: 'numeric' })
+    const parsed = new Date(d)
+    if (isNaN(parsed.getTime())) return d
+    return parsed.toLocaleDateString('nb-NO', { day: 'numeric', month: 'short', year: 'numeric' })
   } catch {
     return d
   }
@@ -38,67 +46,95 @@ function formatCoverDate(d: string | undefined): string {
 export default function FeaturedArticle({ featuredArticle, lang }: FeaturedArticleProps) {
   const imageUrl = featuredArticle?.imageUrl || '/images/resources/featured_article/banner.png'
   const title = featuredArticle?.title || ''
-  const date = formatCoverDate(featuredArticle?.date)
+  const date = formatDate(featuredArticle?.date)
   const readTime = featuredArticle?.readTime || ''
   const tags = featuredArticle?.tags || []
   const primaryTag = tags.find((t) => t.isPrimary) ?? tags[0]
   const category = primaryTag?.label?.toUpperCase() || ''
+  const description = featuredArticle?.description || ''
+  const author = featuredArticle?.author
+  const buttonText = featuredArticle?.buttonText || 'READ THE POST'
 
   const locale = lang || 'en'
   const articleSlug = featuredArticle?.articleSlug?.trim()
-  const link =
-    featuredArticle?.link ||
-    (articleSlug ? `/${locale}/resources/${articleSlug}` : '#')
+  const link = featuredArticle?.link || (articleSlug ? `/${locale}/resources/${articleSlug}` : '#')
 
   return (
-    <div className="section_container mx-auto page-padding-x pb-16 lg:pb-20">
-      <Link
-        href={link}
-        className="block relative overflow-hidden group"
-        style={{ aspectRatio: '21 / 9' }}
-      >
-        {/* Image */}
-        <Image
-          src={imageUrl}
-          alt={title}
-          fill
-          className="object-cover transition-transform duration-500 group-hover:scale-[1.02]"
-          sizes="(max-width: 1536px) 100vw, 1536px"
-          priority
-        />
+    <section className="border-b border-neutral-200">
+      <div className="section_container mx-auto page-padding-x py-16 lg:py-20">
+        <div className="grid grid-cols-1 md:grid-cols-12 md:gap-12 items-start">
 
-        {/* Gradient overlay */}
-        <div
-          className="absolute inset-0"
-          style={{ background: 'linear-gradient(180deg, rgba(0,0,0,0) 30%, rgba(0,0,0,0.55) 100%)' }}
-        />
-
-        {/* Top-left: FEATURED · date */}
-        <div className="absolute top-6 left-7 text-white/80 text-[10px] font-mono tracking-[0.18em] uppercase select-none">
-          FEATURED{date ? ` · ${date}` : ''}
-        </div>
-
-        {/* Top-right: readTime · category */}
-        {(readTime || category) && (
-          <div className="absolute top-6 right-7 text-white/80 text-[10px] font-mono tracking-[0.18em] uppercase select-none">
-            {[readTime, category].filter(Boolean).join(' · ')}
+          {/* Left: text content */}
+          <div className="md:col-span-7 pt-2 order-2 md:order-1 mt-8 md:mt-0">
+            <div className="text-[11px] font-bold uppercase tracking-[0.12em] text-teal mb-6">
+              <span className="inline-flex items-center gap-2">
+                <span className="w-6 h-px bg-teal inline-block" />
+                FEATURED{category ? ` · ${category}` : ''}
+              </span>
+            </div>
+            <h2
+              className="font-bold tracking-tight mb-7 text-[#1F1D1D]"
+              style={{ fontSize: 'clamp(28px, 3.5vw, 48px)', lineHeight: 1.08, letterSpacing: '-0.02em' }}
+            >
+              {title}
+            </h2>
+            {description && (
+              <p className="text-neutral-600 leading-relaxed max-w-xl mb-10" style={{ fontSize: 18, lineHeight: 1.6 }}>
+                {description}
+              </p>
+            )}
+            <div className="flex items-center gap-4 mb-9">
+              {author?.imageUrl ? (
+                <Image
+                  src={author.imageUrl}
+                  alt={author.name || ''}
+                  width={36}
+                  height={36}
+                  className="rounded-full object-cover flex-shrink-0"
+                />
+              ) : (
+                <div
+                  className="w-9 h-9 rounded-full flex-shrink-0"
+                  style={{ background: 'linear-gradient(135deg, #03C1CA, #11848C)' }}
+                />
+              )}
+              <div>
+                {author?.name && (
+                  <div className="text-sm font-semibold text-[#1F1D1D]">{author.name}</div>
+                )}
+                <div className="text-xs text-neutral-500 font-mono">
+                  {[date, readTime ? `${readTime} read` : ''].filter(Boolean).join(' · ')}
+                </div>
+              </div>
+            </div>
+            <Link
+              href={link}
+              className="inline-flex items-center gap-2.5 px-7 py-3.5 font-bold uppercase tracking-[0.10em] text-[13px] text-[#1F1D1D] bg-[#1EEFFA] shadow-button hover:bg-teal transition-colors duration-200"
+            >
+              {buttonText}
+              <ArrowRight className="w-3.5 h-3.5" strokeWidth={2.5} />
+            </Link>
           </div>
-        )}
 
-        {/* Bottom: title + CTA */}
-        <div className="absolute bottom-7 left-8 right-8 flex items-end justify-between gap-8">
-          <h2
-            className="text-white font-bold max-w-3xl"
-            style={{ fontSize: 'clamp(24px, 3vw, 40px)', lineHeight: 1.1, letterSpacing: '-0.02em' }}
-          >
-            {title}
-          </h2>
-          <span className="inline-flex items-center gap-2.5 px-5 py-3 font-bold uppercase tracking-[0.10em] text-xs text-[#1F1D1D] flex-shrink-0 bg-[#1EEFFA] shadow-button">
-            READ
-            <ArrowRight className="w-3.5 h-3.5" strokeWidth={2.5} />
-          </span>
+          {/* Right: image */}
+          <div className="md:col-span-5 order-1 md:order-2">
+            <Link href={link} className="block relative overflow-hidden group" style={{ aspectRatio: '4 / 5' }}>
+              <Image
+                src={imageUrl}
+                alt={title}
+                fill
+                className="object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+                sizes="(max-width: 768px) 100vw, 42vw"
+                priority
+              />
+              <div className="absolute top-5 left-5 text-white/70 text-[11px] font-mono tracking-widest uppercase select-none">
+                01
+              </div>
+            </Link>
+          </div>
+
         </div>
-      </Link>
-    </div>
+      </div>
+    </section>
   )
 }
