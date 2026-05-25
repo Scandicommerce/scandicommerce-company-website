@@ -48,16 +48,30 @@ export const blogPost = defineType({
     }),
     defineField({
       name: "description",
-      title: "Description",
+      title: "Excerpt",
       type: "text",
       group: "content",
-      rows: 2,
+      rows: 3,
+      description: "Shown in article cards and the featured article section. Keep it 1–2 sentences.",
+      validation: (rule) =>
+        rule.required().min(20).warning("Add an excerpt — it shows in cards and the featured section."),
     }),
     defineField({
       name: "category",
       title: "Category",
       type: "string",
       group: "content",
+      options: {
+        list: [
+          { title: "Engineering", value: "Engineering" },
+          { title: "Platform", value: "Platform" },
+          { title: "Conversion", value: "Conversion" },
+          { title: "Norwegian Market", value: "Norway" },
+          { title: "E-commerce", value: "E-commerce" },
+          { title: "Case Study", value: "Case Study" },
+        ],
+      },
+      validation: (rule) => rule.required().warning("Select a category — used for filtering in the blog index."),
     }),
     defineField({
       name: "tags",
