@@ -8,9 +8,11 @@ import type { PartnerCategoryItem } from '@/lib/partnersCategories'
 export function PartnersPageSectionRenderer({
   sections,
   categoryList,
+  lang,
 }: {
   sections: SanitySectionItem[]
   categoryList?: PartnerCategoryItem[]
+  lang?: string
 }) {
   return (
     <>
@@ -29,6 +31,7 @@ export function PartnersPageSectionRenderer({
                 key={_key}
                 partnersGrid={rest as Parameters<typeof PartnersGrid>[0]['partnersGrid']}
                 categoryList={categoryList}
+                lang={lang}
               />
             )
           case 'partnersPageCtaSection':

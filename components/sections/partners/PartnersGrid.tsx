@@ -35,6 +35,8 @@ interface PartnerData {
   /** Fallback URL when image comes from non-Sanity source */
   imageUrl?: string
   logoUrl?: string
+  url?: string
+  linkText?: string
 }
 
 interface PartnersGridData {
@@ -45,6 +47,7 @@ interface PartnersGridProps {
   partnersGrid?: PartnersGridData
   /** Dynamic category list from Sanity (Partner Categories). When set, filters and sections use this order; otherwise static list is used. */
   categoryList?: PartnerCategoryItem[]
+  lang?: string
 }
 
 // Default partners (used when no Sanity data; add Categories in Sanity for ERP, OMS, Shipping, Logistics, POS)
@@ -232,7 +235,7 @@ const ICON_MAP: Record<string, ComponentType<{ className?: string }>> = {
   Compass,
 }
 
-export default function PartnersGrid({ partnersGrid, categoryList }: PartnersGridProps) {
+export default function PartnersGrid({ partnersGrid, categoryList, lang }: PartnersGridProps) {
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
   /** Unique per card instance (group + partner.id) so the same partner in different groups has separate expand state. */
@@ -290,6 +293,8 @@ export default function PartnersGrid({ partnersGrid, categoryList }: PartnersGri
         benefits: p.benefits || [],
         image: imageUrl,
         logo: logoUrl,
+        url: p.url,
+        linkText: p.linkText,
       }
     })
     : defaultPartners
@@ -677,6 +682,7 @@ export default function PartnersGrid({ partnersGrid, categoryList }: PartnersGri
                       <PartnerCard
                         partner={partner}
                         imageSizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                        lang={lang}
                         onExpandChange={(expanded) => {
                           if (expanded) {
                             if (expandedCardId != null && expandedCardId !== cardId) {

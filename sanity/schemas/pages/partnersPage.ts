@@ -113,6 +113,18 @@ export const partnersPagePartnersGridSection = defineType({
               options: { hotspot: true },
             }),
             defineField({ name: "logo", title: "Partner Logo (Optional)", type: "image", options: { hotspot: true } }),
+            defineField({
+              name: "url",
+              title: "Partner Link (URL)",
+              type: "url",
+              description: "External link shown as a button on the expanded card, e.g. https://www.klaviyo.com",
+            }),
+            defineField({
+              name: "linkText",
+              title: "Partner Link Text (optional)",
+              type: "string",
+              description: 'Override the button label, e.g. "Visit Klaviyo" / "Besøk Klaviyo". Leave blank for a language default.',
+            }),
           ],
           preview: {
             select: {

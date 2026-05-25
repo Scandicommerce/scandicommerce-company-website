@@ -47,7 +47,7 @@ export default async function PartnersPage({ params }: { params: Promise<{ lang:
     <div className="flex flex-col min-h-screen">
       <HeaderWrapper />
       <main className="flex-grow">
-        <PartnersPageSectionRenderer sections={sections} categoryList={categoryList ?? undefined} />
+        <PartnersPageSectionRenderer sections={sections} categoryList={categoryList ?? undefined} lang={lang} />
         <FooterWrapper />
       </main>
     </div>

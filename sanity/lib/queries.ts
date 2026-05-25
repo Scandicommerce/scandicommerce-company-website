@@ -1905,7 +1905,9 @@ export const partnersPageQuery = groq`
             "asset": asset->,
             crop,
             hotspot
-          }
+          },
+          url,
+          linkText
         }
       },
       _type == "partnersPageCtaSection" => {
@@ -1946,7 +1948,9 @@ export const partnersPageQuery = groq`
           "asset": asset->,
           crop,
           hotspot
-        }
+        },
+        url,
+        linkText
       }
     },
     cta {

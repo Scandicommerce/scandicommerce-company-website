@@ -17,11 +17,14 @@ export interface Partner {
   benefits: string[]
   image: string
   logo?: string | ReactNode
+  url?: string
+  linkText?: string
 }
 
 interface PartnerCardProps {
   partner: Partner
   imageSizes?: string
+  lang?: string
   /** Called when expand/collapse toggles so the parent can raise z-index (e.g. above other cards/sections, below header). */
   onExpandChange?: (expanded: boolean) => void
   /** When false while this card is expanded, parent has another card expanded — close this one (accordion behavior). */
@@ -33,9 +36,14 @@ const BENEFITS_COLLAPSED = 2
 export default function PartnerCard({
   partner,
   imageSizes = '(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw',
+  lang,
   onExpandChange,
   isActiveExpanded,
 }: PartnerCardProps) {
+  const isNorwegian = lang === 'no' || lang === 'nb-NO' || (lang ?? '').startsWith('nb')
+  const readMoreLabel = isNorwegian ? 'Les mer' : 'Read more'
+  const readLessLabel = isNorwegian ? 'Les mindre' : 'Read less'
+  const visitLabel = partner.linkText || (isNorwegian ? `Besøk ${partner.name}` : `Visit ${partner.name}`)
   const [isExpanded, setIsExpanded] = useState(false)
   const [isCollapsing, setIsCollapsing] = useState(false)
   const [expandedContentHeight, setExpandedContentHeight] = useState(0)
@@ -255,13 +263,25 @@ export default function PartnerCard({
             </div>
           </div>
 
-          <button
-            type="button"
-            onClick={toggleExpanded}
-            className="w-full mt-5 px-5 py-2.5 text-sm font-semibold border-2 border-[#03C1CA] text-[#03C1CA] bg-white hover:bg-[#03C1CA] hover:text-white rounded transition-colors duration-200 self-start"
-          >
-            {isExpanded ? 'Read less' : 'Read more'}
-          </button>
+          <div className="flex flex-col gap-2 mt-5">
+            {partner.url && isExpanded && (
+              <a
+                href={partner.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full px-5 py-2.5 text-sm font-semibold bg-[#03C1CA] text-white hover:bg-[#029AA2] rounded transition-colors duration-200 text-center"
+              >
+                {visitLabel} →
+              </a>
+            )}
+            <button
+              type="button"
+              onClick={toggleExpanded}
+              className="w-full px-5 py-2.5 text-sm font-semibold border-2 border-[#03C1CA] text-[#03C1CA] bg-white hover:bg-[#03C1CA] hover:text-white rounded transition-colors duration-200"
+            >
+              {isExpanded ? readLessLabel : readMoreLabel}
+            </button>
+          </div>
         </div>
       </div>
     </div>
