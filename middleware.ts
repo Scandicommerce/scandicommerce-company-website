@@ -7,6 +7,11 @@ import { isNoSlugEnglishificationRedirect, translatePath } from '@/lib/translate
 const COM_HOST = 'scandicommerce.com'
 const NO_HOST = 'scandicommerce.no'
 
+// Static slug redirect maps: English slugs that must be rewritten on .no, and vice versa.
+// Used to redirect without a Sanity lookup (covers pages with different slugs per locale).
+const STATIC_SLUG_NO_REDIRECT: Record<string, string> = { blog: 'blogg' }
+const STATIC_SLUG_EN_REDIRECT: Record<string, string> = { blogg: 'blog' }
+
 // ---------------------------------------------------------------------------
 // Sanity-managed redirects (fetched at request time with in-memory cache)
 // ---------------------------------------------------------------------------
@@ -207,6 +212,22 @@ export async function middleware(request: NextRequest) {
     response.headers.set('x-pathname', pathname)
     response.headers.set('x-url', request.url)
     return response
+  }
+
+  // On production: redirect statically-known wrong-locale slugs (e.g. /blog on .no → /blogg).
+  // Only covers cases where the same slug differs between EN and NO — avoids any Sanity lookup.
+  if (isProductionHost(host)) {
+    const bare = normalizePath(pathname)
+    if (bare) {
+      const noMatch = STATIC_SLUG_NO_REDIRECT[bare]
+      if (isNoHost(host) && noMatch) {
+        return NextResponse.redirect(new URL(`/${noMatch}`, request.url), 308)
+      }
+      const enMatch = STATIC_SLUG_EN_REDIRECT[bare]
+      if (isComHost(host) && enMatch) {
+        return NextResponse.redirect(new URL(`/${enMatch}`, request.url), 308)
+      }
+    }
   }
 
   // No locale in URL → rewrite to /{defaultLocale}{path}
