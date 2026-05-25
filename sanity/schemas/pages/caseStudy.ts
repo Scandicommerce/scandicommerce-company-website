@@ -258,6 +258,14 @@ export const caseStudy = defineType({
       description: "Displayed above the hero title.",
     }),
     defineField({
+      name: "author",
+      title: "Author",
+      type: "reference",
+      to: [{ type: "author" }],
+      group: "content",
+      description: "Select an author. Create new authors under Blog → Authors.",
+    }),
+    defineField({
       name: "publishedAt",
       title: "Published At",
       type: "datetime",

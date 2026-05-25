@@ -314,6 +314,10 @@ export const deskStructure = (S: StructureBuilder) =>
               blogPostsByLanguage(S),
               postsByLanguage(S),
               caseStudiesByLanguage(S),
+              S.listItem()
+                .title('Authors')
+                .schemaType('author')
+                .child(S.documentTypeList('author').title('Authors')),
             ])
         ),
 

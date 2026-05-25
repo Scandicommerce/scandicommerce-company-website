@@ -24,7 +24,7 @@ import {
 // ============================================
 // Document Types (e.g. post page builder)
 // ============================================
-import { post, siteSettings, redirect } from "./documents";
+import { author, post, siteSettings, redirect } from "./documents";
 
 // ============================================
 // Page Types (document types for pages)
@@ -235,6 +235,7 @@ export const schemaTypes = [
   dividerBlock,
 
   // Document types
+  author,
   post,
 
   // Landing page section blocks (reusable object types)

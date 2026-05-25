@@ -2264,25 +2264,33 @@ export const blogPageQuery = groq`
         "readTime": coalesce(article->readTime, readTime),
         "link": select(defined(article) => "/resources/" + article->slug.current, link),
         buttonText,
-        "author": article->author {
-          name,
-          "imageUrl": image.asset->url
-        }
+        "author": article->author->{ name, "imageUrl": image.asset->url }
       },
       _type == "blogPageArticlesGridSection" => {
-        "articles": *[_type == "blogPost" && (language == $language || !defined(language))] | order(coalesce(publishedAt, date) desc) {
+        "articles": *[_type in ["blogPost", "post", "caseStudy"] && (language == $language || !defined(language))] | order(coalesce(publishedAt, date) desc) {
           _type,
           title,
-          "description": coalesce(description, introduction),
+          "description": select(
+            _type == "caseStudy" => coalesce(excerpt, description),
+            _type == "post" => coalesce(excerpt, description),
+            coalesce(description, introduction)
+          ),
           "date": coalesce(publishedAt, date),
-          readTime,
-          "category": category,
-          "imageUrl": coalesce(featuredImage.asset->url, image.asset->url),
+          "readTime": select(_type == "blogPost" => readTime, null),
+          "category": select(
+            _type == "caseStudy" => coalesce(industry, "Case Study"),
+            _type == "post" => coalesce(tags[isPrimary == true][0].label, tags[0].label),
+            category
+          ),
+          "imageUrl": select(
+            _type == "caseStudy" => coalesce(heroImage.asset->url, image.asset->url),
+            coalesce(featuredImage.asset->url, image.asset->url)
+          ),
           "slug": slug.current,
-          "author": author {
-            name,
-            "imageUrl": image.asset->url
-          }
+          "author": coalesce(
+            author->{ name, "imageUrl": image.asset->url },
+            select(_type == "caseStudy" => { "name": authorName }, null)
+          )
         }
       },
       _type == "blogPageNewsletterCtaSection" => {
@@ -2311,10 +2319,7 @@ export const blogPageQuery = groq`
       "readTime": coalesce(article->readTime, readTime),
       "link": select(defined(article) => "/resources/" + article->slug.current, link),
       buttonText,
-      "author": article->author {
-        name,
-        "imageUrl": image.asset->url
-      }
+      "author": article->author->{ name, "imageUrl": image.asset->url }
     },
     articlesGrid {
       "articles": *[_type == "blogPost" && (language == $language || !defined(language))] | order(coalesce(publishedAt, date) desc) {

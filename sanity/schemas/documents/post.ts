@@ -108,6 +108,14 @@ export const post = defineType({
       ],
     }),
     defineField({
+      name: "author",
+      title: "Author",
+      type: "reference",
+      to: [{ type: "author" }],
+      group: "content",
+      description: "Select an author. Create new authors under Blog → Authors.",
+    }),
+    defineField({
       name: "content",
       title: "Content",
       type: "array",

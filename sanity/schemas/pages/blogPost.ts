@@ -122,14 +122,10 @@ export const blogPost = defineType({
     defineField({
       name: "author",
       title: "Author",
-      type: "object",
+      type: "reference",
+      to: [{ type: "author" }],
       group: "author",
-      fields: [
-        defineField({ name: "name", title: "Name", type: "string" }),
-        defineField({ name: "role", title: "Role", type: "text", rows: 2 }),
-        defineField({ name: "image", title: "Image", type: "image", options: { hotspot: true } }),
-        defineField({ name: "slug", title: "Slug", type: "string", description: "e.g. magnus-andersen for /team/magnus-andersen" }),
-      ],
+      description: "Select an author. Create new authors under Blog → Authors in the Studio.",
     }),
     // Table of contents
     defineField({
