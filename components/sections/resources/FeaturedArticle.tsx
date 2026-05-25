@@ -60,6 +60,34 @@ export default function FeaturedArticle({ featuredArticle, lang }: FeaturedArtic
   const link = featuredArticle?.link || (articleSlug ? `/${locale}/resources/${articleSlug}` : '#')
 
   return (
+    <>
+    {/* Page header — Variant A */}
+    <section className="border-b border-neutral-200">
+      <div className="section_container mx-auto page-padding-x pt-20 pb-14 flex flex-col md:flex-row md:items-end justify-between gap-8">
+        <div>
+          <div className="text-[11px] font-bold uppercase tracking-[0.12em] text-[#11848C] mb-5">
+            Notes from the studio
+          </div>
+          <h1
+            className="font-bold text-[#1F1D1D]"
+            style={{ fontSize: 'clamp(40px, 5.5vw, 72px)', lineHeight: 1.04, letterSpacing: '-0.025em' }}
+          >
+            What we<br />shipped &amp; learned.
+          </h1>
+        </div>
+        <div className="flex items-center gap-5 text-sm text-neutral-500 font-mono pb-1 flex-shrink-0">
+          <span>updated weekly</span>
+          <span className="w-px h-4 bg-neutral-300" />
+          <a href="#" className="text-teal font-semibold inline-flex items-center gap-1.5 font-sans text-sm">
+            RSS
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M4 11a9 9 0 0 1 9 9" /><path d="M4 4a16 16 0 0 1 16 16" /><circle cx="5" cy="19" r="1" />
+            </svg>
+          </a>
+        </div>
+      </div>
+    </section>
+
     <section className="border-b border-neutral-200">
       <div className="section_container mx-auto page-padding-x py-16 lg:py-20">
         <div className="grid grid-cols-1 md:grid-cols-12 md:gap-12 items-start">
@@ -136,5 +164,6 @@ export default function FeaturedArticle({ featuredArticle, lang }: FeaturedArtic
         </div>
       </div>
     </section>
+    </>
   )
 }

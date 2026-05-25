@@ -115,17 +115,15 @@ export default function ArticlesGrid({ articlesGrid, lang }: ArticlesGridProps) 
   }, [articlesGrid])
 
   const { deck, archive } = useMemo(() => {
-    const now = new Date()
-    const thisMonthStart = new Date(now.getFullYear(), now.getMonth(), 1)
-    const thisMonth = articles.filter((a) => a.parsedDate && a.parsedDate >= thisMonthStart)
-    const older = articles.filter((a) => !a.parsedDate || a.parsedDate < thisMonthStart)
+    // Always show the first 3 articles as the deck regardless of date
     return {
-      deck: thisMonth.slice(0, 3),
-      archive: [...thisMonth.slice(3), ...older],
+      deck: articles.slice(0, 3),
+      archive: articles.slice(3),
     }
   }, [articles])
 
   const deckMonthLabel = useMemo(() => {
+    // Label the deck section by the most recent article's month
     const d = deck[0]?.parsedDate
     return d ? getMonthLabel(d, locale) : ''
   }, [deck, locale])
@@ -153,7 +151,7 @@ export default function ArticlesGrid({ articlesGrid, lang }: ArticlesGridProps) 
             <div className="flex items-baseline justify-between mb-10">
               <div className="flex items-baseline gap-4">
                 <span className="text-[11px] font-bold uppercase tracking-[0.12em] text-[#11848C]">
-                  {isNorwegian ? 'Mer denne måneden' : 'More this month'}
+                  {isNorwegian ? 'Nyeste innlegg' : 'Latest posts'}
                 </span>
                 {deckMonthLabel && (
                   <span className="text-xs text-neutral-400 font-mono">/ {deckMonthLabel}</span>
