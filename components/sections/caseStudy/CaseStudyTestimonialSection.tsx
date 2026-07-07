@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { sanityImg } from '@/lib/sanityImage'
 
 interface CaseStudyTestimonialSectionProps {
   section: {
@@ -23,7 +24,7 @@ export default function CaseStudyTestimonialSection({ section }: CaseStudyTestim
     >
       {section.imageUrl && (
         <Image
-          src={section.imageUrl}
+          src={sanityImg(section.imageUrl, 176) as string}
           alt={section.authorName ?? "Portrait"}
           width={88}
           height={88}

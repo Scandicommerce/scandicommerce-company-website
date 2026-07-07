@@ -2,6 +2,7 @@
 
 /* eslint-disable @next/next/no-img-element */
 import React from 'react'
+import { sanityImg } from '@/lib/sanityImage'
 import Link from 'next/link'
 import Marquee from 'react-fast-marquee'
 
@@ -48,7 +49,7 @@ export default function TrustedBy({ trustedBy }: TrustedByProps) {
 
     const content = logoUrl ? (
       <img
-        src={logoUrl}
+        src={sanityImg(logoUrl, 400)}
         alt={altText}
         className="h-7 lg:h-8 w-auto object-contain grayscale opacity-60 transition-opacity hover:opacity-100 hover:grayscale-0"
       />

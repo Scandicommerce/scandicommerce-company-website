@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { sanityImg } from '@/lib/sanityImage'
 import Link from "next/link";
 
 export interface RelatedCaseStudy {
@@ -45,7 +46,7 @@ export default function CaseStudyRelatedCases({ cases, pageLanguage }: CaseStudy
               <div className="relative h-[200px] w-full bg-sc-ink-100">
                 {item.heroImageUrl && (
                   <Image
-                    src={item.heroImageUrl}
+                    src={sanityImg(item.heroImageUrl, 800) as string}
                     alt={item.title ?? ""}
                     fill
                     className="object-cover"

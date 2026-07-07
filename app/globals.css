@@ -1,9 +1,16 @@
-/* Font Import - MUST be at the very top before @tailwind */
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* JetBrains Mono — self-hosted variable font (was a render-blocking Google
+ * Fonts @import costing ~780 ms on the critical path). */
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-weight: 100 800;
+  font-style: normal;
+  font-display: swap;
+  src: url('/fonts/jetbrains-mono-var.woff2') format('woff2');
+}
 
 /* Space Grotesk — self-hosted (from the 2026 design delivery, /public/fonts) */
 @font-face { font-family: 'Space Grotesk'; font-weight: 300; font-style: normal; font-display: swap;

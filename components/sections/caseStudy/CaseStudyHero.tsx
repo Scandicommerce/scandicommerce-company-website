@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { sanityImg } from '@/lib/sanityImage'
 import Link from "next/link";
 
 interface CaseStudyHeroProps {
@@ -49,7 +50,7 @@ export default function CaseStudyHero({
         {heroImage?.url && (
           <div className="relative mb-7 h-[240px] w-full overflow-hidden rounded-[10px] md:h-[440px]">
             <Image
-              src={heroImage.url}
+              src={sanityImg(heroImage.url, 1920) as string}
               alt={heroImage.alt ?? title}
               fill
               className="object-cover"
@@ -73,7 +74,7 @@ export default function CaseStudyHero({
             )}
             {clientLogo?.url && (
               <Image
-                src={clientLogo.url}
+                src={sanityImg(clientLogo.url, 240) as string}
                 alt={clientLogo.alt ?? "Client logo"}
                 width={120}
                 height={32}

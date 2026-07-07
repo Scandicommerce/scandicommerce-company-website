@@ -2,6 +2,7 @@
 
 /* eslint-disable @next/next/no-img-element */
 import React from 'react'
+import { sanityImg } from '@/lib/sanityImage'
 import Link from 'next/link'
 
 interface ResultsItem {
@@ -29,7 +30,7 @@ interface ResultsProps {
   data?: ResultsData
 }
 
-function CaseImage({ item, className }: { item: ResultsItem; className: string }) {
+function CaseImage({ item, className, width = 800 }: { item: ResultsItem; className: string; width?: number }) {
   const url = item.clientImage?.asset?.url
   if (!url) {
     return <div className={`${className} bg-sc-ink-50`} />
@@ -37,7 +38,7 @@ function CaseImage({ item, className }: { item: ResultsItem; className: string }
   return (
     <div className={`${className} overflow-hidden`}>
       <img
-        src={url}
+        src={sanityImg(url, width)}
         alt={item.clientName}
         className="w-full h-full object-cover"
       />
@@ -93,7 +94,7 @@ export default function Results({ data }: ResultsProps) {
 
         {featured && (
           <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)] border border-sc-ink-100 rounded-[10px] overflow-hidden bg-white transition-shadow duration-200 hover:shadow-md mb-3.5 lg:mb-6">
-            <CaseImage item={featured} className="h-[210px] lg:h-[460px]" />
+            <CaseImage item={featured} className="h-[210px] lg:h-[460px]" width={1400} />
             <div className="p-5 lg:py-11 lg:pr-11 lg:pl-6 flex flex-col justify-center">
               <CategoryChip category={featured.category} />
               <div className="text-[38px] lg:text-[64px] font-extrabold text-sc-ink-900 tracking-[-0.03em] leading-none mt-3 lg:mt-5 mb-1.5">
@@ -128,7 +129,7 @@ export default function Results({ data }: ResultsProps) {
                 key={index}
                 className="grid grid-cols-[110px_minmax(0,1fr)] lg:grid-cols-[220px_minmax(0,1fr)] border border-sc-ink-100 rounded-lg overflow-hidden bg-white transition-shadow duration-200 hover:shadow-md"
               >
-                <CaseImage item={item} className="min-h-[110px] lg:min-h-[210px] h-full" />
+                <CaseImage item={item} className="min-h-[110px] lg:min-h-[210px] h-full" width={600} />
                 <div className="px-[18px] py-4 lg:p-[30px] flex flex-col justify-center">
                   <div className="hidden lg:block">
                     <CategoryChip category={item.category} />

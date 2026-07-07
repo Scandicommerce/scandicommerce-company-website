@@ -1,6 +1,7 @@
 'use client'
 
 import React from 'react'
+import { sanityImg } from '@/lib/sanityImage'
 import Link from 'next/link'
 
 interface HeroData {
@@ -135,7 +136,7 @@ export default function Hero({ hero }: HeroProps) {
             ) : (
               /* eslint-disable-next-line @next/next/no-img-element */
               <img
-                src={imageUrl}
+                src={sanityImg(imageUrl, 2000)}
                 alt={titleText || 'Scandicommerce'}
                 className="w-full h-full object-cover"
               />

@@ -1,4 +1,5 @@
 import Image from 'next/image'
+import { sanityImg } from '@/lib/sanityImage'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import FooterWrapper from '@/components/layout/FooterWrapper'
@@ -95,7 +96,7 @@ export default async function AuthorPage({
                 <div className="relative w-36 h-36 md:w-44 md:h-44 flex-shrink-0">
                   <div className="w-full h-full rounded-full overflow-hidden border-4 border-[#03C1CA]/20 relative">
                     <Image
-                      src={author.imageUrl}
+                      src={sanityImg(author.imageUrl, 352) as string}
                       alt={author.name}
                       fill
                       className="object-cover"
@@ -163,7 +164,7 @@ export default async function AuthorPage({
                     <div className="relative w-full h-44 bg-gray-100">
                       {a.imageUrl && (
                         <Image
-                          src={a.imageUrl}
+                          src={sanityImg(a.imageUrl, 800) as string}
                           alt={a.title || ''}
                           fill
                           className="object-cover"

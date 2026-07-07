@@ -44,6 +44,9 @@ export default async function RootLayout({
 gtag('consent','default',{ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied',analytics_storage:'denied',wait_for_update:500});`,
           }}
         />
+        {/* Preload the two critical brand-font weights to shorten the font chain */}
+        <link rel="preload" href="/fonts/space-grotesk-400.ttf" as="font" type="font/ttf" crossOrigin="anonymous" />
+        <link rel="preload" href="/fonts/space-grotesk-700.ttf" as="font" type="font/ttf" crossOrigin="anonymous" />
         <OrganizationJsonLd />
         <BreadcrumbListJsonLd />
         <RouteJsonLd />

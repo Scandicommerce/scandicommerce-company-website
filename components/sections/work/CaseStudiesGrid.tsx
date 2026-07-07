@@ -1,6 +1,7 @@
 'use client'
 
 import { useMemo, useState } from 'react'
+import { sanityImg } from '@/lib/sanityImage'
 import Image from 'next/image'
 import Link from 'next/link'
 import { IoMdArrowForward } from 'react-icons/io'
@@ -151,7 +152,7 @@ export default function CaseStudiesGrid({
                 <div className="relative w-full h-48 bg-gray-100">
                   {c.heroImageUrl && (
                     <Image
-                      src={c.heroImageUrl}
+                      src={sanityImg(c.heroImageUrl, 800) as string}
                       alt={c.title || 'Kundecase'}
                       fill
                       className="object-cover"
