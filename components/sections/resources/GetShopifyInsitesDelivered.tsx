@@ -5,12 +5,15 @@ interface NewsletterCtaData {
   buttonText?: string
 }
 
+import NewsletterForm from '@/components/ui/NewsletterForm'
+
 interface GetShopifyInsitesDeliveredProps {
   newsletterCta?: NewsletterCtaData
 }
 
 export default function GetShopifyInsitesDelivered({ newsletterCta }: GetShopifyInsitesDeliveredProps) {
   const title = newsletterCta?.title || 'One email a month. No tracking, no fluff — just what we shipped and what we learned.'
+  const description = newsletterCta?.description
   const emailPlaceholder = newsletterCta?.emailPlaceholder || 'din@epost.no'
   const buttonText = newsletterCta?.buttonText || 'SUBSCRIBE'
 
@@ -26,23 +29,17 @@ export default function GetShopifyInsitesDelivered({ newsletterCta }: GetShopify
             <h3 className="text-xl md:text-2xl font-bold text-[#1F1D1D] leading-snug" style={{ letterSpacing: '-0.01em' }}>
               {title}
             </h3>
+            {description && (
+              <p className="mt-3 text-sm md:text-base text-[#4A4A4A] leading-relaxed">{description}</p>
+            )}
           </div>
 
           {/* Right: form */}
-          <div className="flex gap-0 mt-2 flex-shrink-0 w-full md:w-auto">
-            <input
-              type="email"
-              placeholder={emailPlaceholder}
-              className="bg-white text-[#1F1D1D] text-sm px-4 py-3 outline-none flex-1 md:w-64 focus:ring-1 focus:ring-teal"
-              style={{ border: '1px solid #D4D8DB' }}
-            />
-            <button
-              type="submit"
-              className="px-6 py-3 text-[11px] font-bold tracking-[0.10em] uppercase text-[#1F1D1D] bg-[#1EEFFA] hover:bg-teal transition-colors duration-200 whitespace-nowrap shadow-button"
-            >
-              {buttonText}
-            </button>
-          </div>
+          <NewsletterForm
+            source="blog"
+            emailPlaceholder={emailPlaceholder}
+            buttonText={buttonText}
+          />
         </div>
       </div>
     </section>

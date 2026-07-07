@@ -7,6 +7,7 @@ import HowWeWork from '@/components/sections/homepage/HowWeWork'
 import Partners from '@/components/sections/homepage/Partners'
 import CTA from '@/components/sections/homepage/CTA'
 import TechnicalDepth from '@/components/sections/homepage/TechnicalDepth'
+import BlogTeaser, { type TeaserPost } from '@/components/sections/homepage/BlogTeaser'
 import Testimonial from '@/components/sections/services/shopify_development/Testimonial'
 import type { HomepageSectionBlock, HomepageServicesShowcasePayload } from '@/lib/homepageSections'
 
@@ -56,9 +57,13 @@ function servicesPackagesFromSection(
 export function HomepageSectionRenderer({
   sections,
   allPackages,
+  latestPosts,
+  lang,
 }: {
   sections: HomepageSectionBlock[]
   allPackages?: PackagesFallback | null
+  latestPosts?: TeaserPost[]
+  lang?: string
 }) {
   return (
     <>
@@ -97,6 +102,8 @@ export function HomepageSectionRenderer({
             return <CTA key={_key} data={rest as Parameters<typeof CTA>[0]['data']} />
           case 'technicalDepthSection':
             return <TechnicalDepth key={_key} data={rest as Parameters<typeof TechnicalDepth>[0]['data']} />
+          case 'blogTeaserSection':
+            return <BlogTeaser key={_key} data={rest as Parameters<typeof BlogTeaser>[0]['data']} posts={latestPosts} lang={lang} />
           default:
             return null
         }

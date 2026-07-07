@@ -1,10 +1,11 @@
-import { client } from '@/sanity/lib/client'
+import { sanityPageFetch } from '@/sanity/lib/fetch'
 import {
   resolvePageByPathQuery,
   resolvePostBySlugQuery,
   resolveBlogPostBySlugQuery,
   resolvePackageDetailBySlugQuery,
   resolveCaseStudyBySlugQuery,
+  resolveAuthorBySlugQuery,
   RESOLVE_PAGE_TYPES,
 } from '@/sanity/lib/queries'
 import { getQueryParams } from '@/sanity/lib/queryHelpers'
@@ -15,6 +16,7 @@ export type ResolvedPage =
   | { type: 'blogPost'; slug: string }
   | { type: 'caseStudy'; slug: string }
   | { type: 'packageDetailPage'; slug: string }
+  | { type: 'author'; slug: string }
   | null
 
 /**
@@ -32,7 +34,7 @@ export async function resolvePageByPath(
   // language must be the 2nd arg to getQueryParams — passing it inside the object causes
   // addLanguageParam to overwrite it with the default language (en), breaking non-English routes.
   const params = getQueryParams({ path, pathWithLocale }, language)
-  const fullMatch = await client.fetch<{ _type: string; _id: string } | null>(
+  const fullMatch = await sanityPageFetch<{ _type: string; _id: string } | null>(
     resolvePageByPathQuery,
     { ...params, pageTypes: RESOLVE_PAGE_TYPES },
     { next: { revalidate: 0 } }
@@ -46,22 +48,33 @@ export async function resolvePageByPath(
 
   // Detail pages: try last segment as slug (e.g. resources/article-slug -> post or blogPost, services/all_packages/package-slug -> packageDetailPage)
   const lastSegment = segments[segments.length - 1]
+
+  // Author pages live at team/<slug>. Authors are language-neutral.
+  if (segments.length === 2 && segments[0] === 'team') {
+    const authorDoc = await sanityPageFetch<{ _type: string; _id: string } | null>(
+      resolveAuthorBySlugQuery,
+      { slug: lastSegment },
+      { next: { revalidate: 0 } }
+    )
+    if (authorDoc?._type) return { type: 'author', slug: lastSegment }
+  }
+
   if (segments.length >= 2) {
-    const post = await client.fetch<{ _type: string; _id: string } | null>(
+    const post = await sanityPageFetch<{ _type: string; _id: string } | null>(
       resolvePostBySlugQuery,
       getQueryParams({ slug: lastSegment }, language),
       { next: { revalidate: 0 } }
     )
     if (post?._type) return { type: 'post', slug: lastSegment }
 
-    const blogPost = await client.fetch<{ _type: string; _id: string } | null>(
+    const blogPost = await sanityPageFetch<{ _type: string; _id: string } | null>(
       resolveBlogPostBySlugQuery,
       getQueryParams({ slug: lastSegment }, language),
       { next: { revalidate: 0 } }
     )
     if (blogPost?._type) return { type: 'blogPost', slug: lastSegment }
 
-    const caseStudyDoc = await client.fetch<{ _type: string; _id: string } | null>(
+    const caseStudyDoc = await sanityPageFetch<{ _type: string; _id: string } | null>(
       resolveCaseStudyBySlugQuery,
       getQueryParams({ slug: lastSegment }, language),
       { next: { revalidate: 0 } }
@@ -69,7 +82,7 @@ export async function resolvePageByPath(
     if (caseStudyDoc?._type) return { type: 'caseStudy', slug: lastSegment }
 
     if (segments.length >= 3) {
-      const pkg = await client.fetch<{ _type: string; _id: string } | null>(
+      const pkg = await sanityPageFetch<{ _type: string; _id: string } | null>(
         resolvePackageDetailBySlugQuery,
         getQueryParams({ slug: lastSegment }, language),
         { next: { revalidate: 0 } }

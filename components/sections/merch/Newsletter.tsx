@@ -28,17 +28,24 @@ export default function Newsletter({ newsletter }: NewsletterProps) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!email) return
+    if (!email || isSubmitting) return
 
     setIsSubmitting(true)
-
-    await new Promise(resolve => setTimeout(resolve, 1000))
-
-    setIsSubmitting(false)
-    setIsSubmitted(true)
-    setEmail('')
-
-    setTimeout(() => setIsSubmitted(false), 5000)
+    try {
+      const res = await fetch('/api/newsletter', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, source: 'merch' }),
+      })
+      if (!res.ok) throw new Error('Subscribe failed')
+      setIsSubmitted(true)
+      setEmail('')
+      setTimeout(() => setIsSubmitted(false), 5000)
+    } catch (err) {
+      console.error('Newsletter signup failed:', err)
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (

@@ -1,14 +1,15 @@
 import type { Metadata } from 'next'
 import HeaderWrapper from '@/components/layout/HeaderWrapper'
 import FooterWrapper from '@/components/layout/FooterWrapper'
-import { client } from '@/sanity/lib/client'
-import { homepageQuery, allPackagesPageQuery } from '@/sanity/lib/queries'
+import { sanityPageFetch } from '@/sanity/lib/fetch'
+import { homepageQuery, allPackagesPageQuery, latestPostsTeaserQuery } from '@/sanity/lib/queries'
 import { getQueryParams } from '@/sanity/lib/queryHelpers'
 import { getLanguageFromParams } from '@/lib/language'
 import { coalescePageSeo, getPageSeo, getSiteSettings } from '@/lib/sanity/pageSeo'
 import { buildMetadata } from '@/lib/seo/buildMetadata'
 import { HomepageSectionRenderer } from '@/components/HomepageSectionRenderer'
 import type { HomepageFromSanity, HomepageSectionBlock } from '@/lib/homepageSections'
+import type { TeaserPost } from '@/components/sections/homepage/BlogTeaser'
 import { normalizePageSections } from '@/lib/sanity/pageBuilderLegacy'
 
 export const dynamic = 'force-dynamic'
@@ -22,7 +23,7 @@ interface HomepageData extends HomepageFromSanity {
 
 async function getHomepage(language?: string): Promise<HomepageData | null> {
   try {
-    const data = await client.fetch<HomepageData>(
+    const data = await sanityPageFetch<HomepageData>(
       homepageQuery,
       getQueryParams({}, language),
       { next: { revalidate: 0 } }
@@ -54,7 +55,7 @@ interface AllPackagesData {
 
 async function getAllPackages(language?: string): Promise<AllPackagesData | null> {
   try {
-    const data = await client.fetch<AllPackagesData>(
+    const data = await sanityPageFetch<AllPackagesData>(
       allPackagesPageQuery,
       getQueryParams({}, language),
       { next: { revalidate: 0 } }
@@ -96,13 +97,18 @@ export default async function Home({
   const language = getLanguageFromParams({ lang })
   const homepage = await getHomepage(language)
   const allPackages = await getAllPackages(language)
+  const latestPosts = await sanityPageFetch<TeaserPost[]>(
+    latestPostsTeaserQuery,
+    getQueryParams({}, language),
+    { next: { revalidate: 0 } }
+  ).catch(() => [] as TeaserPost[])
   const sections = normalizePageSections('landingPage', homepage)
 
   return (
     <div className="flex flex-col min-h-screen">
       <HeaderWrapper />
       <main className="flex-grow">
-        <HomepageSectionRenderer sections={sections as HomepageSectionBlock[]} allPackages={allPackages} />
+        <HomepageSectionRenderer sections={sections as HomepageSectionBlock[]} allPackages={allPackages} latestPosts={latestPosts} lang={language} />
       </main>
       <FooterWrapper />
     </div>

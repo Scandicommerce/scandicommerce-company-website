@@ -1,6 +1,7 @@
 'use client'
 
 import CaseStudy from './CaseStudy'
+import CaseStudiesGrid, { type CaseCard } from './CaseStudiesGrid'
 
 interface Result {
   value?: string
@@ -26,6 +27,10 @@ interface CaseStudiesData {
 
 interface CaseStudiesProps {
   caseStudies?: CaseStudiesData
+  /** All case-study documents, surfaced as a filterable grid below the featured studies. */
+  allCases?: CaseCard[]
+  /** Language of the page, used for same-vs-cross-language grid hrefs. */
+  lang?: string
 }
 
 // Default case studies
@@ -74,35 +79,38 @@ const defaultStudies: Study[] = [
   },
 ]
 
-export default function CaseStudies({ caseStudies }: CaseStudiesProps) {
+export default function CaseStudies({ caseStudies, allCases, lang }: CaseStudiesProps) {
   const studies = caseStudies?.studies && caseStudies.studies.length > 0
     ? caseStudies.studies
     : defaultStudies
   const ctaText = caseStudies?.ctaText || 'Read full case study'
 
   return (
-    <section className="bg-white py-16 lg:py-24">
-      <div className="section_container mx-auto page-padding-x">
-        {studies.map((study, index) => (
-          <CaseStudy
-            key={index}
-            title={study.title || ''}
-            category={study.category || ''}
-            tags={study.tags || []}
-            challenge={study.challenge ?? ''}
-            solution={study.solution ?? ''}
-            results={study.results?.map(r => ({
-              value: r.value || '',
-              label: r.label || ''
-            })) || []}
-            image={study.imageUrl || ''}
-            imageAlt={study.imageAlt || ''}
-            imagePosition={index % 2 === 0 ? 'left' : 'right'}
-            link={study.link}
-            ctaText={ctaText}
-          />
-        ))}
-      </div>
-    </section>
+    <>
+      <section className="bg-white py-16 lg:py-24 lg:pb-12">
+        <div className="section_container mx-auto page-padding-x">
+          {studies.map((study, index) => (
+            <CaseStudy
+              key={index}
+              title={study.title || ''}
+              category={study.category || ''}
+              tags={study.tags || []}
+              challenge={study.challenge ?? ''}
+              solution={study.solution ?? ''}
+              results={study.results?.map(r => ({
+                value: r.value || '',
+                label: r.label || ''
+              })) || []}
+              image={study.imageUrl || ''}
+              imageAlt={study.imageAlt || ''}
+              imagePosition={index % 2 === 0 ? 'left' : 'right'}
+              link={study.link}
+              ctaText={ctaText}
+            />
+          ))}
+        </div>
+      </section>
+      <CaseStudiesGrid cases={allCases} ctaText={ctaText} lang={lang} />
+    </>
   )
 }

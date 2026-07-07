@@ -28,6 +28,7 @@ import BlogPostPage from '../_pages/blogPostPage'
 import PostPage from '../_pages/postPage'
 import MerchProductPage from '../_pages/merchProductPage'
 import CaseStudyPage from '../_pages/caseStudyPage'
+import AuthorPage from '../_pages/authorPage'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -55,6 +56,7 @@ const PAGE_COMPONENTS: Record<string, React.ComponentType<{ params: Promise<{ la
   post: PostPage as React.ComponentType<{ params: Promise<{ lang: string; slug?: string }> }>,
   caseStudy: CaseStudyPage as React.ComponentType<{ params: Promise<{ lang: string; slug?: string }> }>,
   merchProduct: MerchProductPage as React.ComponentType<{ params: Promise<{ lang: string; slug?: string }> }>,
+  author: AuthorPage as React.ComponentType<{ params: Promise<{ lang: string; slug?: string }> }>,
 }
 
 export async function generateMetadata({
