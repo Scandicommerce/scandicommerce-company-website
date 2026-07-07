@@ -1,6 +1,6 @@
 import FooterWrapper from '@/components/layout/FooterWrapper'
 import HeaderWrapper from '@/components/layout/HeaderWrapper'
-import { client } from '@/sanity/lib/client'
+import { sanityPageFetch } from '@/sanity/lib/fetch'
 import { partnersPageQuery, partnerCategoriesQuery } from '@/sanity/lib/queries'
 import { getQueryParams } from '@/sanity/lib/queryHelpers'
 import { getLanguageFromParams } from '@/lib/language'
@@ -37,8 +37,8 @@ export default async function PartnersPage({ params }: { params: Promise<{ lang:
   const { lang } = await params
   const language = getLanguageFromParams({ lang })
   const [pageData, categoryList] = await Promise.all([
-    client.fetch<PartnersPageData>(partnersPageQuery, getQueryParams({}, language), { next: { revalidate: 0 } }),
-    client.fetch<PartnerCategoryItem[]>(partnerCategoriesQuery, {}, { next: { revalidate: 0 } }),
+    sanityPageFetch<PartnersPageData>(partnersPageQuery, getQueryParams({}, language), { next: { revalidate: 0 } }),
+    sanityPageFetch<PartnerCategoryItem[]>(partnerCategoriesQuery, {}, { next: { revalidate: 0 } }),
   ])
 
   const sections = normalizePageSections('partnersPage', pageData)

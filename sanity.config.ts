@@ -1,5 +1,6 @@
 import { defineConfig } from "sanity";
 import { structureTool } from "sanity/structure";
+import { presentationTool } from "sanity/presentation";
 import { visionTool } from "@sanity/vision";
 import { documentInternationalization } from "@sanity/document-internationalization";
 import { assist } from "@sanity/assist";
@@ -31,6 +32,14 @@ export default defineConfig({
   plugins: [
     structureTool({
       structure: deskStructure,
+    }),
+    // Visual editing: side-by-side live preview with click-to-edit overlays.
+    presentationTool({
+      previewUrl: {
+        previewMode: {
+          enable: "/api/draft-mode/enable",
+        },
+      },
     }),
     visionTool(),
     documentInternationalization({

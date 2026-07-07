@@ -1,4 +1,4 @@
-import { client } from "@/sanity/lib/client";
+import { sanityPageFetch } from "@/sanity/lib/fetch";
 import {
   pageSeoQuery,
   pageSeoBySlugQuery,
@@ -105,7 +105,7 @@ export async function getPageSeo({
   language: string;
 }): Promise<PageSeoDoc | null> {
   try {
-    return await client.fetch<PageSeoDoc | null>(
+    return await sanityPageFetch<PageSeoDoc | null>(
       pageSeoQuery,
       { type, slug, language: language || defaultLanguage },
       FETCH_OPTIONS
@@ -132,7 +132,7 @@ export async function getPageSeoBySlug({
   language: string;
 }): Promise<PageSeoDoc | null> {
   try {
-    return await client.fetch<PageSeoDoc | null>(
+    return await sanityPageFetch<PageSeoDoc | null>(
       pageSeoBySlugQuery,
       { types, slug, language: language || defaultLanguage },
       FETCH_OPTIONS
@@ -157,7 +157,7 @@ export async function getSiteSettings(
   language: string
 ): Promise<SiteSettingsForSeo | null> {
   try {
-    return await client.fetch<SiteSettingsForSeo | null>(
+    return await sanityPageFetch<SiteSettingsForSeo | null>(
       siteSettingsQuery,
       { language: language || defaultLanguage },
       FETCH_OPTIONS

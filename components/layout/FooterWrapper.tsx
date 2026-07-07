@@ -1,4 +1,4 @@
-import { client } from '@/sanity/lib/client'
+import { sanityPageFetch } from '@/sanity/lib/fetch'
 import { footerSettingsQuery } from '@/sanity/lib/queries'
 import { getQueryParams } from '@/sanity/lib/queryHelpers'
 import { getServerLanguage } from '@/lib/language'
@@ -40,7 +40,7 @@ export default async function FooterWrapper() {
   // Get language from server (URL params or default)
   const language = await getServerLanguage()
   
-  const settings: FooterSettingsData = await client.fetch(
+  const settings: FooterSettingsData = await sanityPageFetch(
     footerSettingsQuery,
     getQueryParams({}, language),
     { next: { revalidate: 60 } } // Cache for 60 seconds

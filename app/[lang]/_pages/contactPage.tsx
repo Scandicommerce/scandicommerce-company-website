@@ -1,7 +1,7 @@
 import FooterWrapper from '@/components/layout/FooterWrapper'
 import HeaderWrapper from '@/components/layout/HeaderWrapper'
 import { ContactPageSectionRenderer } from '@/components/pageSectionRenderers/ContactPageSectionRenderer'
-import { client } from '@/sanity/lib/client'
+import { sanityPageFetch } from '@/sanity/lib/fetch'
 import { contactPageQuery } from '@/sanity/lib/queries'
 import { getQueryParams } from '@/sanity/lib/queryHelpers'
 import { getLanguageFromParams } from '@/lib/language'
@@ -46,7 +46,7 @@ interface ContactPageData {
 export default async function ContactPage({ params }: { params: Promise<{ lang: string; slug?: string }> }) {
   const { lang } = await params
   const language = getLanguageFromParams({ lang })
-  const pageData: ContactPageData = await client.fetch(
+  const pageData: ContactPageData = await sanityPageFetch(
     contactPageQuery,
     getQueryParams({}, language),
     { next: { revalidate: 0 } }

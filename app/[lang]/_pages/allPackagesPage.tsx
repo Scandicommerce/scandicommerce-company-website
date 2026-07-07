@@ -1,7 +1,7 @@
 import FooterWrapper from '@/components/layout/FooterWrapper'
 import HeaderWrapper from '@/components/layout/HeaderWrapper'
 import { AllPackagesPageSectionRenderer } from '@/components/pageSectionRenderers/AllPackagesPageSectionRenderer'
-import { client } from '@/sanity/lib/client'
+import { sanityPageFetch } from '@/sanity/lib/fetch'
 import { allPackagesPageQuery } from '@/sanity/lib/queries'
 import { getQueryParams } from '@/sanity/lib/queryHelpers'
 import { getLanguageFromParams } from '@/lib/language'
@@ -20,7 +20,7 @@ interface AllPackagesPageData {
 export default async function AllPackagesPage({ params }: { params: Promise<{ lang: string; slug?: string }> }) {
   const resolvedParams = await params
   const language = getLanguageFromParams(resolvedParams)
-  const pageData = await client.fetch<AllPackagesPageData>(
+  const pageData = await sanityPageFetch<AllPackagesPageData>(
     allPackagesPageQuery,
     getQueryParams({}, language),
     { next: { revalidate: 0 } }

@@ -7,7 +7,7 @@ import SizeGuide from '@/components/sections/merch/SizeGuide'
 import RelatedProducts from '@/components/sections/merch/RelatedProducts'
 import { getShopifyProductByHandle, getShopifyRelatedProducts, getShopifyProducts } from '@/lib/shopify'
 import { notFound } from 'next/navigation'
-import { client } from '@/sanity/lib/client'
+import { sanityPageFetch } from '@/sanity/lib/fetch'
 import { merchProductSettingsQuery } from '@/sanity/lib/queries'
 import { getQueryParams } from '@/sanity/lib/queryHelpers'
 import { getLanguageFromParams } from '@/lib/language'
@@ -37,7 +37,7 @@ export default async function MerchProductPage({ params }: { params: Promise<{ l
   const shopifyProduct = await getShopifyProductByHandle(slug)
   if (!shopifyProduct) notFound()
 
-  const settings: MerchProductSettingsData = await client.fetch(
+  const settings: MerchProductSettingsData = await sanityPageFetch(
     merchProductSettingsQuery,
     getQueryParams({}, language),
     { next: { revalidate: 0 } }

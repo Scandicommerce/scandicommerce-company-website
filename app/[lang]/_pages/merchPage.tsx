@@ -3,7 +3,7 @@ import FooterWrapper from '@/components/layout/FooterWrapper'
 import { MerchPageSectionRenderer } from '@/components/pageSectionRenderers/MerchPageSectionRenderer'
 import { getShopifyProducts } from '@/lib/shopify'
 import { Product } from '@/components/sections/merch/ProductCard'
-import { client } from '@/sanity/lib/client'
+import { sanityPageFetch } from '@/sanity/lib/fetch'
 import { merchPageQuery } from '@/sanity/lib/queries'
 import { getQueryParams } from '@/sanity/lib/queryHelpers'
 import { getLanguageFromParams } from '@/lib/language'
@@ -24,7 +24,7 @@ export default async function MerchPage({ params }: { params: Promise<{ lang: st
   const language = getLanguageFromParams({ lang })
   let shopifyProducts: Product[] = []
 
-  const pageData: MerchPageData | null = await client.fetch(
+  const pageData: MerchPageData | null = await sanityPageFetch(
     merchPageQuery,
     getQueryParams({}, language),
     { next: { revalidate: 0 } }

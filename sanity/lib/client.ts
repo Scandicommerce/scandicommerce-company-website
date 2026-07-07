@@ -6,6 +6,12 @@ export const client = createClient({
   apiVersion: "2024-01-01",
   useCdn: false, // Disable CDN for fresh data during development
   perspective: "published",
+  stega: {
+    // Disabled by default; enabled per-request in draft mode (see lib/fetch.ts)
+    // so click-to-edit overlays work inside the Presentation tool.
+    enabled: false,
+    studioUrl: "/studio",
+  },
 });
 
 // For draft preview (optional)

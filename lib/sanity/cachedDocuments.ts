@@ -1,5 +1,5 @@
 import { cache } from 'react'
-import { client } from '@/sanity/lib/client'
+import { sanityPageFetch } from '@/sanity/lib/fetch'
 import {
   aboutPageQuery,
   blogPostBySlugQuery,
@@ -9,25 +9,25 @@ import {
 import { getQueryParams } from '@/sanity/lib/queryHelpers'
 
 export const getAboutPageDocumentCached = cache(async (language: string) =>
-  client.fetch(aboutPageQuery, getQueryParams({}, language), {
+  sanityPageFetch(aboutPageQuery, getQueryParams({}, language), {
     next: { revalidate: 0 },
   })
 )
 
 export const getBlogPostBySlugCached = cache(async (slug: string, language: string) =>
-  client.fetch(blogPostBySlugQuery, getQueryParams({ slug }, language), {
+  sanityPageFetch(blogPostBySlugQuery, getQueryParams({ slug }, language), {
     next: { revalidate: 0 },
   })
 )
 
 export const getPostBySlugCached = cache(async (slug: string, language: string) =>
-  client.fetch(postBySlugQuery, getQueryParams({ slug }, language), {
+  sanityPageFetch(postBySlugQuery, getQueryParams({ slug }, language), {
     next: { revalidate: 0 },
   })
 )
 
 export const getCaseStudyBySlugCached = cache(async (slug: string, language: string) =>
-  client.fetch(caseStudyBySlugQuery, getQueryParams({ slug }, language), {
+  sanityPageFetch(caseStudyBySlugQuery, getQueryParams({ slug }, language), {
     next: { revalidate: 0 },
   })
 )

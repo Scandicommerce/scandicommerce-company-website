@@ -1,7 +1,7 @@
 import { BlogPageSectionRenderer } from '@/components/pageSectionRenderers/BlogPageSectionRenderer'
 import FooterWrapper from '@/components/layout/FooterWrapper'
 import HeaderWrapper from '@/components/layout/HeaderWrapper'
-import { client } from '@/sanity/lib/client'
+import { sanityPageFetch } from '@/sanity/lib/fetch'
 import { blogPageQuery } from '@/sanity/lib/queries'
 import { getQueryParams } from '@/sanity/lib/queryHelpers'
 import { getLanguageFromParams } from '@/lib/language'
@@ -21,7 +21,7 @@ interface BlogPageData {
 export default async function BlogPage({ params }: { params: Promise<{ lang: string; slug?: string }> }) {
   const { lang } = await params
   const language = getLanguageFromParams({ lang })
-  const pageData: BlogPageData | null = await client.fetch(
+  const pageData: BlogPageData | null = await sanityPageFetch(
     blogPageQuery,
     getQueryParams({}, language),
     { next: { revalidate: 0 } }

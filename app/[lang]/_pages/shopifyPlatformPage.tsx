@@ -1,7 +1,7 @@
 import HeaderWrapper from '@/components/layout/HeaderWrapper'
 import FooterWrapper from '@/components/layout/FooterWrapper'
 import { ShopifyPlatformPageSectionRenderer } from '@/components/pageSectionRenderers/ShopifyPlatformPageSectionRenderer'
-import { client } from '@/sanity/lib/client'
+import { sanityPageFetch } from '@/sanity/lib/fetch'
 import { shopifyPlatformPageQuery } from '@/sanity/lib/queries'
 import { getQueryParams } from '@/sanity/lib/queryHelpers'
 import { getLanguageFromParams } from '@/lib/language'
@@ -22,7 +22,7 @@ interface ShopifyPlatformPageData {
 export default async function ShopifyPlatformPage({ params }: { params: Promise<{ lang: string; slug?: string }> }) {
   const { lang } = await params
   const language = getLanguageFromParams({ lang })
-  const pageData = await client.fetch<ShopifyPlatformPageData>(
+  const pageData = await sanityPageFetch<ShopifyPlatformPageData>(
     shopifyPlatformPageQuery,
     getQueryParams({}, language),
     { next: { revalidate: 0 } }

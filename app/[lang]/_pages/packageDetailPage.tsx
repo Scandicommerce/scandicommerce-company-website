@@ -4,7 +4,7 @@ import { PackageDetailPageSectionRenderer } from '@/components/pageSectionRender
 import { getPackageBySlug, Package } from '@/lib/packages'
 import { getShopifyProductByHandle } from '@/lib/shopify'
 import { notFound } from 'next/navigation'
-import { client } from '@/sanity/lib/client'
+import { sanityPageFetch } from '@/sanity/lib/fetch'
 import { packageDetailPageQuery } from '@/sanity/lib/queries'
 import { getQueryParams } from '@/sanity/lib/queryHelpers'
 import { getLanguageFromParams } from '@/lib/language'
@@ -87,7 +87,7 @@ export default async function PackageDetailPage({ params }: { params: Promise<{ 
   if (!slug) notFound()
   const language = getLanguageFromParams(resolvedParams)
 
-  const raw = await client.fetch<PackageDetailPageData | null>(
+  const raw = await sanityPageFetch<PackageDetailPageData | null>(
     packageDetailPageQuery,
     getQueryParams({ slug }, language),
     { next: { revalidate: 0 } }
