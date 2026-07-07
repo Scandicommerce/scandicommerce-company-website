@@ -1,9 +1,54 @@
 /* Font Import - MUST be at the very top before @tailwind */
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&display=swap');
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Space Grotesk — self-hosted (from the 2026 design delivery, /public/fonts) */
+@font-face { font-family: 'Space Grotesk'; font-weight: 300; font-style: normal; font-display: swap;
+  src: url('/fonts/space-grotesk-300.ttf') format('truetype'); }
+@font-face { font-family: 'Space Grotesk'; font-weight: 400; font-style: normal; font-display: swap;
+  src: url('/fonts/space-grotesk-400.ttf') format('truetype'); }
+@font-face { font-family: 'Space Grotesk'; font-weight: 500; font-style: normal; font-display: swap;
+  src: url('/fonts/space-grotesk-500.ttf') format('truetype'); }
+@font-face { font-family: 'Space Grotesk'; font-weight: 600; font-style: normal; font-display: swap;
+  src: url('/fonts/space-grotesk-600.ttf') format('truetype'); }
+@font-face { font-family: 'Space Grotesk'; font-weight: 700; font-style: normal; font-display: swap;
+  src: url('/fonts/space-grotesk-700.ttf') format('truetype'); }
+
+/* ─── Scandicommerce design system 2026 — tokens from the design delivery ───
+ * New/redesigned sections use these; legacy components keep their hardcoded
+ * values until they are migrated. */
+:root {
+  --sc-cyan-50:  #e6fbfc;
+  --sc-cyan-100: #b8f2f5;
+  --sc-cyan-200: #7ee5eb;
+  --sc-cyan-300: #3fd4dc;
+  --sc-cyan-400: #1ec4cf;
+  --sc-cyan-500: #16a7b3;
+  --sc-cyan-600: #118792;
+  --sc-cyan-700: #0e6a73;
+  --sc-cyan-800: #0b4e55;
+  --sc-cyan-900: #07343a;
+
+  --sc-ink-950: #0a0d0f;
+  --sc-ink-900: #12181a;
+  --sc-ink-800: #1a2124;
+  --sc-ink-700: #262e32;
+  --sc-ink-600: #3a444a;
+  --sc-ink-500: #5a6670;
+  --sc-ink-400: #8a95a0;
+  --sc-ink-300: #b5bcc4;
+  --sc-ink-200: #d6dade;
+  --sc-ink-100: #eceef0;
+  --sc-ink-50:  #f6f7f8;
+
+  --sc-accent: var(--sc-cyan-500);
+  --sc-accent-hover: var(--sc-cyan-600);
+  --sc-border-1: var(--sc-ink-100);
+  --sc-border-2: var(--sc-ink-200);
+}
 
 /* Set up your font families */
 :root {
