@@ -1,10 +1,7 @@
 'use client'
 
 import React from 'react'
-import { motion } from 'framer-motion'
-import ServiceCard from '@/components/ui/ServiceCard'
-import TorusKnotAnimation from '@/components/ui/TorusKnotAnimation'
-import { Button } from '@/components/ui'
+import Link from 'next/link'
 
 interface HeroData {
   heroBadge?: string
@@ -19,62 +16,26 @@ interface HeroData {
     variant?: 'primary' | 'secondary'
   }>
   heroTagline?: string
+  heroImageUrl?: string
+  heroVideo?: string
   heroPackages?: Array<{
     title: string
     price?: string
   }>
 }
 
+/** Turn a YouTube/Vimeo page URL into an embeddable, autoplaying, muted URL.
+ * Returns null for direct video files (rendered with <video> instead). */
+function getEmbedUrl(url: string): string | null {
+  const yt = url.match(/(?:youtube\.com\/(?:watch\?v=|shorts\/|embed\/)|youtu\.be\/)([\w-]{11})/)
+  if (yt) return `https://www.youtube-nocookie.com/embed/${yt[1]}?autoplay=1&mute=1&loop=1&playlist=${yt[1]}&controls=0&rel=0&playsinline=1`
+  const vimeo = url.match(/vimeo\.com\/(?:video\/)?(\d+)/)
+  if (vimeo) return `https://player.vimeo.com/video/${vimeo[1]}?autoplay=1&muted=1&loop=1&background=1`
+  return null
+}
+
 interface HeroProps {
   hero?: HeroData
-}
-
-// Animation variants
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.15,
-      delayChildren: 0.2
-    }
-  }
-}
-
-const itemVariants = {
-  hidden: { opacity: 0, y: 30 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.6,
-      ease: [0.25, 0.1, 0.25, 1] as const
-    }
-  }
-}
-
-const cardContainerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.1,
-      delayChildren: 0.5
-    }
-  }
-}
-
-const cardVariants = {
-  hidden: { opacity: 0, x: 50, scale: 0.95 },
-  visible: {
-    opacity: 1,
-    x: 0,
-    scale: 1,
-    transition: {
-      duration: 0.5,
-      ease: [0.25, 0.1, 0.25, 1] as const
-    }
-  }
 }
 
 export default function Hero({ hero }: HeroProps) {
@@ -85,6 +46,8 @@ export default function Hero({ hero }: HeroProps) {
   const description = hero?.heroDescription
   const buttons = hero?.heroButtons
   const tagline = hero?.heroTagline
+  const imageUrl = hero?.heroImageUrl
+  const videoUrl = hero?.heroVideo
   const packages = hero?.heroPackages
 
   // Helper to render title with highlight
@@ -97,119 +60,107 @@ export default function Hero({ hero }: HeroProps) {
     return (
       <>
         {parts[0]}
-        <span className="text-teal">{titleHighlight}</span>
+        <span className="text-sc-cyan-500">{titleHighlight}</span>
         {parts[1]}
       </>
     )
   }
 
   return (
-    <section className="relative bg-[#F8F8F8] py-16 lg:py-24 overflow-hidden min-h-[calc(100vh-80px)] flex items-center justify-center">
-      {/* Three.js Torus Knot Animation */}
-      <TorusKnotAnimation className="opacity-70 lg:right-[-25%] sm:top-0 top-[27vw] xs:top-2 lg:w-[100%] lg:h-[100%] md:w-[55vw] sm:w-[70vw] sm:h-[65vw] xs:w-[60%] xs:h-[40%] w-[90%] flex justify-center sm:justify-start`" />
-      <div className="section_container mx-auto page-padding-x">
-        <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-12 lg:gap-16">
-          <motion.div
-            className="relative space-y-8 lg:space-y-14 w-full lg:w-3/5"
-            variants={containerVariants}
-            initial="hidden"
-            animate="visible"
-          >
+    <section className="relative bg-white pt-8 lg:pt-[72px] overflow-hidden">
+      <div className="section_container max-w-[1320px] mx-auto page-padding-x">
+        {badge && (
+          <div className="text-[11px] lg:text-xs font-semibold uppercase tracking-[0.12em] text-sc-cyan-500 mb-3.5 lg:mb-[18px]">
+            {badge}
+          </div>
+        )}
 
-            {badge && (
-              <motion.div
-                variants={itemVariants}
-                className="inline-flex items-center gap-4 px-4 sm:px-5 py-3 sm:py-4 relative z-10 backdrop-blur-md border border-[#48c5cb]/30"
-                style={{
-                  backgroundColor: 'rgba(29, 239, 250, 0.15)',
-                  // boxShadow: '0px 0px 4px 0px #48c5cb',
-                }}
-              >
-                <span className="text-[10px] sm:text-sm font-bold text-[#00b3bb] uppercase tracking-wide">
-                  {badge}
-                </span>
-                {/* Shopify Plus Partner Logo */}
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src="/images/shopifyPlus.svg"
-                  alt="Shopify Plus Partner"
-                  className="h-9 sm:h-10 w-auto"
-                />
-              </motion.div>
-            )}
+        {titleText && (
+          <h1 className="text-[40px] lg:text-[76px] font-bold text-sc-ink-900 leading-[1.04] lg:leading-[1.02] tracking-[-0.025em] lg:tracking-[-0.028em] max-w-[1080px] mb-4 lg:mb-7 text-balance">
+            {renderTitle()}
+          </h1>
+        )}
 
-            {titleText && (
-              <motion.h1
-                variants={itemVariants}
-                className="text-[6.3vw] xs:text-[24px] sm:text-[32px] md:text-[40px] lg:text-[46px] xl:text-[52px] 2xl:text-[64px] lg:text-start text-center font-bold text-gray-900 leading-[130%] tracking-[0%] pr-0 sm:pr-8 lg:pr-[78px] relative z-10"
-              >
-                {renderTitle()}
-              </motion.h1>
-            )}
+        <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-5 lg:gap-12 mb-6 lg:mb-11">
+          {description && (
+            <p className="text-base lg:text-lg leading-[1.65] text-sc-ink-600 max-w-[520px] m-0">
+              {description}
+            </p>
+          )}
 
-            {description && (
-              <motion.p
-                variants={itemVariants}
-                className="text-[3.7vw] xs:text-sm sm:text-base lg:text-lg lg:text-start text-center text-gray-600 leading-relaxed pr-0 sm:pr-8 lg:pr-12 relative z-10"
-              >
-                {description}
-              </motion.p>
-            )}
-
-            {buttons && buttons.length > 0 && (
-              <motion.div
-                variants={itemVariants}
-                className="flex flex-col sm:flex-row sm:justify-center gap-3.5 sm:gap-5 lg:gap-7 relative z-10"
-              >
-                {buttons.map((button, index) => (
-                  <motion.div
-                    key={index}
-                    whileHover={{ scale: 1.02, y: -2 }}
-                    whileTap={{ scale: 0.98 }}
-                  >
-                    <Button href={button.link || '#'} type={button.variant === 'primary' || index === 0 ? 'primary' : 'default'}>{button.text}</Button>
-                  </motion.div>
-                ))}
-              </motion.div>
-            )}
-
-            {tagline && (
-              <motion.p
-                variants={itemVariants}
-                className="text-xs xs:text-sm text-gray-500 relative z-10 lg:text-start text-center"
-              >
-                {tagline}
-              </motion.p>
-            )}
-          </motion.div>
-
-          {packages && packages.length > 0 && (
-            <motion.div
-              className="space-y-4 w-full lg:w-2/5 z-10"
-              variants={cardContainerVariants}
-              initial="hidden"
-              animate="visible"
-            >
-              {packages.map((pkg, index) => (
-                <motion.div
+          {buttons && buttons.length > 0 && (
+            <div className="flex gap-2.5 lg:gap-3 flex-none">
+              {buttons.map((button, index) => (
+                <Link
                   key={index}
-                  variants={cardVariants}
-                  whileHover={{
-                    scale: 1.02,
-                    x: -5,
-                    transition: { duration: 0.2 }
-                  }}
+                  href={button.link || '#'}
+                  className={`inline-flex flex-1 lg:flex-initial items-center justify-center rounded-lg px-[22px] py-3 text-sm font-semibold tracking-[0.02em] transition-colors ${
+                    button.variant === 'primary' || index === 0
+                      ? 'bg-sc-ink-900 text-white hover:bg-sc-ink-700'
+                      : 'bg-transparent text-sc-ink-900 border border-sc-ink-200 hover:bg-sc-ink-50'
+                  }`}
                 >
-                  <ServiceCard
-                    title={pkg.title}
-                    price={pkg.price || ''}
-                    isOdd={index % 2 === 0}
-                  />
-                </motion.div>
+                  {button.text}
+                </Link>
               ))}
-            </motion.div>
+            </div>
           )}
         </div>
+
+        {(videoUrl || imageUrl) && (
+          <div className="h-[280px] lg:h-[560px] rounded-[10px] overflow-hidden bg-sc-ink-100">
+            {videoUrl ? (
+              getEmbedUrl(videoUrl) ? (
+                <iframe
+                  src={getEmbedUrl(videoUrl) as string}
+                  title={titleText || 'Scandicommerce'}
+                  className="w-full h-full"
+                  style={{ border: 0 }}
+                  allow="autoplay; encrypted-media; picture-in-picture"
+                  allowFullScreen
+                />
+              ) : (
+                <video
+                  src={videoUrl}
+                  poster={imageUrl}
+                  className="w-full h-full object-cover"
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                />
+              )
+            ) : (
+              /* eslint-disable-next-line @next/next/no-img-element */
+              <img
+                src={imageUrl}
+                alt={titleText || 'Scandicommerce'}
+                className="w-full h-full object-cover"
+              />
+            )}
+          </div>
+        )}
+
+        {tagline && (
+          <p className="text-xs lg:text-[13px] text-sc-ink-400 text-center lg:text-left pt-4 lg:pt-6 m-0">
+            {tagline}
+          </p>
+        )}
+
+        {packages && packages.length > 0 && (
+          <div className="mt-12 lg:mt-[72px] grid grid-cols-2 lg:grid-cols-4 gap-y-8 border-t border-sc-ink-100 pt-7">
+            {packages.map((pkg, index) => (
+              <div key={index} className="pr-6">
+                <div className="font-bold text-lg lg:text-xl text-sc-ink-900 mb-1">
+                  {pkg.title}
+                </div>
+                {pkg.price && (
+                  <div className="text-[13px] text-sc-ink-600">{pkg.price}</div>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </section>
   )

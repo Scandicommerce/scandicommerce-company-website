@@ -1,10 +1,13 @@
-"use client";
-
 import CaseStudyIntroSection from "@/components/sections/caseStudy/CaseStudyIntroSection";
 import CaseStudyContentSection from "@/components/sections/caseStudy/CaseStudyContentSection";
 import CaseStudyTestimonialSection from "@/components/sections/caseStudy/CaseStudyTestimonialSection";
 import CaseStudyStatsSection from "@/components/sections/caseStudy/CaseStudyStatsSection";
 import CaseStudyRelatedSection from "@/components/sections/caseStudy/CaseStudyRelatedSection";
+import CaseStudySidebar from "@/components/sections/caseStudy/CaseStudySidebar";
+import CaseStudyCta from "@/components/sections/caseStudy/CaseStudyCta";
+import CaseStudyRelatedCases, {
+  type RelatedCaseStudy,
+} from "@/components/sections/caseStudy/CaseStudyRelatedCases";
 
 type Section = {
   _type: string;
@@ -18,9 +21,20 @@ interface CaseStudyPageSectionRendererProps {
   partner?: string | null;
   previousPlatform?: string | null;
   products?: string | null;
+  tags?: (string | null)[] | null;
+  ctaText?: string | null;
+  relatedCaseStudies?: RelatedCaseStudy[] | null;
+  language: string;
 }
 
-const FULL_WIDTH_TYPES = ["caseStudyStatsSection", "caseStudyRelatedSection"];
+/** Centered 960px content column used for every in-flow block. */
+function Column({ className = "", children }: { className?: string; children: React.ReactNode }) {
+  return (
+    <div className={`mx-auto w-full max-w-[960px] px-4 sm:px-6 lg:px-8 ${className}`}>
+      {children}
+    </div>
+  );
+}
 
 export function CaseStudyPageSectionRenderer({
   sections,
@@ -28,74 +42,110 @@ export function CaseStudyPageSectionRenderer({
   partner,
   previousPlatform,
   products,
+  tags,
+  ctaText,
+  relatedCaseStudies,
+  language,
 }: CaseStudyPageSectionRendererProps) {
-  const hasSidebarData = !!(industry || partner || previousPlatform || products);
+  const byType = (type: string) => sections.filter((s) => s._type === type);
 
-  const sidebarRows = [
-    { label: "Industry", value: industry },
-    { label: "Partner", value: partner },
-    { label: "Previous Platform", value: previousPlatform },
-    { label: "Products", value: products },
-  ].filter((r): r is { label: string; value: string } => Boolean(r.value));
+  const statsSections = byType("caseStudyStatsSection");
+  const contentSections = byType("caseStudyContentSection");
+  const introSections = byType("caseStudyIntroSection");
+  const testimonialSections = byType("caseStudyTestimonialSection");
+  const brandSections = byType("caseStudyRelatedSection");
 
-  const inlineSection = sections.filter((s) => !FULL_WIDTH_TYPES.includes(s._type));
-  const fullWidthSections = sections.filter((s) => FULL_WIDTH_TYPES.includes(s._type));
+  const cleanTags = (tags ?? []).filter((t): t is string => Boolean(t));
+  // Render tech chips inside the second content section (the "Løsningen"-like
+  // section); fall back to a standalone block when there are fewer than two.
+  const tagsSectionIndex = contentSections.length >= 2 ? 1 : -1;
 
-  function renderSection(section: Section) {
-    switch (section._type) {
-      case "caseStudyIntroSection":
-        return <CaseStudyIntroSection section={section as Parameters<typeof CaseStudyIntroSection>[0]["section"]} />;
-      case "caseStudyContentSection":
-        return <CaseStudyContentSection section={section as Parameters<typeof CaseStudyContentSection>[0]["section"]} />;
-      case "caseStudyTestimonialSection":
-        return <CaseStudyTestimonialSection section={section as Parameters<typeof CaseStudyTestimonialSection>[0]["section"]} />;
-      case "caseStudyStatsSection":
-        return <CaseStudyStatsSection section={section as Parameters<typeof CaseStudyStatsSection>[0]["section"]} />;
-      case "caseStudyRelatedSection":
-        return <CaseStudyRelatedSection section={section as Parameters<typeof CaseStudyRelatedSection>[0]["section"]} />;
-      default:
-        return null;
-    }
-  }
+  const hasMeta = !!(industry || partner || previousPlatform || products);
+  const relatedCases = (relatedCaseStudies ?? []).filter((c) => c?.slug && c?.title);
 
   return (
     <div className="bg-white">
-      {/* Two-column layout: content + sidebar */}
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-        <div className={`${hasSidebarData ? "lg:grid lg:grid-cols-[1fr_260px] lg:gap-12" : ""}`}>
-          {/* Main content column */}
-          <div>
-            {inlineSection.map((section) => (
-              <div key={section._key ?? section._type}>
-                {renderSection(section)}
-              </div>
+      {/* Nøkkeltall strip */}
+      {statsSections.map((section) => (
+        <Column key={section._key ?? section._type} className="pt-12">
+          <CaseStudyStatsSection
+            section={section as Parameters<typeof CaseStudyStatsSection>[0]["section"]}
+          />
+        </Column>
+      ))}
+
+      {/* Utfordringen / Løsningen / Resultater */}
+      {contentSections.map((section, i) => (
+        <Column key={section._key ?? `content-${i}`} className={i === 0 ? "pt-[72px]" : "pt-14"}>
+          <CaseStudyContentSection
+            section={section as Parameters<typeof CaseStudyContentSection>[0]["section"]}
+            tags={i === tagsSectionIndex ? cleanTags : undefined}
+          />
+        </Column>
+      ))}
+
+      {/* Standalone tech chips when there is no second content section */}
+      {tagsSectionIndex === -1 && cleanTags.length > 0 && (
+        <Column className={contentSections.length > 0 ? "pt-8" : "pt-12"}>
+          <div className="flex flex-wrap gap-2">
+            {cleanTags.map((tag) => (
+              <span
+                key={tag}
+                className="inline-flex items-center rounded-[6px] bg-sc-ink-100 px-3 py-1.5 text-[13px] font-medium text-sc-ink-900"
+              >
+                {tag}
+              </span>
             ))}
           </div>
+        </Column>
+      )}
 
-          {/* Sidebar */}
-          {hasSidebarData && (
-            <aside className="mt-10 lg:mt-0 border-t border-gray-200 pt-6 lg:border-t-0 lg:pt-0 lg:border-l lg:pl-10">
-              <div>
-                {sidebarRows.map((row) => (
-                  <div key={row.label} className="py-4 border-b border-gray-200 last:border-b-0">
-                    <p className="text-xs font-semibold uppercase tracking-widest text-[#565454] mb-1">
-                      {row.label}
-                    </p>
-                    <p className="text-base font-medium text-[#1F1D1D]">{row.value}</p>
-                  </div>
-                ))}
-              </div>
-            </aside>
-          )}
-        </div>
-      </div>
-
-      {/* Full-width sections (stats, related brands) */}
-      {fullWidthSections.map((section) => (
-        <div key={section._key ?? section._type}>
-          {renderSection(section)}
-        </div>
+      {/* Intro / lede + metrics strip */}
+      {introSections.map((section, i) => (
+        <Column key={section._key ?? `intro-${i}`} className="pt-14">
+          <CaseStudyIntroSection
+            section={section as Parameters<typeof CaseStudyIntroSection>[0]["section"]}
+          />
+        </Column>
       ))}
+
+      {/* Compact metadata list (industry / partner / previous platform / products) */}
+      {hasMeta && (
+        <Column className="pt-14">
+          <CaseStudySidebar
+            industry={industry}
+            partner={partner}
+            previousPlatform={previousPlatform}
+            products={products}
+          />
+        </Column>
+      )}
+
+      {/* Kundesitat */}
+      {testimonialSections.map((section, i) => (
+        <Column key={section._key ?? `testimonial-${i}`} className="pt-[72px]">
+          <CaseStudyTestimonialSection
+            section={section as Parameters<typeof CaseStudyTestimonialSection>[0]["section"]}
+          />
+        </Column>
+      ))}
+
+      {/* Brand logos ("caseStudyRelatedSection") */}
+      {brandSections.map((section, i) => (
+        <Column key={section._key ?? `brands-${i}`} className="pt-16">
+          <CaseStudyRelatedSection
+            section={section as Parameters<typeof CaseStudyRelatedSection>[0]["section"]}
+          />
+        </Column>
+      ))}
+
+      {/* CTA — always rendered after the sections */}
+      <CaseStudyCta ctaText={ctaText} />
+
+      {/* Flere kundecaser — full-bleed band, hidden when empty */}
+      {relatedCases.length > 0 && (
+        <CaseStudyRelatedCases cases={relatedCases} pageLanguage={language} />
+      )}
     </div>
   );
 }

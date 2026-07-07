@@ -1,6 +1,7 @@
 import React from 'react'
-import Logo from '@/components/ui/Logo'
 import LocalizedLink from '@/components/ui/LocalizedLink'
+import ManageCookiesLink from '@/components/tracking/ManageCookiesLink'
+import NewsletterForm from '@/components/ui/NewsletterForm'
 import { FaLinkedinIn, FaTwitter, FaInstagram, FaFacebookF, FaYoutube, FaGithub } from 'react-icons/fa'
 
 interface FooterLink {
@@ -32,6 +33,11 @@ interface FooterSettings {
     orgNumber?: string
     legalLinks?: FooterLink[]
     copyrightText?: string
+  }
+  newsletter?: {
+    variant?: string
+    overskrift?: string
+    undertekst?: string
   }
 }
 
@@ -113,6 +119,10 @@ const getSocialIcon = (platform?: string) => {
   }
 }
 
+// 2026 design shared classes
+const columnTitleClasses = 'text-white font-bold text-[13px]'
+const columnLinkClasses = 'text-[#8a95a0] hover:text-white transition-colors'
+
 export default function Footer({ settings }: FooterProps) {
   // Use Sanity data or fallback to defaults
   const columns = settings?.columns?.length ? settings.columns : defaultColumns
@@ -120,122 +130,122 @@ export default function Footer({ settings }: FooterProps) {
   const bottomSection = settings?.bottomSection?.badgeText ? settings.bottomSection : defaultBottomSection
 
   return (
-    <footer className="w-full bg-black text-white mt-auto">
-      <div className="section_container mx-auto page-padding-x py-8 sm:py-10 lg:py-[3.8rem]">
-        {/* Main Footer Grid */}
-        <div className="grid lg:flex justify-between xl:grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-10 sm:gap-12 lg:gap-2 xl:gap-6 2xl:gap-8 mb-8 sm:mb-10 lg:mb-12">
-          {/* Logo - Full width on mobile, scales gradually on desktop */}
-          <div className="col-span-2 sm:col-span-3 lg:col-span-1 mb-4 sm:mb-6 lg:mb-0">
-            <div className="w-[170px] lg:w-[120px] xl:w-[150px] 2xl:w-[185px]">
-              <Logo logoPath='/images/footer-logo.png' />
-            </div>
-          </div>
+    <footer className="w-full bg-sc-ink-950 text-[#d6dade] mt-auto">
+      <div className="section_container mx-auto page-padding-x pt-10 sm:pt-12 lg:pt-16 pb-5 lg:pb-7">
+        {/* Top grid: brand column | link columns */}
+        <div className="grid gap-8 lg:grid-cols-[1fr_2.2fr] lg:gap-[60px] items-start">
+          {/* Brand column */}
+          <div>
+            <img
+              src="/images/brand/logo-white-text.png"
+              alt="Scandicommerce"
+              className="block h-6 lg:h-[30px] w-auto mb-4"
+            />
+            <p className="text-[12px] lg:text-[13px] leading-relaxed text-[#8a95a0]">
+              {bottomSection.badgeText}
+              {bottomSection.badgeText && bottomSection.orgNumber && <br />}
+              {bottomSection.orgNumber}
+            </p>
 
-          {/* Dynamic Columns */}
-          {columns.map((column, index) => (
-            <div key={index} className="col-span-1 lg:min-w-[130px] xl:min-w-auto">
-              <h3 className="font-semibold text-sm sm:text-base mb-3 sm:mb-4 pb-2 border-b border-gray-700">
-                {column.title}
-              </h3>
-              <ul className="space-y-2 sm:space-y-3 text-xs sm:text-sm">
-                {column.links?.map((link, linkIndex) => (
-                  <li key={linkIndex}>
-                    <LocalizedLink
-                      href={link.slug ? `/${link.slug}` : (link.href || '#')}
-                      className="text-gray-300 hover:text-teal transition-colors"
-                    >
-                      {link.label}
-                    </LocalizedLink>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
-
-          {/* Connect Section */}
-          <div className="col-span-2 sm:col-span-1">
-            <h3 className="font-semibold text-sm sm:text-base mb-3 sm:mb-4 pb-2 border-b border-gray-700">
-              {connectSection.title}
-            </h3>
-            <div className="space-y-2 sm:space-y-3 text-xs sm:text-sm">
-              {connectSection.email && (
-                <p className="text-gray-300">
-                  <a
-                    href={`mailto:${connectSection.email}`}
-                    className="hover:text-teal transition-colors break-all sm:break-normal"
-                  >
-                    {connectSection.email}
-                  </a>
-                </p>
-              )}
-              {connectSection.phone && (
-                <p>
-                  <a
-                    href={`tel:${connectSection.phone.replace(/\s/g, '')}`}
-                    className="text-teal hover:text-teal-light transition-colors"
-                  >
-                    {connectSection.phone}
-                  </a>
-                </p>
-              )}
-            </div>
-            {connectSection.socialLinks && connectSection.socialLinks.length > 0 && (
-              <div className="mt-4 sm:mt-6 flex gap-2 sm:gap-3">
-                {connectSection.socialLinks.map((social, index) => (
-                  <a
-                    key={index}
-                    href={social.url || '#'}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-gray-800 flex items-center justify-center text-white hover:bg-teal transition-colors"
-                    aria-label={social.platform}
-                  >
-                    {getSocialIcon(social.platform)}
-                  </a>
-                ))}
+            {/* Newsletter signup (reusable block, footer variant) */}
+            {settings?.newsletter?.overskrift && (
+              <div className="mt-7">
+                <div className="text-[13px] font-bold text-white mb-1">
+                  {settings.newsletter.overskrift}
+                </div>
+                {settings.newsletter.undertekst && (
+                  <p className="text-[12px] text-[#8a95a0] m-0 mb-3">
+                    {settings.newsletter.undertekst}
+                  </p>
+                )}
+                <NewsletterForm
+                  source="footer"
+                  emailPlaceholder="din@epost.no"
+                  buttonText="Meld meg på"
+                  successText="Takk! Du er meldt på."
+                  className="flex w-full max-w-[320px]"
+                  inputClassName="bg-white/[0.06] border border-white/10 text-white placeholder:text-[#5a6670] text-[13px] px-3 py-2.5 outline-none flex-1 rounded-l-lg focus:border-sc-cyan-500"
+                  buttonClassName="px-4 py-2.5 text-[12px] font-semibold text-white bg-sc-cyan-500 hover:bg-sc-cyan-600 transition-colors rounded-r-lg whitespace-nowrap"
+                />
               </div>
             )}
           </div>
-        </div>
 
-        {/* Bottom Section */}
-        <div className="border-t border-gray-800 pt-6 sm:pt-8">
-          <div className="flex flex-col gap-4 sm:gap-6 lg:flex-row lg:items-center lg:justify-between">
-            {/* Badge and Org Number */}
-            <div className="flex flex-col xs:flex-row items-start xs:items-center gap-3 sm:gap-4">
-              {bottomSection.badgeText && (
-                <span className="bg-gray-800 text-white px-3 py-1.5 sm:px-4 sm:py-2 rounded text-xs sm:text-sm font-medium">
-                  {bottomSection.badgeText}
-                </span>
-              )}
-              {bottomSection.orgNumber && (
-                <p className="text-gray-400 text-xs sm:text-sm">{bottomSection.orgNumber}</p>
-              )}
-            </div>
-
-            {/* Legal Links */}
-            {bottomSection.legalLinks && bottomSection.legalLinks.length > 0 && (
-              <div className="flex flex-wrap gap-3 sm:gap-4 lg:gap-6 text-xs sm:text-sm">
-                {bottomSection.legalLinks.map((link, index) => (
+          {/* Link columns: 2 cols on mobile, one row on desktop */}
+          <div className="grid grid-cols-2 gap-x-6 gap-y-8 lg:flex lg:flex-wrap lg:justify-between lg:gap-7 text-[13px]">
+            {columns.map((column, index) => (
+              <div key={index} className="flex flex-col gap-2.5 lg:min-w-[120px]">
+                <span className={columnTitleClasses}>{column.title}</span>
+                {column.links?.map((link, linkIndex) => (
                   <LocalizedLink
-                    key={index}
+                    key={linkIndex}
                     href={link.slug ? `/${link.slug}` : (link.href || '#')}
-                    className="text-gray-400 hover:text-teal transition-colors"
+                    className={columnLinkClasses}
                   >
                     {link.label}
                   </LocalizedLink>
                 ))}
               </div>
-            )}
-          </div>
+            ))}
 
-          {/* Copyright */}
-          {bottomSection.copyrightText && (
-            <div className="mt-6 sm:mt-8 text-center sm:text-left lg:text-center">
-              <p className="text-gray-500 text-xs sm:text-sm">
-                {bottomSection.copyrightText}
-              </p>
+            {/* Connect column */}
+            <div className="flex flex-col gap-2.5 lg:min-w-[120px]">
+              <span className={columnTitleClasses}>{connectSection.title}</span>
+              {connectSection.email && (
+                <a
+                  href={`mailto:${connectSection.email}`}
+                  className={`${columnLinkClasses} break-all sm:break-normal`}
+                >
+                  {connectSection.email}
+                </a>
+              )}
+              {connectSection.phone && (
+                <a
+                  href={`tel:${connectSection.phone.replace(/\s/g, '')}`}
+                  className={columnLinkClasses}
+                >
+                  {connectSection.phone}
+                </a>
+              )}
+              {connectSection.socialLinks && connectSection.socialLinks.length > 0 && (
+                <div className="mt-1 flex gap-3">
+                  {connectSection.socialLinks.map((social, index) => (
+                    <a
+                      key={index}
+                      href={social.url || '#'}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-[#8a95a0] hover:text-white transition-colors"
+                      aria-label={social.platform}
+                    >
+                      {getSocialIcon(social.platform)}
+                    </a>
+                  ))}
+                </div>
+              )}
             </div>
+          </div>
+        </div>
+
+        {/* Bottom bar */}
+        <div className="mt-10 lg:mt-12 pt-5 border-t border-[rgba(255,255,255,0.08)] text-[12px] text-[#5a6670] flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <span>{bottomSection.copyrightText}</span>
+          {bottomSection.legalLinks && bottomSection.legalLinks.length > 0 && (
+            <div className="flex flex-wrap gap-x-4 gap-y-2">
+              {bottomSection.legalLinks.map((link, index) => (
+                <LocalizedLink
+                  key={index}
+                  href={link.slug ? `/${link.slug}` : (link.href || '#')}
+                  className="text-[#5a6670] hover:text-white transition-colors"
+                >
+                  {link.label}
+                </LocalizedLink>
+              ))}
+              <ManageCookiesLink />
+            </div>
+          )}
+          {(!bottomSection.legalLinks || bottomSection.legalLinks.length === 0) && (
+            <ManageCookiesLink />
           )}
         </div>
       </div>

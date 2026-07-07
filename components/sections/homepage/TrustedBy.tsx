@@ -1,10 +1,8 @@
 'use client'
 
 /* eslint-disable @next/next/no-img-element */
-import React, { useRef } from 'react'
-import Image from 'next/image'
+import React from 'react'
 import Link from 'next/link'
-import { motion, useInView } from 'framer-motion'
 import Marquee from 'react-fast-marquee'
 
 interface Brand {
@@ -30,122 +28,72 @@ interface TrustedByProps {
 
 // Default brands fallback
 const defaultBrands: Brand[] = [
-  { name: 'Telenor Group', logo: { asset: { url: '/images/brands/telenor.png' } }, alt: 'Telenor Group logo' },
-  { name: 'Yara', logo: { asset: { url: '/images/brands/yara.png' } }, alt: 'Yara logo' },
-  { name: 'Gjensidige', logo: { asset: { url: '/images/brands/gjensidige.png' } }, alt: 'Gjensidige logo' },
-  { name: 'AkerBP', logo: { asset: { url: '/images/brands/akerbp.png' } }, alt: 'AkerBP logo' },
-  { name: 'DNB', logo: { asset: { url: '/images/brands/dnb.png' } }, alt: 'DNB logo' },
-  { name: 'SpareBank 1', logo: { asset: { url: '/images/brands/sparebank1.png' } }, alt: 'SpareBank 1 logo' },
-  { name: 'KLP', logo: { asset: { url: '/images/brands/klp.png' } }, alt: 'KLP logo' },
-  { name: 'Lerøy', logo: { asset: { url: '/images/brands/leroy.png' } }, alt: 'Lerøy logo' },
+  { name: 'Shopify Plus' },
+  { name: 'Klaviyo' },
+  { name: 'Vipps' },
+  { name: 'Visma' },
+  { name: 'Judge.me' },
+  { name: 'Make.com' },
 ]
 
-const titleVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.6,
-      ease: [0.25, 0.1, 0.25, 1] as const
-    }
-  }
-}
-
-const scrollVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      duration: 0.8,
-      delay: 0.3,
-      ease: [0.25, 0.1, 0.25, 1] as const
-    }
-  }
-}
-
 export default function TrustedBy({ trustedBy }: TrustedByProps) {
-  const ref = useRef<HTMLDivElement>(null)
-  const isInView = useInView(ref, { once: true, amount: 0.3 })
-
-  const title = trustedBy?.title || 'Trusted by 50+ Norwegian brands'
+  const title = trustedBy?.title || 'Offisiell Shopify-partner siden 2024'
   const brands = trustedBy?.brands && trustedBy.brands.length > 0
     ? trustedBy.brands
     : defaultBrands
 
-  const renderBrandLogo = (brand: Brand, index: number) => {
+  const renderBrand = (brand: Brand, index: number) => {
     const logoUrl = brand.logo?.asset?.url
-    const altText = brand.alt || brand.name || 'Brand logo'
+    const altText = brand.alt || brand.logo?.alt || brand.name || 'Brand logo'
 
-    if (!logoUrl) return null
+    const content = logoUrl ? (
+      <img
+        src={logoUrl}
+        alt={altText}
+        className="h-7 lg:h-8 w-auto object-contain grayscale opacity-60 transition-opacity hover:opacity-100 hover:grayscale-0"
+      />
+    ) : (
+      <span className="whitespace-nowrap text-sm font-semibold text-sc-ink-400">
+        {brand.name}
+      </span>
+    )
+
+    if (brand.link) {
+      return (
+        <Link
+          key={`brand-${index}`}
+          href={brand.link}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center mx-6 lg:mx-8"
+        >
+          {content}
+        </Link>
+      )
+    }
 
     return (
-      <div
-        key={`brand-${index}`}
-        className="relative flex items-center justify-center flex-shrink-0 mx-2 sm:mx-6 lg:mx-8"
-      >
-        {brand.link ? (
-          <Link 
-            href={brand.link} 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="block transition-transform hover:scale-110 duration-200"
-          >
-            <div className="relative h-[70px] w-auto">
-              <Image
-                src={logoUrl}
-                alt={altText}
-                width={300}
-                height={150}
-                className="h-[50px] sm:h-[70px] w-auto object-contain"
-                unoptimized={logoUrl.startsWith('/')}
-              />
-            </div>
-          </Link>
-        ) : (
-          <div className="relative h-[70px] w-auto">
-            <Image
-              src={logoUrl}
-              alt={altText}
-              width={300}
-              height={150}
-              className="h-[50px] sm:h-[70px] w-auto object-contain"
-              unoptimized={logoUrl.startsWith('/')}
-            />
-          </div>
-        )}
+      <div key={`brand-${index}`} className="flex items-center mx-6 lg:mx-8">
+        {content}
       </div>
     )
   }
 
   return (
-    <section className="bg-teal py-12 lg:py-16 overflow-hidden" ref={ref}>
-      <div className="section_container mx-auto page-padding-x">
-        <motion.div
-          className="text-center mb-8 lg:mb-12"
-          variants={titleVariants}
-          initial="hidden"
-          animate={isInView ? "visible" : "hidden"}
-        >
-          <h2 className="text-[5.3vw] xs:text-[3.5vw] sm:text-[3.2vw] md:text-[3.2vw] lg:text-[28px] xl:text-[34px] font-bold text-white">
-            {title}
-          </h2>
-        </motion.div>
-        <motion.div
-          className="relative w-full overflow-hidden"
-          variants={scrollVariants}
-          initial="hidden"
-          animate={isInView ? "visible" : "hidden"}
-        >
-          <Marquee
-            speed={50}
-            gradient={false}
-            pauseOnHover={true}
-            className="overflow-hidden"
-          >
-            {brands.map((brand, index) => renderBrandLogo(brand, index))}
-          </Marquee>
-        </motion.div>
+    // Partner strip (2026 design, upgraded to the scrolling logo list):
+    // clear air above (separates it from the hero/tier strip) and a large gap
+    // (112px desktop / 44px mobile) before the next section.
+    <section className="bg-white mt-10 lg:mt-16 mb-11 lg:mb-[112px]">
+      <p className="text-xs lg:text-[13px] text-sc-ink-400 text-center mb-5 lg:mb-7 page-padding-x">
+        {title}
+      </p>
+      <div className="relative">
+        {/* Edge fades so logos glide in/out instead of clipping */}
+        <div className="pointer-events-none absolute inset-y-0 left-0 w-12 lg:w-32 z-10 bg-gradient-to-r from-white to-transparent" />
+        <div className="pointer-events-none absolute inset-y-0 right-0 w-12 lg:w-32 z-10 bg-gradient-to-l from-white to-transparent" />
+        <Marquee speed={40} gradient={false} pauseOnHover autoFill>
+          {brands.map((brand, index) => renderBrand(brand, index))}
+        </Marquee>
       </div>
     </section>
   )

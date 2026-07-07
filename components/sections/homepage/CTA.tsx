@@ -1,8 +1,7 @@
 'use client'
 
-import React, { useRef } from 'react'
+import React from 'react'
 import Link from 'next/link'
-import { motion, useInView } from 'framer-motion'
 
 interface CTAData {
   title?: string
@@ -18,122 +17,54 @@ interface CTAProps {
   data?: CTAData
 }
 
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.15,
-      delayChildren: 0.2
-    }
-  }
-}
-
-const itemVariants = {
-  hidden: { opacity: 0, y: 40 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.6,
-      ease: [0.25, 0.1, 0.25, 1] as const
-    }
-  }
-}
-
-const buttonContainerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.1,
-      delayChildren: 0.4
-    }
-  }
-}
-
-const buttonVariants = {
-  hidden: { opacity: 0, y: 20, scale: 0.9 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    scale: 1,
-    transition: {
-      duration: 0.4,
-      ease: [0.25, 0.1, 0.25, 1] as const
-    }
-  }
-}
-
 export default function CTA({ data }: CTAProps) {
-  const ref = useRef<HTMLDivElement>(null)
-  const isInView = useInView(ref, { once: true, amount: 0.3 })
-
   // Content variables from Sanity
   const title = data?.title
   const subtitle = data?.subtitle
   const buttons = data?.buttons
 
   return (
-    <section className="relative bg-teal py-16 lg:py-44 overflow-hidden" ref={ref}>
-       <div className="section_container mx-auto page-padding-x">
-        <motion.div 
-          className="text-center"
-          variants={containerVariants}
-          initial="hidden"
-          animate={isInView ? "visible" : "hidden"}
-        >
+    <section className="relative bg-sc-ink-900 overflow-hidden">
+      {/* Decorative logo mark */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src="/images/brand/logo-mark.png"
+        alt=""
+        aria-hidden="true"
+        className="hidden md:block absolute -right-20 -top-20 h-[420px] w-auto opacity-[0.08] pointer-events-none select-none"
+      />
+
+      <div className="section_container max-w-[1320px] mx-auto page-padding-x py-11 lg:py-[88px] relative flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 lg:gap-12">
+        <div>
           {title && (
-            <motion.h2 
-              className="text-[5.3vw] xs:text-[3.5vw] sm:text-[3.2vw] md:text-[3.2vw] lg:text-[28px] xl:text-[34px] font-bold text-white leading-tight mb-4"
-              variants={itemVariants}
-            >
+            <h2 className="text-[26px] lg:text-[44px] font-bold text-white tracking-[-0.02em] leading-tight mb-2 lg:mb-2.5">
               {title}
-            </motion.h2>
+            </h2>
           )}
-
           {subtitle && (
-            <motion.p 
-              className="text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[16px] xl:text-[18px] text-gray-100 mb-8 lg:mb-12"
-              variants={itemVariants}
-            >
+            <p className="text-sm lg:text-base text-sc-ink-300 m-0">
               {subtitle}
-            </motion.p>
+            </p>
           )}
+        </div>
 
-          {buttons && buttons.length > 0 && (
-            <motion.div 
-              className="flex flex-col sm:flex-row gap-4 justify-center"
-              variants={buttonContainerVariants}
-              initial="hidden"
-              animate={isInView ? "visible" : "hidden"}
-            >
-              {buttons.map((button, index) => (
-                <motion.div
-                  key={index}
-                  variants={buttonVariants}
-                  whileHover={{ 
-                    scale: 1.05, 
-                    y: -3,
-                    transition: { duration: 0.2 }
-                  }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  <Link
-                    href={button.link || '#'}
-                    className={`block px-8 py-3 font-semibold transition-colors text-center ${
-                      button.variant === 'primary' || index === 0
-                        ? 'bg-gray-900 text-white hover:bg-gray-800'
-                        : 'bg-white text-gray-900 hover:bg-gray-100'
-                    }`}
-                  >
-                    {button.text}
-                  </Link>
-                </motion.div>
-              ))}
-            </motion.div>
-          )}
-        </motion.div>
+        {buttons && buttons.length > 0 && (
+          <div className="flex flex-col sm:flex-row gap-2.5 lg:gap-3 flex-none">
+            {buttons.map((button, index) => (
+              <Link
+                key={index}
+                href={button.link || '#'}
+                className={`inline-flex items-center justify-center rounded-lg px-[22px] py-3.5 lg:py-3 text-sm font-semibold tracking-[0.02em] text-center transition-colors ${
+                  button.variant === 'primary' || index === 0
+                    ? 'bg-sc-cyan-500 text-white hover:bg-sc-cyan-600 shadow-[0_10px_30px_rgba(22,167,179,0.25)]'
+                    : 'bg-white text-sc-ink-900 hover:bg-sc-ink-100'
+                }`}
+              >
+                {button.text}
+              </Link>
+            ))}
+          </div>
+        )}
       </div>
     </section>
   )

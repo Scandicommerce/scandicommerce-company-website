@@ -1,5 +1,3 @@
-"use client";
-
 interface CaseStudySidebarProps {
   industry?: string | null;
   partner?: string | null;
@@ -7,22 +5,10 @@ interface CaseStudySidebarProps {
   products?: string | null;
 }
 
-interface SidebarRowProps {
-  label: string;
-  value: string;
-}
-
-function SidebarRow({ label, value }: SidebarRowProps) {
-  return (
-    <div className="py-4 border-t border-gray-200 first:border-t-0">
-      <p className="text-xs font-semibold uppercase tracking-widest text-[#565454] mb-1">
-        {label}
-      </p>
-      <p className="text-base font-medium text-[#1F1D1D]">{value}</p>
-    </div>
-  );
-}
-
+/**
+ * Compact metadata definition list (2026 design) — rendered after the
+ * content sections instead of the old right-hand sidebar.
+ */
 export default function CaseStudySidebar({
   industry,
   partner,
@@ -30,21 +16,24 @@ export default function CaseStudySidebar({
   products,
 }: CaseStudySidebarProps) {
   const rows = [
-    { label: "Industry", value: industry },
+    { label: "Bransje", value: industry },
     { label: "Partner", value: partner },
-    { label: "Previous Platform", value: previousPlatform },
-    { label: "Products", value: products },
+    { label: "Tidligere plattform", value: previousPlatform },
+    { label: "Produkter", value: products },
   ].filter((r): r is { label: string; value: string } => Boolean(r.value));
 
   if (rows.length === 0) return null;
 
   return (
-    <aside className="bg-white border-t border-gray-200 lg:border-t-0 lg:pl-10 lg:pt-4">
-      <div className="divide-y divide-gray-200">
-        {rows.map((row) => (
-          <SidebarRow key={row.label} label={row.label} value={row.value} />
-        ))}
-      </div>
-    </aside>
+    <dl className="grid grid-cols-2 gap-x-6 gap-y-5 border-t border-sc-ink-100 pt-6 md:grid-cols-4">
+      {rows.map((row) => (
+        <div key={row.label}>
+          <dt className="mb-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-sc-ink-400">
+            {row.label}
+          </dt>
+          <dd className="m-0 text-sm font-semibold text-sc-ink-900">{row.value}</dd>
+        </div>
+      ))}
+    </dl>
   );
 }

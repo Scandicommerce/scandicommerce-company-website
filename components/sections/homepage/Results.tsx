@@ -1,204 +1,161 @@
 'use client'
 
-import React, { useRef } from 'react'
+/* eslint-disable @next/next/no-img-element */
+import React from 'react'
 import Link from 'next/link'
-import { motion, useInView } from 'framer-motion'
+
+interface ResultsItem {
+  clientImage?: {
+    asset?: {
+      url?: string
+    }
+  }
+  clientName: string
+  category?: string
+  stat: string
+  metricName?: string
+  description?: string
+  ctaText?: string
+  ctaLink?: string
+}
 
 interface ResultsData {
   title?: string
   subtitle?: string
-  items?: Array<{
-    clientImage?: {
-      asset?: {
-        url?: string
-      }
-    }
-    clientName: string
-    stat: string
-    metricName?: string
-    description?: string
-    ctaText?: string
-    ctaLink?: string
-  }>
+  items?: ResultsItem[]
 }
 
 interface ResultsProps {
   data?: ResultsData
 }
 
-const headerVariants = {
-  hidden: { opacity: 0, y: 30 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.6,
-      ease: [0.25, 0.1, 0.25, 1] as const
-    }
+function CaseImage({ item, className }: { item: ResultsItem; className: string }) {
+  const url = item.clientImage?.asset?.url
+  if (!url) {
+    return <div className={`${className} bg-sc-ink-50`} />
   }
+  return (
+    <div className={`${className} overflow-hidden`}>
+      <img
+        src={url}
+        alt={item.clientName}
+        className="w-full h-full object-cover"
+      />
+    </div>
+  )
 }
 
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.15,
-      delayChildren: 0.2
-    }
-  }
-}
-
-const cardVariants = {
-  hidden: { opacity: 0, y: 50, scale: 0.95 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    scale: 1,
-    transition: {
-      duration: 0.5,
-      ease: [0.25, 0.1, 0.25, 1] as const
-    }
-  }
-}
-
-const statVariants = {
-  hidden: { opacity: 0, scale: 0.5 },
-  visible: {
-    opacity: 1,
-    scale: 1,
-    transition: {
-      duration: 0.6,
-      ease: [0.25, 0.1, 0.25, 1] as const,
-      delay: 0.2
-    }
-  }
+function CategoryChip({ category }: { category?: string }) {
+  if (!category) return null
+  return (
+    <span className="inline-flex items-center self-start rounded-[6px] bg-sc-cyan-50 px-3 py-1.5 text-xs font-medium text-sc-cyan-700">
+      {category}
+    </span>
+  )
 }
 
 export default function Results({ data }: ResultsProps) {
-  const headerRef = useRef<HTMLDivElement>(null)
-  const gridRef = useRef<HTMLDivElement>(null)
-  
-  const headerInView = useInView(headerRef, { once: true, amount: 0.3 })
-  const gridInView = useInView(gridRef, { once: true, amount: 0.2 })
-
   // Content variables from Sanity
   const title = data?.title
   const subtitle = data?.subtitle
   const items = data?.items
 
+  const featured = items?.[0]
+  const rest = items && items.length > 1 ? items.slice(1) : []
+
   return (
-    <section className="relative bg-black py-16 lg:py-24 overflow-hidden">
-      <div className="section_container mx-auto page-padding-x">
-        {(title || subtitle) && (
-          <motion.div 
-            ref={headerRef}
-            className="text-center mb-12 lg:mb-16 relative"
-            variants={headerVariants}
-            initial="hidden"
-            animate={headerInView ? "visible" : "hidden"}
-          >
+    <section className="relative bg-white py-16 lg:py-28 overflow-hidden">
+      <div className="section_container max-w-[1320px] mx-auto page-padding-x">
+        <div className="flex items-end justify-between gap-6 mb-6 lg:mb-10">
+          <div>
+            <div className="text-[11px] lg:text-xs font-semibold uppercase tracking-[0.12em] text-sc-cyan-500 mb-2.5">
+              Kundecaser
+            </div>
             {title && (
-              <h2 className="text-[5.3vw] xs:text-[3.5vw] sm:text-[3.2vw] md:text-[3.2vw] lg:text-[28px] xl:text-[34px] font-bold text-white leading-tight mb-4">
+              <h2 className="text-[26px] lg:text-[44px] font-bold text-sc-ink-900 tracking-[-0.02em] leading-tight m-0">
                 {title}
               </h2>
             )}
             {subtitle && (
-              <p className="text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[16px] xl:text-[18px] text-gray-400">
+              <p className="text-sm lg:text-base text-sc-ink-600 mt-2 m-0">
                 {subtitle}
               </p>
             )}
-          </motion.div>
+          </div>
+          <Link
+            href="/kundecaser"
+            className="flex-none text-[13px] lg:text-sm font-semibold text-sc-ink-900 hover:text-sc-cyan-600 transition-colors whitespace-nowrap"
+          >
+            <span className="hidden sm:inline">Alle kundecaser →</span>
+            <span className="sm:hidden">Alle →</span>
+          </Link>
+        </div>
+
+        {featured && (
+          <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)] border border-sc-ink-100 rounded-[10px] overflow-hidden bg-white transition-shadow duration-200 hover:shadow-md mb-3.5 lg:mb-6">
+            <CaseImage item={featured} className="h-[210px] lg:h-[460px]" />
+            <div className="p-5 lg:py-11 lg:pr-11 lg:pl-6 flex flex-col justify-center">
+              <CategoryChip category={featured.category} />
+              <div className="text-[38px] lg:text-[64px] font-extrabold text-sc-ink-900 tracking-[-0.03em] leading-none mt-3 lg:mt-5 mb-1.5">
+                {featured.stat}
+              </div>
+              {featured.metricName && (
+                <div className="text-[13px] lg:text-sm font-semibold text-sc-ink-600 mb-2.5 lg:mb-4">
+                  {featured.metricName}
+                </div>
+              )}
+              {featured.description && (
+                <p className="hidden lg:block text-[15px] leading-relaxed text-sc-ink-600 m-0 mb-[22px]">
+                  {featured.description}
+                </p>
+              )}
+              {featured.ctaLink && (
+                <Link
+                  href={featured.ctaLink}
+                  className="text-[13px] lg:text-sm font-semibold text-sc-ink-900 hover:text-sc-cyan-600 transition-colors"
+                >
+                  {featured.ctaText || 'Se caset'} →
+                </Link>
+              )}
+            </div>
+          </div>
         )}
 
-        {items && items.length > 0 && (
-          <motion.div 
-            ref={gridRef}
-            className="grid grid-cols-1 md:grid-cols-3 gap-6"
-            variants={containerVariants}
-            initial="hidden"
-            animate={gridInView ? "visible" : "hidden"}
-          >
-            {items.map((study, index) => (
-              <motion.div
+        {rest.length > 0 && (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5 lg:gap-6">
+            {rest.map((item, index) => (
+              <div
                 key={index}
-                variants={cardVariants}
-                whileHover={{ 
-                  y: -10,
-                  scale: 1.02,
-                  transition: { duration: 0.3 }
-                }}
-                className="bg-gray-900 rounded-lg p-6 hover:bg-gray-800 transition-colors"
+                className="grid grid-cols-[110px_minmax(0,1fr)] lg:grid-cols-[220px_minmax(0,1fr)] border border-sc-ink-100 rounded-lg overflow-hidden bg-white transition-shadow duration-200 hover:shadow-md"
               >
-                <motion.div 
-                  className="flex items-start justify-between mb-6"
-                  initial={{ opacity: 0 }}
-                  animate={gridInView ? { opacity: 1 } : { opacity: 0 }}
-                  transition={{ delay: 0.3 + index * 0.1 }}
-                >
-                  <div className="relative h-12 rounded-lg overflow-hidden">
-                    {study.clientImage?.asset?.url ? (
-                      /* eslint-disable-next-line @next/next/no-img-element */
-                      <img
-                        src={study.clientImage.asset.url}
-                        alt={study.clientName}
-                        className="h-full w-auto object-contain"
-                      />
-                    ) : (
-                      <div className="w-16 h-full flex items-center justify-center text-gray-500 bg-gray-700 rounded-lg">
-                        <span className="text-2xl">👤</span>
-                      </div>
-                    )}
+                <CaseImage item={item} className="min-h-[110px] lg:min-h-[210px] h-full" />
+                <div className="px-[18px] py-4 lg:p-[30px] flex flex-col justify-center">
+                  <div className="hidden lg:block">
+                    <CategoryChip category={item.category} />
                   </div>
-                  <span className="text-sm text-gray-400">{study.clientName}</span>
-                </motion.div>
-
-                <div className="mb-4">
-                  {study.stat && (
-                    <motion.p 
-                      className="text-[5.3vw] xs:text-[3.5vw] sm:text-[3.2vw] md:text-[3.2vw] lg:text-[28px] xl:text-[34px] font-bold text-white mb-2 font-mono tracking-tight"
-                      variants={statVariants}
-                    >
-                      {study.stat}
-                    </motion.p>
+                  <div className="text-[26px] lg:text-[38px] font-extrabold text-sc-ink-900 tracking-[-0.03em] leading-tight lg:mt-3 lg:mb-0.5">
+                    {item.stat}
+                  </div>
+                  {item.metricName && (
+                    <div className="text-xs lg:text-[13px] text-sc-ink-600 lg:mb-3">
+                      {item.metricName}
+                      {item.category && (
+                        <span className="lg:hidden"> · {item.category}</span>
+                      )}
+                    </div>
                   )}
-                  {study.metricName && (
-                    <p className="text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[16px] xl:text-[18px] text-white">{study.metricName}</p>
+                  {item.ctaLink && (
+                    <Link
+                      href={item.ctaLink}
+                      className="hidden lg:inline text-[13px] font-semibold text-sc-ink-900 hover:text-sc-cyan-600 transition-colors"
+                    >
+                      {item.ctaText || 'Se caset'} →
+                    </Link>
                   )}
                 </div>
-
-                {study.description && (
-                  <p className="text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[16px] xl:text-[18px] text-gray-400 mb-6">{study.description}</p>
-                )}
-
-                {study.ctaLink && (
-                  <motion.div whileHover={{ x: 5 }}>
-                    <Link
-                      href={study.ctaLink}
-                      className="inline-flex items-center gap-2 text-teal font-semibold hover:text-teal-light transition-colors"
-                    >
-                      {study.ctaText || 'Read case study'}
-                      <motion.svg
-                        className="w-5 h-5"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                        animate={{ x: [0, 4, 0] }}
-                        transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M17 8l4 4m0 0l-4 4m4-4H3"
-                        />
-                      </motion.svg>
-                    </Link>
-                  </motion.div>
-                )}
-              </motion.div>
+              </div>
             ))}
-          </motion.div>
+          </div>
         )}
       </div>
     </section>

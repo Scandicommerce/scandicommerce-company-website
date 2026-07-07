@@ -2,9 +2,6 @@
 
 import React from 'react'
 import Link from 'next/link'
-import { motion, useInView, useScroll, useTransform } from 'framer-motion'
-import { useRef } from 'react'
-import { HiXMark } from 'react-icons/hi2'
 
 interface PainPointsData {
   painPointsTitle?: {
@@ -25,54 +22,7 @@ interface PainPointsProps {
   painPoints?: PainPointsData
 }
 
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.15,
-      delayChildren: 0.3
-    }
-  }
-}
-
-const itemVariants = {
-  hidden: { opacity: 0, y: 60, scale: 0.9, rotateX: 15 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    scale: 1,
-    rotateX: 0,
-    transition: {
-      duration: 0.6,
-      ease: [0.25, 0.1, 0.25, 1] as const
-    }
-  }
-}
-
-const titleVariants = {
-  hidden: { opacity: 0, y: 40, scale: 0.95 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    scale: 1,
-    transition: {
-      duration: 0.7,
-      ease: [0.25, 0.1, 0.25, 1] as const
-    }
-  }
-}
-
 export default function PainPoints({ painPoints }: PainPointsProps) {
-  const sectionRef = useRef<HTMLDivElement>(null)
-  const titleRef = useRef<HTMLDivElement>(null)
-  const cardsRef = useRef<HTMLDivElement>(null)
-  const bottomRef = useRef<HTMLDivElement>(null)
-  
-  const titleInView = useInView(titleRef, { once: true, amount: 0.5 })
-  const cardsInView = useInView(cardsRef, { once: true, amount: 0.3 })
-  const bottomInView = useInView(bottomRef, { once: true, amount: 0.5 })
-  
   // Content variables from Sanity
   const titleText = painPoints?.painPointsTitle?.text
   const titleHighlight = painPoints?.painPointsTitle?.highlight
@@ -91,129 +41,51 @@ export default function PainPoints({ painPoints }: PainPointsProps) {
     return (
       <>
         {parts[0]}
-        <motion.span 
-          className="text-teal inline-block"
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={titleInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.8 }}
-          transition={{ delay: 0.4, duration: 0.5 }}
-        >
-          {titleHighlight}
-        </motion.span>
+        <span className="text-sc-cyan-400">{titleHighlight}</span>
         {parts[1]}
       </>
     )
   }
 
   return (
-    <section className="relative bg-gray-50 py-16 lg:py-24 overflow-hidden" ref={sectionRef}>
-      <div className="section_container mx-auto page-padding-x">
-        {titleText && (
-          <motion.div 
-            ref={titleRef}
-            className="text-center mb-8 sm:mb-12 lg:mb-16"
-            variants={titleVariants}
-            initial="hidden"
-            animate={titleInView ? "visible" : "hidden"}
-          >
-            <h2 className="text-[5.3vw] xs:text-[3.5vw] sm:text-[3.2vw] md:text-[3.2vw] lg:text-[28px] xl:text-[34px] font-bold text-gray-900 leading-tight px-2">
+    <section className="relative bg-sc-ink-900 overflow-hidden">
+      <div className="section_container max-w-[1320px] mx-auto page-padding-x py-12 lg:py-20 grid grid-cols-1 lg:grid-cols-[1.1fr_1fr] gap-8 lg:gap-[60px] items-center">
+        <div>
+          {titleText && (
+            <h2 className="text-[26px] lg:text-[40px] font-bold text-white tracking-[-0.02em] leading-snug m-0">
               {renderTitle()}
             </h2>
-          </motion.div>
-        )}
-
-        {items && items.length > 0 && (
-          <motion.div 
-            ref={cardsRef}
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-12 sm:mb-16 lg:mb-20"
-            variants={containerVariants}
-            initial="hidden"
-            animate={cardsInView ? "visible" : "hidden"}
-            style={{ perspective: 1000 }}
-          >
-            {items.map((point, index) => (
-              <motion.div
-                key={index}
-                variants={itemVariants}
-                whileHover={{ 
-                  y: -12, 
-                  scale: 1.03,
-                  boxShadow: '0 25px 50px rgba(0,0,0,0.12)',
-                  transition: { duration: 0.3, ease: "easeOut" }
-                }}
-                className="bg-white p-4 sm:p-6 shadow-md hover:shadow-xl transition-all flex flex-col items-center justify-center gap-3 sm:gap-4 min-h-[140px] sm:h-40 origin-bottom"
-              >
-                <motion.div 
-                  className="flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 bg-teal rounded-full flex-shrink-0"
-                  initial={{ scale: 0, rotate: -180 }}
-                  animate={cardsInView ? { scale: 1, rotate: 0 } : { scale: 0, rotate: -180 }}
-                  transition={{ delay: 0.4 + index * 0.1, duration: 0.5, type: "spring" }}
-                  whileHover={{ rotate: 180, scale: 1.1 }}
-                >
-                  <HiXMark className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
-                </motion.div>
-                <motion.p 
-                  className="text-[#565454] font-semibold text-xs sm:text-sm text-center leading-tight"
-                  initial={{ opacity: 0 }}
-                  animate={cardsInView ? { opacity: 1 } : { opacity: 0 }}
-                  transition={{ delay: 0.5 + index * 0.1, duration: 0.4 }}
-                >
-                  {point.text}
-                </motion.p>
-              </motion.div>
-            ))}
-          </motion.div>
-        )}
-
-        <div ref={bottomRef}>
-          {bottomText && (
-            <motion.div 
-              className="text-center mb-4 sm:mb-6"
-              initial={{ opacity: 0, y: 30 }}
-              animate={bottomInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-              transition={{ duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
-            >
-              <p className="text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[16px] xl:text-[18px] text-[#555555] max-w-2xl mx-auto">
-                {bottomText}
-              </p>
-            </motion.div>
           )}
-
+          {bottomText && (
+            <p className="text-sm lg:text-base leading-relaxed text-sc-ink-300 mt-3 lg:mt-4 m-0">
+              {bottomText}
+            </p>
+          )}
           {ctaText && ctaUrl && (
-            <motion.div 
-              className="text-center"
-              initial={{ opacity: 0, y: 30 }}
-              animate={bottomInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-              transition={{ delay: 0.2, duration: 0.6, ease: [0.25, 0.1, 0.25, 1] }}
+            <Link
+              href={ctaUrl}
+              className="inline-flex items-center gap-2 mt-5 lg:mt-6 text-sm font-semibold text-sc-cyan-400 hover:text-sc-cyan-300 transition-colors"
             >
-              <motion.div
-                whileHover={{ x: 8, scale: 1.02 }}
-                className="inline-block"
-              >
-                <Link
-                  href={ctaUrl}
-                  className="inline-flex items-center gap-2 text-[#00b3bb] font-semibold text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[16px] xl:text-[18px] hover:text-teal-dark transition-colors"
-                >
-                  {ctaText}
-                  <motion.svg
-                    className="w-5 h-5"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                    animate={{ x: [0, 6, 0] }}
-                    transition={{ duration: 1.2, repeat: Infinity, ease: "easeInOut" }}
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M17 8l4 4m0 0l-4 4m4-4H3"
-                    />
-                  </motion.svg>
-                </Link>
-              </motion.div>
-            </motion.div>
+              {ctaText} →
+            </Link>
           )}
         </div>
+
+        {items && items.length > 0 && (
+          <ul className="list-none p-0 m-0 flex flex-col gap-3">
+            {items.map((point, index) => (
+              <li
+                key={index}
+                className="flex items-start gap-3.5 rounded-xl border border-white/[0.06] bg-white/[0.03] px-[18px] py-4 text-[15px] lg:text-base text-sc-ink-200"
+              >
+                <span className="font-bold text-[#e04a4a] leading-6" aria-hidden="true">
+                  ✕
+                </span>
+                <span>{point.text}</span>
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
     </section>
   )

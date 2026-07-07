@@ -28,7 +28,25 @@ interface SanityCaseStudy {
   partner?: string | null;
   previousPlatform?: string | null;
   products?: string | null;
+  pakke?: string | null;
+  ctaText?: string | null;
+  relatedCaseStudies?: Array<{
+    _id?: string | null;
+    language?: string | null;
+    title?: string | null;
+    slug?: string | null;
+    excerpt?: string | null;
+    industry?: string | null;
+    heroImageUrl?: string | null;
+  }> | null;
   sections?: Array<{ _type: string; _key?: string; [key: string]: unknown }> | null;
+}
+
+/** Short breadcrumb leaf: partner name, or the part of the title before an em dash/colon. */
+function breadcrumbLeafFrom(title: string, partner?: string | null): string {
+  if (partner) return partner;
+  const short = title.split(/\s*[—–:|]\s*/)[0]?.trim();
+  return short || title;
 }
 
 export default async function CaseStudyPage({
@@ -69,6 +87,9 @@ export default async function CaseStudyPage({
           title={data.title}
           clientLogo={clientLogo}
           heroImage={heroImage}
+          industry={data.industry}
+          pakke={data.pakke}
+          breadcrumbLeaf={breadcrumbLeafFrom(data.title, data.partner)}
         />
         <CaseStudyPageSectionRenderer
           sections={sections}
@@ -76,6 +97,10 @@ export default async function CaseStudyPage({
           partner={data.partner}
           previousPlatform={data.previousPlatform}
           products={data.products}
+          tags={data.tags}
+          ctaText={data.ctaText}
+          relatedCaseStudies={data.relatedCaseStudies}
+          language={data.language ?? language}
         />
       </main>
       <FooterWrapper />

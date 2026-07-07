@@ -1,7 +1,6 @@
 'use client'
 
-import React, { useRef } from 'react'
-import { motion, useInView } from 'framer-motion'
+import React from 'react'
 
 interface ProcessData {
   processTitle?: string
@@ -17,142 +16,63 @@ interface HowWeWorkProps {
   process?: ProcessData
 }
 
-const headerVariants = {
-  hidden: { opacity: 0, y: 30 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.6,
-      ease: [0.25, 0.1, 0.25, 1] as const
-    }
-  }
-}
-
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.2,
-      delayChildren: 0.3
-    }
-  }
-}
-
-const stepVariants = {
-  hidden: { opacity: 0, y: 50, scale: 0.9 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    scale: 1,
-    transition: {
-      duration: 0.5,
-      ease: [0.25, 0.1, 0.25, 1] as const
-    }
-  }
-}
-
-const numberVariants = {
-  hidden: { opacity: 0, scale: 0, rotate: -180 },
-  visible: {
-    opacity: 1,
-    scale: 1,
-    rotate: 0,
-    transition: {
-      duration: 0.6,
-      ease: [0.25, 0.1, 0.25, 1] as const
-    }
-  }
-}
-
 export default function HowWeWork({ process }: HowWeWorkProps) {
-  const headerRef = useRef<HTMLDivElement>(null)
-  const stepsRef = useRef<HTMLDivElement>(null)
-  
-  const headerInView = useInView(headerRef, { once: true, amount: 0.3 })
-  const stepsInView = useInView(stepsRef, { once: true, amount: 0.2 })
-
   // Content variables from Sanity
   const title = process?.processTitle
   const subtitle = process?.processSubtitle
   const steps = process?.processSteps
 
   return (
-    <section className="relative bg-white py-16 lg:py-24 overflow-hidden">
-      <div className="section_container mx-auto page-padding-x">
-        {(title || subtitle) && (
-          <motion.div 
-            ref={headerRef}
-            className="text-center mb-12 lg:mb-16 relative"
-            variants={headerVariants}
-            initial="hidden"
-            animate={headerInView ? "visible" : "hidden"}
-          >
-            {title && (
-              <h2 className="text-[5.3vw] xs:text-[3.5vw] sm:text-[3.2vw] md:text-[3.2vw] lg:text-[28px] xl:text-[34px] font-bold text-gray-900 leading-tight mb-4">
-                {title}
-              </h2>
-            )}
-            {subtitle && (
-              <p className="text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[16px] xl:text-[18px] text-[#555555]">
-                {subtitle}
-              </p>
-            )}
-          </motion.div>
-        )}
+    <section className="relative bg-white py-10 lg:py-24 overflow-hidden">
+      <div className="section_container max-w-[1320px] mx-auto page-padding-x">
+        <div className="mb-[18px] lg:mb-8">
+          <div className="text-[11px] lg:text-xs font-semibold uppercase tracking-[0.12em] text-sc-cyan-500 mb-2 lg:mb-2.5">
+            Prosess
+          </div>
+          {title && (
+            <h2 className="text-[26px] lg:text-[40px] font-bold text-sc-ink-900 tracking-[-0.02em] leading-tight m-0">
+              {title}
+            </h2>
+          )}
+          {subtitle && (
+            <p className="text-sm lg:text-base text-sc-ink-600 mt-2 lg:mt-3 m-0">
+              {subtitle}
+            </p>
+          )}
+        </div>
 
         {steps && steps.length > 0 && (
-          <motion.div 
-            ref={stepsRef}
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8"
-            variants={containerVariants}
-            initial="hidden"
-            animate={stepsInView ? "visible" : "hidden"}
-          >
-            {steps.map((step, index) => (
-              <motion.div 
-                key={index} 
-                className="text-center"
-                variants={stepVariants}
-                whileHover={{ y: -8, transition: { duration: 0.3 } }}
-              >
-                <motion.div 
-                  className="flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 bg-teal rounded-full mx-auto mb-4 sm:mb-6"
-                  variants={numberVariants}
-                  whileHover={{ 
-                    scale: 1.1, 
-                    rotate: 10,
-                    transition: { duration: 0.3 }
-                  }}
+          <div className="grid grid-cols-2 lg:grid-cols-4 border border-sc-ink-100 rounded-[10px] overflow-hidden">
+            {steps.map((step, index) => {
+              const isLast = index === steps.length - 1
+              const borderClasses = [
+                // mobile 2x2 grid: right divider on left column, bottom divider on all but last row
+                index % 2 === 0 && !isLast ? 'border-r' : '',
+                index < steps.length - 2 ? 'border-b lg:border-b-0' : '',
+                // desktop 4 columns: right divider on all but last
+                !isLast ? 'lg:border-r' : '',
+              ]
+                .filter(Boolean)
+                .join(' ')
+              const number = String(step.number || index + 1).padStart(2, '0')
+
+              return (
+                <div
+                  key={index}
+                  className={`p-4 lg:px-7 lg:py-8 border-sc-ink-100 ${borderClasses}`}
                 >
-                  <span className="text-lg sm:text-xl lg:text-2xl font-bold text-white">{step.number || index + 1}</span>
-                </motion.div>
-
-                {step.title && (
-                  <motion.h3 
-                    className="text-[4.3vw] xs:text-[2.6vw] sm:text-[2.5vw] md:text-[2.2vw] lg:text-[18px] xl:text-[24px] font-bold text-gray-900 mb-2"
-                    initial={{ opacity: 0 }}
-                    animate={stepsInView ? { opacity: 1 } : { opacity: 0 }}
-                    transition={{ delay: 0.4 + index * 0.1 }}
-                  >
-                    {step.title}
-                  </motion.h3>
-                )}
-
-                {step.description && (
-                  <motion.p 
-                    className="text-gray-600"
-                    initial={{ opacity: 0 }}
-                    animate={stepsInView ? { opacity: 1 } : { opacity: 0 }}
-                    transition={{ delay: 0.5 + index * 0.1 }}
-                  >
-                    {step.description}
-                  </motion.p>
-                )}
-              </motion.div>
-            ))}
-          </motion.div>
+                  <div className="text-xs lg:text-[13px] font-semibold text-sc-cyan-600 mb-1.5 lg:mb-2">
+                    {number} · {step.title}
+                  </div>
+                  {step.description && (
+                    <p className="text-xs lg:text-sm leading-normal text-sc-ink-600 m-0">
+                      {step.description}
+                    </p>
+                  )}
+                </div>
+              )
+            })}
+          </div>
         )}
       </div>
     </section>

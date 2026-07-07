@@ -1,5 +1,3 @@
-"use client";
-
 import { PortableText } from "@/sanity";
 
 interface CaseStudyIntroSectionProps {
@@ -10,20 +8,24 @@ interface CaseStudyIntroSectionProps {
 }
 
 export default function CaseStudyIntroSection({ section }: CaseStudyIntroSectionProps) {
+  const metrics = (section.metrics ?? []).filter((m) => m.text);
+  const hasText = Array.isArray(section.text) && section.text.length > 0;
+  if (!hasText && metrics.length === 0) return null;
+
   return (
-    <div className="mb-8">
-      {section.text && Array.isArray(section.text) && section.text.length > 0 && (
-        <div className="prose prose-base max-w-none text-[#1F1D1D] leading-relaxed mb-6 [&_p]:mb-4 [&_a]:text-[#1F1D1D] [&_a]:underline [&_a]:underline-offset-2">
-          <PortableText value={section.text} />
+    <div>
+      {hasText && (
+        <div className="text-[17px] leading-[1.7] text-sc-ink-600 [&_p]:mb-5 [&_p:last-child]:mb-0 [&_a]:text-sc-cyan-600 [&_a]:underline [&_a]:underline-offset-2 [&_strong]:text-sc-ink-900">
+          <PortableText value={section.text as unknown[]} />
         </div>
       )}
 
-      {section.metrics && section.metrics.length > 0 && (
-        <ul className="space-y-3 mt-4">
-          {section.metrics.map((metric, i) => (
-            <li key={i} className="flex items-start gap-3 text-[#1F1D1D]">
+      {metrics.length > 0 && (
+        <ul className={`flex flex-wrap gap-x-8 gap-y-3 ${hasText ? "mt-6" : ""}`}>
+          {metrics.map((metric, i) => (
+            <li key={i} className="flex items-start gap-2.5">
               <svg
-                className="mt-0.5 flex-shrink-0 w-5 h-5 text-[#03C1CA]"
+                className="mt-0.5 h-5 w-5 flex-shrink-0 text-sc-cyan-500"
                 viewBox="0 0 20 20"
                 fill="currentColor"
                 aria-hidden="true"
@@ -34,7 +36,7 @@ export default function CaseStudyIntroSection({ section }: CaseStudyIntroSection
                   clipRule="evenodd"
                 />
               </svg>
-              <span className="text-base leading-relaxed">{metric.text}</span>
+              <span className="text-sm font-semibold leading-relaxed text-sc-ink-700">{metric.text}</span>
             </li>
           ))}
         </ul>
