@@ -89,11 +89,19 @@ export const heroSection = defineType({
       description: "Large image below the hero copy (2026 design). Optional.",
     }),
     defineField({
+      name: "heroVideoFile",
+      title: "Hero Video (upload)",
+      type: "file",
+      options: { accept: "video/mp4,video/webm,video/quicktime" },
+      description:
+        "Optional. Upload a short video (mp4/webm, ideally under ~10 MB) — replaces the hero image, plays muted on loop. For long videos use the URL field below (YouTube/Vimeo) instead.",
+    }),
+    defineField({
       name: "heroVideo",
       title: "Hero Video URL",
       type: "url",
       description:
-        "Optional. Replaces the hero image. Direct video URL (.mp4/.webm — plays muted on loop) or a YouTube/Vimeo link. The hero image is used as poster/fallback.",
+        "Optional alternative to uploading: a direct video URL (.mp4/.webm) or a YouTube/Vimeo link. The uploaded file wins if both are set. The hero image is used as poster/fallback.",
     }),
     defineField({
       name: "heroPackages",

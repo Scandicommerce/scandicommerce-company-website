@@ -18,6 +18,7 @@ interface HeroData {
   heroTagline?: string
   heroImageUrl?: string
   heroVideo?: string
+  heroVideoFileUrl?: string
   heroPackages?: Array<{
     title: string
     price?: string
@@ -47,7 +48,8 @@ export default function Hero({ hero }: HeroProps) {
   const buttons = hero?.heroButtons
   const tagline = hero?.heroTagline
   const imageUrl = hero?.heroImageUrl
-  const videoUrl = hero?.heroVideo
+  // Uploaded file wins over the URL field; both fall back to the hero image.
+  const videoUrl = hero?.heroVideoFileUrl || hero?.heroVideo
   const packages = hero?.heroPackages
 
   // Helper to render title with highlight

@@ -23,6 +23,7 @@ export interface HomepageHeroPayload {
   heroTagline?: string
   heroImageUrl?: string
   heroVideo?: string
+  heroVideoFileUrl?: string
   heroPackages?: Array<{ title: string; price?: string }>
 }
 
