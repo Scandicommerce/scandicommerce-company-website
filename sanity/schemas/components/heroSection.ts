@@ -90,11 +90,19 @@ export const heroSection = defineType({
     }),
     defineField({
       name: "heroVideoFile",
-      title: "Hero Video (upload)",
+      title: "Hero Video — desktop (upload)",
       type: "file",
       options: { accept: "video/mp4,video/webm,video/quicktime" },
       description:
-        "Optional. Upload a short video (mp4/webm, ideally under ~10 MB) — replaces the hero image, plays muted on loop. For long videos use the URL field below (YouTube/Vimeo) instead.",
+        "Optional. Short video (mp4/webm, ideally under ~4 MB) — replaces the hero image, plays muted on loop. Wide format (~2.4:1) for desktop.",
+    }),
+    defineField({
+      name: "heroVideoFileMobile",
+      title: "Hero Video — mobile (upload)",
+      type: "file",
+      options: { accept: "video/mp4,video/webm,video/quicktime" },
+      description:
+        "Optional. Served to phones/tablets instead of the desktop video. Taller format (~1.25:1), ideally under ~2 MB. Falls back to the desktop video if empty.",
     }),
     defineField({
       name: "heroVideo",

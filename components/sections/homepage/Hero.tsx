@@ -1,6 +1,6 @@
 'use client'
 
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { sanityImg } from '@/lib/sanityImage'
 import Link from 'next/link'
 
@@ -20,10 +20,25 @@ interface HeroData {
   heroImageUrl?: string
   heroVideo?: string
   heroVideoFileUrl?: string
+  heroVideoFileMobileUrl?: string
   heroPackages?: Array<{
     title: string
     price?: string
   }>
+}
+
+/** true below lg (1024px), false above, null before hydration —
+ * so only the correct video source is ever requested. */
+function useIsMobileViewport(): boolean | null {
+  const [isMobile, setIsMobile] = useState<boolean | null>(null)
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 1023px)')
+    const update = () => setIsMobile(mq.matches)
+    update()
+    mq.addEventListener('change', update)
+    return () => mq.removeEventListener('change', update)
+  }, [])
+  return isMobile
 }
 
 /** Turn a YouTube/Vimeo page URL into an embeddable, autoplaying, muted URL.
@@ -49,8 +64,14 @@ export default function Hero({ hero }: HeroProps) {
   const buttons = hero?.heroButtons
   const tagline = hero?.heroTagline
   const imageUrl = hero?.heroImageUrl
+  const isMobileViewport = useIsMobileViewport()
   // Uploaded file wins over the URL field; both fall back to the hero image.
-  const videoUrl = hero?.heroVideoFileUrl || hero?.heroVideo
+  // Phones get the mobile edit when one is uploaded.
+  const desktopVideo = hero?.heroVideoFileUrl || hero?.heroVideo
+  const videoUrl =
+    isMobileViewport === null
+      ? undefined // pre-hydration: render the image/placeholder, fetch nothing
+      : (isMobileViewport && hero?.heroVideoFileMobileUrl) || desktopVideo
   const packages = hero?.heroPackages
 
   // Helper to render title with highlight
@@ -110,7 +131,7 @@ export default function Hero({ hero }: HeroProps) {
           )}
         </div>
 
-        {(videoUrl || imageUrl) && (
+        {(desktopVideo || hero?.heroVideoFileMobileUrl || imageUrl) && (
           <div className="h-[280px] lg:h-[560px] rounded-[10px] overflow-hidden bg-sc-ink-100">
             {videoUrl ? (
               getEmbedUrl(videoUrl) ? (

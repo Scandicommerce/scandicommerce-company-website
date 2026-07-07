@@ -24,6 +24,7 @@ export interface HomepageHeroPayload {
   heroImageUrl?: string
   heroVideo?: string
   heroVideoFileUrl?: string
+  heroVideoFileMobileUrl?: string
   heroPackages?: Array<{ title: string; price?: string }>
 }
 

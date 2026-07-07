@@ -51,6 +51,7 @@ export const landingPageQuery = groq`
         heroTagline,
         "heroImageUrl": heroImage.asset->url,
         "heroVideoFileUrl": heroVideoFile.asset->url,
+        "heroVideoFileMobileUrl": heroVideoFileMobile.asset->url,
         heroVideo,
         heroPackages[] {
           title,
@@ -183,6 +184,7 @@ export const landingPageQuery = groq`
       heroTagline,
         "heroImageUrl": heroImage.asset->url,
         "heroVideoFileUrl": heroVideoFile.asset->url,
+        "heroVideoFileMobileUrl": heroVideoFileMobile.asset->url,
         heroVideo,
       heroPackages[] {
         title,
@@ -311,6 +313,7 @@ export const homepageQuery = groq`
         heroTagline,
         "heroImageUrl": heroImage.asset->url,
         "heroVideoFileUrl": heroVideoFile.asset->url,
+        "heroVideoFileMobileUrl": heroVideoFileMobile.asset->url,
         heroVideo,
         heroPackages[] {
           title,
@@ -443,6 +446,7 @@ export const homepageQuery = groq`
       heroTagline,
         "heroImageUrl": heroImage.asset->url,
         "heroVideoFileUrl": heroVideoFile.asset->url,
+        "heroVideoFileMobileUrl": heroVideoFileMobile.asset->url,
         heroVideo,
       heroPackages[] {
         title,
