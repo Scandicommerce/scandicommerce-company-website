@@ -49,6 +49,8 @@ export const landingPageQuery = groq`
           variant
         },
         heroTagline,
+        "heroImageUrl": heroImage.asset->url,
+        heroVideo,
         heroPackages[] {
           title,
           price
@@ -110,6 +112,7 @@ export const landingPageQuery = groq`
         items[] {
           clientImage { ${imageFragment} },
           clientName,
+          category,
           stat,
           metricName,
           description,
@@ -155,6 +158,13 @@ export const landingPageQuery = groq`
       _type == "technicalDepthSection" => {
         headline,
         body
+      },
+      _type == "blogTeaserSection" => {
+        eyebrow,
+        title,
+        linkText,
+        linkHref,
+        count
       }
     },
     hero {
@@ -170,6 +180,8 @@ export const landingPageQuery = groq`
         variant
       },
       heroTagline,
+        "heroImageUrl": heroImage.asset->url,
+        heroVideo,
       heroPackages[] {
         title,
         price
@@ -231,6 +243,7 @@ export const landingPageQuery = groq`
       items[] {
         clientImage { ${imageFragment} },
         clientName,
+        category,
         stat,
         metricName,
         description,
@@ -294,6 +307,8 @@ export const homepageQuery = groq`
           variant
         },
         heroTagline,
+        "heroImageUrl": heroImage.asset->url,
+        heroVideo,
         heroPackages[] {
           title,
           price
@@ -355,6 +370,7 @@ export const homepageQuery = groq`
         items[] {
           clientImage { ${imageFragment} },
           clientName,
+          category,
           stat,
           metricName,
           description,
@@ -400,6 +416,13 @@ export const homepageQuery = groq`
       _type == "technicalDepthSection" => {
         headline,
         body
+      },
+      _type == "blogTeaserSection" => {
+        eyebrow,
+        title,
+        linkText,
+        linkHref,
+        count
       }
     },
     hero {
@@ -415,6 +438,8 @@ export const homepageQuery = groq`
         variant
       },
       heroTagline,
+        "heroImageUrl": heroImage.asset->url,
+        heroVideo,
       heroPackages[] {
         title,
         price
@@ -476,6 +501,7 @@ export const homepageQuery = groq`
       items[] {
         clientImage { ${imageFragment} },
         clientName,
+        category,
         stat,
         metricName,
         description,
@@ -1698,6 +1724,44 @@ export const workPageQuery = groq`
   }
 `;
 
+// Latest posts for the homepage blog teaser (2026 design). Includes both
+// article types, newest first, filtered to the page language.
+export const latestPostsTeaserQuery = groq`
+  *[_type in ["blogPost", "post"] && defined(slug.current) && (language == $language || !defined(language))]
+    | order(coalesce(publishedAt, _createdAt) desc) [0...6] {
+    _id,
+    _type,
+    language,
+    title,
+    "slug": slug.current,
+    "category": category,
+    "tag": coalesce(category, tags[0].label, tags[0]),
+    publishedAt,
+    _createdAt
+  }
+`;
+
+// All case-study documents as lightweight cards for the Kundecaser overview
+// grid (filterable by industry / tag). Not language-filtered: the case-study
+// portfolio is shared across locales, so we surface every case and dedupe by
+// slug on the client.
+export const caseStudyCardsQuery = groq`
+  *[_type == "caseStudy" && defined(slug.current)]
+    | order(coalesce(publishedAt, _createdAt) desc) {
+    _id,
+    language,
+    title,
+    "slug": slug.current,
+    excerpt,
+    industry,
+    tags,
+    pakke,
+    "heroImageUrl": heroImage.asset->url,
+    heroVideo,
+    "clientLogoUrl": clientLogo.asset->url
+  }
+`;
+
 // About Page Query
 export const aboutPageQuery = groq`
   *[_type == "aboutPage" && (language == $language || !defined(language))] | order(defined(language) desc) [0] {
@@ -2744,6 +2808,11 @@ export const footerSettingsQuery = groq`
         href
       },
       copyrightText
+    },
+    newsletter {
+      variant,
+      overskrift,
+      undertekst
     }
   }
 `;
@@ -3043,6 +3112,18 @@ export const caseStudyBySlugQuery = groq`
     partner,
     previousPlatform,
     products,
+    pakke,
+    ctaText,
+    heroVideo,
+    "relatedCaseStudies": relatedCaseStudies[]-> {
+      _id,
+      language,
+      title,
+      "slug": slug.current,
+      excerpt,
+      industry,
+      "heroImageUrl": heroImage.asset->url
+    },
     sections[] {
       _type,
       _key,
@@ -3059,7 +3140,8 @@ export const caseStudyBySlugQuery = groq`
         quote,
         company,
         authorName,
-        authorRole
+        authorRole,
+        "imageUrl": image.asset->url
       },
       (_type == "caseStudyStatsSection") => {
         headline,
@@ -3082,6 +3164,45 @@ export const caseStudyBySlugQuery = groq`
 
 export const resolveCaseStudyBySlugQuery = groq`
   *[_type == "caseStudy" && slug.current == $slug && (language == $language || !defined(language))] | order(defined(language) desc) [0] { _type, _id }
+`;
+
+// ============================================
+// Author pages (/team/<slug>)
+// Authors are language-neutral (no language filter).
+// ============================================
+export const resolveAuthorBySlugQuery = groq`
+  *[_type == "author" && slug.current == $slug][0] { _type, _id }
+`;
+
+export const authorBySlugQuery = groq`
+  *[_type == "author" && slug.current == $slug][0] {
+    _id,
+    name,
+    role,
+    "slug": slug.current,
+    bio,
+    longBio,
+    expertise,
+    linkedin,
+    "imageUrl": image.asset->url,
+    seo { metaTitle, metaDescription }
+  }
+`;
+
+// Everything the author has written, as cards (blog posts, page-builder posts, case studies)
+export const authorArticlesQuery = groq`
+  *[_type in ["blogPost", "post", "caseStudy"] && author._ref == $authorId && defined(slug.current)]
+    | order(coalesce(publishedAt, _createdAt) desc) {
+    _id,
+    _type,
+    language,
+    title,
+    "slug": slug.current,
+    "excerpt": coalesce(excerpt, description),
+    "category": coalesce(category, industry),
+    publishedAt,
+    "imageUrl": coalesce(image.asset->url, featuredImage.asset->url, heroImage.asset->url)
+  }
 `;
 
 export const sitemapCaseStudiesAllLocalesQuery = groq`

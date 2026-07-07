@@ -218,6 +218,20 @@ export const blogPost = defineType({
         }),
       ],
     }),
+    // Related case studies — cross-linking between blog and Kundecaser (doc §1.3)
+    defineField({
+      name: "relatedCaseStudies",
+      title: "Related Case Studies",
+      type: "array",
+      group: "related",
+      description: "Shown as a 'Relatert case' module at the bottom of the article.",
+      of: [
+        defineArrayMember({
+          type: "reference",
+          to: [{ type: "caseStudy" }],
+        }),
+      ],
+    }),
     { ...seoExtendedField, group: "settings" },
     { ...legacySeoFieldMinimal, group: "settings" },
   ],

@@ -82,6 +82,20 @@ export const heroSection = defineType({
       description: "Small text below buttons (e.g., 'Transparent pricing · Productized packages')",
     }),
     defineField({
+      name: "heroImage",
+      title: "Hero Image",
+      type: "image",
+      options: { hotspot: true },
+      description: "Large image below the hero copy (2026 design). Optional.",
+    }),
+    defineField({
+      name: "heroVideo",
+      title: "Hero Video URL",
+      type: "url",
+      description:
+        "Optional. Replaces the hero image. Direct video URL (.mp4/.webm — plays muted on loop) or a YouTube/Vimeo link. The hero image is used as poster/fallback.",
+    }),
+    defineField({
       name: "heroPackages",
       title: "Hero Package Cards",
       type: "array",

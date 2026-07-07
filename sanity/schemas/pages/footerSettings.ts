@@ -165,6 +165,13 @@ export const footerSettings = defineType({
         defineField({ name: "copyrightText", title: "Copyright Text", type: "string" }),
       ],
     }),
+    // Newsletter signup (reusable block, doc §3.1 — footer variant)
+    defineField({
+      name: "newsletter",
+      title: "Newsletter Signup",
+      type: "newsletterSignup",
+      description: "Shown in the footer's brand column. Leave heading empty to hide.",
+    }),
   ],
   preview: {
     select: { title: "settingsTitle" },

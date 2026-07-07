@@ -13,6 +13,7 @@ export type HomepageSectionBlock =
   | ({ _type: "partnersSection"; _key: string } & HomepagePartnersPayload)
   | ({ _type: "ctaSection"; _key: string } & HomepageCtaPayload)
   | ({ _type: "technicalDepthSection"; _key: string } & TechnicalDepthPayload)
+  | ({ _type: "blogTeaserSection"; _key: string } & HomepageBlogTeaserPayload)
 
 export interface HomepageHeroPayload {
   heroBadge?: string
@@ -20,7 +21,17 @@ export interface HomepageHeroPayload {
   heroDescription?: string
   heroButtons?: Array<{ text: string; link: string; variant?: "primary" | "secondary" }>
   heroTagline?: string
+  heroImageUrl?: string
+  heroVideo?: string
   heroPackages?: Array<{ title: string; price?: string }>
+}
+
+export interface HomepageBlogTeaserPayload {
+  eyebrow?: string
+  title?: string
+  linkText?: string
+  linkHref?: string
+  count?: number
 }
 
 export interface HomepageTrustedByPayload {
@@ -72,6 +83,7 @@ export interface HomepageResultsPayload {
   items?: Array<{
     clientImage?: { asset?: { url?: string } }
     clientName: string
+    category?: string
     stat: string
     metricName?: string
     description?: string

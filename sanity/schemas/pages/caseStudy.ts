@@ -98,6 +98,13 @@ export const caseStudyTestimonialSection = defineType({
       validation: (r) => r.required(),
     }),
     defineField({
+      name: "image",
+      title: "Portrait",
+      type: "image",
+      options: { hotspot: true },
+      description: "Portrait of the person quoted (shown as a circle in the 2026 design).",
+    }),
+    defineField({
       name: "company",
       title: "Company Name",
       type: "string",
@@ -206,6 +213,7 @@ export const caseStudy = defineType({
     { name: "content", title: "Content", default: true },
     { name: "metadata", title: "Metadata" },
     { name: "sections", title: "Sections" },
+    { name: "related", title: "Related" },
     { name: "settings", title: "Settings" },
   ],
   fields: [
@@ -248,6 +256,14 @@ export const caseStudy = defineType({
       group: "content",
       options: { hotspot: true },
       validation: (r) => r.required(),
+    }),
+    defineField({
+      name: "heroVideo",
+      title: "Hero Video URL",
+      type: "url",
+      group: "content",
+      description:
+        "Optional. A short product/case video shown instead of the hero image (e.g. a Vimeo/YouTube/MP4 URL).",
     }),
     defineField({
       name: "clientLogo",
@@ -308,6 +324,22 @@ export const caseStudy = defineType({
       group: "metadata",
       description: 'e.g. "Shopify Plus"',
     }),
+    defineField({
+      name: "pakke",
+      title: "Package",
+      type: "string",
+      group: "metadata",
+      description: "Which Scandicommerce package this case belongs to.",
+      options: {
+        list: [
+          { title: "Foundation", value: "foundation" },
+          { title: "Growth", value: "growth" },
+          { title: "Premium", value: "premium" },
+          { title: "Enterprise", value: "enterprise" },
+        ],
+        layout: "radio",
+      },
+    }),
 
     // ── Sinuous section array ──
     defineField({
@@ -322,6 +354,39 @@ export const caseStudy = defineType({
         defineArrayMember({ type: "caseStudyTestimonialSection" }),
         defineArrayMember({ type: "caseStudyStatsSection" }),
         defineArrayMember({ type: "caseStudyRelatedSection" }),
+      ],
+    }),
+
+    // ── CTA ──
+    defineField({
+      name: "ctaText",
+      title: "CTA Text",
+      type: "string",
+      group: "content",
+      description: "Call-to-action shown at the end of the case.",
+      initialValue: "Vil du ha samme resultat?",
+    }),
+
+    // ── Related ──
+    defineField({
+      name: "relatedCaseStudies",
+      title: "Related Case Studies",
+      type: "array",
+      group: "related",
+      description: "Manually curated related cases (or leave empty to suggest by industry tag).",
+      of: [defineArrayMember({ type: "reference", to: [{ type: "caseStudy" }] })],
+    }),
+    defineField({
+      name: "relatedArticles",
+      title: "Related Articles",
+      type: "array",
+      group: "related",
+      description: "Cross-link to blog articles for this case.",
+      of: [
+        defineArrayMember({
+          type: "reference",
+          to: [{ type: "blogPost" }, { type: "post" }],
+        }),
       ],
     }),
 

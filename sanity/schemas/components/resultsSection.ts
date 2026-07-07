@@ -39,6 +39,12 @@ export const resultsSection = defineType({
               validation: (rule) => rule.required(),
             }),
             defineField({
+              name: "category",
+              title: "Category Chip",
+              type: "string",
+              description: 'Small chip on the card, e.g. "Migrering", "CRO", "Ytelse" (2026 design).',
+            }),
+            defineField({
               name: "stat",
               title: "Stat Value",
               type: "string",

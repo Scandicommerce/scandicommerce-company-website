@@ -5,6 +5,7 @@ import {
   link,
   button,
   seo,
+  newsletterSignup,
   blockContent,
   richTextBlock,
   keyTakeawaysBlock,
@@ -41,6 +42,7 @@ import {
   ctaSection,
   technicalDepthSection,
   homepageTestimonialSection,
+  blogTeaserSection,
 } from "./components";
 import {
   workPageHeroSection,
@@ -218,6 +220,7 @@ export const schemaTypes = [
   link,
   button,
   seo,
+  newsletterSignup,
   blockContent,
   // Blog page builder blocks
   richTextBlock,
@@ -249,6 +252,7 @@ export const schemaTypes = [
   ctaSection,
   technicalDepthSection,
   homepageTestimonialSection,
+  blogTeaserSection,
 
   workPageHeroSection,
   workPageCaseStudiesSection,
