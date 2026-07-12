@@ -9,6 +9,8 @@ interface ServicesShowcaseData {
     highlight?: string
   }
   subtitle?: string
+  viewAllText?: string
+  viewAllLink?: string
   categories?: Array<{
     title: string
     icon?: string
@@ -49,11 +51,19 @@ interface ServiceRow {
   href?: string
 }
 
+/** CMS-entered internal paths must be root-relative, or they resolve against the current URL and 404. */
+function normalizeHref(href: string): string {
+  if (!href || /^(https?:|mailto:|tel:|#|\/)/.test(href)) return href
+  return `/${href}`
+}
+
 export default function ServicesPackaged({ data, packages: packagesData }: ServicesPackagedProps) {
   // Content variables from Sanity (section title/subtitle from Homepage)
   const titleText = data?.title?.text || 'Fast pris. Ingen pingpong.'
   const titleHighlight = data?.title?.highlight
   const subtitle = data?.subtitle || 'Alle pakker har offentlig pris. Velg, bestill, kom i gang.'
+  const viewAllText = data?.viewAllText || 'Se alle tjenester'
+  const viewAllLink = normalizeHref(data?.viewAllLink || '/tjenester/alle-pakker')
   const categories = data?.categories
 
   // Use packages from All Packages page
@@ -65,12 +75,12 @@ export default function ServicesPackaged({ data, packages: packagesData }: Servi
       ? displayPackages.map((pkg) => ({
           name: pkg.title,
           description: pkg.subtitle,
-          href: pkg.href,
+          href: pkg.href ? normalizeHref(pkg.href) : pkg.href,
         }))
       : (categories || []).map((category) => ({
           name: category.title,
           description: category.description,
-          href: category.link,
+          href: category.link ? normalizeHref(category.link) : category.link,
         }))
 
   // Helper to render title with highlight
@@ -103,10 +113,10 @@ export default function ServicesPackaged({ data, packages: packagesData }: Servi
               {subtitle}
             </p>
             <Link
-              href="/tjenester"
+              href={viewAllLink}
               className="inline-flex items-center justify-center rounded-lg bg-sc-cyan-500 px-[22px] py-3 text-sm font-semibold tracking-[0.02em] text-white shadow-[0_10px_30px_rgba(22,167,179,0.25)] transition-colors hover:bg-sc-cyan-600"
             >
-              Se alle tjenester
+              {viewAllText}
             </Link>
           </div>
 

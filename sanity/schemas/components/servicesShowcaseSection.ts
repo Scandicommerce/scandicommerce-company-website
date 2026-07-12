@@ -31,6 +31,18 @@ export const servicesShowcaseSection = defineType({
       type: "string",
     }),
     defineField({
+      name: "viewAllText",
+      title: "View All Button Text",
+      type: "string",
+      description: "Text for the main button under the subtitle. e.g. 'Se alle tjenester'",
+    }),
+    defineField({
+      name: "viewAllLink",
+      title: "View All Button Link",
+      type: "string",
+      description: "Where the main button goes. e.g. '/tjenester/alle-pakker'",
+    }),
+    defineField({
       name: "categories",
       title: "Service Categories",
       type: "array",

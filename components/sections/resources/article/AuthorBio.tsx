@@ -1,7 +1,6 @@
 'use client'
 
 import Image from 'next/image'
-import Link from 'next/link'
 import { Author } from '@/lib/articles'
 
 interface AuthorBioProps {
@@ -36,12 +35,6 @@ export default function AuthorBio({ author }: AuthorBioProps) {
                 <p className="text-[#565454] text-sm md:text-base leading-relaxed mb-4">
                   {author.role}
                 </p>
-                <Link
-                  href={`/team/${author.slug}`}
-                  className="inline-block px-6 py-2.5 bg-[#03C1CA] text-white text-sm font-medium hover:bg-[#02a8b0] transition-colors"
-                >
-                  More from {author.name.split(' ')[0]}
-                </Link>
               </div>
             </div>
           </div>

@@ -87,6 +87,8 @@ export const landingPageQuery = groq`
           highlight
         },
         subtitle,
+        viewAllText,
+        viewAllLink,
         categories[] {
           title,
           icon,
@@ -349,6 +351,8 @@ export const homepageQuery = groq`
           highlight
         },
         subtitle,
+        viewAllText,
+        viewAllLink,
         categories[] {
           title,
           icon,

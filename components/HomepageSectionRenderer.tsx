@@ -29,6 +29,12 @@ type PackagesFallback = {
   }
 }
 
+/** CMS-entered internal paths must be root-relative, or they resolve against the current URL and 404. */
+function normalizeHref(href: string): string {
+  if (!href || /^(https?:|mailto:|tel:|#|\/)/.test(href)) return href
+  return `/${href}`
+}
+
 function servicesPackagesFromSection(
   section: HomepageServicesShowcasePayload,
   allPackages: PackagesFallback | null | undefined
@@ -46,7 +52,7 @@ function servicesPackagesFromSection(
         bestFor: pkg.bestFor || [],
         included: [],
         description: '',
-        href: pkg.buttonLink || '',
+        href: normalizeHref(pkg.buttonLink || ''),
         buttonText: pkg.buttonText || 'View Details',
       })),
     }
