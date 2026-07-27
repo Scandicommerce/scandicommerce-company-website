@@ -2545,6 +2545,7 @@ export const postBySlugQuery = groq`
     "metaDescription": coalesce(seo.metaDescription, excerpt),
     publishedAt,
     "image": image.asset->url,
+    "author": author->{ name, role, "image": image.asset->url, "slug": slug.current },
     tags[] { label, isPrimary },
     content[] {
       _type,
@@ -2641,6 +2642,13 @@ export const postBySlugQuery = groq`
       },
       // dividerBlock
       (_type == "dividerBlock") => { spacing },
+      // videoBlock
+      (_type == "videoBlock") => {
+        url,
+        "poster": poster.asset->url,
+        caption,
+        autoplay
+      },
     }
   }
 `;

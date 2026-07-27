@@ -19,6 +19,7 @@ import {
   gradientTitleBlock,
   imageBlock,
   dividerBlock,
+  videoBlock,
 } from "../objects/blog";
 
 export const post = defineType({
@@ -149,6 +150,7 @@ export const post = defineType({
         defineArrayMember({ type: gradientTitleBlock.name }),
         defineArrayMember({ type: imageBlock.name }),
         defineArrayMember({ type: dividerBlock.name }),
+        defineArrayMember({ type: videoBlock.name }),
       ],
     }),
     { ...seoExtendedField, group: "settings" },

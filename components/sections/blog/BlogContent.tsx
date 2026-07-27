@@ -15,6 +15,7 @@ import GradientTitle from "./GradientTitle";
 import ImageBlock from "./ImageBlock";
 import DividerBlock from "./DividerBlock";
 import RichTextBlock from "./RichTextBlock";
+import VideoBlock from "./VideoBlock";
 
 interface BlogContentProps {
   content: PostBlock[] | null | undefined;
@@ -57,6 +58,8 @@ export default function BlogContent({ content }: BlogContentProps) {
             return <ImageBlock key={key} block={block} />;
           case "dividerBlock":
             return <DividerBlock key={key} block={block} />;
+          case "videoBlock":
+            return <VideoBlock key={key} block={block} />;
           default:
             return null;
         }

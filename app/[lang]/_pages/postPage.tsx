@@ -35,11 +35,19 @@ export default async function PostPage({
             <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-[#1F1D1D] mb-4">
               {post.title}
             </h1>
-            {publishedLabel && (
-              <p className="text-[#565454] text-sm md:text-base">
-                {publishedLabel}
-              </p>
-            )}
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[#565454] text-sm md:text-base">
+              {post.author?.name && (
+                <span className="flex items-center gap-2">
+                  {post.author.image && (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={post.author.image} alt={post.author.name} className="w-7 h-7 rounded-full object-cover" />
+                  )}
+                  <span className="font-medium text-[#1F1D1D]">{post.author.name}</span>
+                  {post.author.role && <span className="text-[#565454]">· {post.author.role}</span>}
+                </span>
+              )}
+              {publishedLabel && <span>{publishedLabel}</span>}
+            </div>
             {post.excerpt && (
               <p className="mt-4 text-[#565454] text-base md:text-lg leading-relaxed max-w-3xl">
                 {post.excerpt}

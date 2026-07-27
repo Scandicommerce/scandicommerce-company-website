@@ -16,6 +16,7 @@ export interface Post {
   language?: string | null;
   /** Featured / card image URL from Sanity */
   image?: string | null;
+  author?: { name?: string | null; role?: string | null; image?: string | null; slug?: string | null } | null;
   tags?: Array<{ label?: string | null; isPrimary?: boolean | null }> | null;
   content?: PostBlock[] | null;
 }
@@ -33,7 +34,17 @@ export type PostBlock =
   | CtaBlock
   | GradientTitleBlock
   | ImageBlock
-  | DividerBlock;
+  | DividerBlock
+  | VideoBlock;
+
+export interface VideoBlock {
+  _type: "videoBlock";
+  _key: string;
+  url?: string | null;
+  poster?: string | null;
+  caption?: string | null;
+  autoplay?: boolean | null;
+}
 
 export interface RichTextBlock {
   _type: "richTextBlock";

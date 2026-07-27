@@ -11,3 +11,4 @@ export { gradientTitleBlock } from "./gradientTitleBlock";
 export { imageBlock } from "./imageBlock";
 export { dividerBlock } from "./dividerBlock";
 export { richTextBlock } from "./richTextBlock";
+export { videoBlock } from "./videoBlock";
