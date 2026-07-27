@@ -20,6 +20,7 @@ import {
   gradientTitleBlock,
   imageBlock,
   dividerBlock,
+  videoBlock,
 } from "./objects";
 
 // ============================================
@@ -236,6 +237,7 @@ export const schemaTypes = [
   gradientTitleBlock,
   imageBlock,
   dividerBlock,
+  videoBlock,
 
   // Document types
   author,

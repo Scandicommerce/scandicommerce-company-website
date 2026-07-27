@@ -18,4 +18,5 @@ export {
   gradientTitleBlock,
   imageBlock,
   dividerBlock,
+  videoBlock,
 } from "./blog";
