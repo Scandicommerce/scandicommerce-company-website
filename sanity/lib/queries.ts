@@ -3391,3 +3391,28 @@ export const siteSettingsRobotsQuery = groq`
     "noIndexEntireSite": robots.noIndexEntireSite
   }
 `;
+
+// ============================================
+// Legal pages (privacy policy, terms, …)
+// ============================================
+// Rendered at /legal/[slug]. Falls back to the English document when no
+// translation exists for the requested language (e.g. the EN privacy
+// policy served on scandicommerce.no until a NO translation is created).
+export const legalPageBySlugQuery = groq`
+  coalesce(
+    *[_type == "legalPage" && slug.current == $slug && language == $language][0] {
+      pageTitle,
+      language,
+      lastUpdated,
+      content,
+      seo
+    },
+    *[_type == "legalPage" && slug.current == $slug && language == "en"][0] {
+      pageTitle,
+      language,
+      lastUpdated,
+      content,
+      seo
+    }
+  )
+`;

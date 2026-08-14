@@ -7,6 +7,7 @@ import {
   PlugIcon,
   EarthGlobeIcon,
   LinkIcon,
+  DocumentTextIcon,
 } from '@sanity/icons'
 import { PageListWithDelete } from '@/sanity/components/PageListWithDelete'
 import { CalendlySetup } from '@/sanity/components/CalendlySetup'
@@ -367,6 +368,13 @@ export const deskStructure = (S: StructureBuilder) =>
                 ),
             ])
         ),
+
+      // Legal pages (privacy policy, terms of service, …) at /legal/[slug]
+      S.listItem()
+        .title('Legal Pages')
+        .icon(DocumentTextIcon)
+        .schemaType('legalPage')
+        .child(S.documentTypeList('legalPage').title('Legal Pages')),
 
       S.divider(),
 
