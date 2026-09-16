@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { sanityImg } from '@/lib/sanityImage'
 import Link from "next/link";
+import { workIndexHref } from "@/lib/routes";
 
 interface CaseStudyHeroProps {
   title: string;
@@ -10,6 +11,8 @@ interface CaseStudyHeroProps {
   pakke?: string | null;
   /** Last breadcrumb segment — partner name or short title */
   breadcrumbLeaf?: string | null;
+  /** Page language (drives the index link and label). */
+  language?: string;
 }
 
 export default function CaseStudyHero({
@@ -19,19 +22,22 @@ export default function CaseStudyHero({
   industry,
   pakke,
   breadcrumbLeaf,
+  language = "no",
 }: CaseStudyHeroProps) {
+  const indexHref = workIndexHref(language);
+  const indexLabel = language === "no" ? "Kundecaser" : language === "sv" ? "Kundcase" : language === "da" ? "Kundecases" : language === "de" ? "Referenzen" : "Case studies";
   return (
     <section className="bg-white">
       {/* Breadcrumb */}
       <div className="mx-auto w-full max-w-[960px] px-4 sm:px-6 lg:px-8 pt-8">
         <nav aria-label="Breadcrumb" className="flex flex-wrap items-center gap-2 text-[13px] text-sc-ink-400">
-          <Link href="/kundecaser" className="text-sc-ink-600 hover:text-sc-ink-900 transition-colors">
-            Kundecaser
+          <Link href={indexHref} className="text-sc-ink-600 hover:text-sc-ink-900 transition-colors">
+            {indexLabel}
           </Link>
           {industry && (
             <>
               <span aria-hidden="true">/</span>
-              <Link href="/kundecaser" className="text-sc-ink-600 hover:text-sc-ink-900 transition-colors">
+              <Link href={indexHref} className="text-sc-ink-600 hover:text-sc-ink-900 transition-colors">
                 {industry}
               </Link>
             </>

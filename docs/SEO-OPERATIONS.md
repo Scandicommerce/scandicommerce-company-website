@@ -60,7 +60,16 @@ pins previews to one site if wanted. `NEXT_PUBLIC_SITE_URL*` env vars are no lon
 - Integration pages: what/why/how (HowTo), data-flow diagram, prerequisites, pricing signal, ≥1 named client.
 - Migration pages: source platform, transfers / does not transfer, timeline, risks, cost band, named case.
 
-## 4. Known content gaps (not code)
+## 4. Visual editing (Presentation tool)
+
+Draft mode is enabled through `/api/draft-mode/enable` (untouched by the SEO work). On 2026-09-16 that
+route returned **500 on production**. Reproduced locally: a missing or invalid `SANITY_API_READ_TOKEN`
+produces exactly that 500 (`client must have a token` / `Unauthorized - Session not found`); with a valid
+token an unknown secret returns 401. Check the token in Vercel → Environment Variables (needs Viewer
+access on project `fk1tt27l`) and redeploy. Everything else the Presentation tool needs (`/studio`,
+`sanityPageFetch` draft perspective, `<VisualEditing />`) is unchanged.
+
+## 5. Known content gaps (not code)
 
 - No Norwegian `caseStudy` documents exist; `/kundecaser` shows English cases with absolute links to
   `.com` (flagged `data-cross-locale`). Create NO case studies for Slikkepott and Lanullva.

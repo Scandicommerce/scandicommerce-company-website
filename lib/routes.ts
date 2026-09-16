@@ -53,6 +53,16 @@ export const WORK_INDEX_SLUG: Record<Language, string> = {
   de: 'work',
 }
 
+/** Localized slugs of the conversion pages every template links to. */
+export const CONTACT_SLUG: Record<Language, string> = { no: 'kontakt', en: 'contact', sv: 'contact', da: 'contact', de: 'contact' }
+export const PACKAGES_SLUG: Record<Language, string> = {
+  no: 'tjenester/alle-pakker',
+  en: 'services/all-packages',
+  sv: 'services/all-packages',
+  da: 'services/all-packages',
+  de: 'services/all-packages',
+}
+
 /** Legacy first segments that used to host articles AND case studies. */
 export const LEGACY_ARTICLE_PREFIXES = ['resources'] as const
 
@@ -181,6 +191,14 @@ export function blogIndexHref(language: string): string {
 
 export function workIndexHref(language: string): string {
   return publicPath(language, WORK_INDEX_SLUG[language as Language] ?? 'work')
+}
+
+export function contactHref(language: string): string {
+  return publicPath(language, CONTACT_SLUG[language as Language] ?? 'contact')
+}
+
+export function packagesHref(language: string): string {
+  return publicPath(language, PACKAGES_SLUG[language as Language] ?? 'services/all-packages')
 }
 
 export function hreflangCode(language: string): string {

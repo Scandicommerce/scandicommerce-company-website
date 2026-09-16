@@ -92,7 +92,7 @@ export function HomepageSectionRenderer({
               />
             )
           case 'resultsSection':
-            return <Results key={_key} data={rest as Parameters<typeof Results>[0]['data']} />
+            return <Results key={_key} data={rest as Parameters<typeof Results>[0]['data']} lang={lang} />
           case 'homepageTestimonialSection':
             return (
               <Testimonial

@@ -86,7 +86,7 @@ export type SiteSettingsForSeo = {
 // Metadata changes rarely; cache aggressively. Tag so we can revalidate on
 // Sanity writes via revalidateTag if desired in a follow-up.
 const FETCH_OPTIONS = {
-  next: { revalidate: 3600, tags: ["page-seo"] as string[] },
+  next: { revalidate: 60, tags: ["page-seo"] as string[] },
 };
 
 /**

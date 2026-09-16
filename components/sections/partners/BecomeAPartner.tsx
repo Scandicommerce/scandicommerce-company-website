@@ -1,6 +1,8 @@
 'use client'
 
 import Link from 'next/link'
+import { useLanguage } from '@/contexts/LanguageContext'
+import { contactHref } from '@/lib/routes'
 
 interface CTAData {
   title?: string
@@ -17,7 +19,8 @@ export default function BecomeAPartner({ cta }: BecomeAPartnerProps) {
   const title = cta?.title || "Need a tool we don't partner with?"
   const description = cta?.description || "We can integrate with any tool via API. Our partnerships just mean we know these platforms inside-out and can move faster."
   const buttonText = cta?.buttonText || 'Ask about custom integrations'
-  const buttonLink = cta?.buttonLink || '/book-call'
+  const { currentLanguage } = useLanguage()
+  const buttonLink = cta?.buttonLink || contactHref(currentLanguage)
 
   return (
     <section className="bg-[#03C1CA] py-16 lg:py-[170px]">

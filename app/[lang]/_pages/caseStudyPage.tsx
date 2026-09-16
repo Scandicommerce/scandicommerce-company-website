@@ -90,6 +90,7 @@ export default async function CaseStudyPage({
           industry={data.industry}
           pakke={data.pakke}
           breadcrumbLeaf={breadcrumbLeafFrom(data.title, data.partner)}
+          language={data.language ?? language}
         />
         <CaseStudyPageSectionRenderer
           sections={sections}

@@ -3,7 +3,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
-import { articleHref } from '@/lib/routes'
+import { hrefFor } from '@/lib/routes'
 
 interface AuthorData {
   name?: string
@@ -17,6 +17,8 @@ interface TagData {
 
 interface FeaturedArticleData {
   articleSlug?: string
+  articleType?: string
+  articleLanguage?: string
   imageUrl?: string
   tags?: TagData[]
   title?: string
@@ -63,7 +65,11 @@ export default function FeaturedArticle({ featuredArticle, lang }: FeaturedArtic
   const eyebrow = featuredArticle?.pageHeaderEyebrow || (isNorwegian ? 'Notater fra studioet' : 'Notes from the studio')
   const pageTitle = featuredArticle?.pageHeaderTitle || (isNorwegian ? 'Hva vi sendte\nog lærte.' : 'What we\nshipped & learned.')
   const articleSlug = featuredArticle?.articleSlug?.trim()
-  const link = featuredArticle?.link || (articleSlug ? articleHref(articleSlug, locale) : '#')
+  const link =
+    featuredArticle?.link ||
+    (articleSlug
+      ? hrefFor({ _type: featuredArticle?.articleType ?? 'post', slug: articleSlug, language: featuredArticle?.articleLanguage ?? locale }, locale)
+      : '#')
 
   return (
     <>

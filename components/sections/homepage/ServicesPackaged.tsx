@@ -2,6 +2,7 @@
 
 import React from 'react'
 import Link from 'next/link'
+import { packagesHref } from '@/lib/routes'
 
 interface ServicesShowcaseData {
   title?: {
@@ -41,6 +42,7 @@ interface PackagesData {
 }
 
 interface ServicesPackagedProps {
+  lang?: string
   data?: ServicesShowcaseData
   packages?: PackagesData
 }
@@ -57,13 +59,13 @@ function normalizeHref(href: string): string {
   return `/${href}`
 }
 
-export default function ServicesPackaged({ data, packages: packagesData }: ServicesPackagedProps) {
+export default function ServicesPackaged({ data, packages: packagesData, lang = 'no' }: ServicesPackagedProps) {
   // Content variables from Sanity (section title/subtitle from Homepage)
   const titleText = data?.title?.text || 'Fast pris. Ingen pingpong.'
   const titleHighlight = data?.title?.highlight
   const subtitle = data?.subtitle || 'Alle pakker har offentlig pris. Velg, bestill, kom i gang.'
   const viewAllText = data?.viewAllText || 'Se alle tjenester'
-  const viewAllLink = normalizeHref(data?.viewAllLink || '/tjenester/alle-pakker')
+  const viewAllLink = normalizeHref(data?.viewAllLink || packagesHref(lang))
   const categories = data?.categories
 
   // Use packages from All Packages page

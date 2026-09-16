@@ -140,7 +140,7 @@ export function CaseStudyPageSectionRenderer({
       ))}
 
       {/* CTA — always rendered after the sections */}
-      <CaseStudyCta ctaText={ctaText} />
+      <CaseStudyCta ctaText={ctaText} language={language} />
 
       {/* Flere kundecaser — full-bleed band, hidden when empty */}
       {relatedCases.length > 0 && (

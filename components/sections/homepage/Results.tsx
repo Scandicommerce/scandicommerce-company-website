@@ -4,6 +4,7 @@
 import React from 'react'
 import { sanityImg } from '@/lib/sanityImage'
 import Link from 'next/link'
+import { workIndexHref } from '@/lib/routes'
 
 interface ResultsItem {
   clientImage?: {
@@ -27,6 +28,7 @@ interface ResultsData {
 }
 
 interface ResultsProps {
+  lang?: string
   data?: ResultsData
 }
 
@@ -55,7 +57,7 @@ function CategoryChip({ category }: { category?: string }) {
   )
 }
 
-export default function Results({ data }: ResultsProps) {
+export default function Results({ data , lang = 'no' }: ResultsProps) {
   // Content variables from Sanity
   const title = data?.title
   const subtitle = data?.subtitle
@@ -84,11 +86,11 @@ export default function Results({ data }: ResultsProps) {
             )}
           </div>
           <Link
-            href="/kundecaser"
+            href={workIndexHref(lang)}
             className="flex-none text-[13px] lg:text-sm font-semibold text-sc-ink-900 hover:text-sc-cyan-600 transition-colors whitespace-nowrap"
           >
-            <span className="hidden sm:inline">Alle kundecaser →</span>
-            <span className="sm:hidden">Alle →</span>
+            <span className="hidden sm:inline">{lang === 'no' ? 'Alle kundecaser →' : 'All case studies →'}</span>
+            <span className="sm:hidden">{lang === 'no' ? 'Alle →' : 'All →'}</span>
           </Link>
         </div>
 
