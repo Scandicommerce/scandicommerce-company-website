@@ -75,10 +75,10 @@ export default function CookieConsent({ locale }: CookieConsentProps) {
     <div
       role="dialog"
       aria-label={t.title}
-      className="fixed bottom-4 left-4 right-4 sm:right-auto sm:max-w-md z-[9998] bg-white border border-sc-ink-100 rounded-[10px] shadow-lg p-5"
+      className="fixed bottom-0 left-0 right-0 sm:bottom-4 sm:left-4 sm:right-auto sm:max-w-md z-[9998] bg-white border border-sc-ink-100 rounded-t-[10px] sm:rounded-[10px] shadow-lg p-4 sm:p-5"
     >
-      <div className="font-bold text-sc-ink-900 mb-1.5">{t.title}</div>
-      <p className="text-[13px] leading-relaxed text-sc-ink-600 m-0 mb-4">{t.body}</p>
+      <div className="font-bold text-sc-ink-900 mb-1 text-sm sm:text-base">{t.title}</div>
+      <p className="text-[12px] sm:text-[13px] leading-snug sm:leading-relaxed text-sc-ink-600 m-0 mb-3 sm:mb-4">{t.body}</p>
 
       {expanded && (
         <div className="mb-4 flex flex-col gap-3">

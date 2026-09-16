@@ -29,7 +29,7 @@ export function PackageDetailPageSectionRenderer({
   void sections
   return (
     <>
-      <PackageHero pkg={pkg} shopifyProduct={shopifyProduct} />
+      <PackageHero pkg={pkg} shopifyProduct={shopifyProduct} lang={lang} />
       <PackageTabs pkg={pkg} tabLabels={tabLabels} lang={lang} />
       <FrequentlyAddedTogether addOns={addOns} />
       <CaseStudiesBanner packageName={pkg.title} caseStudiesBanner={caseStudiesBanner} />

@@ -1,5 +1,6 @@
 'use client'
 
+import { contactHref } from '@/lib/routes'
 import { Package } from '@/lib/packages'
 import LiquidBlob from '@/components/ui/LiquidBlob'
 import Button from '@/components/ui/Button'
@@ -7,6 +8,7 @@ import PackageAddToCart from './PackageAddToCart'
 import AddToCartDropdown from '@/components/sections/merch/AddToCartDropdown'
 
 interface PackageHeroProps {
+  lang?: string
   pkg: Package
   shopifyProduct?: {
     variantId: string
@@ -58,14 +60,24 @@ function StarRating({ rating, maxStars = 5 }: { rating: number; maxStars?: numbe
   )
 }
 
-export default function PackageHero({ pkg, shopifyProduct }: PackageHeroProps) {
+const T = {
+  no: { highlights: 'Dette får du', more: (n: number) => `+${n} flere leveranser inkludert`, reviews: 'anmeldelser', timeline: 'Tidslinje', cta: 'Book en samtale' },
+  en: { highlights: 'Package highlights', more: (n: number) => `+${n} more deliverables included`, reviews: 'reviews', timeline: 'Timeline', cta: 'Book a discovery call' },
+  sv: { highlights: 'Det här ingår', more: (n: number) => `+${n} fler leveranser ingår`, reviews: 'omdömen', timeline: 'Tidslinje', cta: 'Boka ett samtal' },
+  da: { highlights: 'Det får du', more: (n: number) => `+${n} flere leverancer inkluderet`, reviews: 'anmeldelser', timeline: 'Tidslinje', cta: 'Book en samtale' },
+  de: { highlights: 'Das ist enthalten', more: (n: number) => `+${n} weitere Leistungen enthalten`, reviews: 'Bewertungen', timeline: 'Zeitplan', cta: 'Gespräch buchen' },
+} as const
+
+export default function PackageHero({ pkg, shopifyProduct, lang = 'en' }: PackageHeroProps) {
+  const t = T[(lang as keyof typeof T)] ?? T.en
+  const moreCount = pkg.moreDeliverablesCount !== undefined ? pkg.moreDeliverablesCount : (pkg.included.length - pkg.highlights.length)
   return (
     <section className="relative bg-[#F8F8F8] py-6 xs:py-16 lg:py-20 overflow-hidden min-h-[600px]">
       {/* Mobile Blob - Centered animation like blog details page (< 1024px) */}
       <LiquidBlob
         page="homepage"
         rotation={0}
-        className="top-[42vw] opacity-40 xs:top-[40vw] sm:top-[36vw] md:top-[35vw] left-1/2 -translate-x-1/2 -translate-y-1/2 w-[75%] h-[75%] md:w-[80%] md:h-[80%] block lg:hidden"
+        className="top-[95%] opacity-20 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[70%] h-[50%] block lg:hidden pointer-events-none"
         enableMouseFollow={true}
       />
 
@@ -96,7 +108,7 @@ export default function PackageHero({ pkg, shopifyProduct }: PackageHeroProps) {
               <div className="flex items-center gap-2 sm:mb-5 mb-3">
                 <StarRating rating={pkg.rating || 0} />
                 <span className="text-black lg:text-gray-600 text-xs sm:text-sm">
-                  {pkg.ratingValue || pkg.rating?.toFixed(1) || '0'} ({pkg.reviewCount || 0} reviews)
+                  {pkg.ratingValue || pkg.rating?.toFixed(1) || '0'} ({pkg.reviewCount || 0} {t.reviews})
                 </span>
               </div>
             )}
@@ -110,7 +122,7 @@ export default function PackageHero({ pkg, shopifyProduct }: PackageHeroProps) {
             <div className="lg:hidden sm:mb-8 mb-4 flex flex-col justify-start items-start pl-[20px] xs:pl-[35px] lg:pl-0">
               <div>
                 <h2 className="text-xl sm:text-2xl font-bold sm:mb-6 mb-3 text-black">
-                  Package Highlights
+                  {t.highlights}
                 </h2>
                 <ul className="space-y-[2.8px] lg:space-y-3 mb-4">
                   {pkg.highlights.map((highlight, index) => (
@@ -122,9 +134,9 @@ export default function PackageHero({ pkg, shopifyProduct }: PackageHeroProps) {
                     </li>
                   ))}
                 </ul>
-                <p className="text-black lg:text-gray-600 text-base sm:mt-4 mt-2">
-                  +{pkg.moreDeliverablesCount !== undefined ? pkg.moreDeliverablesCount : (pkg.included.length - pkg.highlights.length)} more deliverables included
-                </p>
+                {moreCount > 0 && (
+                  <p className="text-black lg:text-gray-600 text-base sm:mt-4 mt-2">{t.more(moreCount)}</p>
+                )}
               </div>
             </div>
 
@@ -138,7 +150,7 @@ export default function PackageHero({ pkg, shopifyProduct }: PackageHeroProps) {
 
             {/* Timeline */}
             <p className="text-sm sm:text-base text-black lg:text-gray-600 sm:mb-6 mb-3">
-              Timeline: {pkg.timeline}
+              {t.timeline}: {pkg.timeline}
             </p>
 
             {/* CTA Buttons */}
@@ -160,13 +172,13 @@ export default function PackageHero({ pkg, shopifyProduct }: PackageHeroProps) {
                       quantity={1}
                     />
                   )}
-                  <Button href={pkg.heroButtons?.primaryButtonLink || '/contact'}>
-                    {pkg.heroButtons?.primaryButtonText || 'Book Discovery Call'}
+                  <Button href={pkg.heroButtons?.primaryButtonLink || contactHref(lang)}>
+                    {pkg.heroButtons?.primaryButtonText || t.cta}
                   </Button>
                 </>
               ) : (
-                <Button href={pkg.heroButtons?.primaryButtonLink || '/contact'} type="primary">
-                  {pkg.heroButtons?.primaryButtonText || 'Book Discovery Call'}
+                <Button href={pkg.heroButtons?.primaryButtonLink || contactHref(lang)} type="primary">
+                  {pkg.heroButtons?.primaryButtonText || t.cta}
                 </Button>
               )}
               {/* <Button href={pkg.heroButtons?.secondaryButtonLink || '#'}>
@@ -180,7 +192,7 @@ export default function PackageHero({ pkg, shopifyProduct }: PackageHeroProps) {
             {/* Package Highlights Card */}
             <div className="relative p-8 lg:p-10 text-white max-w-md">
               <h2 className="text-2xl lg:text-3xl font-bold mb-6">
-                Package Highlights
+                {t.highlights}
               </h2>
               <ul className="space-y-3 mb-4">
                 {pkg.highlights.map((highlight, index) => (
@@ -192,9 +204,7 @@ export default function PackageHero({ pkg, shopifyProduct }: PackageHeroProps) {
                   </li>
                 ))}
               </ul>
-              <p className="text-[#A8F0F5] text-base mt-4">
-                +{pkg.moreDeliverablesCount !== undefined ? pkg.moreDeliverablesCount : (pkg.included.length - pkg.highlights.length)} more deliverables included
-              </p>
+              {moreCount > 0 && <p className="text-[#A8F0F5] text-base mt-4">{t.more(moreCount)}</p>}
             </div>
           </div>
         </div>

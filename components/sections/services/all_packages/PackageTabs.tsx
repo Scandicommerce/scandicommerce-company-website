@@ -61,7 +61,7 @@ export default function PackageTabs({ pkg, tabLabels, lang }: PackageTabsProps) 
               : 'bg-[#F0F9FA]'
               }`}
           >
-            {activeTab === 'overview' && <IdealFor idealFor={pkg.idealFor} label={tabLabels?.idealFor} />}
+            {activeTab === 'overview' && <IdealFor idealFor={pkg.idealFor} label={tabLabels?.idealFor || (isNo ? 'Passer for:' : 'Ideal for:')} />}
 
             {activeTab === 'included' && (
               <div className="space-y-10">
