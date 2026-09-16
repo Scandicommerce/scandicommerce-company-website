@@ -63,10 +63,11 @@ export default function MeetTheTeam({ meetTheTeam }: MeetTheTeamProps) {
   const subtitle = meetTheTeam?.subtitle || 'The people behind your Shopify success'
   const teamMembers = meetTheTeam?.teamMembers && meetTheTeam.teamMembers.length > 0 ? meetTheTeam.teamMembers : defaultTeamMembers
   const buttonText = meetTheTeam?.buttonText || 'View Full Team'
-  const buttonLink = meetTheTeam?.buttonLink || '/team'
+  const rawButtonLink = meetTheTeam?.buttonLink || '#team'
+  const buttonLink = rawButtonLink === '/team' ? '#team' : rawButtonLink
 
   return (
-    <section className="bg-black py-16 lg:py-24">
+    <section id="team" className="bg-black py-16 lg:py-24">
       <div className="w-full">
         {/* Header */}
         <div className="text-center mb-12 lg:mb-16">

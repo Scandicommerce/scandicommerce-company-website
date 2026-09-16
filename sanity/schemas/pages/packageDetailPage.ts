@@ -5,6 +5,7 @@ import {
   legacySeoFieldMinimal,
 } from "../_shared/seoFields";
 import { isUniquePerLanguage } from "@/sanity/lib/slugUtils";
+import { validatePublicSlug } from "@/sanity/lib/slugValidation";
 
 export const packageDetailPagePackageInfoSection = defineType({
   name: "packageDetailPagePackageInfoSection",
@@ -314,7 +315,7 @@ export const packageDetailPage = defineType({
         maxLength: 96,
         isUnique: isUniquePerLanguage,
       },
-      validation: (rule) => rule.required(),
+      validation: (rule) => rule.required().custom(validatePublicSlug),
       description: "URL slug for the package (e.g., foundation, growth, premium, enterprise)",
     }),
     defineField({

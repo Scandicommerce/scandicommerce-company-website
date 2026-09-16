@@ -5,6 +5,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
 import { articles as allArticles } from '@/lib/articles'
+import { articleHref } from '@/lib/routes'
 
 interface AuthorData {
   name?: string
@@ -181,7 +182,7 @@ export default function ArticlesGrid({ articlesGrid, lang }: ArticlesGridProps) 
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
               {deck.map((article, i) => {
-                const href = article.slug ? `/${locale}/resources/${article.slug}` : '#'
+                const href = article.slug ? articleHref(article.slug, locale) : '#'
                 const displayDate = formatDisplayDate(article.parsedDate, article.date)
                 return (
                   <Link key={article.slug || i} href={href} className="group cursor-pointer">
@@ -280,7 +281,7 @@ export default function ArticlesGrid({ articlesGrid, lang }: ArticlesGridProps) 
           {/* Archive rows — desktop */}
           <div className="border-t border-neutral-200">
             {filteredArchive.map((article, i) => {
-              const href = article.slug ? `/${locale}/resources/${article.slug}` : '#'
+              const href = article.slug ? articleHref(article.slug, locale) : '#'
               const displayDate = formatDisplayDate(article.parsedDate, article.date)
               const globalIdx = deck.length + i + 2
 
@@ -345,7 +346,7 @@ export default function ArticlesGrid({ articlesGrid, lang }: ArticlesGridProps) 
         <div className="section_container mx-auto page-padding-x pt-16">
           <div className="border-t border-neutral-200">
             {articles.map((article, i) => {
-              const href = article.slug ? `/${locale}/resources/${article.slug}` : '#'
+              const href = article.slug ? articleHref(article.slug, locale) : '#'
               const displayDate = formatDisplayDate(article.parsedDate, article.date)
               return (
                 <Link

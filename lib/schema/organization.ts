@@ -26,33 +26,96 @@ import {
   ORGANIZATION_TELEPHONE,
   ORGANIZATION_VAT_ID,
 } from './organizationConfig'
-import {
-  SCHEMA_ORG_CONTEXT,
-  type JsonLdObject,
-  type SchemaOrgImageObject,
-} from './types'
+import { SCHEMA_ORG_CONTEXT, type JsonLdObject, type SchemaOrgImageObject } from './types'
 import { normalizeHttpUrl, normalizeSiteOrigin } from './urls'
+import { SITES } from '@/lib/site-config'
 
 export function organizationSchemaId(origin: string): string {
   return `${origin}/#organization`
 }
 
-export function buildOrganizationAndProfessionalService(origin: string): JsonLdObject | null {
-  const o = normalizeSiteOrigin(origin)
-  if (!o) return null
+export function localBusinessSchemaId(origin: string): string {
+  return `${origin}/#localbusiness`
+}
 
-  const logoUrl = normalizeHttpUrl(`${o}${ORGANIZATION_LOGO_PATH}`)
+function logoObject(origin: string): SchemaOrgImageObject | null {
+  const logoUrl = normalizeHttpUrl(`${origin}${ORGANIZATION_LOGO_PATH}`)
   if (!logoUrl) return null
-
-  const logo: SchemaOrgImageObject = {
+  return {
     '@type': 'ImageObject',
     url: logoUrl,
     width: ORGANIZATION_LOGO_DIMENSIONS.width,
     height: ORGANIZATION_LOGO_DIMENSIONS.height,
   }
+}
 
-  const sameAs = getOrganizationSameAs()
+/**
+ * `sameAs`: the other production domain plus verified profiles. Brand
+ * disambiguation against "scandiweb" depends on this being complete
+ * (SITE-SEO-ARCHITECTURE §11).
+ */
+export function organizationSameAs(origin: string): string[] {
+  const o = normalizeSiteOrigin(origin)
+  const others = Object.values(SITES)
+    .map((s) => s.origin)
+    .filter((u) => u !== o)
+  return [...new Set([...others, ...getOrganizationSameAs()])]
+}
 
+/**
+ * Sitewide `Organization` node (TECHNICAL-SEO-SPEC §12.1). `url` is always
+ * the origin that served the page; `@id` is origin-scoped so the two domains
+ * reference each other via `sameAs`, not by sharing an id.
+ */
+export function buildOrganizationNode(origin: string): JsonLdObject | null {
+  const o = normalizeSiteOrigin(origin)
+  if (!o) return null
+  const logo = logoObject(o)
+  const node: JsonLdObject = {
+    '@type': 'Organization',
+    '@id': organizationSchemaId(o),
+    name: ORGANIZATION_BRAND_NAME,
+    legalName: ORGANIZATION_LEGAL_NAME,
+    alternateName: [...ORGANIZATION_ALTERNATE_NAMES],
+    url: o,
+    ...(logo && { logo, image: logo.url }),
+    description: ORGANIZATION_DESCRIPTION,
+    telephone: ORGANIZATION_TELEPHONE,
+    email: ORGANIZATION_EMAIL,
+    address: { ...ORGANIZATION_ADDRESS },
+    vatID: ORGANIZATION_VAT_ID,
+    taxID: ORGANIZATION_TAX_ID,
+    foundingDate: ORGANIZATION_FOUNDING_DATE,
+    numberOfEmployees: { ...ORGANIZATION_NUMBER_OF_EMPLOYEES },
+    areaServed: [...ORGANIZATION_AREA_SERVED],
+    knowsLanguage: [...ORGANIZATION_KNOWS_LANGUAGE],
+    knowsAbout: [...ORGANIZATION_KNOWS_ABOUT],
+    slogan: ORGANIZATION_SLOGAN,
+    founder: [...ORGANIZATION_FOUNDERS],
+    member: [...ORGANIZATION_TEAM_MEMBERS],
+    contactPoint: [
+      {
+        '@type': 'ContactPoint',
+        telephone: ORGANIZATION_TELEPHONE,
+        email: ORGANIZATION_EMAIL,
+        contactType: 'sales',
+        areaServed: ['NO', 'SE', 'DK', 'FI'],
+        availableLanguage: ['Norwegian', 'English'],
+      },
+    ],
+    sameAs: organizationSameAs(o),
+  }
+  return node
+}
+
+/**
+ * `ProfessionalService` (a LocalBusiness) for the Oslo office — emitted on
+ * the .no homepage and contact page only (TECHNICAL-SEO-SPEC §12.1).
+ */
+export function buildLocalBusinessNode(origin: string): JsonLdObject | null {
+  const o = normalizeSiteOrigin(origin)
+  if (!o) return null
+  const logo = logoObject(o)
   const itemListElement = ORGANIZATION_SERVICE_PACKAGES.map((pkg) => {
     const offerUrl = normalizeHttpUrl(`${o}/tjenester/alle-pakker/${pkg.slug}`)
     return {
@@ -68,52 +131,36 @@ export function buildOrganizationAndProfessionalService(origin: string): JsonLdO
         billingDuration: 'P1M',
         unitText: 'month',
       },
-      ...(offerUrl ? { url: offerUrl } : {}),
+      ...(offerUrl && pkg.slug !== 'foundation' ? { url: offerUrl } : {}),
     }
   })
-
-  const entity: JsonLdObject = {
-    '@context': SCHEMA_ORG_CONTEXT,
-    '@type': ['ProfessionalService', 'Organization'],
-    '@id': organizationSchemaId(o),
+  return {
+    '@type': ['ProfessionalService', 'LocalBusiness'],
+    '@id': localBusinessSchemaId(o),
     name: ORGANIZATION_BRAND_NAME,
-    legalName: ORGANIZATION_LEGAL_NAME,
-    alternateName: [...ORGANIZATION_ALTERNATE_NAMES],
     url: o,
-    logo,
-    image: logoUrl,
-    description: ORGANIZATION_DESCRIPTION,
+    ...(logo && { image: logo.url }),
     telephone: ORGANIZATION_TELEPHONE,
     email: ORGANIZATION_EMAIL,
     address: { ...ORGANIZATION_ADDRESS },
     geo: { ...ORGANIZATION_GEO },
-    vatID: ORGANIZATION_VAT_ID,
-    taxID: ORGANIZATION_TAX_ID,
-    foundingDate: ORGANIZATION_FOUNDING_DATE,
-    numberOfEmployees: { ...ORGANIZATION_NUMBER_OF_EMPLOYEES },
     priceRange: ORGANIZATION_PRICE_RANGE,
     currenciesAccepted: ORGANIZATION_CURRENCIES_ACCEPTED,
     paymentAccepted: ORGANIZATION_PAYMENT_ACCEPTED,
     areaServed: [...ORGANIZATION_AREA_SERVED],
     serviceArea: { ...ORGANIZATION_SERVICE_AREA },
-    knowsLanguage: [...ORGANIZATION_KNOWS_LANGUAGE],
-    knowsAbout: [...ORGANIZATION_KNOWS_ABOUT],
-    slogan: ORGANIZATION_SLOGAN,
-    brand: {
-      '@type': 'Brand',
-      name: ORGANIZATION_BRAND_NAME,
-      url: o,
-    },
-    founder: [...ORGANIZATION_FOUNDERS],
-    member: [...ORGANIZATION_TEAM_MEMBERS],
+    parentOrganization: { '@id': organizationSchemaId(o) },
     hasOfferCatalog: {
       '@type': 'OfferCatalog',
       name: `${ORGANIZATION_BRAND_NAME} Shopify services`,
       itemListElement,
     },
   }
+}
 
-  if (sameAs.length) entity.sameAs = sameAs
-
-  return entity
+/** @deprecated kept for callers that still expect a single combined node. */
+export function buildOrganizationAndProfessionalService(origin: string): JsonLdObject | null {
+  const node = buildOrganizationNode(origin)
+  if (!node) return null
+  return { '@context': SCHEMA_ORG_CONTEXT, ...node }
 }

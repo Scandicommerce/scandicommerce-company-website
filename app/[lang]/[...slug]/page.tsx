@@ -1,10 +1,13 @@
 import type { Metadata } from 'next'
-import { notFound } from 'next/navigation'
+import { notFound, permanentRedirect } from 'next/navigation'
 import { getLanguageFromParams } from '@/lib/language'
 import { resolvePageByPath } from '@/lib/resolvePageByPath'
 import type { ResolvedPage } from '@/lib/resolvePageByPath'
 import { coalescePageSeo, getPageSeo, getSiteSettings } from '@/lib/sanity/pageSeo'
 import { buildMetadata } from '@/lib/seo/buildMetadata'
+import { publicPath, trimSlashes } from '@/lib/routes'
+import { sanityPageFetch } from '@/sanity/lib/fetch'
+import { authorBySlugQuery } from '@/sanity/lib/queries'
 
 import AboutPage from '../_pages/aboutPage'
 import ContactPage from '../_pages/contactPage'
@@ -29,34 +32,59 @@ import PostPage from '../_pages/postPage'
 import MerchProductPage from '../_pages/merchProductPage'
 import CaseStudyPage from '../_pages/caseStudyPage'
 import AuthorPage from '../_pages/authorPage'
+import TemplatePage from '../_pages/templatePage'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
 
-const PAGE_COMPONENTS: Record<string, React.ComponentType<{ params: Promise<{ lang: string; slug?: string }> }>> = {
-  aboutPage: AboutPage as React.ComponentType<{ params: Promise<{ lang: string; slug?: string }> }>,
-  contactPage: ContactPage as React.ComponentType<{ params: Promise<{ lang: string; slug?: string }> }>,
-  partnersPage: PartnersPage as React.ComponentType<{ params: Promise<{ lang: string; slug?: string }> }>,
-  workPage: WorkPage as React.ComponentType<{ params: Promise<{ lang: string; slug?: string }> }>,
-  merchPage: MerchPage as React.ComponentType<{ params: Promise<{ lang: string; slug?: string }> }>,
-  migratePage: MigratePage as React.ComponentType<{ params: Promise<{ lang: string; slug?: string }> }>,
-  shopifyPosPage: ShopifyPosPage as React.ComponentType<{ params: Promise<{ lang: string; slug?: string }> }>,
-  shopifyPosInfoPage: ShopifyPosInfoPage as React.ComponentType<{ params: Promise<{ lang: string; slug?: string }> }>,
-  shopifyXAiPage: ShopifyXAiPage as React.ComponentType<{ params: Promise<{ lang: string; slug?: string }> }>,
-  shopifyXPimPage: ShopifyXPimPage as React.ComponentType<{ params: Promise<{ lang: string; slug?: string }> }>,
-  whyShopifyPage: WhyShopifyPage as React.ComponentType<{ params: Promise<{ lang: string; slug?: string }> }>,
-  shopifyPlatformPage: ShopifyPlatformPage as React.ComponentType<{ params: Promise<{ lang: string; slug?: string }> }>,
-  vippsHurtigkassePage: VippsHurtigkassePage as React.ComponentType<{ params: Promise<{ lang: string; slug?: string }> }>,
-  shopifyTcoCalculatorPage: ShopifyTcoCalculatorPage as React.ComponentType<{ params: Promise<{ lang: string; slug?: string }> }>,
-  shopifyDevelopmentPage: ShopifyDevelopmentPage as React.ComponentType<{ params: Promise<{ lang: string; slug?: string }> }>,
-  allPackagesPage: AllPackagesPage as React.ComponentType<{ params: Promise<{ lang: string; slug?: string }> }>,
-  packageDetailPage: PackageDetailPage as React.ComponentType<{ params: Promise<{ lang: string; slug?: string }> }>,
-  blogPage: BlogPage as React.ComponentType<{ params: Promise<{ lang: string; slug?: string }> }>,
-  blogPost: BlogPostPage as React.ComponentType<{ params: Promise<{ lang: string; slug?: string }> }>,
-  post: PostPage as React.ComponentType<{ params: Promise<{ lang: string; slug?: string }> }>,
-  caseStudy: CaseStudyPage as React.ComponentType<{ params: Promise<{ lang: string; slug?: string }> }>,
-  merchProduct: MerchProductPage as React.ComponentType<{ params: Promise<{ lang: string; slug?: string }> }>,
-  author: AuthorPage as React.ComponentType<{ params: Promise<{ lang: string; slug?: string }> }>,
+type PageProps = { params: Promise<{ lang: string; slug?: string }> }
+type PageComponent = React.ComponentType<PageProps>
+
+const PAGE_COMPONENTS: Record<string, PageComponent> = {
+  aboutPage: AboutPage as PageComponent,
+  contactPage: ContactPage as PageComponent,
+  partnersPage: PartnersPage as PageComponent,
+  workPage: WorkPage as PageComponent,
+  merchPage: MerchPage as PageComponent,
+  migratePage: MigratePage as PageComponent,
+  shopifyPosPage: ShopifyPosPage as PageComponent,
+  shopifyPosInfoPage: ShopifyPosInfoPage as PageComponent,
+  shopifyXAiPage: ShopifyXAiPage as PageComponent,
+  shopifyXPimPage: ShopifyXPimPage as PageComponent,
+  whyShopifyPage: WhyShopifyPage as PageComponent,
+  shopifyPlatformPage: ShopifyPlatformPage as PageComponent,
+  vippsHurtigkassePage: VippsHurtigkassePage as PageComponent,
+  shopifyTcoCalculatorPage: ShopifyTcoCalculatorPage as PageComponent,
+  shopifyDevelopmentPage: ShopifyDevelopmentPage as PageComponent,
+  allPackagesPage: AllPackagesPage as PageComponent,
+  packageDetailPage: PackageDetailPage as PageComponent,
+  blogPage: BlogPage as PageComponent,
+  blogPost: BlogPostPage as PageComponent,
+  post: PostPage as PageComponent,
+  caseStudy: CaseStudyPage as PageComponent,
+  merchProduct: MerchProductPage as PageComponent,
+  author: AuthorPage as PageComponent,
+  pillarPage: TemplatePage as PageComponent,
+  integrationPage: TemplatePage as PageComponent,
+  migrationPage: TemplatePage as PageComponent,
+}
+
+/**
+ * One canonical URL per document: if the request used a legacy prefix
+ * (/resources/…), the wrong section, or different casing, 308 to the
+ * canonical shape. Middleware already handles most cases from the static
+ * URL plan; this covers content published after the plan was generated.
+ */
+function redirectIfNotCanonical(path: string, language: string, resolved: NonNullable<ResolvedPage>): void {
+  const requested = trimSlashes(path)
+  if (requested !== resolved.canonicalPath) {
+    permanentRedirect(publicPath(language, resolved.canonicalPath))
+  }
+}
+
+function isMerchProduct(path: string): boolean {
+  const segments = trimSlashes(path).split('/')
+  return segments.length === 2 && segments[0] === 'merch'
 }
 
 export async function generateMetadata({
@@ -67,26 +95,40 @@ export async function generateMetadata({
   const { lang, slug } = await params
   const language = getLanguageFromParams({ lang })
   const path = slug.join('/')
+
+  if (isMerchProduct(path)) {
+    const settings = await getSiteSettings(language)
+    const seo = coalescePageSeo(null, settings)
+    seo.metaTitle = decodeURIComponent(slug[1]).replace(/-/g, ' ')
+    return buildMetadata({ seo, settings, language, pathWithoutLang: path })
+  }
+
   const resolved = await resolvePageByPath(path, language)
   if (!resolved) return {}
+  redirectIfNotCanonical(path, language, resolved)
 
-  // For detail-page types (blogPost / post / caseStudy / packageDetailPage)
-  // the resolved slug is the URL-trailing segment, not the full path. For
-  // section-style pages the slug stored in Sanity is the full localized path.
-  // resolvePageByPath already returns `slug` only when needed; otherwise we
-  // fall back to the full path.
-  const seoSlug = resolved.slug ?? path
-
+  const seoSlug = resolved.slug ?? resolved.canonicalPath
   const [doc, settings] = await Promise.all([
     getPageSeo({ type: resolved.type, slug: seoSlug, language }),
     getSiteSettings(language),
   ])
   const seo = coalescePageSeo(doc, settings)
+
+  if (resolved.type === 'author' && !seo.metaTitle) {
+    const author = await sanityPageFetch<{ name?: string; role?: string; bio?: string } | null>(
+      authorBySlugQuery,
+      { slug: resolved.slug },
+      { next: { revalidate: 0 } }
+    )
+    if (author?.name) seo.metaTitle = author.role ? `${author.name} – ${author.role}` : author.name
+    if (author?.bio && !doc?.seoExtended?.metaDescription) seo.metaDescription = author.bio
+  }
+
   return buildMetadata({
     seo,
     settings,
     language,
-    pathWithoutLang: path,
+    pathWithoutLang: resolved.canonicalPath,
     docType: resolved.type,
   })
 }
@@ -101,23 +143,17 @@ export default async function SlugPage({
   const path = slug.join('/')
 
   // Merch product: path "merch/handle" -> render product page (Shopify)
-  const segments = path.split('/')
-  if (segments.length === 2 && segments[0] === 'merch') {
+  if (isMerchProduct(path)) {
     const ProductPage = PAGE_COMPONENTS.merchProduct
-    if (ProductPage) {
-      return <ProductPage params={Promise.resolve({ lang, slug: segments[1] })} />
-    }
+    return <ProductPage params={Promise.resolve({ lang, slug: slug[1] })} />
   }
 
   const resolved: ResolvedPage = await resolvePageByPath(path, language)
   if (!resolved) notFound()
+  redirectIfNotCanonical(path, language, resolved)
 
   const PageComponent = PAGE_COMPONENTS[resolved.type]
   if (!PageComponent) notFound()
 
-  return (
-    <PageComponent
-      params={Promise.resolve({ lang, slug: resolved.slug })}
-    />
-  )
+  return <PageComponent params={Promise.resolve({ lang, slug: resolved.slug })} />
 }

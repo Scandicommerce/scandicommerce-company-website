@@ -1,0 +1,35 @@
+name: SEO verify
+
+on:
+  schedule:
+    - cron: '17 5 * * *' # daily 05:17 UTC
+  workflow_dispatch:
+    inputs:
+      expect_apex:
+        description: 'Require www/http → apex (after the Vercel domain flip)'
+        default: 'true'
+        required: false
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Verify scandicommerce.no + scandicommerce.com
+        run: |
+          FLAGS=""
+          if [ "${{ github.event.inputs.expect_apex || 'true' }}" = "true" ]; then FLAGS="--expect-apex"; fi
+          node scripts/seo-verify.mjs --origin=https://scandicommerce.no --origin=https://scandicommerce.com $FLAGS --json=seo-verify-report.json
+      - name: Sanity ↔ URL health check
+        if: always()
+        run: node scripts/seo-health-check.mjs --json=seo-health-report.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: seo-reports
+          path: |
+            seo-verify-report.json
+            seo-health-report.json

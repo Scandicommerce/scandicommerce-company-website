@@ -1,53 +1,55 @@
-import type { MetadataRoute } from "next";
-import { client } from "@/sanity/lib/client";
-import { siteSettingsRobotsQuery } from "@/sanity/lib/queries";
-import { getBaseUrl } from "@/lib/hreflang";
+import type { MetadataRoute } from 'next'
+import { headers } from 'next/headers'
+import { client } from '@/sanity/lib/client'
+import { siteSettingsRobotsQuery } from '@/sanity/lib/queries'
+import { SITES, siteForHost } from '@/lib/site-config'
 
-export const revalidate = 3600;
+export const dynamic = 'force-dynamic'
 
-type RobotsRow = {
-  language?: string;
-  noIndexEntireSite?: boolean;
-};
+type RobotsRow = { language?: string; noIndexEntireSite?: boolean }
 
 async function isSiteWideNoIndex(): Promise<boolean> {
   try {
     const rows = await client.fetch<RobotsRow[]>(
       siteSettingsRobotsQuery,
       {},
-      { next: { revalidate: 60, tags: ["site-settings"] } }
-    );
-    // Treat as a global kill switch: if ANY language doc has it flipped on,
-    // the whole site goes dark. Editors can flip any single doc to deindex.
-    return Array.isArray(rows) && rows.some((r) => r.noIndexEntireSite === true);
+      { next: { revalidate: 60, tags: ['site-settings'] } }
+    )
+    return Array.isArray(rows) && rows.some((r) => r.noIndexEntireSite === true)
   } catch (err) {
-    console.error("[robots] failed to read siteSettings robots flag", err);
-    return false;
+    console.error('[robots] failed to read siteSettings robots flag', err)
+    return false
   }
 }
 
+/**
+ * robots.txt per origin (TECHNICAL-SEO-SPEC Task 5).
+ *
+ * - Preview / development deployments block everything.
+ * - Production allows everything except app/studio internals and lists the
+ *   sitemap of the origin that served the request (never the other domain).
+ */
 export default async function robots(): Promise<MetadataRoute.Robots> {
-  const baseUrl = getBaseUrl();
-  const killSwitch = await isSiteWideNoIndex();
+  const h = await headers()
+  const host = h.get('x-forwarded-host') ?? h.get('host')
+  const site = siteForHost(host)
+  const isProduction = process.env.VERCEL_ENV ? process.env.VERCEL_ENV === 'production' : true
+  const isCanonicalHost = !host || host.split(':')[0] === SITES.no.host || host.split(':')[0] === SITES.com.host
+  const blocked = !isProduction || !isCanonicalHost || (await isSiteWideNoIndex())
 
-  if (killSwitch) {
-    return {
-      rules: [{ userAgent: "*", disallow: "/" }],
-      ...(baseUrl && { host: baseUrl }),
-    };
+  if (blocked) {
+    return { rules: [{ userAgent: '*', disallow: '/' }] }
   }
 
   return {
     rules: [
       {
-        userAgent: "*",
-        allow: "/",
-        disallow: ["/studio", "/api/", "/_next/", "/admin"],
+        userAgent: '*',
+        allow: '/',
+        disallow: ['/api/', '/studio', '/_next/', '/admin'],
       },
     ],
-    ...(baseUrl && {
-      sitemap: `${baseUrl}/sitemap.xml`,
-      host: baseUrl,
-    }),
-  };
+    sitemap: `${site.origin}/sitemap.xml`,
+    host: site.origin,
+  }
 }

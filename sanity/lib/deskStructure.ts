@@ -263,6 +263,30 @@ export const deskStructure = (S: StructureBuilder) =>
             ])
         ),
 
+      // SEO templates (SITE-SEO-ARCHITECTURE §7): pillar, integration, migration
+      S.listItem()
+        .title('SEO templates')
+        .icon(EarthGlobeIcon)
+        .child(
+          S.list()
+            .title('SEO templates')
+            .items([
+              S.listItem()
+                .title('Pillar pages')
+                .schemaType('pillarPage')
+                .child(S.documentTypeList('pillarPage').title('Pillar pages')),
+              S.listItem()
+                .title('Integration pages')
+                .schemaType('integrationPage')
+                .child(S.documentTypeList('integrationPage').title('Integration pages')),
+              S.listItem()
+                .title('Migration pages')
+                .schemaType('migrationPage')
+                .child(S.documentTypeList('migrationPage').title('Migration pages')),
+              caseStudiesByLanguage(S),
+            ])
+        ),
+
       S.listItem()
         .title('About Page')
         .schemaType('aboutPage')

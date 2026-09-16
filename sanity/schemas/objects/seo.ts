@@ -22,9 +22,9 @@ export const seo = defineType({
       title: "Meta title",
       type: "string",
       description:
-        "Overrides the page title in browser tabs and search results. Aim for 50–60 characters.",
+        "Overrides the page title in browser tabs and search results. Hard limit 60 characters (SITE-SEO-ARCHITECTURE §7). Do not add the brand – the site template appends it.",
       validation: (Rule) =>
-        Rule.max(70).warning("Meta titles should be under 70 characters"),
+        Rule.max(60).error("Meta titles must be 60 characters or fewer"),
     }),
     defineField({
       name: "metaDescription",
@@ -32,19 +32,28 @@ export const seo = defineType({
       type: "text",
       rows: 3,
       description:
-        "Shown in search engine result snippets. Aim for 140–160 characters.",
+        "Shown in search engine result snippets. Aim for 120–155 characters; hard limit 155.",
       validation: (Rule) =>
-        Rule.max(160).warning(
-          "Meta descriptions should be under 160 characters"
-        ),
+        Rule.max(155).error("Meta descriptions must be 155 characters or fewer"),
     }),
     defineField({
       name: "canonical",
       title: "Canonical URL override",
       type: "url",
       description:
-        "Optional. Only set this if this page is a duplicate of another page.",
-      validation: (Rule) => Rule.uri({ scheme: ["http", "https"] }),
+        "Escape hatch only. Absolute URL. Leave empty unless you know why – the frontend always emits a self-referencing canonical on the serving domain.",
+      validation: (Rule) =>
+        Rule.uri({ scheme: ["https"] }).custom((value) => {
+          if (!value) return true;
+          try {
+            const u = new URL(value);
+            if (u.hostname.startsWith("www.")) return "Use the apex domain (no www).";
+            if (u.pathname !== u.pathname.toLowerCase()) return "Canonical URLs must be lowercase.";
+            return true;
+          } catch {
+            return "Must be an absolute https URL.";
+          }
+        }),
     }),
     defineField({
       name: "ogTitle",

@@ -5,6 +5,7 @@ import {
   legacySeoFieldMinimal,
 } from "../_shared/seoFields";
 import { isUniquePerLanguage } from "@/sanity/lib/slugUtils";
+import { validatePublicSlug } from "@/sanity/lib/slugValidation";
 
 export const vippsHurtigkassePageHeroSection = defineType({
   name: "vippsHurtigkassePageHeroSection",
@@ -295,6 +296,7 @@ export const vippsHurtigkassePage = defineType({
         maxLength: 96,
         isUnique: isUniquePerLanguage,
       },
+      validation: (rule) => rule.custom(validatePublicSlug),
     }),
     defineField({
       name: "sections",

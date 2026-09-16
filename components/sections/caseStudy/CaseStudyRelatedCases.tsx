@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { sanityImg } from '@/lib/sanityImage'
 import Link from "next/link";
+import { hrefFor } from "@/lib/routes";
 
 export interface RelatedCaseStudy {
   _id?: string | null;
@@ -19,11 +20,7 @@ interface CaseStudyRelatedCasesProps {
 }
 
 function caseHref(item: RelatedCaseStudy, pageLanguage: string): string {
-  const slug = item.slug ?? "";
-  const cardLanguage = item.language ?? pageLanguage;
-  return cardLanguage === pageLanguage
-    ? `/resources/${slug}`
-    : `/${cardLanguage}/resources/${slug}`;
+  return hrefFor({ _type: "caseStudy", slug: item.slug ?? "", language: item.language ?? pageLanguage }, pageLanguage);
 }
 
 export default function CaseStudyRelatedCases({ cases, pageLanguage }: CaseStudyRelatedCasesProps) {
@@ -41,6 +38,7 @@ export default function CaseStudyRelatedCases({ cases, pageLanguage }: CaseStudy
             <Link
               key={item._id ?? item.slug}
               href={caseHref(item, pageLanguage)}
+              data-cross-locale={item.language && item.language !== pageLanguage ? true : undefined}
               className="block overflow-hidden rounded-[10px] border border-sc-ink-100 bg-white transition-shadow duration-200 hover:shadow-lg"
             >
               <div className="relative h-[200px] w-full bg-sc-ink-100">

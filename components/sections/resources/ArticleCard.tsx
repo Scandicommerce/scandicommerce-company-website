@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { articleHref } from '@/lib/routes'
 
 interface Article {
   id?: number
@@ -20,7 +21,7 @@ export interface LogRowProps {
 
 export default function ArticleCard({ article, idx, variant = 'default', lang }: LogRowProps) {
   const locale = lang || 'en'
-  const href = article.slug ? `/${locale}/resources/${article.slug}` : '#'
+  const href = article.slug ? articleHref(article.slug, locale) : '#'
   const num = String(idx).padStart(2, '0')
   const category = article.category?.toUpperCase() || ''
 

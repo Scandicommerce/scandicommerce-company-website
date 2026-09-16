@@ -1,26 +1,27 @@
-import { LOCALE_IDS } from "@/sanity/lib/languages";
-import {
-  buildLocaleUrl,
-  X_DEFAULT_LANGUAGE,
-} from "@/lib/hreflang";
-import type { PageSeoTranslation } from "@/lib/sanity/pageSeo";
+import { isLanguage, X_DEFAULT_LANGUAGE, type Language } from '@/lib/site-config'
+import { absoluteUrl, docPath, hreflangCode, normalizeSlug } from '@/lib/routes'
+import type { PageSeoTranslation } from '@/lib/sanity/pageSeo'
+import { findDocByLegacyPath } from '@/lib/seo/urlPlan'
 
-/** Locale-specific blog index slug (matches the renamed index routes). */
-const BLOG_INDEX_SLUG: Record<string, string> = {
-  no: "blogg",
-  en: "blog",
-  sv: "blogg",
-  da: "blog",
-  de: "blog",
-};
+/** Sibling path, mapped to its post-migration shape when Sanity still carries the old slug. */
+function siblingPath(doc: { _type: string; slug?: string; isHomepage?: boolean }, lang: Language): string {
+  const p = docPath({ ...doc, language: lang }).toLowerCase()
+  const planned = findDocByLegacyPath(lang, p)
+  return planned ? planned.newPath.toLowerCase() : p
+}
 
 /**
- * Hreflang + canonical from `translation.metadata` siblings.
+ * Canonical + hreflang cluster for a page, derived from its
+ * `translation.metadata` siblings (TECHNICAL-SEO-SPEC Task 3).
  *
- * Domain split:
- *   - NO → scandicommerce.no (no /no prefix)
- *   - EN → scandicommerce.com (no /en prefix)
- *   - SV / DA / DE → scandicommerce.com/{locale}/... only (never .no)
+ * Rules enforced here:
+ *   - the canonical is the self-referencing URL on the origin that serves the
+ *     language (Norwegian → .no, everything else → .com);
+ *   - every cluster lists every member including itself;
+ *   - only siblings that exist (published) and are indexable are emitted;
+ *   - `x-default` is the English page; if there is no English page the
+ *     cluster has no x-default (never point x-default at a non-English page);
+ *   - a page with no translations emits no hreflang at all.
  */
 export function buildHreflangFromTranslations({
   translations,
@@ -29,81 +30,61 @@ export function buildHreflangFromTranslations({
   currentPath,
   explicitCanonical,
 }: {
-  translations: PageSeoTranslation[] | null | undefined;
-  currentLanguage: string;
-  currentDoc?: {
-    _type: string;
-    slug?: string;
-    isHomepage?: boolean;
-  } | null;
-  currentPath?: string;
-  explicitCanonical?: string;
+  translations: PageSeoTranslation[] | null | undefined
+  currentLanguage: string
+  currentDoc?: { _type: string; slug?: string; isHomepage?: boolean } | null
+  currentPath?: string
+  explicitCanonical?: string
 }): { canonical?: string; languages: Record<string, string> } {
-  const languages: Record<string, string> = {};
+  const byLanguage: Partial<Record<Language, string>> = {}
 
-  const currentPathResolved = currentDoc
-    ? slugForRoute({ ...currentDoc, language: currentLanguage })
-    : (currentPath ?? "").replace(/^\/+|\/+$/g, "");
+  // The route already resolved the canonical path (lowercase, prefix-aware);
+  // prefer it over the raw Sanity slug so a not-yet-renamed slug never leaks
+  // into the canonical. Fall back to the document when no path is given.
+  const currentPathResolved = (
+    currentPath !== undefined
+      ? normalizeSlug(currentPath)
+      : currentDoc
+        ? docPath({ ...currentDoc, language: currentLanguage })
+        : ''
+  ).toLowerCase()
 
-  const currentUrl = buildLocaleUrl(currentLanguage, currentPathResolved);
-  if (currentUrl) {
-    languages[currentLanguage] = currentUrl;
-  }
+  const currentUrl = isLanguage(currentLanguage)
+    ? absoluteUrl(currentLanguage, currentPathResolved)
+    : undefined
+  if (currentUrl && isLanguage(currentLanguage)) byLanguage[currentLanguage] = currentUrl
 
   if (Array.isArray(translations)) {
     for (const t of translations) {
-      if (!t?.doc) continue;
-      const lang = t.doc.language || t._key;
-      if (!lang || !LOCALE_IDS.includes(lang)) continue;
-      if (lang === currentLanguage) continue;
-      if (t.doc.noIndex) continue;
-
-      const path = slugForRoute(t.doc);
-      const url = buildLocaleUrl(lang, path);
-      if (!url) continue;
-
-      languages[lang] = url;
+      if (!t?.doc) continue
+      const lang = t.doc.language || t._key
+      if (!isLanguage(lang) || lang === currentLanguage) continue
+      if (t.doc.noIndex) continue
+      byLanguage[lang] = absoluteUrl(lang, siblingPath(t.doc, lang))
     }
   }
 
-  const xDefaultUrl =
-    languages[X_DEFAULT_LANGUAGE] ?? Object.values(languages)[0];
-  if (xDefaultUrl) {
-    languages["x-default"] = xDefaultUrl;
+  const languages: Record<string, string> = {}
+  for (const [lang, url] of Object.entries(byLanguage)) {
+    if (url) languages[hreflangCode(lang)] = url
   }
+  const xDefault = byLanguage[X_DEFAULT_LANGUAGE]
+  if (xDefault) languages['x-default'] = xDefault
 
-  const hasCrossLocale = Object.keys(languages).some(
-    (k) => k !== currentLanguage && k !== "x-default"
-  );
-  const finalLanguages = hasCrossLocale ? languages : {};
+  const memberCount = Object.keys(byLanguage).length
+  const finalLanguages = memberCount > 1 ? languages : {}
 
-  const canonical =
-    explicitCanonical?.trim() ? explicitCanonical : currentUrl || undefined;
+  const canonical = explicitCanonical?.trim() ? explicitCanonical.trim() : currentUrl || undefined
 
-  return { canonical, languages: finalLanguages };
+  return { canonical, languages: finalLanguages }
 }
 
-/**
- * Sanity slug → path segment for `buildLocaleUrl` (before locale prefix rules).
- */
+/** @deprecated use `docPath` from `@/lib/routes`. */
 export function slugForRoute(doc: {
-  _type: string;
-  slug?: string;
-  isHomepage?: boolean;
-  language?: string;
+  _type: string
+  slug?: string
+  isHomepage?: boolean
+  language?: string
 }): string {
-  if (!doc) return "";
-
-  const rawSlug = (doc.slug ?? "").replace(/^\/+|\/+$/g, "");
-  const treatAsHomepage = doc.isHomepage || rawSlug === "" || rawSlug === "home";
-
-  if (treatAsHomepage) {
-    return "";
-  }
-  if (doc._type === "blogPost" || doc._type === "post") {
-    const indexSlug = BLOG_INDEX_SLUG[doc.language ?? ""] ?? "blog";
-    return `${indexSlug}/${rawSlug}`;
-  }
-  return rawSlug;
+  return docPath(doc)
 }
-

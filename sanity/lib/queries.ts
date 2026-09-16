@@ -2655,7 +2655,7 @@ export const postBySlugQuery = groq`
 
 // Resolve post by slug (for routing)
 export const resolvePostBySlugQuery = groq`
-  *[_type == "post" && slug.current == $slug && (language == $language || !defined(language))] | order(defined(language) desc) [0] { _type, _id }
+  *[_type == "post" && lower(slug.current) == lower($slug) && (language == $language || !defined(language))] | order(defined(language) desc) [0] { _type, _id, "slug": slug.current }
 `;
 
 // All post slugs (for sitemap / static params)
@@ -3064,14 +3064,19 @@ const PAGE_TYPES_WITH_SLUG = [
   "shopifyDevelopmentPage",
   "merchPage",
   "packageDetailPage",
+  "pillarPage",
+  "integrationPage",
+  "migrationPage",
 ];
 
 // Matches slug with or without locale prefix (e.g. "tjenester/vare_pakker" or "no/tjenester/vare_pakker")
 export const resolvePageByPathQuery = groq`
-  *[_type in $pageTypes && (slug.current == $path || slug.current == $pathWithLocale) && (language == $language || !defined(language))] | order(defined(language) desc) [0] {
-    _type,
-    _id
-  }
+  *[
+    _type in $pageTypes
+    && defined(slug.current)
+    && (lower(slug.current) == lower($path) || lower(slug.current) == lower($pathWithLocale))
+    && (language == $language || !defined(language))
+  ] | order(defined(language) desc) [0] { _type, _id, "slug": slug.current }
 `;
 
 export const RESOLVE_PAGE_TYPES = PAGE_TYPES_WITH_SLUG;
@@ -3091,11 +3096,11 @@ export const breadcrumbTitlesQuery = groq`
 
 // Resolve detail pages by last segment (e.g. blogPost by "article-slug", packageDetailPage by "package-slug")
 export const resolveBlogPostBySlugQuery = groq`
-  *[_type == "blogPost" && slug.current == $slug && (language == $language || !defined(language))] | order(defined(language) desc) [0] { _type, _id }
+  *[_type == "blogPost" && lower(slug.current) == lower($slug) && (language == $language || !defined(language))] | order(defined(language) desc) [0] { _type, _id, "slug": slug.current }
 `;
 
 export const resolvePackageDetailBySlugQuery = groq`
-  *[_type == "packageDetailPage" && slug.current == $slug && (language == $language || !defined(language))] | order(defined(language) desc) [0] { _type, _id }
+  *[_type == "packageDetailPage" && lower(slug.current) == lower($slug) && (language == $language || !defined(language))] | order(defined(language) desc) [0] { _type, _id, "slug": slug.current }
 `;
 
 // Given a document _id, find its translated sibling slug (for language switching)
@@ -3183,7 +3188,7 @@ export const caseStudyBySlugQuery = groq`
 `;
 
 export const resolveCaseStudyBySlugQuery = groq`
-  *[_type == "caseStudy" && slug.current == $slug && (language == $language || !defined(language))] | order(defined(language) desc) [0] { _type, _id }
+  *[_type == "caseStudy" && lower(slug.current) == lower($slug) && (language == $language || !defined(language))] | order(defined(language) desc) [0] { _type, _id, "slug": slug.current }
 `;
 
 // ============================================
@@ -3191,11 +3196,11 @@ export const resolveCaseStudyBySlugQuery = groq`
 // Authors are language-neutral (no language filter).
 // ============================================
 export const resolveAuthorBySlugQuery = groq`
-  *[_type == "author" && slug.current == $slug][0] { _type, _id }
+  *[_type == "author" && lower(slug.current) == lower($slug)][0] { _type, _id, "slug": slug.current }
 `;
 
 export const authorBySlugQuery = groq`
-  *[_type == "author" && slug.current == $slug][0] {
+  *[_type == "author" && lower(slug.current) == lower($slug)][0] {
     _id,
     name,
     role,
@@ -3254,15 +3259,16 @@ export const pageSeoQuery = groq`
   *[
     _type == $type
     && (
-      ($slug == "" && (slug.current == "home" || isHomepage == true))
-      || slug.current == $slug
+      ($slug == "" && (slug.current == "home" || slug.current == "/" || isHomepage == true))
+      || lower(slug.current) in $slugCandidates
     )
     && (language == $language || !defined(language))
   ] | order(defined(language) desc) [0] {
     _id,
     _type,
     "language": coalesce(language, "en"),
-    "pageTitle": coalesce(pageTitle, title),
+    "pageTitle": coalesce(pageTitle, title, name),
+    "excerpt": coalesce(excerpt, description, bio),
     "slug": slug.current,
     "isHomepage": coalesce(isHomepage, false),
     "seoExtended": seoExtended {
@@ -3288,7 +3294,8 @@ export const pageSeoQuery = groq`
       _type == "shopifyXAiPage" => coalesce(sections[_type == "shopifyXAiPageFaqSection"][0].items[]{ question, answer }, []),
       _type == "packageDetailPage" => coalesce(sections[_type == "packageDetailPageFaqListSection"][0].faq[]{ question, answer }, []),
       _type == "post" => coalesce(content[_type == "faqBlock"][0].items[]{ question, answer }, []),
-      _type == "shopifyXPimPage" => coalesce(sections[_type == "shopifyXPimCombinedSection"][0].faq.items[]{ question, answer }, [])
+      _type == "shopifyXPimPage" => coalesce(sections[_type == "shopifyXPimCombinedSection"][0].faq.items[]{ question, answer }, []),
+      _type in ["pillarPage", "integrationPage", "migrationPage"] => coalesce(faq[]{ question, answer }, [])
     ), []),
     "translations": *[_type == "translation.metadata" && references(^._id)][0]{
       translations[] {
@@ -3318,7 +3325,8 @@ export const pageSeoBySlugQuery = groq`
     _id,
     _type,
     "language": coalesce(language, "en"),
-    "pageTitle": coalesce(pageTitle, title),
+    "pageTitle": coalesce(pageTitle, title, name),
+    "excerpt": coalesce(excerpt, description, bio),
     "slug": slug.current,
     "isHomepage": coalesce(isHomepage, false),
     "seoExtended": seoExtended {
@@ -3344,7 +3352,8 @@ export const pageSeoBySlugQuery = groq`
       _type == "shopifyXAiPage" => coalesce(sections[_type == "shopifyXAiPageFaqSection"][0].items[]{ question, answer }, []),
       _type == "packageDetailPage" => coalesce(sections[_type == "packageDetailPageFaqListSection"][0].faq[]{ question, answer }, []),
       _type == "post" => coalesce(content[_type == "faqBlock"][0].items[]{ question, answer }, []),
-      _type == "shopifyXPimPage" => coalesce(sections[_type == "shopifyXPimCombinedSection"][0].faq.items[]{ question, answer }, [])
+      _type == "shopifyXPimPage" => coalesce(sections[_type == "shopifyXPimCombinedSection"][0].faq.items[]{ question, answer }, []),
+      _type in ["pillarPage", "integrationPage", "migrationPage"] => coalesce(faq[]{ question, answer }, [])
     ), []),
     "translations": *[_type == "translation.metadata" && references(^._id)][0]{
       translations[] {

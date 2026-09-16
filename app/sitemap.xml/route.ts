@@ -1,32 +1,88 @@
 import { NextResponse } from 'next/server'
+import { headers } from 'next/headers'
+import { groq } from 'next-sanity'
 import { client } from '@/sanity/lib/client'
-import {
-  sitemapPagesAllLocalesQuery,
-  sitemapBlogPostsAllLocalesQuery,
-  sitemapPostsAllLocalesQuery,
-} from '@/sanity/lib/queries'
-import { buildLocaleUrl, getBaseUrl, X_DEFAULT_LANGUAGE } from '@/lib/hreflang'
-import { LOCALE_IDS } from '@/sanity/lib/languages'
-import { getShopifyProducts } from '@/lib/shopify'
+import { SITES, X_DEFAULT_LANGUAGE, isLanguage, siteForHost, siteForLanguage, type Language } from '@/lib/site-config'
+import { docPath, absoluteUrl, hreflangCode, isNoIndexPath } from '@/lib/routes'
+import { findDocByLegacyPath } from '@/lib/seo/urlPlan'
+
+/** Canonical path for a doc, mapped through the URL plan while a slug rename is still unpublished. */
+function canonicalPathFor(m: { _type: string; slug: string; isHomepage?: boolean }, lang: Language): string {
+  const p = docPath({ ...m, language: lang }).toLowerCase()
+  const planned = findDocByLegacyPath(lang, p)
+  return planned ? planned.newPath.toLowerCase() : p
+}
+
+export const dynamic = 'force-dynamic'
+
+/**
+ * One sitemap per origin (TECHNICAL-SEO-SPEC Task 7).
+ *
+ * - Only URLs of the origin that served the request.
+ * - hreflang alternates per URL, mirroring `buildHreflangFromTranslations`.
+ * - Excludes noindex documents, merch, the human /sitemap page, drafts.
+ * - `<lastmod>` from Sanity `_updatedAt`; no `<priority>` / `<changefreq>`.
+ */
 
 const SITEMAP_NS = 'http://www.sitemaps.org/schemas/sitemap/0.9'
 const XHTML_NS = 'http://www.w3.org/1999/xhtml'
 
-interface SitemapEntry {
+const INDEXABLE_TYPES = [
+  'landingPage',
+  'aboutPage',
+  'contactPage',
+  'workPage',
+  'partnersPage',
+  'blogPage',
+  'allPackagesPage',
+  'packageDetailPage',
+  'migratePage',
+  'shopifyPosPage',
+  'shopifyPosInfoPage',
+  'shopifyXAiPage',
+  'shopifyXPimPage',
+  'whyShopifyPage',
+  'shopifyPlatformPage',
+  'vippsHurtigkassePage',
+  'shopifyTcoCalculatorPage',
+  'shopifyDevelopmentPage',
+  'post',
+  'blogPost',
+  'caseStudy',
+  'author',
+  'legalPage',
+  'pillarPage',
+  'integrationPage',
+  'migrationPage',
+]
+
+const sitemapDocsQuery = groq`
+  *[
+    _type in $types
+    && defined(slug.current)
+    && !(_id in path("drafts.**"))
+    && seoExtended.noIndex != true
+    && seo.noIndex != true
+    && !defined(seoExtended.canonical)
+  ] {
+    _id,
+    _type,
+    language,
+    "slug": slug.current,
+    "isHomepage": coalesce(isHomepage, false),
+    _updatedAt,
+    "group": *[_type == "translation.metadata" && references(^._id)][0]._id
+  }
+`
+
+interface SitemapDoc {
   _id: string
-  language: string
-  slug: string
   _type: string
+  language?: string | null
+  slug: string
+  isHomepage?: boolean
   _updatedAt?: string
-}
-
-function getBaseId(id: string): string {
-  return id.replace(/-[a-z]{2}$/, '')
-}
-
-function getPath(entry: { _type: string; slug: string }): string {
-  if (entry._type === 'blogPost' || entry._type === 'post') return `resources/${entry.slug}`
-  return entry.slug
+  group?: string | null
 }
 
 function escapeXml(unsafe: string): string {
@@ -38,188 +94,92 @@ function escapeXml(unsafe: string): string {
     .replace(/'/g, '&apos;')
 }
 
-function formatLastmod(updated?: string): string {
-  if (updated) {
-    const d = new Date(updated)
-    if (!Number.isNaN(d.getTime())) return d.toISOString().slice(0, 10)
-  }
-  return new Date().toISOString().slice(0, 10)
+function lastmod(updated?: string): string | null {
+  if (!updated) return null
+  const d = new Date(updated)
+  return Number.isNaN(d.getTime()) ? null : d.toISOString().slice(0, 10)
 }
 
 export async function GET() {
-  const baseUrl = getBaseUrl()
-  if (!baseUrl) {
-    return new NextResponse(
-      '<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="' +
-        SITEMAP_NS +
-        '"></urlset>',
-      {
-        headers: {
-          'Content-Type': 'application/xml; charset=utf-8',
-          'Cache-Control': 'public, max-age=3600, s-maxage=3600',
-        },
+  const h = await headers()
+  const site = siteForHost(h.get('x-forwarded-host') ?? h.get('host'))
+
+  let docs: SitemapDoc[] = []
+  try {
+    docs = await client.fetch<SitemapDoc[]>(sitemapDocsQuery, { types: INDEXABLE_TYPES }, { next: { revalidate: 3600 } })
+  } catch (err) {
+    console.error('[sitemap] Sanity fetch failed', err)
+  }
+
+  // Cluster by translation group (or own id when untranslated).
+  const clusters = new Map<string, SitemapDoc[]>()
+  for (const doc of docs) {
+    const key = doc.group ?? doc._id
+    if (!clusters.has(key)) clusters.set(key, [])
+    clusters.get(key)!.push(doc)
+  }
+
+  const entries: string[] = []
+  const seenLoc = new Set<string>()
+
+  for (const members of clusters.values()) {
+    // Alternates: one URL per language among indexable, published members.
+    const alternates: Partial<Record<Language, string>> = {}
+    for (const m of members) {
+      if (!isLanguage(m.language)) continue
+      const p = canonicalPathFor(m, m.language)
+      if (isNoIndexPath(p)) continue
+      alternates[m.language] = absoluteUrl(m.language, p)
+    }
+
+    for (const m of members) {
+      // Language-neutral docs (authors) are served on both origins.
+      const languagesToEmit: Language[] = isLanguage(m.language)
+        ? [m.language]
+        : m._type === 'author'
+          ? [site.defaultLanguage]
+          : []
+      for (const lang of languagesToEmit) {
+        if (siteForLanguage(lang).key !== site.key) continue
+        const p = canonicalPathFor(m, lang)
+        if (isNoIndexPath(p)) continue
+        const loc = absoluteUrl(lang, p)
+        if (seenLoc.has(loc)) continue
+        seenLoc.add(loc)
+
+        const lines = ['  <url>', `    <loc>${escapeXml(loc)}</loc>`]
+        const clusterSize = Object.keys(alternates).length
+        if (isLanguage(m.language) && clusterSize > 1) {
+          for (const [l, href] of Object.entries(alternates)) {
+            if (!href) continue
+            lines.push(`    <xhtml:link rel="alternate" hreflang="${hreflangCode(l)}" href="${escapeXml(href)}" />`)
+          }
+          const xDefault = alternates[X_DEFAULT_LANGUAGE]
+          if (xDefault) lines.push(`    <xhtml:link rel="alternate" hreflang="x-default" href="${escapeXml(xDefault)}" />`)
+        }
+        const lm = lastmod(m._updatedAt)
+        if (lm) lines.push(`    <lastmod>${lm}</lastmod>`)
+        lines.push('  </url>')
+        entries.push(lines.join('\n'))
       }
-    )
-  }
-
-  const [pages, blogPosts, posts, shopifyProducts] = await Promise.all([
-    client.fetch<SitemapEntry[]>(sitemapPagesAllLocalesQuery, {}, { next: { revalidate: 3600 } }),
-    client.fetch<SitemapEntry[]>(sitemapBlogPostsAllLocalesQuery, {}, { next: { revalidate: 3600 } }),
-    client.fetch<SitemapEntry[]>(sitemapPostsAllLocalesQuery, {}, { next: { revalidate: 3600 } }),
-    getShopifyProducts().catch(() => []),
-  ])
-
-  // Group by base id so we can output hreflang alternates per logical page
-  const alternates = new Map<string, Record<string, { path: string; lastmod: string }>>()
-
-  const addEntry = (entry: SitemapEntry, path: string) => {
-    const baseId = getBaseId(entry._id)
-    if (!alternates.has(baseId)) alternates.set(baseId, {})
-    const rec = alternates.get(baseId)!
-    rec[entry.language] = {
-      path,
-      lastmod: formatLastmod(entry._updatedAt),
     }
   }
 
-  for (const entry of pages || []) {
-    const path =
-      entry._type === 'landingPage' && (entry.slug === '' || entry.slug === 'home')
-        ? ''
-        : getPath(entry)
-    addEntry(entry, path)
-  }
-
-  for (const entry of blogPosts || []) {
-    addEntry(entry, getPath(entry))
-  }
-
-  for (const entry of posts || []) {
-    addEntry(entry, getPath(entry))
-  }
-
-  // Static routes: home and sitemap (same path for all locales)
-  const staticRoutes: Record<string, { path: string; changefreq: string; priority: string }> = {
-    __home: { path: '', changefreq: 'daily', priority: '1.0' },
-    __sitemap: { path: 'sitemap', changefreq: 'weekly', priority: '0.5' },
-  }
-
-  const productHandles =
-    shopifyProducts
-      ?.filter((p) => p.collections?.length > 0)
-      .map((p) => p.handle) ?? []
-
-  const today = new Date().toISOString().slice(0, 10)
-  const urlEntries: Array<{
-    locale: string
-    path: string
-    lastmod: string
-    changefreq: string
-    priority: string
-    alternates: Record<string, { path: string; lastmod: string }>
-  }> = []
-
-  // Static: home and sitemap (one logical “page” per locale with same path in all locales)
-  const hasHomeFromCms = Array.from(alternates.values()).some((langToPath) =>
-    Object.values(langToPath).some((v) => v.path === '')
-  )
-  for (const [, { path, changefreq, priority }] of Object.entries(staticRoutes)) {
-    if (path === '' && hasHomeFromCms) continue
-    const alt: Record<string, { path: string; lastmod: string }> = {}
-    for (const loc of LOCALE_IDS) {
-      alt[loc] = { path, lastmod: today }
-    }
-    for (const loc of LOCALE_IDS) {
-      urlEntries.push({
-        locale: loc,
-        path,
-        lastmod: today,
-        changefreq,
-        priority,
-        alternates: alt,
-      })
-    }
-  }
-
-  // Sanity pages and blog posts (grouped by base id)
-  for (const [, langToPath] of alternates) {
-    const locales = Object.keys(langToPath)
-    if (locales.length === 0) continue
-    const lastmod = Object.values(langToPath).map((v) => v.lastmod).sort().reverse()[0] ?? today
-    const changefreq = 'weekly'
-    const priority = '0.8'
-    for (const [locale, { path }] of Object.entries(langToPath)) {
-      urlEntries.push({
-        locale,
-        path,
-        lastmod,
-        changefreq,
-        priority,
-        alternates: Object.fromEntries(
-          Object.entries(langToPath).map(([loc, v]) => [loc, { path: v.path, lastmod: v.lastmod }])
-        ),
-      })
-    }
-  }
-
-  // Products: path merch/{handle} for all locales (same path, no translation)
-  for (const handle of productHandles) {
-    const path = `merch/${handle}`
-    const alt: Record<string, { path: string; lastmod: string }> = {}
-    for (const loc of LOCALE_IDS) {
-      alt[loc] = { path, lastmod: today }
-    }
-    for (const loc of LOCALE_IDS) {
-      urlEntries.push({
-        locale: loc,
-        path,
-        lastmod: today,
-        changefreq: 'weekly',
-        priority: '0.6',
-        alternates: alt,
-      })
-    }
-  }
-
-  const xmlLines: string[] = [
+  const xml = [
     '<?xml version="1.0" encoding="UTF-8"?>',
     `<urlset xmlns="${SITEMAP_NS}" xmlns:xhtml="${XHTML_NS}">`,
-  ]
+    ...entries,
+    '</urlset>',
+  ].join('\n')
 
-  for (const { locale, path, lastmod, changefreq, priority, alternates: alt } of urlEntries) {
-    // Use the locale-aware URL builder so the sitemap reflects the production
-    // domain split: NO → scandicommerce.no (no /no prefix), EN → scandicommerce.com
-    // (no /en prefix), SV/DA/DE → scandicommerce.com/{locale}/...
-    const loc = buildLocaleUrl(locale, path)
-    if (!loc) continue
-    xmlLines.push('  <url>')
-    xmlLines.push(`    <loc>${escapeXml(loc)}</loc>`)
-    for (const [lang, { path: p }] of Object.entries(alt)) {
-      const href = buildLocaleUrl(lang, p)
-      if (!href) continue
-      xmlLines.push(`    <xhtml:link rel="alternate" hreflang="${lang}" href="${escapeXml(href)}" />`)
-    }
-    // x-default points at the EN URL (project decision; falls back to whatever
-    // locale-specific path is present for the canonical entry).
-    const xDefaultAlt = alt[X_DEFAULT_LANGUAGE]
-    const xDefaultUrl = xDefaultAlt
-      ? buildLocaleUrl(X_DEFAULT_LANGUAGE, xDefaultAlt.path)
-      : buildLocaleUrl(X_DEFAULT_LANGUAGE, path)
-    if (xDefaultUrl) {
-      xmlLines.push(`    <xhtml:link rel="alternate" hreflang="x-default" href="${escapeXml(xDefaultUrl)}" />`)
-    }
-    xmlLines.push(`    <lastmod>${lastmod}</lastmod>`)
-    xmlLines.push(`    <changefreq>${changefreq}</changefreq>`)
-    xmlLines.push(`    <priority>${priority}</priority>`)
-    xmlLines.push('  </url>')
-  }
-
-  xmlLines.push('</urlset>')
-
-  return new NextResponse(xmlLines.join('\n'), {
+  return new NextResponse(xml, {
     headers: {
       'Content-Type': 'application/xml; charset=utf-8',
       'Cache-Control': 'public, max-age=3600, s-maxage=3600',
+      'X-Robots-Tag': 'noindex',
+      'X-Sitemap-Origin': site.origin,
+      Vary: 'Host',
     },
   })
 }
+

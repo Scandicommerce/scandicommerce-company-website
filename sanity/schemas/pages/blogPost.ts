@@ -5,6 +5,7 @@ import {
   legacySeoFieldMinimal,
 } from "../_shared/seoFields";
 import { isUniquePerLanguage } from "@/sanity/lib/slugUtils";
+import { validatePublicSlug } from "@/sanity/lib/slugValidation";
 
 export const blogPost = defineType({
   name: "blogPost",
@@ -38,13 +39,13 @@ export const blogPost = defineType({
       title: "Slug",
       type: "slug",
       group: "content",
-      description: "URL path after /resources/ only. Example: for https://yoursite.com/en/resources/10-essential-shopify-apps-norwegian-ecommerce-2025 enter: 10-essential-shopify-apps-norwegian-ecommerce-2025 (no /resources/, no /en/, no slashes). Use 'Generate' from title or type manually.",
+      description: "Article slug only, lowercase with hyphens (no /blog/, no language prefix). The page lives at /blogg/<slug> on .no and /blog/<slug> on .com.",
       options: {
         source: "title",
         maxLength: 96,
         isUnique: isUniquePerLanguage,
       },
-      validation: (rule) => rule.required(),
+      validation: (rule) => rule.required().custom(validatePublicSlug),
     }),
     defineField({
       name: "description",

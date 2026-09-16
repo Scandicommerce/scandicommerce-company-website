@@ -154,14 +154,16 @@ export default function Hero({ hero }: HeroProps) {
                   playsInline
                 />
               )
-            ) : (
+            ) : imageUrl ? (
               /* eslint-disable-next-line @next/next/no-img-element */
               <img
                 src={sanityImg(imageUrl, 2000)}
                 alt={titleText || 'Scandicommerce'}
+                width={1600}
+                height={900}
                 className="w-full h-full object-cover"
               />
-            )}
+            ) : null}
           </div>
         )}
 

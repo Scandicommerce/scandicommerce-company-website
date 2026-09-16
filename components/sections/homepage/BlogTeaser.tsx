@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { hrefFor, blogIndexHref } from '@/lib/routes'
 
 export interface TeaserPost {
   _id: string
@@ -40,14 +41,10 @@ function formatDate(post: TeaserPost, lang?: string): string {
   return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })
 }
 
-/** Bare path when the post language matches the page (production locale is
- * domain-based); locale prefix only for cross-language links. */
+/** Article href via the shared route helper (`/blogg|/blog/<slug>`). */
 function postHref(post: TeaserPost, lang?: string): string {
   if (!post.slug) return '#'
-  const clean = post.slug.replace(/^\/+/, '')
-  const path = clean.startsWith('resources/') ? clean : `resources/${clean}`
-  if (post.language && lang && post.language !== lang) return `/${post.language}/${path}`
-  return `/${path}`
+  return hrefFor({ _type: post._type ?? 'post', slug: post.slug, language: post.language ?? lang ?? 'en' }, lang ?? post.language ?? 'en')
 }
 
 /** Homepage "Nyheter og guider" section (2026 design). Posts are fetched
@@ -56,7 +53,7 @@ export default function BlogTeaser({ data, posts = [], lang }: BlogTeaserProps) 
   const eyebrow = data?.eyebrow || 'Blogg'
   const title = data?.title || 'Nyheter og guider'
   const linkText = data?.linkText || 'Til bloggen'
-  const linkHref = data?.linkHref || '/blogg'
+  const linkHref = data?.linkHref || blogIndexHref(lang ?? 'no')
   const count = data?.count && data.count > 0 ? data.count : 3
   const visible = posts.slice(0, count)
 

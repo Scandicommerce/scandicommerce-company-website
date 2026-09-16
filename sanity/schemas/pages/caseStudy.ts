@@ -1,6 +1,9 @@
 import { defineField, defineType, defineArrayMember } from "sanity";
 import { languageField } from "../objects/language";
 import { isUniquePerLanguage } from "@/sanity/lib/slugUtils";
+import { validatePublicSlug } from "@/sanity/lib/slugValidation";
+import { seoExtendedField } from "../_shared/seoFields";
+import { relatedPagesField } from "../_shared/relatedPagesField";
 
 // ─── Section: Intro ────────────────────────────────────────────────────────────
 export const caseStudyIntroSection = defineType({
@@ -233,13 +236,13 @@ export const caseStudy = defineType({
       type: "slug",
       group: "content",
       description:
-        "URL path after /resources/. E.g. for /en/resources/groupe-marcelle enter: groupe-marcelle.",
+        "Client name, lowercase. The page lives at /kundecaser/<slug> on .no and /work/<slug> on .com.",
       options: {
         source: "title",
         maxLength: 96,
         isUnique: isUniquePerLanguage,
       },
-      validation: (r) => r.required(),
+      validation: (r) => r.required().custom(validatePublicSlug),
     }),
     defineField({
       name: "excerpt",
@@ -390,12 +393,17 @@ export const caseStudy = defineType({
       ],
     }),
 
+    relatedPagesField({ group: "related" }),
+
     // ── SEO ──
+    { ...seoExtendedField, group: "settings" },
     defineField({
       name: "seo",
-      title: "SEO",
+      title: "SEO (legacy — read-only)",
       type: "object",
       group: "settings",
+      readOnly: true,
+      hidden: ({ value }) => !value,
       fields: [
         defineField({ name: "metaTitle", title: "Meta Title", type: "string" }),
         defineField({ name: "metaDescription", title: "Meta Description", type: "text", rows: 3 }),

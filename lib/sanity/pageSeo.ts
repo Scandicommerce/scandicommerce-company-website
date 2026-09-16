@@ -6,6 +6,8 @@ import {
 } from "@/sanity/lib/queries";
 import { defaultLanguage } from "@/sanity/lib/languages";
 import { stegaClean } from "@sanity/client/stega";
+import { findDocByCurrentPath } from "@/lib/seo/urlPlan";
+import { normalizeSlug } from "@/lib/routes";
 
 /**
  * Server-side helpers for `generateMetadata`. All fetches use the published
@@ -56,6 +58,7 @@ export type PageSeoDoc = {
   _type: string;
   language?: string;
   pageTitle?: string;
+  excerpt?: string | null;
   slug?: string;
   isHomepage?: boolean;
   seoExtended?: PageSeoExtended | null;
@@ -105,9 +108,16 @@ export async function getPageSeo({
   language: string;
 }): Promise<PageSeoDoc | null> {
   try {
+    const lang = language || defaultLanguage;
+    const clean = normalizeSlug(slug).toLowerCase();
+    // Accept the canonical slug, the legacy locale-prefixed form (`sv/about`)
+    // and, transitionally, the pre-migration slug from the URL plan.
+    const candidates = new Set<string>([clean, `${lang}/${clean}`, slug.trim().toLowerCase()]);
+    const planned = findDocByCurrentPath(lang, clean);
+    if (planned && planned.type === type) candidates.add(planned.oldSlug.toLowerCase());
     return await sanityPageFetch<PageSeoDoc | null>(
       pageSeoQuery,
-      { type, slug, language: language || defaultLanguage },
+      { type, slug: clean, slugCandidates: [...candidates], language: lang },
       FETCH_OPTIONS
     );
   } catch (err) {
@@ -189,6 +199,7 @@ export function coalescePageSeo(
   const metaDescription =
     clean(ext?.metaDescription) ||
     clean(legacy?.metaDescription) ||
+    clean(doc?.excerpt) ||
     clean(settings?.defaultMetaDescription) ||
     "";
 

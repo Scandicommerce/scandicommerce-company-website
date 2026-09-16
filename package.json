@@ -9,7 +9,10 @@
     "lint": "next lint",
     "type-check": "tsc --noEmit",
     "migrate:landing-sections": "node scripts/migrate-landing-page-sections.mjs",
-    "migrate:all-page-sections": "node scripts/migrate-all-page-sections.mjs"
+    "migrate:all-page-sections": "node scripts/migrate-all-page-sections.mjs",
+    "seo:verify": "node scripts/seo-verify.mjs",
+    "seo:health": "node scripts/seo-health-check.mjs",
+    "seo:plan": "python3 scripts/seo/generate-url-plan.py"
   },
   "dependencies": {
     "@portabletext/react": "^6.0.2",

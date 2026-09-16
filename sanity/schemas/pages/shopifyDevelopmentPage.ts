@@ -5,6 +5,7 @@ import {
   legacySeoFieldMinimal,
 } from "../_shared/seoFields";
 import { isUniquePerLanguage } from "@/sanity/lib/slugUtils";
+import { validatePublicSlug } from "@/sanity/lib/slugValidation";
 
 export const shopifyDevelopmentPageHeroSection = defineType({
   name: "shopifyDevelopmentPageHeroSection",
@@ -233,7 +234,7 @@ export const shopifyDevelopmentPage = defineType({
         maxLength: 96,
         isUnique: isUniquePerLanguage,
       },
-      validation: (rule) => rule.required(),
+      validation: (rule) => rule.required().custom(validatePublicSlug),
     }),
     defineField({
       name: "sections",

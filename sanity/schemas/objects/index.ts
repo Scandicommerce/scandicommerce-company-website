@@ -20,3 +20,4 @@ export {
   dividerBlock,
   videoBlock,
 } from "./blog";
+export { faqItems } from "./faqItems";

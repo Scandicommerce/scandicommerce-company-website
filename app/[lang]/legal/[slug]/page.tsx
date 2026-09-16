@@ -6,6 +6,8 @@ import { PortableText } from '@/sanity'
 import { sanityPageFetch } from '@/sanity/lib/fetch'
 import { legalPageBySlugQuery } from '@/sanity/lib/queries'
 import { getLanguageFromParams } from '@/lib/language'
+import { coalescePageSeo, getSiteSettings } from '@/lib/sanity/pageSeo'
+import { buildMetadata } from '@/lib/seo/buildMetadata'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -33,12 +35,15 @@ export async function generateMetadata({
   params: Promise<{ lang: string; slug: string }>
 }): Promise<Metadata> {
   const { lang, slug } = await params
-  const page = await getLegalPage(lang, slug)
+  const language = getLanguageFromParams({ lang })
+  const [page, settings] = await Promise.all([getLegalPage(lang, slug), getSiteSettings(language)])
   if (!page) return {}
-  return {
-    title: page.seo?.metaTitle ?? page.pageTitle,
-    description: page.seo?.metaDescription,
-  }
+  const seo = coalescePageSeo(null, settings)
+  seo.metaTitle = page.seo?.metaTitle ?? page.pageTitle
+  seo.metaDescription = page.seo?.metaDescription ?? seo.metaDescription
+  // Legal pages are served in the requested language but only exist in English:
+  // canonical stays self-referencing on this origin; no hreflang cluster.
+  return buildMetadata({ seo, settings, language, pathWithoutLang: `legal/${slug}` })
 }
 
 export default async function LegalPage({

@@ -64,6 +64,10 @@ export const TRANSLATABLE_SCHEMA_TYPES = [
   "footerSettings",
   "vippsHurtigkassePage",
   "legalPage",
+  "caseStudy",
+  "pillarPage",
+  "integrationPage",
+  "migrationPage",
 ] as const;
 
 export const getLanguageTitle = (id: string): string => {

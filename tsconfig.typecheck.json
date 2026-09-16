@@ -1,0 +1,4 @@
+{
+  "extends": "./tsconfig.json",
+  "exclude": ["node_modules", ".next", "dist", "Scandicommerce Design System", "scripts", "migrations"]
+}

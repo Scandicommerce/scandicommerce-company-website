@@ -8,6 +8,7 @@ import { PortableText } from '@/sanity'
 import { sanityPageFetch } from '@/sanity/lib/fetch'
 import { authorBySlugQuery, authorArticlesQuery } from '@/sanity/lib/queries'
 import { getLanguageFromParams } from '@/lib/language'
+import { hrefFor } from '@/lib/routes'
 
 interface AuthorData {
   _id: string
@@ -34,14 +35,10 @@ interface AuthorArticle {
   imageUrl?: string
 }
 
-/** Same-language links stay bare (production locale is domain-based); cross-language
- * links get a locale prefix, which middleware resolves to the right domain. */
+/** Same-language links are relative; other languages get an absolute URL on their own origin. */
 function articleHref(article: AuthorArticle, pageLang: string): string {
   if (!article.slug) return '#'
-  const clean = article.slug.replace(/^\/+/, '')
-  const path = clean.startsWith('resources/') ? clean : `resources/${clean}`
-  if (article.language && article.language !== pageLang) return `/${article.language}/${path}`
-  return `/${path}`
+  return hrefFor({ _type: article._type, slug: article.slug, language: article.language ?? pageLang }, pageLang)
 }
 
 export default async function AuthorPage({

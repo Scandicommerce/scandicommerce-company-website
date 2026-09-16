@@ -50,6 +50,24 @@ const LOCALE_DOMAINS: Record<string, string> = {
 /** Locales served on .com with a /{locale}/ path prefix (no dedicated domain). */
 const LOCALES_WITH_PATH_PREFIX = new Set(['sv', 'da', 'de'])
 
+/** hreflang code emitted in <head> for a Sanity language id. */
+const HREFLANG_BY_LANGUAGE: Record<string, string> = {
+  no: 'nb-NO',
+  en: 'en',
+  sv: 'sv-SE',
+  da: 'da-DK',
+  de: 'de-DE',
+}
+
+/** URL of the <link rel="alternate" hreflang> for `lang` on the current page, if any. */
+function alternateUrlFor(lang: string): string | null {
+  if (typeof document === 'undefined') return null
+  const code = HREFLANG_BY_LANGUAGE[lang] ?? lang
+  const links = Array.from(document.querySelectorAll<HTMLLinkElement>('link[rel="alternate"][hreflang]'))
+  const match = links.find((l) => (l.getAttribute('hreflang') || '').toLowerCase() === code.toLowerCase())
+  return match?.href || null
+}
+
 function isProductionHost(): boolean {
   return typeof window !== 'undefined' && window.location.hostname.includes('scandicommerce')
 }
@@ -96,6 +114,10 @@ function LanguageUrlSync({ onValue }: { onValue: (v: LanguageContextType) => voi
   }, [pathname, isInitialized, langFromPath, currentLanguage])
 
   // --- Switch language ---
+  // Prefer the hreflang alternate already in <head> for the target language
+  // (TECHNICAL-SEO-SPEC §7.4: the switcher links to the translation of the
+  // current document). Fall back to the translate-slug API, then to the
+  // target site's homepage.
   const setLanguage = useCallback(
     async (lang: string) => {
       setCurrentLanguageState(lang)
@@ -107,26 +129,34 @@ function LanguageUrlSync({ onValue }: { onValue: (v: LanguageContextType) => voi
       const domainDefault = getDomainDefaultLocale()
       const currentCleanPath = cleanPath === '/' ? '' : cleanPath.replace(/^\//, '')
 
-      // Resolve slug in target language
-      let resolvedSlug: string | null = null
+      if (isProductionHost()) {
+        const alternate = alternateUrlFor(lang)
+        if (alternate) {
+          window.location.href = alternate
+          return
+        }
+      }
+
+      // Resolve the translated path (already shaped: blogg/…, kundecaser/…)
+      let resolvedPath: string | null = null
       if (currentCleanPath && currentLanguage !== lang) {
         try {
           const res = await fetch(
             `/api/translate-slug?currentPath=${encodeURIComponent(currentCleanPath)}&currentLang=${encodeURIComponent(currentLanguage)}&targetLang=${encodeURIComponent(lang)}`
           )
           const data: { slug: string | null } = await res.json()
-          resolvedSlug = data.slug
+          resolvedPath = data.slug
         } catch {
           // Fall through
         }
       }
 
-      const targetPath = resolvedSlug ? `/${resolvedSlug}` : (cleanPath || '/')
+      // No translation: go to the target site's homepage rather than a 404.
+      const targetPath = resolvedPath ? `/${resolvedPath}` : currentLanguage !== lang && currentCleanPath ? '/' : cleanPath || '/'
 
-      // Production: switch domain or add path prefix
       if (isProductionHost()) {
         if (LOCALE_DOMAINS[lang]) {
-          window.location.href = `https://${LOCALE_DOMAINS[lang]}${targetPath}`
+          window.location.href = `https://${LOCALE_DOMAINS[lang]}${targetPath === '/' ? '' : targetPath}`
           return
         }
         if (LOCALES_WITH_PATH_PREFIX.has(lang)) {

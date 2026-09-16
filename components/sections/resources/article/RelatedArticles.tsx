@@ -2,6 +2,7 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
+import { articleHref } from '@/lib/routes'
 import { RelatedArticle } from '@/lib/articles'
 import { FiClock } from 'react-icons/fi'
 
@@ -23,7 +24,7 @@ export default function RelatedArticles({ articles, lang }: RelatedArticlesProps
           {articles.map((article, index) => (
             <Link
               key={index}
-              href={lang ? `/${lang}/resources/${article.slug}` : `/resources/${article.slug}`}
+              href={articleHref(article.slug, lang ?? 'en')}
               className="group relative overflow-hidden"
             >
               {/* Article Image */}

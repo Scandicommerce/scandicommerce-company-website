@@ -4,7 +4,8 @@ import { client } from '@/sanity/lib/client'
 import { sitemapPagesQuery, sitemapBlogPostsQuery } from '@/sanity/lib/queries'
 import { getQueryParams } from '@/sanity/lib/queryHelpers'
 import { getLanguageFromParams } from '@/lib/language'
-import { getAlternateLanguagesForMetadata } from '@/lib/hreflang'
+import type { Metadata } from 'next'
+import { docHref } from '@/lib/routes'
 import { getShopifyProducts } from '@/lib/shopify'
 import LocalizedLink from '@/components/ui/LocalizedLink'
 
@@ -83,19 +84,16 @@ function groupByCategory(
     .map((cat) => ({ label: cat, entries: categoryMap.get(cat)! }))
 }
 
-function getPageHref(entry: SitemapEntry): string {
-  if (entry._type === 'blogPost') return `/resources/${entry.slug}`
+function getPageHref(entry: SitemapEntry, language: string): string {
   if (entry._type === 'shopifyProduct') return `/merch/${entry.slug}`
-  return `/${entry.slug}`
+  return docHref({ _type: entry._type, slug: entry.slug, language })
 }
 
-export async function generateMetadata() {
-  const alternates = getAlternateLanguagesForMetadata('sitemap')
+/** Human-readable sitemap: useful for visitors, but must not compete with real pages (Task 5.4). */
+export async function generateMetadata(): Promise<Metadata> {
   return {
-    title: 'Sitemap | ScandiCommerce',
-    alternates: Object.keys(alternates).length
-      ? { languages: alternates }
-      : undefined,
+    title: 'Sitemap | scandicommerce',
+    robots: { index: false, follow: true },
   }
 }
 
@@ -180,7 +178,7 @@ export default async function SitemapPage({
                     {category.entries.map((entry) => (
                       <li key={`${entry._type}-${entry.slug}`}>
                         <LocalizedLink
-                          href={getPageHref(entry)}
+                          href={getPageHref(entry, language)}
                           className="group flex items-center gap-2 text-gray-600 hover:text-teal transition-colors"
                         >
                           <span className="w-1.5 h-1.5 rounded-full bg-gray-300 group-hover:bg-teal transition-colors shrink-0" />

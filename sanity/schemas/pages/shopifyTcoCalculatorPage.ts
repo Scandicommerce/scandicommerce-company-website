@@ -5,6 +5,7 @@ import {
   legacySeoFieldMinimal,
 } from "../_shared/seoFields";
 import { isUniquePerLanguage } from "@/sanity/lib/slugUtils";
+import { validatePublicSlug } from "@/sanity/lib/slugValidation";
 
 export const shopifyTcoCalculatorPageHeroSection = defineType({
   name: "shopifyTcoCalculatorPageHeroSection",
@@ -85,7 +86,7 @@ export const shopifyTcoCalculatorPage = defineType({
       title: "Slug",
       type: "slug",
       options: { source: "pageTitle", maxLength: 96, isUnique: isUniquePerLanguage },
-      validation: (rule) => rule.required(),
+      validation: (rule) => rule.required().custom(validatePublicSlug),
     }),
     defineField({
       name: "sections",

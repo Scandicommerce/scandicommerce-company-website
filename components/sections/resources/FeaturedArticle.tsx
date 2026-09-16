@@ -3,6 +3,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
+import { articleHref } from '@/lib/routes'
 
 interface AuthorData {
   name?: string
@@ -62,7 +63,7 @@ export default function FeaturedArticle({ featuredArticle, lang }: FeaturedArtic
   const eyebrow = featuredArticle?.pageHeaderEyebrow || (isNorwegian ? 'Notater fra studioet' : 'Notes from the studio')
   const pageTitle = featuredArticle?.pageHeaderTitle || (isNorwegian ? 'Hva vi sendte\nog lærte.' : 'What we\nshipped & learned.')
   const articleSlug = featuredArticle?.articleSlug?.trim()
-  const link = featuredArticle?.link || (articleSlug ? `/${locale}/resources/${articleSlug}` : '#')
+  const link = featuredArticle?.link || (articleSlug ? articleHref(articleSlug, locale) : '#')
 
   return (
     <>

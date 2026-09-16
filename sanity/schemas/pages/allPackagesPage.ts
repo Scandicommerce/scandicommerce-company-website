@@ -5,6 +5,7 @@ import {
   legacySeoFieldMinimal,
 } from "../_shared/seoFields";
 import { isUniquePerLanguage } from "@/sanity/lib/slugUtils";
+import { validatePublicSlug } from "@/sanity/lib/slugValidation";
 
 function packagePageFilter({ document }: { document: Record<string, unknown> }) {
   const lang = (document as { language?: string }).language;
@@ -188,7 +189,7 @@ export const allPackagesPage = defineType({
         maxLength: 96,
         isUnique: isUniquePerLanguage,
       },
-      validation: (rule) => rule.required(),
+      validation: (rule) => rule.required().custom(validatePublicSlug),
     }),
     defineField({
       name: "sections",

@@ -5,6 +5,7 @@ import { sanityImg } from '@/lib/sanityImage'
 import Image from 'next/image'
 import Link from 'next/link'
 import { IoMdArrowForward } from 'react-icons/io'
+import { hrefFor } from '@/lib/routes'
 
 export interface CaseCard {
   _id: string
@@ -33,16 +34,15 @@ interface CaseStudiesGridProps {
 
 const ALL = 'Alle'
 
-/** Build a case-study href. Production locale is domain-based (.no = Norwegian,
- * .com = everything else), so same-language links stay bare; cross-language
- * links get a locale prefix, which the middleware turns into the right
- * cross-domain redirect. Slugs already carrying "resources/" are tolerated. */
+/** Case-study href via the shared route helper: same language → relative
+ * `/kundecaser|/work/<slug>`; other language → absolute URL on its own origin
+ * (no redirect hop). Cross-locale anchors are flagged with data-cross-locale. */
 function caseHref(slug?: string, language?: string, pageLang?: string): string {
   if (!slug) return '#'
-  const clean = slug.replace(/^\/+/, '')
-  const path = clean.startsWith('resources/') ? clean : `resources/${clean}`
-  if (language && pageLang && language !== pageLang) return `/${language}/${path}`
-  return `/${path}`
+  return hrefFor({ _type: 'caseStudy', slug, language: language ?? pageLang ?? 'en' }, pageLang ?? language ?? 'en')
+}
+function isCrossLocale(language?: string, pageLang?: string): boolean {
+  return Boolean(language && pageLang && language !== pageLang)
 }
 
 export default function CaseStudiesGrid({
@@ -146,7 +146,7 @@ export default function CaseStudiesGrid({
             {visible.map((c) => (
               <Link
                 key={c._id}
-                href={caseHref(c.slug, c.language, lang)}
+                href={caseHref(c.slug, c.language, lang)} data-cross-locale={isCrossLocale(c.language,  lang) || undefined}
                 className="group flex flex-col rounded-lg border border-gray-200 overflow-hidden hover:shadow-md transition-shadow"
               >
                 <div className="relative w-full h-48 bg-gray-100">

@@ -5,6 +5,7 @@ import {
   legacySeoFieldMinimal,
 } from "../_shared/seoFields";
 import { isUniquePerLanguage } from "@/sanity/lib/slugUtils";
+import { relatedPagesField } from "../_shared/relatedPagesField";
 import {
   richTextBlock,
   keyTakeawaysBlock,
@@ -21,6 +22,7 @@ import {
   dividerBlock,
   videoBlock,
 } from "../objects/blog";
+import { validatePublicSlug } from "@/sanity/lib/slugValidation";
 
 export const post = defineType({
   name: "post",
@@ -44,13 +46,13 @@ export const post = defineType({
       title: "Slug",
       type: "slug",
       group: "content",
-      description: "URL path after /resources/. Use Generate from title or type manually.",
+      description: "Article slug, lowercase with hyphens. The page lives at /blogg/<slug> on .no and /blog/<slug> on .com.",
       options: {
         source: "title",
         maxLength: 96,
         isUnique: isUniquePerLanguage,
       },
-      validation: (rule) => rule.required(),
+      validation: (rule) => rule.required().custom(validatePublicSlug),
     }),
     defineField({
       name: "excerpt",
@@ -153,6 +155,7 @@ export const post = defineType({
         defineArrayMember({ type: videoBlock.name }),
       ],
     }),
+    relatedPagesField({ group: "content" }),
     { ...seoExtendedField, group: "settings" },
     { ...legacySeoFieldMinimal, group: "settings" },
   ],

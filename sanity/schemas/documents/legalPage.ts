@@ -2,6 +2,7 @@ import { defineField, defineType } from "sanity";
 import { DocumentTextIcon } from "@sanity/icons";
 import { languages, defaultLanguage } from "@/sanity/lib/languages";
 import { isUniquePerLanguage } from "@/sanity/lib/slugUtils";
+import { validatePublicSlug } from "@/sanity/lib/slugValidation";
 
 /**
  * Legal pages (privacy policy, terms of service, …) rendered at
@@ -45,7 +46,7 @@ export const legalPage = defineType({
         source: "pageTitle",
         isUnique: isUniquePerLanguage,
       },
-      validation: (Rule) => Rule.required(),
+      validation: (Rule) => Rule.required().custom(validatePublicSlug),
     }),
     defineField({
       name: "lastUpdated",

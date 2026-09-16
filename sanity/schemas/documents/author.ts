@@ -1,5 +1,6 @@
 import { defineArrayMember, defineField, defineType } from "sanity";
 import { isUniquePerLanguage } from "@/sanity/lib/slugUtils";
+import { validatePublicSlug } from "@/sanity/lib/slugValidation";
 
 export const author = defineType({
   name: "author",
@@ -38,6 +39,7 @@ export const author = defineType({
       group: "profile",
       options: { source: "name", maxLength: 96, isUnique: isUniquePerLanguage },
       description: "e.g. magnus-andersen — the author page lives at /team/<slug>",
+      validation: (rule) => rule.custom(validatePublicSlug),
     }),
     defineField({
       name: "bio",

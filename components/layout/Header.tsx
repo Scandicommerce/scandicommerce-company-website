@@ -37,24 +37,24 @@ interface HeaderProps {
 const defaultServicesMenu: MenuSection = {
   label: 'Services',
   items: [
-    { label: 'Shopify Development', href: '/services/shopify_development' },
+    { label: 'Shopify Development', href: '/services/shopify-development' },
     { label: 'Migration to Shopify', href: '/services/migrate' },
-    { label: 'Shopify POS', href: '/services/shopify_pos' },
-    { label: 'All Packages', href: '/services/all_packages' },
+    { label: 'Shopify POS', href: '/services/shopify-pos' },
+    { label: 'All Packages', href: '/services/all-packages' },
   ],
 }
 
 const defaultShopifyMenu: MenuSection = {
   label: 'Shopify',
   items: [
-    { label: 'Shopify', href: '/shopify/shopify_platform' },
-    { label: 'Shopify POS', href: '/shopify/shopify_POS' },
-    { label: 'Shopify Migration', href: '/shopify/shopify_migration' },
-    { label: 'Shopify TCO calculator', href: '/shopify/shopify_TCO_calculator' },
-    { label: 'Shopify x PIM', href: '/shopify/shopify_x_PIM' },
-    { label: 'Shopify X AI', href: '/shopify/shopify_x_AI' },
-    { label: 'Why Shopify?', href: '/shopify/why_shopify' },
-    { label: 'Vipps Hurtigkasse', href: '/shopify/vipps_hurtigkasse' },
+    { label: 'Shopify', href: '/shopify/shopify-platform' },
+    { label: 'Shopify POS', href: '/shopify/shopify-pos' },
+    { label: 'Shopify Migration', href: '/services/migrate' },
+    { label: 'Shopify TCO calculator', href: '/shopify-tco-calculator' },
+    { label: 'Shopify x PIM', href: '/shopify-pim' },
+    { label: 'Shopify X AI', href: '/shopify/shopify-x-ai' },
+    { label: 'Why Shopify?', href: '/why-shopify' },
+    { label: 'Vipps Hurtigkasse', href: '/shopify/vipps-hurtigkasse' },
   ],
 }
 
@@ -67,7 +67,7 @@ const defaultMainNavLinks: MenuItem[] = [
 
 const defaultCtaButton = {
   label: 'GET STARTED',
-  href: '/get-started',
+  href: '/services/all-packages',
 }
 
 const LOCALE_IDS_SET = new Set(['en', 'no', 'sv', 'da', 'de'])
