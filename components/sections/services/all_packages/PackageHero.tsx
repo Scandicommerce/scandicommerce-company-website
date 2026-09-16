@@ -92,8 +92,9 @@ export default function PackageHero({ pkg, shopifyProduct, lang = 'en' }: Packag
       <div className="absolute top-[35%] left-[25%] lg:hidden w-24 h-24 sm:w-32 sm:h-32 rounded-full bg-[#1DEFFA33]"></div>
       <div className="absolute bottom-[44%] right-[32%] lg:hidden w-[40px] h-[40px] sm:w-[50px] sm:h-[50px] rounded-full bg-[#1DEFFA33]"></div>
 
-      <div className="max-w-[100%] xs:max-w-[90%] sm:container mx-auto page-padding-x relative z-10">
-        <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-8 lg:gap-16">
+      {/* Same container as the tabs below so hero and content share one left edge on every screen width */}
+      <div className="section_container mx-auto page-padding-x relative z-10">
+        <div className="max-w-6xl mx-auto flex flex-col lg:flex-row justify-between items-start lg:items-center gap-8 lg:gap-16">
           {/* Left Section - Package Details */}
           <div className="flex flex-col w-full lg:w-1/2 py-4">
             <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-black lg:text-gray-900 mb-3">
