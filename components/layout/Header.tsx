@@ -193,23 +193,22 @@ export default function Header({ settings }: HeaderProps) {
                   </svg>
                 </button>
 
-                {isServicesOpen && (
+                {/* Always in the DOM (CSS-hidden when closed) so the links are crawlable */}
                   <div
-                    className={dropdownPanelClasses}
+                    className={`${dropdownPanelClasses} ${isServicesOpen ? '' : 'hidden'}`}
                     onMouseLeave={() => setIsServicesOpen(false)}
                   >
-                    {servicesMenu.items?.map((item, index) => (
-                      <LocalizedLink
-                        key={index}
-                        href={getNavHref(item)}
-                        onClick={() => setIsServicesOpen(false)}
-                        className={dropdownItemClasses}
-                      >
-                        {item.label}
-                      </LocalizedLink>
-                    ))}
+                  {servicesMenu.items?.map((item, index) => (
+                    <LocalizedLink
+                      key={index}
+                      href={getNavHref(item)}
+                      onClick={() => setIsServicesOpen(false)}
+                      className={dropdownItemClasses}
+                    >
+                      {item.label}
+                    </LocalizedLink>
+                  ))}
                   </div>
-                )}
               </div>
 
               {/* Shopify Menu */}
@@ -236,23 +235,22 @@ export default function Header({ settings }: HeaderProps) {
                   </svg>
                 </button>
 
-                {isShopifyOpen && (
+                {/* Always in the DOM (CSS-hidden when closed) so the links are crawlable */}
                   <div
-                    className={dropdownPanelClasses}
+                    className={`${dropdownPanelClasses} ${isShopifyOpen ? '' : 'hidden'}`}
                     onMouseLeave={() => setIsShopifyOpen(false)}
                   >
-                    {shopifyMenu.items?.map((item, index) => (
-                      <LocalizedLink
-                        key={index}
-                        href={getNavHref(item)}
-                        onClick={() => setIsShopifyOpen(false)}
-                        className={dropdownItemClasses}
-                      >
-                        {item.label}
-                      </LocalizedLink>
-                    ))}
+                  {shopifyMenu.items?.map((item, index) => (
+                    <LocalizedLink
+                      key={index}
+                      href={getNavHref(item)}
+                      onClick={() => setIsShopifyOpen(false)}
+                      className={dropdownItemClasses}
+                    >
+                      {item.label}
+                    </LocalizedLink>
+                  ))}
                   </div>
-                )}
               </div>
 
               {/* Main Nav Links */}

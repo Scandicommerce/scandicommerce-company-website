@@ -3,6 +3,7 @@ import { footerSettingsQuery } from '@/sanity/lib/queries'
 import { getQueryParams } from '@/sanity/lib/queryHelpers'
 import { getServerLanguage } from '@/lib/language'
 import Footer from './Footer'
+import RelatedPages from '@/components/RelatedPages'
 
 export interface FooterSettingsData {
   _id?: string
@@ -46,5 +47,10 @@ export default async function FooterWrapper() {
     { next: { revalidate: 60 } } // Cache for 60 seconds
   )
 
-  return <Footer settings={settings} />
+  return (
+    <>
+      <RelatedPages />
+      <Footer settings={settings} />
+    </>
+  )
 }
