@@ -193,6 +193,18 @@ export function workIndexHref(language: string): string {
   return publicPath(language, WORK_INDEX_SLUG[language as Language] ?? 'work')
 }
 
+/**
+ * CMS-entered links are often typed without a leading slash ("book-call",
+ * "tjenester/alle-pakker"), which the browser resolves relative to the current
+ * page and 404s. Normalise anything that is not absolute, an anchor or a scheme.
+ */
+export function ensureInternalHref(href: string | null | undefined): string {
+  const h = (href ?? '').trim()
+  if (!h) return '#'
+  if (/^(https?:|mailto:|tel:|#|\/)/i.test(h)) return h
+  return `/${h}`
+}
+
 export function contactHref(language: string): string {
   return publicPath(language, CONTACT_SLUG[language as Language] ?? 'contact')
 }

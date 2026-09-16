@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { useLanguage } from '@/contexts/LanguageContext'
-import { contactHref } from '@/lib/routes'
+import { contactHref, ensureInternalHref } from '@/lib/routes'
 
 interface CTAData {
   title?: string
@@ -20,7 +20,7 @@ export default function CTA({ cta }: CTAProps) {
   const description = cta?.description || "Let's discuss your project and how we can help you grow"
   const buttonText = cta?.buttonText || 'Book Discovery Call'
   const { currentLanguage } = useLanguage()
-  const buttonLink = cta?.buttonLink || contactHref(currentLanguage)
+  const buttonLink = cta?.buttonLink ? ensureInternalHref(cta.buttonLink) : contactHref(currentLanguage)
 
   return (
     <section className="bg-[#03C1CA] py-16 lg:py-[170px]">
