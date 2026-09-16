@@ -35,8 +35,9 @@ pins previews to one site if wanted. `NEXT_PUBLIC_SITE_URL*` env vars are no lon
    `scripts/seo/sanity-drafts-2026-09-16.json` via the Sanity MCP `publish_documents`.
    Until published, the new URLs still resolve; after publishing, the transitional fallback is unused.
 3. **Vercel → Domains**: make `scandicommerce.no` and `scandicommerce.com` the primary domains and set
-   `www.scandicommerce.no` / `www.scandicommerce.com` to *Redirect to* the apex (308). Today the apex
-   redirects to www, which is D2.
+   `www.scandicommerce.no` / `www.scandicommerce.com` to *Redirect to* the apex with status **308**
+   (Vercel defaults to 307 = temporary; pick permanent). Done for `.no` on 2026-09-16 but with 307, and
+   `www.scandicommerce.com` still serves pages (200) instead of redirecting.
 4. After step 3 is live, set the env var `SEO_ENFORCE_APEX_HOST=true` (production) and redeploy — the
    middleware then also 308s any legacy host that reaches the origin. **Never set it before step 3:**
    the two redirects would loop.
