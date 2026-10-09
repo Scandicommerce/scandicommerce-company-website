@@ -1,7 +1,12 @@
 'use client'
 
 import React, { useState, useMemo } from 'react'
+import Script from 'next/script'
 import { FiClock, FiCheck, FiLoader } from 'react-icons/fi'
+
+const HUBSPOT_PORTAL_ID = process.env.NEXT_PUBLIC_HUBSPOT_CONTACT_PORTAL_ID
+const HUBSPOT_FORM_ID = process.env.NEXT_PUBLIC_HUBSPOT_CONTACT_FORM_ID
+const HUBSPOT_REGION = 'eu1'
 
 interface MeetingTypeData {
   title?: string
@@ -252,165 +257,21 @@ function TimeSlots({ slots, selectedTime, onTimeSelect, loading }: TimeSlotsProp
   )
 }
 
-interface ContactFormProps {
-  submitButtonText?: string
-}
+function ContactForm() {
+  if (!HUBSPOT_PORTAL_ID || !HUBSPOT_FORM_ID) return null
 
-function ContactForm({ submitButtonText }: ContactFormProps) {
-  const [firstName, setFirstName] = useState('')
-  const [lastName, setLastName] = useState('')
-  const [email, setEmail] = useState('')
-  const [company, setCompany] = useState('')
-  const [interest, setInterest] = useState('')
-  const [message, setMessage] = useState('')
-  const [loading, setLoading] = useState(false)
-  const [success, setSuccess] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault()
-    setError(null)
-    setSuccess(false)
-
-    if (!email.trim() || !message.trim()) {
-      setError('Please enter your email and message.')
-      return
-    }
-
-    setLoading(true)
-    try {
-      const res = await fetch('/api/contact', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          firstName: firstName.trim() || undefined,
-          lastName: lastName.trim() || undefined,
-          email: email.trim(),
-          company: company.trim() || undefined,
-          interest: interest || undefined,
-          message: message.trim()
-        })
-      })
-      const data = await res.json()
-
-      if (!res.ok) {
-        setError(data.error || 'Failed to send message.')
-        return
-      }
-
-      setSuccess(true)
-      setFirstName('')
-      setLastName('')
-      setEmail('')
-      setCompany('')
-      setInterest('')
-      setMessage('')
-      setTimeout(() => setSuccess(false), 5000)
-    } catch {
-      setError('Failed to send message. Please try again.')
-    } finally {
-      setLoading(false)
-    }
-  }
+  const scriptUrl = `https://js-${HUBSPOT_REGION}.hsforms.net/forms/embed/${HUBSPOT_PORTAL_ID}.js`
 
   return (
-    <form className="bg-white" onSubmit={handleSubmit}>
-      <div className="px-9 py-6 flex flex-col justify-between gap-9">
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">First Name</label>
-            <input
-              type="text"
-              placeholder="John"
-              value={firstName}
-              onChange={(e) => setFirstName(e.target.value)}
-              className="w-full px-3 py-2 bg-[#F5F5F5] text-sm text-black outline-none"
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Last Name</label>
-            <input
-              type="text"
-              placeholder="Doe"
-              value={lastName}
-              onChange={(e) => setLastName(e.target.value)}
-              className="w-full px-3 py-2 bg-[#F5F5F5] text-sm text-black outline-none"
-            />
-          </div>
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Email *</label>
-          <input
-            type="email"
-            placeholder="john@company.com"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            className="w-full px-3 py-2 bg-[#F5F5F5] text-sm text-black outline-none"
-          />
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Company</label>
-          <input
-            type="text"
-            placeholder="Your Company AS"
-            value={company}
-            onChange={(e) => setCompany(e.target.value)}
-            className="w-full px-3 py-2 bg-[#F5F5F5] text-sm text-black outline-none"
-          />
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">What are you interested in?</label>
-          <select
-            value={interest}
-            onChange={(e) => setInterest(e.target.value)}
-            className="w-full px-3 py-2 bg-[#F5F5F5] text-sm text-gray-500 outline-none"
-          >
-            <option value="">Select a service</option>
-            <option value="shopify-development">Shopify Development</option>
-            <option value="migration">Migration Services</option>
-            <option value="shopify-pos">Shopify POS</option>
-            <option value="consulting">Consulting</option>
-            <option value="other">Other</option>
-          </select>
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Message *</label>
-          <textarea
-            placeholder="Tell us about your project..."
-            rows={4}
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            required
-            className="w-full px-3 py-2 bg-[#F5F5F5] text-sm text-black outline-none resize-none"
-          />
-        </div>
-        {error && (
-          <div className="p-3 bg-red-50 border border-red-200 rounded">
-            <p className="text-sm text-red-600">{error}</p>
-          </div>
-        )}
-        {success && (
-          <div className="p-3 bg-green-50 border border-green-200 rounded">
-            <p className="text-sm text-green-600">Message sent! We&apos;ll get back to you soon.</p>
-          </div>
-        )}
-        <button
-          type="submit"
-          disabled={loading}
-          className={`w-full bg-[#03C1CA] text-white py-3 font-semibold hover:bg-[#02a8b0] transition-colors ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
-        >
-          {loading ? (
-            <span className="flex items-center justify-center">
-              <FiLoader className="animate-spin mr-2" size={16} />
-              Sending...
-            </span>
-          ) : (
-            submitButtonText || 'Send Message'
-          )}
-        </button>
-      </div>
-    </form>
+    <div className="bg-white px-0 sm:px-9 py-6">
+      <Script src={scriptUrl} strategy="afterInteractive" />
+      <div
+        className="hs-form-frame"
+        data-region={HUBSPOT_REGION}
+        data-form-id={HUBSPOT_FORM_ID}
+        data-portal-id={HUBSPOT_PORTAL_ID}
+      />
+    </div>
   )
 }
 
@@ -447,7 +308,6 @@ export default function BookingSection({ bookingSection, messageSection, benefit
   const messageLabel = messageSection?.label || 'Alternative'
   const messageTitle = messageSection?.title || 'Send Us a Message'
   const messageDescription = messageSection?.description || "Prefer to write? Fill out the form and we'll get back to you within 2 hours."
-  const submitButtonText = messageSection?.submitButtonText || 'Send Message'
 
   const benefitsList = benefits && benefits.length > 0 ? benefits : defaultBenefits
 
@@ -708,7 +568,7 @@ export default function BookingSection({ bookingSection, messageSection, benefit
                 <p className="text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[16px] xl:text-[18px] text-gray-500 mb-6">
                   {messageDescription}
                 </p>
-                <ContactForm submitButtonText={submitButtonText} />
+                <ContactForm />
               </div>
             </div>
 
