@@ -31,6 +31,10 @@ export interface GrowthPageContent {
   intro?: { title: string; paragraphs: string[] }
   /** "Hva forskningen sier": evidence points, each optionally with a chart and its source. */
   insights?: { title: string; text: string; chart?: GrowthChart; source?: { label: string; href: string } }[]
+  /** "Slik flyter dataene": source → processing → destination diagrams. */
+  flows?: { title: string; text?: string; stages: { title: string; items: string[] }[] }[]
+  /** "Plattformer og integrasjoner": grouped external links to tools we work with. */
+  platforms?: { title: string; items: { label: string; href: string; text?: string }[] }[]
   /** "Kilder og videre lesning": external links shown at the end of the page. */
   sources?: { label: string; publisher: string; href: string }[]
   /** "Når du trenger dette": buying situations the reader recognises. */
@@ -54,6 +58,240 @@ export interface GrowthPageContent {
 }
 
 export const growthContent: Record<string, GrowthPageContent> = {
+  'sporing-og-analyse': {
+    intro: {
+      title: 'Hvorfor server-side sporing?',
+      paragraphs: [
+        'Sporing som bare kjører i nettleseren mister data. Annonseblokkere stopper skript, Safari begrenser informasjonskapsler satt med JavaScript til sju dager, og samtykke må håndteres riktig. Resultatet er at Meta, Google og analyseverktøyene ser færre kjøp enn Shopify – og at budstrategiene lærer av et ufullstendig bilde.',
+        'Med server-side sporing sendes hendelsene fra en server i tillegg til nettleseren, via løsninger som Metas Conversions API og Googles forbedrede konverteringer. Vi bruker Tracklution som standardpartner, og setter opp andre løsninger – som server-side Google Tag Manager – når det passer bedre. Samtykke er fortsatt et krav: server-side sporing endrer hvordan data sendes, ikke hvem som har sagt ja.',
+      ],
+    },
+    flows: [
+      {
+        title: 'Server-side sporing med Tracklution',
+        text: 'Tracklution kobles til Shopify via kundehendelser og en webhook for ordre, på et eget førstepartsdomene. Hendelsene sendes videre til annonseplattformene og analyse – med samtykke fra Shopifys samtykkebanner og Consent Mode v2.',
+        stages: [
+          { title: 'Shopify', items: ['Kundehendelser (sidevisning, handlekurv, kasse)', 'Webhook ved ny ordre', 'Samtykke fra Shopifys banner'] },
+          { title: 'Tracklution', items: ['Førsteparts domene (DNS)', 'Server-side behandling', 'Datasenter i Stockholm (AWS)'] },
+          { title: 'Plattformer', items: ['Meta (Conversions API)', 'Google Ads (forbedrede konverteringer)', 'Google Analytics 4', 'TikTok, Pinterest, Microsoft Ads, Klaviyo m.fl.'] },
+        ],
+      },
+      {
+        title: 'Analyse og dashboards i Google Cloud',
+        text: 'For de som vil eie dataene sine og se alt samlet, henter vi data fra Shopify, GA4 og annonseplattformene inn i BigQuery og bygger dashboards og rapporter oppå.',
+        stages: [
+          { title: 'Kilder', items: ['Shopify', 'Google Analytics 4', 'Google Ads og Merchant Center', 'Meta, Klaviyo og andre'] },
+          { title: 'Google Cloud', items: ['BigQuery-eksport fra GA4', 'BigQuery Data Transfer Service', 'Koblinger for øvrige kilder'] },
+          { title: 'Innsikt', items: ['Egne dashboards', 'Rapporter på lønnsomhet og kanal', 'Integrasjoner mot andre systemer'] },
+        ],
+      },
+    ],
+    situations: [
+      {
+        title: 'Tallene i Shopify, GA4 og annonsene spriker',
+        text: 'Ingen kilder er enige om hvor mange ordre markedsføringen ga, og du vet ikke hvilken du skal stole på.',
+      },
+      {
+        title: 'Meta og Google ser for få kjøp',
+        text: 'Lav hendelsesmatchkvalitet i Meta og manglende konverteringer i Google Ads gjør at kampanjene optimaliserer på for lite data.',
+      },
+      {
+        title: 'Samtykket er ikke koblet riktig',
+        text: 'Banneret er på plass, men Consent Mode og pikslene følger ikke valgene – enten mister du data, eller du sporer uten gyldig samtykke.',
+      },
+      {
+        title: 'Pikslene er lagt inn i flere lag',
+        text: 'Apper, temaet og Google Tag Manager sender de samme hendelsene, og kjøp telles dobbelt.',
+      },
+      {
+        title: 'Dataene ligger i ti forskjellige verktøy',
+        text: 'Du bruker timer på å lage rapporter for hånd, og ingen har en samlet oversikt over kanaler og lønnsomhet.',
+      },
+      {
+        title: 'Du vil eie historikken din',
+        text: 'Du trenger rådata og lang historikk til egne analyser, ikke bare det standardrapportene viser.',
+      },
+    ],
+    deliverables: {
+      strategi: [
+        'Sporingsrevisjon: piksler, tagger, dobbelttelling og samtykke',
+        'Måleplan: hvilke hendelser og måltall som skal spores, og hvorfor',
+        'Valg av løsning: Tracklution som standard, andre løsninger ved behov',
+        'Valg av analyseplattform og datamodell',
+      ],
+      gjennomforing: [
+        'Tracklution i Shopify: kundehendelser, ordre-webhook og førsteparts domene',
+        'Metas Conversions API og Googles forbedrede konverteringer',
+        'Consent Mode v2 koblet til Shopifys samtykke',
+        'GA4 med e-handelshendelser, og eksport til BigQuery',
+        'Data fra Google Ads, Merchant Center og andre kilder inn i BigQuery',
+        'Egne dashboards og integrasjoner mellom systemene dine',
+        'På forespørsel: server-side Google Tag Manager (Stape eller Google Cloud Run) eller Google tag gateway',
+      ],
+      rapportering: [
+        'Dashboards med omsetning, kanaler og lønnsomhet',
+        'Månedlig kontroll av datakvalitet: avvik mot Shopify og hendelsesmatchkvalitet',
+        'Varsling og retting når sporingen brytes, for eksempel etter en temaendring',
+      ],
+      ikkeInkludert: [
+        'Lisens til Tracklution og kostnader i Google Cloud – det betaler du direkte',
+        'Juridisk rådgivning om personvern; ansvaret for gyldig samtykke ligger hos deg',
+        'Utvikling av egne apper i Shopify',
+      ],
+    },
+    packages: [
+      {
+        name: 'Sporingsrevisjon',
+        kind: 'Engangsleveranse',
+        summary: 'Vi finner ut hva som spores, hva som mangler og hva som telles dobbelt.',
+        includes: [
+          'Gjennomgang av piksler, tagger og apper',
+          'Samtykke og Consent Mode v2',
+          'Avvik mellom Shopify, GA4 og annonseplattformene',
+          'Prioritert tiltaksliste',
+        ],
+      },
+      {
+        name: 'Server-side sporing',
+        kind: 'Engangsleveranse',
+        summary: 'Komplett oppsett med Tracklution og kobling til annonseplattformene dine.',
+        includes: [
+          'Tracklution i Shopify med førsteparts domene',
+          'Meta, Google Ads, GA4 og øvrige plattformer',
+          'Samtykke koblet til Shopifys banner',
+          'Test og kontroll mot ordre i Shopify',
+        ],
+      },
+      {
+        name: 'Analyse og dashboards',
+        kind: 'Månedlig',
+        summary: 'Data samlet i BigQuery, dashboards som oppdateres selv, og løpende kontroll.',
+        includes: [
+          'BigQuery-oppsett og datakilder',
+          'Egne dashboards og rapporter',
+          'Månedlig kontroll av datakvalitet',
+          'Ingen bindingstid – 30 dagers oppsigelse',
+        ],
+      },
+    ],
+    process: [
+      {
+        period: '0–30 dager',
+        title: 'Revisjon og plan',
+        text: 'Vi kartlegger dagens sporing og samtykke, finner avvikene og lager en måleplan. Vi trenger tilgang til Shopify, GA4, annonsekontoene og domenets DNS.',
+      },
+      {
+        period: '30–60 dager',
+        title: 'Server-side på plass',
+        text: 'Tracklution settes opp, plattformene kobles på, samtykket testes, og tallene kontrolleres mot ordrene i Shopify.',
+      },
+      {
+        period: '60–90 dager',
+        title: 'Analyse og dashboards',
+        text: 'Data samles i BigQuery, og dashboardene bygges rundt måltallene dere faktisk styrer etter.',
+      },
+    ],
+    kpis: [
+      { name: 'Andel sporede ordre', text: 'Hvor mange av ordrene i Shopify som også registreres i annonseplattformene og GA4.' },
+      { name: 'Hendelsesmatchkvalitet', text: 'Metas mål på hvor godt hendelsene kan kobles til riktige personer.' },
+      { name: 'Avvik mot Shopify', text: 'Forskjellen mellom ordre og omsetning i Shopify og i plattformene, over tid.' },
+      { name: 'Samtykkeandel', text: 'Hvor mange som godtar sporing, og hvordan endringer i banneret påvirker det.' },
+      { name: 'Ferske data', text: 'Om dashboardene er oppdatert og kildene leverer som de skal.' },
+    ],
+    faq: [
+      {
+        question: 'Hva er server-side sporing?',
+        answer: 'At hendelser som kjøp sendes fra en server direkte til for eksempel Meta og Google, i tillegg til fra nettleseren. Det gjør sporingen mindre sårbar for annonseblokkere og nettleserbegrensninger, og gir plattformene bedre data å optimalisere på.',
+      },
+      {
+        question: 'Trenger vi fortsatt samtykke?',
+        answer: 'Ja. Etter ekomloven § 3-15 krever lagring og lesing av informasjon på brukerens enhet samtykke, med unntak for det som er strengt nødvendig. Server-side sporing endrer ikke det. Vi kobler sporingen til samtykkebanneret og Consent Mode v2, slik at valgene til den besøkende følges.',
+      },
+      {
+        question: 'Hvorfor Tracklution?',
+        answer: 'Tracklution er en ferdig server-side løsning med koblinger til de vanligste annonse- og analyseplattformene, oppsett i Shopify via kundehendelser og datasenter i Stockholm. Det gir sikker sporing uten at du må drifte egne servere. Derfor er det vår standard.',
+      },
+      {
+        question: 'Kan dere bruke andre løsninger?',
+        answer: 'Ja. Vi setter også opp server-side Google Tag Manager – på Stape eller i Google Cloud Run – og Google tag gateway, og vi jobber med Shopifys egne integrasjoner mot Meta og Google. Valget avhenger av behov, budsjett og hvem som skal drifte det.',
+      },
+      {
+        question: 'Hvilke analyseplattformer kan dere?',
+        answer: 'Google Analytics 4 og Googles verktøy i Google Cloud, som BigQuery, og de mest brukte alternativene som Piwik PRO, Matomo, Plausible, Amplitude og Mixpanel, i tillegg til Shopify Analytics og verktøy for adferd som Microsoft Clarity og Hotjar.',
+      },
+      {
+        question: 'Hva koster BigQuery?',
+        answer: 'Google tar ikke betalt for selve eksporten fra GA4, men lagring og spørringer i BigQuery koster etter bruk. For de fleste nettbutikker er det håndterbart, men vi estimerer kostnaden før oppstart, slik at du vet hva du går til.',
+      },
+    ],
+    platforms: [
+      {
+        title: 'Server-side sporing',
+        items: [
+          { label: 'Tracklution', href: 'https://www.tracklution.com/', text: 'Vår standardpartner' },
+          { label: 'Tracklution for Shopify', href: 'https://www.tracklution.com/server-side-tracking/shopify/' },
+          { label: 'Alle Tracklution-integrasjoner', href: 'https://www.tracklution.com/server-side-tracking/integrations/' },
+          { label: 'Server-side Google Tag Manager', href: 'https://developers.google.com/tag-platform/tag-manager/server-side', text: 'På forespørsel' },
+          { label: 'Stape', href: 'https://stape.io/', text: 'Hosting av server-side GTM' },
+          { label: 'Google tag gateway', href: 'https://support.google.com/google-ads/answer/16214371', text: 'Googles tagger via eget domene' },
+        ],
+      },
+      {
+        title: 'Annonseplattformer via Tracklution',
+        items: [
+          { label: 'Meta', href: 'https://www.tracklution.com/server-side-tracking/meta/', text: 'Conversions API' },
+          { label: 'Google Ads', href: 'https://www.tracklution.com/server-side-tracking/google-ads/', text: 'Forbedrede konverteringer' },
+          { label: 'Google Analytics 4', href: 'https://www.tracklution.com/server-side-tracking/ga4/' },
+          { label: 'TikTok', href: 'https://www.tracklution.com/server-side-tracking/tiktok/' },
+          { label: 'Klaviyo', href: 'https://www.tracklution.com/server-side-tracking/klaviyo/' },
+        ],
+      },
+      {
+        title: 'Analyse',
+        items: [
+          { label: 'Google Analytics 4', href: 'https://marketingplatform.google.com/about/analytics/' },
+          { label: 'Shopify Analytics', href: 'https://www.shopify.com/no/analytics' },
+          { label: 'Piwik PRO', href: 'https://piwik.pro/' },
+          { label: 'Matomo', href: 'https://matomo.org/' },
+          { label: 'Plausible', href: 'https://plausible.io/' },
+          { label: 'Amplitude', href: 'https://amplitude.com/' },
+          { label: 'Mixpanel', href: 'https://mixpanel.com/home/' },
+          { label: 'Microsoft Clarity', href: 'https://clarity.microsoft.com/' },
+          { label: 'Hotjar', href: 'https://contentsquare.com/hotjar/' },
+        ],
+      },
+      {
+        title: 'Data, BigQuery og dashboards',
+        items: [
+          { label: 'GA4-eksport til BigQuery', href: 'https://support.google.com/analytics/answer/9358801' },
+          { label: 'BigQuery Data Transfer Service', href: 'https://docs.cloud.google.com/bigquery/docs/dts-introduction' },
+          { label: 'Google Ads til BigQuery', href: 'https://docs.cloud.google.com/bigquery/docs/google-ads-transfer' },
+          { label: 'Merchant Center til BigQuery', href: 'https://docs.cloud.google.com/bigquery/docs/merchant-center-transfer' },
+          { label: 'Looker', href: 'https://cloud.google.com/looker', text: 'Dashboards og BI' },
+          { label: 'Fivetran', href: 'https://www.fivetran.com/connectors/shopify', text: 'Shopify-kobling' },
+          { label: 'Airbyte', href: 'https://airbyte.com/connectors/shopify', text: 'Shopify-kobling' },
+          { label: 'Supermetrics', href: 'https://supermetrics.com/', text: 'Markedsdata' },
+        ],
+      },
+    ],
+    sources: [
+      { label: 'Tracking Prevention in WebKit', publisher: 'WebKit (Safari)', href: 'https://webkit.org/tracking-prevention/' },
+      { label: 'Conversions API', publisher: 'Meta for Developers', href: 'https://developers.facebook.com/documentation/ads-commerce/conversions-api' },
+      { label: 'Om hendelsesmatchkvalitet', publisher: 'Meta', href: 'https://www.facebook.com/business/help/765081237991954' },
+      { label: 'Om forbedrede konverteringer', publisher: 'Google Ads-hjelp', href: 'https://support.google.com/google-ads/answer/9888656' },
+      { label: 'Consent mode', publisher: 'Google for Developers', href: 'https://developers.google.com/tag-platform/security/guides/consent' },
+      { label: 'Pixels and customer events', publisher: 'Shopify Help', href: 'https://help.shopify.com/en/manual/promoting-marketing/pixels/customer-events' },
+      { label: 'Ekomloven § 3-15', publisher: 'Lovdata', href: 'https://lovdata.no/dokument/NL/lov/2024-12-13-76' },
+      { label: 'Samtykke til informasjonskapsler og sporingsteknologier', publisher: 'Datatilsynet', href: 'https://www.datatilsynet.no/personvern-pa-ulike-omrader/internett-og-apper/bruk-av-informasjonskapsler-og-andre-sporingsteknologier/' },
+      { label: 'Råd for analyse og sporing på nettsted', publisher: 'Datatilsynet', href: 'https://www.datatilsynet.no/personvern-pa-ulike-omrader/internett-og-apper/rad-for-analyse-og-sporing-pa-nettsted/' },
+    ],
+    related: [
+      { slug: 'sem/google-ads', why: 'Budstrategiene i Google Ads lærer av konverteringene sporingen sender.' },
+      { slug: 'some/meta-ads', why: 'Conversions API og god hendelsesmatch er grunnlaget for Meta-kampanjene.' },
+      { slug: 'cro', why: 'Riktig data viser hvor kundene faller fra – og hva som faktisk virker.' },
+    ],
+  },
+
   'merkevare-og-strategi': {
     intro: {
       title: 'Hvordan merkevarer vokser – også på nett',

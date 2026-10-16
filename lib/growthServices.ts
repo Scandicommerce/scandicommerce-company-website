@@ -62,7 +62,7 @@ export const growthServices: GrowthService[] = [
     group: 'strategi',
     label: 'Sporing og analyse',
     title: 'Sporing og analyse for Shopify-butikker',
-    lead: 'GA4, Consent Mode og server-side sporing satt opp riktig, så du vet hva markedsføringen faktisk gir.',
+    lead: 'Server-side sporing med Tracklution, analyse i GA4 og BigQuery, og dashboards som viser hva markedsføringen faktisk gir.',
   },
   {
     slug: 'sem',

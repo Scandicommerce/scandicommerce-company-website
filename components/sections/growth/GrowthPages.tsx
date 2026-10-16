@@ -296,11 +296,13 @@ export function GrowthServicePage({ service }: { service: GrowthService }) {
       )}
       {content?.intro && <IntroSection intro={content.intro} />}
       {content?.insights?.length ? <InsightsSection insights={content.insights} /> : null}
+      {content?.flows?.length ? <FlowsSection flows={content.flows} /> : null}
       {SERVICE_TEMPLATE.map((block) => (
         <React.Fragment key={block.key}>
           {renderTemplateBlock(block, content) ?? <PlaceholderSection {...block} />}
         </React.Fragment>
       ))}
+      {content?.platforms?.length ? <PlatformsSection platforms={content.platforms} /> : null}
       {content?.sources?.length ? <SourcesSection sources={content.sources} /> : null}
       {content?.related?.length ? <RelatedServicesSection related={content.related} /> : null}
       <ClosingCta />
@@ -337,6 +339,85 @@ function InsightsSection({ insights }: { insights: NonNullable<GrowthPageContent
               </div>
             )}
           </figure>
+        ))}
+      </div>
+    </SectionShell>
+  )
+}
+
+function FlowsSection({ flows }: { flows: NonNullable<GrowthPageContent['flows']> }) {
+  return (
+    <SectionShell eyebrow="Oppsett" title="Slik flyter dataene">
+      <div className="space-y-8 lg:space-y-10">
+        {flows.map((flow) => (
+          <figure key={flow.title} className="m-0">
+            <h3 className="text-lg lg:text-xl font-semibold text-sc-ink-900 m-0">{flow.title}</h3>
+            {flow.text && <p className="text-sm lg:text-base text-sc-ink-600 leading-relaxed mt-2 m-0 max-w-[860px]">{flow.text}</p>}
+            <div className="mt-4 flex flex-col lg:flex-row lg:items-stretch gap-2 lg:gap-0">
+              {flow.stages.map((stage, index) => (
+                <React.Fragment key={stage.title}>
+                  {index > 0 && (
+                    <div className="flex items-center justify-center lg:px-2 text-sc-ink-300" aria-hidden="true">
+                      <ArrowRight className="w-5 h-5 rotate-90 lg:rotate-0" strokeWidth={ICON_STROKE} />
+                    </div>
+                  )}
+                  <div
+                    className={`flex-1 rounded-[10px] border p-4 lg:p-5 ${
+                      index === 1 ? 'border-sc-cyan-200 bg-sc-cyan-50' : 'border-sc-ink-100 bg-white'
+                    }`}
+                  >
+                    <div className="text-xs lg:text-[13px] font-semibold uppercase tracking-[0.08em] text-sc-cyan-700 mb-2">
+                      {stage.title}
+                    </div>
+                    <ul className="list-none m-0 p-0 space-y-1 text-sm text-sc-ink-700">
+                      {stage.items.map((item) => (
+                        <li key={item}>{item}</li>
+                      ))}
+                    </ul>
+                  </div>
+                </React.Fragment>
+              ))}
+            </div>
+          </figure>
+        ))}
+      </div>
+    </SectionShell>
+  )
+}
+
+function PlatformsSection({ platforms }: { platforms: NonNullable<GrowthPageContent['platforms']> }) {
+  return (
+    <SectionShell eyebrow="Verktøy" title="Plattformer og integrasjoner">
+      <div className="space-y-7 lg:space-y-9">
+        {platforms.map((group) => (
+          <div key={group.title}>
+            <h3 className="text-xs lg:text-[13px] font-semibold uppercase tracking-[0.08em] text-sc-cyan-700 m-0 mb-3">
+              {group.title}
+            </h3>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-2.5 lg:gap-3">
+              {group.items.map((item) => (
+                <a
+                  key={item.href}
+                  href={item.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group flex items-start justify-between gap-3 rounded-[10px] border border-sc-ink-100 p-4 hover:border-sc-cyan-300 transition-colors"
+                >
+                  <span>
+                    <span className="block text-sm font-semibold text-sc-ink-900 group-hover:text-sc-cyan-700 transition-colors">
+                      {item.label}
+                    </span>
+                    {item.text && <span className="block text-[13px] text-sc-ink-500 mt-0.5">{item.text}</span>}
+                  </span>
+                  <ArrowUpRight
+                    className="w-4 h-4 flex-shrink-0 mt-0.5 text-sc-ink-400 group-hover:text-sc-cyan-600 transition-colors"
+                    strokeWidth={ICON_STROKE}
+                    aria-hidden="true"
+                  />
+                </a>
+              ))}
+            </div>
+          </div>
         ))}
       </div>
     </SectionShell>

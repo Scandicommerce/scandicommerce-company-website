@@ -38,7 +38,7 @@ Samleside: `/growth-marketing`. Gjelder bare norsk side (.no). Andre språk gir 
 |---|---|
 | Samleside og 11 tjenestesider | Dummyer med mal og plassholdere, `noindex`, ikke i XML-sitemap |
 | Menyforslag | Ligger i `lib/growthServices.ts` (`growthNavItem()`). **Ikke koblet inn** i headeren ennå (se §5) |
-| Ekte innhold | **Merkevare og strategi**, **SEM**, **Google Ads** og **Affiliate, CSS og feed** har tekstutkast til gjennomlesning (alle seksjoner unntatt bevis; priser via pakkeoversikten). Resten er dummyer |
+| Ekte innhold | **Sporing og analyse**, **Merkevare og strategi**, **SEM**, **Google Ads** og **Affiliate, CSS og feed** har tekstutkast til gjennomlesning (alle seksjoner unntatt bevis; priser via pakkeoversikten). Resten er dummyer |
 | Innhold i Sanity | Ikke startet. Innholdet ligger i kode til tekstene er klare |
 
 ## 3. Struktur
@@ -149,6 +149,7 @@ npm run dev                 # http://localhost:3000/no/growth-marketing
 - [ ] Leveranser: Stemmer listene med det vi faktisk gjør (Bing som tillegg, CSS-vurdering, AI Max-tester, Demand Gen)?
 - [ ] Affiliate og feed: Stemmer leveransene (feed-revisjon, distribusjon til prissammenligning, oppfølging av affiliate-partnere)? Nevner vi riktige eksempler (Prisjakt; Adtraction og Awin)? Hvilke feed-verktøy bruker vi?
 - [ ] Bevis: Kundecase med tall fra annonsering, og navngitt spesialist.
+- [ ] Sporing og analyse: Stemmer leveransene og de tre pakkene (sporingsrevisjon, server-side sporing, analyse og dashboards månedlig)? Lover vi «varsling og retting når sporingen brytes»? Hvilke dashboardverktøy bruker vi i praksis (Looker, Looker Studio, annet)?
 - [ ] Merkevare og strategi: Stemmer leveransene og pakkene (strategi som engangsleveranse, strategisk partner månedlig)? «Logodesign og full visuell identitet» står som ikke inkludert. Stemmer det?
 
 **Øvrige:**
@@ -178,6 +179,17 @@ Tekstene skal bare inneholde påstander vi kan stå for. Tidsavhengige fakta sje
 - Share of search (Binet, IPA 2020): Andelen merkenavnsøk er en tidlig indikator på markedsandel, og den kan måles i Google Trends.
 - Ahrefs (75 000 merkevarer, publisert 26. mai 2025, oppdatert 27. april 2026): Korrelasjon med synlighet i AI-oversikter. Omtale av merkevaren 0,664, merkenavn i lenketekst 0,527, søk på merkenavnet 0,392, domenestyrke 0,326, lenkende domener 0,295 og trafikk fra merkenavnsøk 0,274. Tallene er sjekket mot artikkelen. Det er korrelasjon, ikke årsak, og det står i teksten.
 - Romaniuk, Building Distinctive Brand Assets (2018): Elementene må være kjente og unike. Forlagets side svarer 403, så den lenkes ikke.
+
+**Sporing og analyse** (research 2026-10-16, alle lenker sjekket):
+- Tracklution (Tracklution Oy, Finland): Server-side sporing som tjeneste. I Shopify settes det opp med egen piksel under Kundehendelser, en webhook for ny ordre og en CNAME for førstepartsdomene. Kilde: Tracklution docs. Ingen app i Shopify App Store er bekreftet, så vi skriver ikke «app».
+- Tracklutions integrasjoner: Hentet fra integrasjonssiden deres. Vi nevner bare plattformer som står der.
+- Data: AWS, «primary data centers in Northern Europe (Stockholm)». Kilde: Tracklutions side om personvern og sikkerhet. Vi skriver **ikke** «bare i EU».
+- Samtykke: Tracklution leser Shopifys samtykkebanner og støtter Consent Mode v2 (oppgitt av leverandøren). Ekomloven § 3-15 krever samtykke uansett. Det står i teksten.
+- Safari ITP: Informasjonskapsler satt med JavaScript begrenses til 7 dager. Kilde: webkit.org.
+- GA4 til BigQuery: Google tar ikke betalt for eksporten, men lagring og spørringer koster. Standardeiendommer kan eksportere maks 1 million hendelser per dag. Kilde: Google Analytics-hjelp 9358801. Vi skriver ikke «gratis».
+- Shopifys egen kobling til BigQuery (Data Transfer Service) har uavklart status (forhåndsversjon?) og nevnes ikke.
+- Looker Studio: Lenken sender videre til en side som heter «Data Studio», så navnet er uklart og produktet nevnes ikke. Looker lenkes.
+- Ikke brukt: Tracklutions egne påstander om forbedring i prosent, priser og grenser for antall hendelser, og Datatilsynets vedtak om Google Analytics (ikke bekreftet som endelig).
 
 **Affiliate, CSS og feed** (research 2026-10-16):
 - Bilder: Minst 500 × 500 piksler for `image_link` og `additional_image_link`. Advarsler siden 14. april 2026, håndheves fra 31. januar 2027. Kilde: Google Merchant Center-hjelp 16989427.
@@ -211,5 +223,6 @@ Tekstene skal bare inneholde påstander vi kan stå for. Tidsavhengige fakta sje
 | 2026-10-16 | SEM og Google Ads: «for mye på eget merkenavn» i stedet for «betaler for ditt eget merkenavn»; SEO-søkeordsanalyse og negative søkeordslister løftet fram i leveranser, måltall og FAQ | Tydeligere problem (mangler kontroll); viser at SEM og SEO jobber sammen og hvordan vi kutter bortkastet budsjett |
 | 2026-10-16 | Pakkekort på tjenestesidene lenker til pakkeoversikten i stedet for å vise pris | Prisene ligger ett sted, så de ikke spriker mellom sidene |
 | 2026-10-16 | Affiliate-siden blir «Affiliate, CSS og feedoptimalisering», med feeden som kjerne; menynavnet forblir «Affiliate» | Den samme feeden driver Shopping, CSS, prissammenligning, affiliate og Meta-katalog; menyen holdes kort |
+| 2026-10-16 | Sporing og analyse: server-side sporing med Tracklution som standardpartner, andre løsninger på forespørsel; analyse i GA4, Google Cloud og BigQuery; egne dashboards og integrasjoner | Slik leverer vi i dag (fra brukeren); nye seksjoner for dataflyt (`flows`) og plattformlenker (`platforms`) |
 | 2026-10-16 | Ny seksjon «Fungerer best sammen med» på tjenestesidene (felt `related`) | Viser at tjenestene henger sammen, og gir intern lenking for SEO |
 | 2026-10-16 | Merkevare og strategi får tekstutkast med forskningsinnsikt, tre grafer og eksterne kilder | Brukeren ba om oppdatert merkevareinnsikt med grafer og lenker; forskningen kobles til hvordan nettbutikker vokser (mental og fysisk tilgjengelighet) |
