@@ -47,8 +47,12 @@ export const growthContent: Record<string, GrowthPageContent> = {
         text: 'Du bruker mer enn før, men vet ikke hvilke kampanjer som faktisk tjener penger.',
       },
       {
-        title: 'Du betaler for ditt eget merkenavn',
-        text: 'Kampanjene tar æren for kunder som ville kjøpt uansett, mens nye kunder uteblir.',
+        title: 'Du bruker for mye på ditt eget merkenavn',
+        text: 'Merkevaresøk og gjenkjøp tar en stor del av budsjettet, og du har ikke kontroll på hva som faktisk gir nye kunder.',
+      },
+      {
+        title: 'Du betaler for søk som aldri blir salg',
+        text: 'Søkeordsrapporten er full av irrelevante treff, og ingen har ryddet med negative søkeord på lenge.',
       },
       {
         title: 'Performance Max er en svart boks',
@@ -71,19 +75,21 @@ export const growthContent: Record<string, GrowthPageContent> = {
       strategi: [
         'Revisjon av konto, sporing og produktfeed',
         'Kanal- og budsjettplan for Google og Bing',
-        'Skille mellom merkevaresøk og nye kunder',
+        'Søkeordsanalyse på tvers av betalt og organisk: hvor du allerede rangerer i SEO, og hvor betalt søk gir mest',
+        'Skille mellom merkevaresøk og nye kunder, med tak på hva merkevaresøk får koste',
         'Måltall knyttet til margin, ikke bare omsetning',
       ],
       gjennomforing: [
         'Kampanjestruktur for Søk, Shopping og Performance Max',
         'Budstrategi (mål-ROAS / maks konverteringsverdi) og budsjettstyring',
-        'Negative søkeord, merkeutelukkelser og løpende søkeordsarbeid',
+        'Negative søkeordslister som bygges ut hver måned fra søkeordsrapporten',
+        'Merkeutelukkelser og løpende søkeordsarbeid',
         'Annonsetekster og bildemateriell i samspill med merkevaren',
         'Microsoft Advertising som tillegg der det lønner seg',
       ],
       rapportering: [
         'Månedlig rapport på inntekt, lønnsomhet og nye kunder',
-        'Gjennomgang av hva Googles automatikk faktisk gjør',
+        'Gjennomgang av søkeordsrapporten og hva Googles automatikk faktisk gjør',
         'Fast møte med plan for neste periode',
       ],
       ikkeInkludert: [
@@ -138,6 +144,7 @@ export const growthContent: Record<string, GrowthPageContent> = {
       { name: 'ROAS og lønnsomhet', text: 'Inntekt per annonsekrone – og hva som er igjen etter varekost når marginene er med.' },
       { name: 'Kostnad per ny kunde', text: 'Hva det koster å vinne en kunde som ikke har handlet hos deg før.' },
       { name: 'Andel nye kunder', text: 'Hvor mye av salget som kommer fra nye kunder, ikke gjenkjøp og merkevaresøk.' },
+      { name: 'Kostnad på merkevaresøk', text: 'Hvor stor del av budsjettet som går til ditt eget navn, og om det kan senkes.' },
       { name: 'Visningsandel', text: 'Hvor ofte du vises på søkene som betyr noe, og hva du taper på budsjett eller rangering.' },
       { name: 'Feed-helse', text: 'Andel godkjente produkter og feil i Merchant Center som stopper salg.' },
     ],
@@ -153,6 +160,14 @@ export const growthContent: Record<string, GrowthPageContent> = {
       {
         question: 'Hvem eier kontoen og dataene?',
         answer: 'Du. Kontoene ligger hos deg, og vi jobber med tilgang du gir oss. Slutter du, beholder du alt.',
+      },
+      {
+        question: 'Hvorfor ser dere på SEO når vi kjøper SEM?',
+        answer: 'Fordi betalt og organisk søk konkurrerer om de samme klikkene. Rangerer du allerede godt organisk på et søkeord, kan det være bortkastet å by høyt på det – og omvendt viser søkeordsdata fra annonsene hvor det er verdt å satse på SEO. Vi ser på begge samtidig.',
+      },
+      {
+        question: 'Hva gjør dere med negative søkeord?',
+        answer: 'Vi går gjennom søkeordsrapporten jevnlig og bygger negative søkeordslister for søk som ikke fører til salg – på tvers av Søk, Shopping og Performance Max. Det er en av de raskeste måtene å kutte bortkastet budsjett på.',
       },
       {
         question: 'Hvorfor er sporing en del av SEM?',
@@ -187,6 +202,10 @@ export const growthContent: Record<string, GrowthPageContent> = {
         text: 'Kampanjen bruker mye på merkevaresøk og gjenkjøp, og du ser ikke hva som skjer per kanal.',
       },
       {
+        title: 'Ingen kontroll på søkeordene',
+        text: 'Bredt samsvar og automatikk viser annonsene dine på søk du aldri ville valgt – og ingen negative søkeordslister holder det i sjakk.',
+      },
+      {
         title: 'Konverteringene stemmer ikke med Shopify',
         text: 'Dobbeltelling, manglende samtykkesignaler eller feil konverteringsverdi gjør at budstrategien styrer i blinde.',
       },
@@ -202,6 +221,7 @@ export const growthContent: Record<string, GrowthPageContent> = {
     deliverables: {
       strategi: [
         'Kontorevisjon: struktur, budstrategier, søkeord og merkevareandel',
+        'Søkeordsanalyse sammen med SEO, så betalt og organisk søk ikke konkurrerer om de samme klikkene',
         'Plan for Søk, Shopping, Performance Max og Demand Gen',
         'Mål på lønnsomhet og nye kunder, ikke bare ROAS',
       ],
@@ -210,12 +230,14 @@ export const growthContent: Record<string, GrowthPageContent> = {
         'Google-tagg, forbedrede konverteringer og Consent Mode v2 koblet til Shopifys samtykke',
         'Varekost i feeden for rapportering på lønnsomhet',
         'Performance Max med merkeutelukkelser, negative søkeord og søketemaer',
+        'Negative søkeordslister på kontonivå, oppdatert fra søkeordsrapporten hver måned',
         'Mål for nye kunder og kundelister der det gir mening',
         'AI Max for Search testet som eksperiment der det er tilgjengelig, med kontroll på merke og URL-er',
         'Vurdering av CSS-partner for Shopping-annonser',
       ],
       rapportering: [
         'Kanalrapport for Performance Max og innsikt i søkeord',
+        'Liste over nye negative søkeord og hva de har spart',
         'Månedlig gjennomgang av hva automatikken har laget og vist',
         'Rapport på inntekt, lønnsomhet og nye kunder',
       ],
@@ -277,6 +299,10 @@ export const growthContent: Record<string, GrowthPageContent> = {
       {
         question: 'Performance Max eller vanlig Shopping?',
         answer: 'Det kommer an på kontoen. Performance Max gir rekkevidde på tvers av Google, mens vanlig Shopping gir mer kontroll. Mange butikker får best resultat med en kombinasjon, og vi tester heller enn å gjette.',
+      },
+      {
+        question: 'Kan jeg styre søkeordene i Performance Max?',
+        answer: 'Delvis. Du kan legge inn negative søkeord på kampanjenivå, utelukke merkenavn og gi søketemaer, og du får innsikt i hvilke søk kampanjen vises på. Vi bruker alt dette, og kombinerer med vanlige søkekampanjer der du trenger full kontroll.',
       },
       {
         question: 'Hva er en CSS, og trenger jeg det?',
