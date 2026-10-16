@@ -13,6 +13,7 @@ import { getPageTeaserText } from '@/lib/pageTeaser'
 import { packagesHref, CONTACT_SLUG, trimSlashes } from '@/lib/routes'
 import { coalescePageSeo, getSiteSettings } from '@/lib/sanity/pageSeo'
 import { buildMetadata } from '@/lib/seo/buildMetadata'
+import { ui } from '@/components/integrations/labels'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -110,6 +111,7 @@ export default async function TjenesterOverviewPage({ params }: { params: Promis
           eyebrow="Leveranser"
           title={PAGE_TITLE}
           description={PAGE_INTRO}
+          visualFrame={false}
           buttons={[
             { text: 'Book møte', link: `/${CONTACT_SLUG.no}`, variant: 'primary' },
             { text: 'Se alle pakker', link: packagesHref(language), variant: 'secondary' },
@@ -146,31 +148,20 @@ export default async function TjenesterOverviewPage({ params }: { params: Promis
           }
         />
 
-        <section className="bg-white">
-          <div className="section_container max-w-[1320px] mx-auto page-padding-x py-10 lg:py-20">
-            <ul className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-6 list-none p-0 m-0">
+        <section className="bg-white pb-16 lg:pb-20">
+          <div className={ui.container}>
+            <ul className="m-0 grid list-none grid-cols-1 gap-4 p-0 md:grid-cols-2 lg:gap-5">
               {teasers.map((teaser) => (
                 <li key={teaser.href}>
-                  <LocalizedLink
-                    href={teaser.href}
-                    className="group flex h-full flex-col rounded-lg border border-sc-ink-100 bg-white p-6 lg:p-8 transition-transform hover:-translate-y-1"
-                  >
+                  <LocalizedLink href={teaser.href} className={`${ui.card} group h-full no-underline`}>
                     {teaser.Icon && (
-                      <span className="mb-5 flex h-12 w-12 items-center justify-center rounded-full bg-sc-cyan-500 text-white">
-                        <teaser.Icon className="h-6 w-6" strokeWidth={1.75} aria-hidden="true" />
+                      <span className="flex h-11 w-11 items-center justify-center rounded-full bg-sc-cyan-500 text-white">
+                        <teaser.Icon className="h-5 w-5" strokeWidth={1.75} aria-hidden="true" />
                       </span>
                     )}
-                    <h2 className="text-[22px] lg:text-[28px] font-bold text-sc-ink-900 tracking-[-0.01em] mb-3">
-                      {teaser.label}
-                    </h2>
-                    {teaser.description && (
-                      <p className="flex-1 text-sm lg:text-[15px] leading-relaxed text-sc-ink-600 mb-6 m-0">
-                        {teaser.description}
-                      </p>
-                    )}
-                    <span className="mt-auto text-sm font-semibold text-sc-cyan-500 group-hover:text-sc-cyan-600">
-                      Les mer →
-                    </span>
+                    <h2 className="m-0 text-[22px] font-bold leading-snug tracking-[-0.01em] text-sc-ink-900 lg:text-[26px]">{teaser.label}</h2>
+                    {teaser.description && <p className="m-0 flex-1 text-[15px] leading-relaxed text-sc-ink-600">{teaser.description}</p>}
+                    <span className="mt-auto text-sm font-semibold text-sc-ink-900 group-hover:text-sc-cyan-600">Les mer →</span>
                   </LocalizedLink>
                 </li>
               ))}
@@ -178,26 +169,22 @@ export default async function TjenesterOverviewPage({ params }: { params: Promis
           </div>
         </section>
 
-        <section className="bg-sc-ink-50">
-          <div className="section_container max-w-[1320px] mx-auto page-padding-x py-10 lg:py-20 flex flex-col lg:flex-row lg:items-center gap-6 lg:gap-12">
-            <div className="flex-1">
-              <h2 className="text-[26px] lg:text-[36px] font-bold text-sc-ink-900 tracking-[-0.02em] leading-snug mb-2">
-                Vet du hva du trenger?
-              </h2>
-              <p className="text-sm lg:text-[15px] leading-relaxed text-sc-ink-600 m-0">
-                Se pakkene med fast pris, eller book et møte så finner vi riktig løsning sammen.
-              </p>
+        <section className="bg-sc-ink-900 py-16 text-white lg:py-20">
+          <div className={`${ui.container} flex flex-wrap items-center justify-between gap-8`}>
+            <div className="flex max-w-[640px] flex-col gap-3">
+              <h2 className="m-0 text-[32px] font-bold leading-[1.15] tracking-[-0.02em] lg:text-[36px]">Vet du hva du trenger?</h2>
+              <p className="m-0 text-lg leading-relaxed text-sc-ink-200">Se pakkene med fast pris, eller book et møte så finner vi riktig løsning sammen.</p>
             </div>
-            <div className="flex flex-wrap gap-3">
+            <div className="flex flex-col gap-3 sm:flex-row">
               <LocalizedLink
                 href={packagesHref(language)}
-                className="inline-flex items-center justify-center rounded-lg bg-[#1EEFFA] px-[22px] py-3 text-sm font-semibold tracking-[0.02em] text-sc-ink-900 transition-colors hover:bg-teal"
+                className="inline-flex min-h-[46px] items-center justify-center rounded-lg bg-white px-[22px] py-3 text-sm font-semibold tracking-[0.02em] text-sc-ink-900 transition-colors hover:bg-sc-ink-50"
               >
                 Se alle pakker
               </LocalizedLink>
               <LocalizedLink
                 href={`/${CONTACT_SLUG.no}`}
-                className="inline-flex items-center justify-center rounded-lg border border-sc-ink-200 bg-[#1EEFFA] px-[22px] py-3 text-sm font-semibold tracking-[0.02em] text-sc-ink-900 transition-colors hover:bg-teal"
+                className="inline-flex min-h-[46px] items-center justify-center rounded-lg border border-sc-ink-600 px-[22px] py-3 text-sm font-semibold tracking-[0.02em] text-white transition-colors hover:bg-sc-ink-800"
               >
                 Book møte
               </LocalizedLink>

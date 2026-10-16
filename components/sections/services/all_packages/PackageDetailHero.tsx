@@ -42,21 +42,12 @@ export default function PackageDetailHero({ pkg, tier, shopifyProduct, lang = 'e
   const audience = card?.audience || pkg.idealFor?.[0]
 
   return (
-    <section className="relative overflow-hidden bg-sc-ink-50">
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 opacity-60 [background-image:linear-gradient(to_right,rgba(15,23,42,0.06)_1px,transparent_1px),linear-gradient(to_bottom,rgba(15,23,42,0.06)_1px,transparent_1px)] [background-size:48px_48px] [mask-image:linear-gradient(to_bottom,black,transparent)]"
-      />
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute -right-40 -top-40 h-[560px] w-[560px] rounded-full bg-sc-cyan-500/10 blur-[140px]"
-      />
-
-      <div className="section_container relative mx-auto max-w-[1320px] page-padding-x pt-14 pb-12 lg:pt-24 lg:pb-20">
+    <section className="bg-white">
+      <div className="mx-auto max-w-[1100px] px-5 pb-14 pt-14 lg:px-8 lg:pb-20 lg:pt-20">
         <div className="grid grid-cols-1 items-start gap-10 lg:grid-cols-[1.1fr_1fr] lg:gap-16">
           {/* Copy */}
           <div>
-            <div className="mb-3 text-[11px] font-semibold uppercase tracking-[0.12em] text-sc-cyan-500 lg:text-xs">
+            <div className="mb-4 text-xs font-semibold uppercase tracking-[0.12em] text-sc-cyan-500">
               {t.eyebrow}
             </div>
             <h1 className="text-[40px] font-bold leading-[1.02] tracking-[-0.028em] text-sc-ink-900 lg:text-[56px]">
@@ -70,7 +61,7 @@ export default function PackageDetailHero({ pkg, tier, shopifyProduct, lang = 'e
 
             {/* Price */}
             <div className="mt-8 flex flex-wrap items-baseline gap-x-3 gap-y-1">
-              <span className="text-[32px] font-bold tracking-[-0.02em] text-sc-ink-900 lg:text-[40px]">
+              <span className="font-mono text-[32px] font-medium tracking-tight text-sc-ink-900 lg:text-[40px]">
                 {card?.price || pkg.price}
               </span>
               {(card ? 'per måned' : pkg.priceType) && (
@@ -107,7 +98,7 @@ export default function PackageDetailHero({ pkg, tier, shopifyProduct, lang = 'e
           </div>
 
           {/* Facts panel */}
-          <div className="w-full rounded-lg border border-sc-ink-100 bg-white p-6 lg:p-8">
+          <div className="w-full rounded-lg border border-sc-ink-100 bg-sc-ink-50 p-6 lg:p-8">
             {audience && (
               <>
                 <h2 className="text-xs font-semibold uppercase tracking-[0.12em] text-sc-ink-400">

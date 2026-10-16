@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react'
 import LocalizedLink from '@/components/ui/LocalizedLink'
+import { ui } from '@/components/integrations/labels'
 
 interface ServiceHeroButton {
   text: string
@@ -18,6 +19,8 @@ interface ServiceHeroProps {
   highlights?: string[]
   /** Right-hand column: an image, illustration or mockup. Omit for a text-only hero. */
   visual?: ReactNode
+  /** Wrap the visual in the hairline panel the integrations pages use. Off for visuals that bring their own frame. */
+  visualFrame?: boolean
 }
 
 function renderTitle(title: string, highlight?: string) {
@@ -32,53 +35,32 @@ function renderTitle(title: string, highlight?: string) {
   )
 }
 
-/** Two-column hero for the Tjenester pages: copy left, visual right. */
-export default function ServiceHero({ eyebrow, title, highlight, description, buttons, highlights, visual }: ServiceHeroProps) {
+/**
+ * Hero for the Tjenester pages, on the integrations hero: white surface,
+ * eyebrow, large heading, lead, ink/transparent buttons and proof points.
+ * The visual sits to the right in a hairline panel.
+ */
+export default function ServiceHero({ eyebrow, title, highlight, description, buttons, highlights, visual, visualFrame = true }: ServiceHeroProps) {
   return (
-    <section className="relative overflow-hidden bg-sc-ink-50">
-      {/* Faint grid, fading out towards the bottom */}
+    <section className="bg-white">
       <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 opacity-60 [background-image:linear-gradient(to_right,rgba(15,23,42,0.06)_1px,transparent_1px),linear-gradient(to_bottom,rgba(15,23,42,0.06)_1px,transparent_1px)] [background-size:48px_48px] [mask-image:linear-gradient(to_bottom,black,transparent)]"
-      />
-      {/* Cyan glow behind the visual */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute -right-40 -top-40 h-[560px] w-[560px] rounded-full bg-sc-cyan-500/10 blur-[140px]"
-      />
-
-      <div
-        className={`section_container relative max-w-[1320px] mx-auto page-padding-x pt-16 pb-14 lg:pt-28 lg:pb-24 grid grid-cols-1 items-center gap-12 ${
+        className={`${ui.container} grid grid-cols-1 items-center gap-12 pb-14 pt-14 lg:pb-20 lg:pt-20 ${
           visual ? 'lg:grid-cols-[1.05fr_1fr] lg:gap-16' : ''
         }`}
       >
         <div className={visual ? '' : 'max-w-[760px]'}>
-          {eyebrow && (
-            <div className="text-[11px] lg:text-xs font-semibold uppercase tracking-[0.12em] text-sc-cyan-500 mb-3">
-              {eyebrow}
-            </div>
-          )}
-          <h1 className="text-[36px] sm:text-[44px] lg:text-[60px] font-bold text-sc-ink-900 tracking-[-0.028em] leading-[1.02] mb-5 lg:mb-6">
+          {eyebrow && <div className={`${ui.eyebrow} mb-4`}>{eyebrow}</div>}
+          <h1 className="mb-5 text-[36px] font-bold leading-[1.02] tracking-[-0.028em] text-sc-ink-900 sm:text-[44px] lg:mb-6 lg:text-[60px]">
             {renderTitle(title, highlight)}
           </h1>
-          {description && (
-            <p className="max-w-[580px] text-base lg:text-lg leading-relaxed text-sc-ink-600 m-0">{description}</p>
-          )}
+          {description && <p className="m-0 max-w-[580px] text-base leading-relaxed text-sc-ink-600 lg:text-lg">{description}</p>}
 
           {buttons && buttons.length > 0 && (
-            <div className="mt-8 flex flex-col sm:flex-row gap-3">
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               {buttons.map((button, index) => {
                 const primary = button.variant ? button.variant === 'primary' : index === 0
                 return (
-                  <LocalizedLink
-                    key={button.link + button.text}
-                    href={button.link}
-                    className={
-                      primary
-                        ? 'inline-flex items-center justify-center rounded-lg bg-[#1EEFFA] px-[22px] py-3 text-sm font-semibold tracking-[0.02em] text-sc-ink-900 transition-colors hover:bg-teal'
-                        : 'inline-flex items-center justify-center rounded-lg border border-sc-ink-200 bg-[#1EEFFA] px-[22px] py-3 text-sm font-semibold tracking-[0.02em] text-sc-ink-900 transition-colors hover:bg-teal'
-                    }
-                  >
+                  <LocalizedLink key={button.link + button.text} href={button.link} className={primary ? ui.btnPrimary : ui.btnSecondary}>
                     {button.text}
                   </LocalizedLink>
                 )
@@ -87,7 +69,7 @@ export default function ServiceHero({ eyebrow, title, highlight, description, bu
           )}
 
           {highlights && highlights.length > 0 && (
-            <ul className="mt-8 flex flex-wrap gap-x-6 gap-y-2 list-none p-0 m-0 text-sm text-sc-ink-600">
+            <ul className="m-0 mt-8 flex list-none flex-wrap gap-x-6 gap-y-2 p-0 text-sm text-sc-ink-600">
               {highlights.map((item) => (
                 <li key={item} className="flex items-center gap-2">
                   <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-sc-cyan-500" />
@@ -98,7 +80,9 @@ export default function ServiceHero({ eyebrow, title, highlight, description, bu
           )}
         </div>
 
-        {visual && <div className="relative">{visual}</div>}
+        {visual && (
+          <div className={visualFrame ? 'relative overflow-hidden rounded-lg border border-sc-ink-100 bg-sc-ink-50 p-4 lg:p-6' : 'relative'}>{visual}</div>
+        )}
       </div>
     </section>
   )

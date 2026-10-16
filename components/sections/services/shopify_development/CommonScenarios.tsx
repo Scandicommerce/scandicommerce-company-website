@@ -1,8 +1,8 @@
-'use client'
-
 import Link from 'next/link'
+import { ui } from '@/components/integrations/labels'
 
 interface ScenariosData {
+  scenariosEyebrow?: string
   scenariosTitle?: string
   scenariosLinkText?: string
   scenariosItems?: Array<{
@@ -16,69 +16,32 @@ interface CommonScenariosProps {
   scenarios?: ScenariosData
 }
 
+/** Scenarios as hairline cards, two per row. */
 export default function CommonScenarios({ scenarios }: CommonScenariosProps) {
-  // Content variables from Sanity
   const title = scenarios?.scenariosTitle
-  const linkText = scenarios?.scenariosLinkText || 'See how we help'
+  const linkText = scenarios?.scenariosLinkText || 'Se hvordan vi hjelper'
   const items = scenarios?.scenariosItems
 
   return (
-    <section className="bg-sc-ink-50 py-12 sm:py-16 lg:py-24">
-      <div className="section_container mx-auto page-padding-x">
-        {/* Header */}
+    <section className="bg-white py-16 lg:py-20">
+      <div className={`${ui.container} flex flex-col gap-10`}>
         {title && (
-          <div className="text-center mb-8 sm:mb-12 lg:mb-16">
-            <h2 className="text-[28px] lg:text-[44px] leading-[1.25] font-bold tracking-[-0.02em] text-sc-ink-900">
-              {title}
-            </h2>
+          <div className="flex max-w-[680px] flex-col gap-2.5">
+            <div className={ui.eyebrow}>{scenarios?.scenariosEyebrow || 'Typiske oppdrag'}</div>
+            <h2 className={ui.h2}>{title}</h2>
           </div>
         )}
 
-        {/* Scenarios Grid */}
         {items && items.length > 0 && (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-0">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:gap-5">
             {items.map((scenario, index) => (
-              <div
-                key={index}
-                className={`py-6 sm:py-8 lg:py-10 px-4 sm:px-6 lg:px-10 border-l-2 border-sc-cyan-500 ${
-                  index % 2 === 0 ? 'md:border-r md:border-r-gray-200' : ''
-                } ${
-                  index < 2 ? 'border-b border-b-gray-200' : ''
-                } ${
-                  index >= 2 && index < items.length ? 'max-md:border-b max-md:border-b-gray-200' : ''
-                } ${
-                  index === items.length - 1 ? 'max-md:border-b-0' : ''
-                }`}
-              >
-                {scenario.title && (
-                  <h3 className="text-xl font-semibold text-sc-ink-900 mb-2 sm:mb-3">
-                    {scenario.title}
-                  </h3>
-                )}
-                {scenario.description && (
-                  <p className="text-base text-sc-ink-500 mb-4 sm:mb-6 leading-relaxed">
-                    {scenario.description}
-                  </p>
-                )}
+              <div key={index} className="flex flex-col gap-3 rounded-lg border border-sc-ink-100 bg-white p-6 lg:p-7">
+                <span className="font-mono text-[13px] text-sc-ink-500">{String(index + 1).padStart(2, '0')}</span>
+                {scenario.title && <h3 className="m-0 text-xl font-semibold leading-snug text-sc-ink-900">{scenario.title}</h3>}
+                {scenario.description && <p className="m-0 text-[15px] leading-relaxed text-sc-ink-600">{scenario.description}</p>}
                 {scenario.link && (
-                  <Link
-                    href={scenario.link}
-                    className="inline-flex items-center text-sc-cyan-600 text-[15px] font-semibold hover:underline"
-                  >
-                    {linkText}
-                    <svg
-                      className="ml-1.5 sm:ml-2 w-3.5 h-3.5 sm:w-4 sm:h-4"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M17 8l4 4m0 0l-4 4m4-4H3"
-                      />
-                    </svg>
+                  <Link href={scenario.link} className="mt-auto pt-2 text-sm font-semibold text-sc-ink-900 no-underline hover:text-sc-cyan-600">
+                    {linkText} →
                   </Link>
                 )}
               </div>

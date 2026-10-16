@@ -45,7 +45,7 @@ export default function CTA({ cta, lang }: CTAProps) {
         <div className="flex flex-col gap-3 sm:flex-row">
           <Link
             href={buttonLink}
-            className="inline-flex min-h-[46px] items-center justify-center rounded-lg bg-[#1EEFFA] px-[22px] py-3 text-sm font-semibold tracking-[0.02em] text-sc-ink-900 transition-colors hover:bg-teal"
+            className="inline-flex min-h-[46px] items-center justify-center rounded-lg bg-white px-[22px] py-3 text-sm font-semibold tracking-[0.02em] text-sc-ink-900 transition-colors hover:bg-sc-ink-50"
           >
             {buttonText}
           </Link>

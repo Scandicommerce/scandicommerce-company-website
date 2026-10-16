@@ -131,7 +131,7 @@ export default async function ShopifyNettbutikkPage({ params }: { params: Promis
           description={platformText.description || platform.fallbackDescription}
           href={platform.href}
           linkText={platform.linkText}
-          visual={<Image src="/images/shopifyPlus.svg" alt="Shopify Plus" width={220} height={96} className="h-auto w-[160px] md:w-full" />}
+          visual={<Image src="/images/shopifyPlus.svg" alt="Shopify Plus" width={220} height={96} unoptimized className="h-auto w-[160px] md:w-full" />}
         />
         <ReadyToBuild cta={cta} />
       </main>

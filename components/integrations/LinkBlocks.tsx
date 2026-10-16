@@ -67,7 +67,7 @@ export function CtaBand({ heading, text, buttonLabel, buttonHref }: { heading: s
           <h2 className="text-[32px] font-bold leading-[1.15] tracking-[-0.02em] lg:text-[36px]">{heading}</h2>
           {text && <p className="text-lg leading-relaxed text-sc-ink-200">{text}</p>}
         </div>
-        <Link href={buttonHref} className="inline-flex min-h-[46px] items-center justify-center rounded-lg bg-[#1EEFFA] px-[22px] py-3 text-sm font-semibold tracking-[0.02em] text-sc-ink-900 transition-colors hover:bg-teal">
+        <Link href={buttonHref} className="inline-flex min-h-[46px] items-center justify-center rounded-lg bg-white px-[22px] py-3 text-sm font-semibold tracking-[0.02em] text-sc-ink-900 transition-colors hover:bg-sc-ink-50">
           {buttonLabel}
         </Link>
       </div>

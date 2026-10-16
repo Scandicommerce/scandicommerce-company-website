@@ -50,7 +50,7 @@ export default function PackageDetailBody({ pkg, tier, lang = 'en' }: PackageDet
       {/* Anchor bar: navigation only, nothing is hidden behind it */}
       {anchors.length > 1 && (
         <nav className="sticky top-14 z-20 border-b border-sc-ink-100 bg-white/95 backdrop-blur-md lg:top-[62px]">
-          <div className="section_container mx-auto max-w-[1320px] page-padding-x">
+          <div className="mx-auto max-w-[1100px] px-5 lg:px-8">
             <ul className="flex gap-6 overflow-x-auto py-3.5 text-[15px] font-medium">
               {anchors.map((a) => (
                 <li key={a.id}>
@@ -68,7 +68,7 @@ export default function PackageDetailBody({ pkg, tier, lang = 'en' }: PackageDet
       )}
 
       <div className="bg-white">
-        <div className="section_container mx-auto max-w-[1320px] page-padding-x py-14 lg:py-20">
+        <div className="mx-auto max-w-[1100px] px-5 lg:px-8 py-14 lg:py-20">
           <div className="mx-auto max-w-5xl space-y-16 lg:space-y-20">
             {/* What's included */}
             <section>

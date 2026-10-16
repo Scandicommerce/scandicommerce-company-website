@@ -158,9 +158,9 @@ export const ui = {
   eyebrow: 'text-xs font-semibold uppercase tracking-[0.12em] text-sc-cyan-500',
   h2: 'text-[32px] lg:text-[44px] leading-[1.25] font-bold tracking-[-0.02em] text-sc-ink-900',
   btnPrimary:
-    'inline-flex items-center justify-center min-h-[46px] rounded-lg bg-[#1EEFFA] px-[22px] py-3 text-sm font-semibold tracking-[0.02em] text-sc-ink-900 transition-colors hover:bg-teal',
+    'inline-flex items-center justify-center min-h-[46px] rounded-lg bg-sc-ink-900 px-[22px] py-3 text-sm font-semibold tracking-[0.02em] text-white transition-colors hover:bg-sc-ink-700',
   btnSecondary:
-    'inline-flex items-center justify-center min-h-[46px] rounded-lg border border-sc-ink-200 bg-[#1EEFFA] px-[22px] py-3 text-sm font-semibold tracking-[0.02em] text-sc-ink-900 transition-colors hover:bg-teal transition-colors',
+    'inline-flex items-center justify-center min-h-[46px] rounded-lg border border-sc-ink-300 bg-transparent px-[22px] py-3 text-sm font-semibold tracking-[0.02em] text-sc-ink-900 transition-colors hover:bg-sc-ink-50',
   tag: 'inline-flex items-center rounded-md bg-sc-cyan-50 px-2.5 py-1 text-xs font-medium text-sc-cyan-700',
   tagOutline: 'inline-flex items-center rounded-md border border-sc-ink-200 px-2.5 py-1 text-xs font-medium text-sc-ink-600',
   chip: 'inline-flex items-center rounded-full border border-sc-ink-200 px-2.5 py-1 text-xs text-sc-ink-600',

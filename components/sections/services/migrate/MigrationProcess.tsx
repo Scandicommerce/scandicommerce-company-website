@@ -1,6 +1,7 @@
-'use client'
+import { ui } from '@/components/integrations/labels'
 
 interface ProcessData {
+  processEyebrow?: string
   processTitle?: string
   processSubtitle?: string
   processPhases?: Array<{
@@ -14,64 +15,45 @@ interface MigrationProcessProps {
   process?: ProcessData
 }
 
+/** Migration phases as a numbered row over a hairline, week label in mono. */
 export default function MigrationProcess({ process }: MigrationProcessProps) {
   const title = process?.processTitle
   const subtitle = process?.processSubtitle
   const phases = process?.processPhases
 
   return (
-    <section className="bg-white py-16 lg:py-[170px]">
-      <div className="section_container mx-auto page-padding-x">
-        {/* Heading */}
+    <section className="bg-sc-ink-50 py-16 lg:py-20">
+      <div className={`${ui.container} flex flex-col gap-10`}>
         {(title || subtitle) && (
-          <div className="text-center mb-12 lg:mb-16">
-            {title && (
-              <h2 className="text-[5.3vw] xs:text-[3.5vw] sm:text-[3.2vw] md:text-[3.2vw] lg:text-[28px] xl:text-[34px] font-bold text-[#222222] mb-4">
-                {title}
-              </h2>
-            )}
-            {subtitle && (
-              <p className="text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[16px] xl:text-[18px] text-[#565454]">
-                {subtitle}
-              </p>
-            )}
+          <div className="flex max-w-[680px] flex-col gap-2.5">
+            <div className={ui.eyebrow}>{process?.processEyebrow || 'Prosess'}</div>
+            {title && <h2 className={ui.h2}>{title}</h2>}
+            {subtitle && <p className="m-0 text-lg leading-relaxed text-sc-ink-600">{subtitle}</p>}
           </div>
         )}
 
-        {/* Process Cards */}
         {phases && phases.length > 0 && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
+          <ol className="m-0 grid list-none grid-cols-1 gap-6 p-0 sm:grid-cols-2 lg:grid-cols-4 lg:gap-8">
             {phases.map((phase, index) => (
-              <div
-                key={index}
-                className="bg-sc-ink-50 rounded-sm p-6 lg:p-8 shadow-md"
-              >
-                {phase.week && (
-                  <div className="text-sc-cyan-600 text-sm lg:text-base font-semibold mb-3">
-                    {phase.week}
-                  </div>
-                )}
-                {phase.title && (
-                  <h3 className="text-[4.3vw] xs:text-[2.6vw] sm:text-[2.5vw] md:text-[2.2vw] lg:text-[18px] xl:text-[24px] font-bold text-[#222222] mb-4 lg:mb-6">
-                    {phase.title}
-                  </h3>
-                )}
+              <li key={index} className="flex flex-col gap-3 border-t border-sc-ink-900 pt-5">
+                <span className="font-mono text-[13px] text-sc-ink-500">
+                  {String(index + 1).padStart(2, '0')}
+                  {phase.week ? ` · ${phase.week}` : ''}
+                </span>
+                {phase.title && <h3 className="m-0 text-lg font-semibold leading-snug text-sc-ink-900">{phase.title}</h3>}
                 {phase.activities && phase.activities.length > 0 && (
-                  <ul className="space-y-2 lg:space-y-3">
-                    {phase.activities.map((activity, activityIndex) => (
-                      <li
-                        key={activityIndex}
-                        className="text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[16px] xl:text-[18px] text-[#565454] flex items-start"
-                      >
-                        <span className="mr-2 text-[#565454]">•</span>
+                  <ul className="m-0 flex list-none flex-col gap-1.5 p-0 text-[15px] leading-relaxed text-sc-ink-600">
+                    {phase.activities.map((activity, i) => (
+                      <li key={i} className="flex gap-2.5">
+                        <span aria-hidden="true" className="mt-[9px] h-1.5 w-1.5 shrink-0 rounded-full bg-sc-cyan-500" />
                         {activity}
                       </li>
                     ))}
                   </ul>
                 )}
-              </div>
+              </li>
             ))}
-          </div>
+          </ol>
         )}
       </div>
     </section>
