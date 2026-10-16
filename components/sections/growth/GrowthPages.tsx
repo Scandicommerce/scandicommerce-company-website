@@ -298,8 +298,32 @@ export function GrowthServicePage({ service }: { service: GrowthService }) {
           {renderTemplateBlock(block, content) ?? <PlaceholderSection {...block} />}
         </React.Fragment>
       ))}
+      {content?.related?.length ? <RelatedServicesSection related={content.related} /> : null}
       <ClosingCta />
     </>
+  )
+}
+
+function RelatedServicesSection({ related }: { related: NonNullable<GrowthPageContent['related']> }) {
+  const items = related.flatMap((item) => {
+    const target = findGrowthService(item.slug)
+    return target ? [{ target, why: item.why }] : []
+  })
+  if (!items.length) return null
+  return (
+    <SectionShell eyebrow="Henger sammen med" title="Fungerer best sammen med">
+      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 lg:gap-4">
+        {items.map(({ target, why }) => (
+          <ServiceCard
+            key={target.slug}
+            label={target.label}
+            summary={why}
+            href={growthHref(target.slug)}
+            icon={SERVICE_ICONS[target.parent ?? target.slug]}
+          />
+        ))}
+      </div>
+    </SectionShell>
   )
 }
 

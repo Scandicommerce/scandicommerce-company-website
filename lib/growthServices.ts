@@ -107,8 +107,8 @@ export const growthServices: GrowthService[] = [
     slug: 'affiliate',
     group: 'annonsering',
     label: 'Affiliate',
-    title: 'Affiliate og CSS for Shopify-butikker',
-    lead: 'Affiliate-nettverk og CSS-partnere for Google Shopping – flere salgskanaler, satt opp og fulgt opp mot salg i Shopify.',
+    title: 'Affiliate, CSS og feedoptimalisering for Shopify-butikker',
+    lead: 'Én god produktfeed – ut til Google Shopping, CSS, prissammenligning og affiliate-partnere, og fulgt opp mot salg i Shopify.',
   },
   {
     // GEO / AI visibility is part of the SEO offer, not a page of its own

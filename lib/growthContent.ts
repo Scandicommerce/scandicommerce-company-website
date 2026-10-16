@@ -30,6 +30,8 @@ export interface GrowthPageContent {
   /** "Hva vi måler og rapporterer". */
   kpis?: { name: string; text: string }[]
   faq?: { question: string; answer: string }[]
+  /** "Henger sammen med": other growth services this one depends on, by slug. */
+  related?: { slug: string; why: string }[]
 }
 
 export const growthContent: Record<string, GrowthPageContent> = {
@@ -117,7 +119,7 @@ export const growthContent: Record<string, GrowthPageContent> = {
         includes: [
           'Alt fra revisjonen, satt ut i livet',
           'Løpende drift av Google Ads og ved behov Bing',
-          'Feed-optimalisering og budstrategi',
+          'Feedoptimalisering (titler, egendefinerte etiketter for margin og bestselgere) og budstrategi',
           'Månedlig rapport og statusmøte',
           'Ingen bindingstid – 30 dagers oppsigelse',
         ],
@@ -182,6 +184,11 @@ export const growthContent: Record<string, GrowthPageContent> = {
         answer: 'Nei. Løpende avtale kan sies opp med 30 dagers varsel.',
       },
     ],
+    related: [
+      { slug: 'affiliate', why: 'Produktfeeden er grunnmuren i Shopping og Performance Max – og den samme feeden går til CSS og affiliate.' },
+      { slug: 'sporing-og-analyse', why: 'Riktig sporing og samtykke er det budstrategiene lærer av.' },
+      { slug: 'seo', why: 'Betalt og organisk søk planlegges sammen, så du ikke betaler for klikk du allerede vinner.' },
+    ],
   },
 
   'sem/google-ads': {
@@ -226,7 +233,8 @@ export const growthContent: Record<string, GrowthPageContent> = {
         'Mål på lønnsomhet og nye kunder, ikke bare ROAS',
       ],
       gjennomforing: [
-        'Merchant Center og feed via Shopifys Google & YouTube-app – GTIN, frakt, retur og bilder',
+        'Merchant Center og feed via Shopifys Google & YouTube-app – GTIN, titler, frakt, retur og bilder (minst 500 × 500 piksler)',
+        'Egendefinerte etiketter i feeden for margin, bestselgere og sesong, så kampanjene kan styres etter lønnsomhet',
         'Google-tagg, forbedrede konverteringer og Consent Mode v2 koblet til Shopifys samtykke',
         'Varekost i feeden for rapportering på lønnsomhet',
         'Performance Max med merkeutelukkelser, negative søkeord og søketemaer',
@@ -320,6 +328,154 @@ export const growthContent: Record<string, GrowthPageContent> = {
         question: 'Hva trenger dere fra oss for å starte?',
         answer: 'Tilgang til Google Ads, Merchant Center, Google Analytics 4 og Shopify, og en prat om marginer, sesonger og hvilke produkter som er viktigst.',
       },
+    ],
+    related: [
+      { slug: 'affiliate', why: 'Feedoptimalisering og CSS – det som avgjør hvordan produktene dine vises i Shopping.' },
+      { slug: 'sem/bing-ads', why: 'Importer kampanjene til Microsoft Advertising og nå søk Google ikke dekker.' },
+      { slug: 'sporing-og-analyse', why: 'Konverteringer, verdier og samtykke som budstrategiene kan stole på.' },
+    ],
+  },
+
+  affiliate: {
+    intro: {
+      title: 'Én feed, mange salgskanaler',
+      paragraphs: [
+        'Produktfeeden er listen over varene dine med pris, lager, bilder og egenskaper – og det er den Google Shopping, Performance Max, prissammenligningstjenester, affiliate-partnere og Meta bruker for å vise produktene dine. Er feeden svak, betaler du for det i alle kanalene samtidig.',
+        'Vi optimaliserer feeden fra Shopify én gang og sender den ut dit den gir salg: Google Shopping via en CSS-partner, prissammenligning som Prisjakt, og affiliate-nettverk der partnere selger for deg mot provisjon.',
+      ],
+    },
+    situations: [
+      {
+        title: 'Produktene blir avvist i Merchant Center',
+        text: 'Manglende GTIN, feil frakt eller for små bilder gjør at varer ikke vises – og Google skjerper kravet til bildestørrelse.',
+      },
+      {
+        title: 'Titlene er skrevet for butikken, ikke for søk',
+        text: 'Produktnavnet i Shopify sier lite om merke, type og størrelse, så produktene matcher dårlig på det folk søker etter.',
+      },
+      {
+        title: 'Du kan ikke styre etter margin',
+        text: 'Alle produkter behandles likt i kampanjene, fordi feeden ikke sier noe om margin, bestselgere eller sesong.',
+      },
+      {
+        title: 'Du er ikke der folk sammenligner priser',
+        text: 'Kundene sjekker pris på sammenligningstjenester før de kjøper, men produktene dine er ikke med.',
+      },
+      {
+        title: 'Du betaler full pris i Shopping',
+        text: 'Shopping-annonsene går gjennom Googles egen CSS, og ingen har vurdert om en annen CSS-partner gir lavere klikkpris.',
+      },
+      {
+        title: 'Affiliate gir lite – eller du vet ikke hva det gir',
+        text: 'Partnerne har ikke gode produktdata, sporingen faller ut ved samtykke, eller kansellerte ordre gir likevel provisjon.',
+      },
+    ],
+    deliverables: {
+      strategi: [
+        'Feed-revisjon: avvisninger, mangler og kvalitet per produkt',
+        'Kanalplan: Google Shopping, CSS, prissammenligning, affiliate og Meta-katalog',
+        'Vurdering av CSS-partner for Shopping-annonser i Norge',
+        'Valg av affiliate-nettverk og provisjonsmodell',
+      ],
+      gjennomforing: [
+        'Strukturerte produkttitler: merke, produkttype og viktigste egenskaper først',
+        'GTIN, merke, produkttype og Google-kategori på plass',
+        'Egendefinerte etiketter for margin, bestselgere, sesong og prisklasse',
+        'Bilder som oppfyller Googles krav på minst 500 × 500 piksler – helst større',
+        'Tilleggsfeeder og feed-regler for det Shopify-appen ikke dekker',
+        'Feed til prissammenligning og affiliate-partnere, med samme priser som i butikken',
+        'Affiliate-sporing i Shopify satt opp med samtykke, og kansellerte ordre trukket fra',
+      ],
+      rapportering: [
+        'Feed-helse: godkjente produkter, avvisninger og advarsler',
+        'Salg og kostnad per kanal og per etikett',
+        'Provisjon og ordre fra affiliate-partnere, mot bekreftede ordre i Shopify',
+      ],
+      ikkeInkludert: [
+        'Klikkostnader og provisjon til kanalene – det betaler du direkte',
+        'Produktfotografering',
+        'Rekruttering av enkeltinfluensere',
+      ],
+    },
+    packages: [
+      {
+        name: 'Feed-revisjon',
+        kind: 'Engangsleveranse',
+        summary: 'Vi går gjennom produktfeeden og gir deg en prioritert liste over det som stopper salg.',
+        includes: [
+          'Avvisninger og advarsler i Merchant Center',
+          'Titler, attributter og bilder',
+          'Forslag til etiketter for margin og bestselgere',
+          'Vurdering av CSS og prissammenligning',
+        ],
+      },
+      {
+        name: 'Feed og affiliate løpende',
+        kind: 'Månedlig',
+        summary: 'Løpende feedoptimalisering og drift av prissammenligning og affiliate.',
+        includes: [
+          'Feed-optimalisering og overvåking av avvisninger',
+          'Distribusjon til CSS, prissammenligning og affiliate',
+          'Oppfølging av affiliate-partnere og provisjon',
+          'Månedlig rapport per kanal',
+          'Ingen bindingstid – 30 dagers oppsigelse',
+        ],
+      },
+    ],
+    process: [
+      {
+        period: '0–30 dager',
+        title: 'Feeden i orden',
+        text: 'Revisjon, avvisninger rettet, titler og attributter strukturert, og etiketter for margin og bestselgere lagt inn.',
+      },
+      {
+        period: '30–60 dager',
+        title: 'Ut i kanalene',
+        text: 'CSS-partner vurdert og koblet på, produktene ut til prissammenligning, og affiliate-nettverk satt opp med sporing.',
+      },
+      {
+        period: '60–90 dager',
+        title: 'Mer fra det som selger',
+        text: 'Vi ser på salg per kanal og etikett, og flytter innsats dit marginen og volumet er best.',
+      },
+    ],
+    kpis: [
+      { name: 'Godkjente produkter', text: 'Andel av sortimentet som faktisk kan vises i Shopping og hos partnerne.' },
+      { name: 'Klikkpris i Shopping', text: 'Utviklingen i klikkpris før og etter bytte av CSS, målt på dine egne tall.' },
+      { name: 'Salg per kanal', text: 'Omsetning og kostnad fra Shopping, prissammenligning og affiliate hver for seg.' },
+      { name: 'Lønnsomhet per etikett', text: 'Hvordan høy- og lavmarginprodukter presterer, så budsjettet går dit det tjener mest.' },
+      { name: 'Affiliate-kvalitet', text: 'Andel ordre fra partnere som faktisk blir stående, og provisjon per bekreftet ordre.' },
+    ],
+    faq: [
+      {
+        question: 'Hva er feedoptimalisering?',
+        answer: 'Å gjøre produktdataene dine så komplette og presise som mulig – titler, attributter, bilder, priser og etiketter – slik at Google og andre kanaler viser riktige produkter til riktige søk, og slik at du kan styre kampanjene etter margin.',
+      },
+      {
+        question: 'Holder det med Shopifys Google & YouTube-app?',
+        answer: 'Den er et godt utgangspunkt og sender produktene til Merchant Center. Men den gir begrenset kontroll over titler og etiketter, så vi legger ofte på tilleggsfeeder, feed-regler eller et feed-verktøy der det trengs.',
+      },
+      {
+        question: 'Hva er en CSS?',
+        answer: 'En Comparison Shopping Service plasserer Shopping-annonsene dine hos Google. I EØS, også Norge, må alle Shopping-annonser gå gjennom en CSS. Googles egen trekker en fast margin av budet, mens andre CSS-partnere kan gi lavere klikkpris. Vi måler effekten på dine egne tall i stedet for å love en prosent.',
+      },
+      {
+        question: 'Hvilke affiliate-nettverk bruker dere?',
+        answer: 'Det avhenger av bransje og hvilke partnere du vil nå. Flere nettverk som er aktive i Norge, for eksempel Adtraction og Awin, har egne Shopify-apper for sporing. Vi hjelper deg å velge, sette opp og følge opp.',
+      },
+      {
+        question: 'Hva må vi passe på juridisk?',
+        answer: 'Priser i feeden og hos partnere må stemme med butikken, og førpriser må følge regelen om laveste pris de siste 30 dagene. Partnere som markedsfører deg, må merke innholdet tydelig som reklame. Vi bygger dette inn i oppsettet, men det juridiske ansvaret ligger hos deg som annonsør.',
+      },
+      {
+        question: 'Brukes feeden også i Meta?',
+        answer: 'Ja. Shopifys Facebook- og Instagram-kanal synkroniserer en produktkatalog til Meta, som brukes i katalogannonser. Vi sørger for at det bare er én katalog, og at den holder samme kvalitet som feeden til Google.',
+      },
+    ],
+    related: [
+      { slug: 'sem/google-ads', why: 'Shopping og Performance Max bygger direkte på produktfeeden.' },
+      { slug: 'some/meta-ads', why: 'Katalogannonser i Facebook og Instagram bruker den samme produktdataen.' },
+      { slug: 'sporing-og-analyse', why: 'Sporing og samtykke som gjør at både Google og affiliate-partnere måler riktig.' },
     ],
   },
 }

@@ -21,7 +21,7 @@ Tjenestene vi leverer:
 | Sporing og analyse | `/growth-marketing/sporing-og-analyse` |
 | SEM (betalt søk) | `/growth-marketing/sem` |
 | SoMe | `/growth-marketing/some` |
-| Affiliate (inkl. CSS for Google Shopping) | `/growth-marketing/affiliate` |
+| Affiliate, CSS og feedoptimalisering | `/growth-marketing/affiliate` |
 | SEO (inkl. GEO / AI-søk) | `/growth-marketing/seo` |
 | E-postmarkedsføring | `/growth-marketing/e-postmarkedsforing` |
 | CRO | `/growth-marketing/cro` |
@@ -38,7 +38,7 @@ Samleside: `/growth-marketing`. Gjelder bare norsk side (.no). Andre språk gir 
 |---|---|
 | Samleside og 11 tjenestesider | Dummyer med mal og plassholdere, `noindex`, ikke i XML-sitemap |
 | Menyforslag | Ligger i `lib/growthServices.ts` (`growthNavItem()`). **Ikke koblet inn** i headeren ennå (se §5) |
-| Ekte innhold | **SEM** og **Google Ads** har tekstutkast til gjennomlesning (alle seksjoner unntatt bevis; priser mangler). Resten er dummyer |
+| Ekte innhold | **SEM**, **Google Ads** og **Affiliate, CSS og feed** har tekstutkast til gjennomlesning (alle seksjoner unntatt bevis; priser via pakkeoversikten). Resten er dummyer |
 | Innhold i Sanity | Ikke startet. Innholdet ligger i kode til tekstene er klare |
 
 ## 3. Struktur
@@ -144,6 +144,7 @@ npm run dev                 # http://localhost:3000/no/growth-marketing
 - [ ] Priser: Pakkekortene lenker til pakkeoversikten (`/tjenester/alle-pakker`) i stedet for å vise pris. **Pakkeoversikten viser i dag bare Shopify-pakkene.** SEM- og Google Ads-pakkene må legges inn der (i Sanity) før lenken gir mening.
 - [ ] Vilkår: «Ingen bindingstid – 30 dagers oppsigelse» er hentet fra Growth-pakken. Gjelder det også her?
 - [ ] Leveranser: Stemmer listene med det vi faktisk gjør (Bing som tillegg, CSS-vurdering, AI Max-tester, Demand Gen)?
+- [ ] Affiliate og feed: Stemmer leveransene (feed-revisjon, distribusjon til prissammenligning, oppfølging av affiliate-partnere)? Nevner vi riktige eksempler (Prisjakt; Adtraction og Awin)? Hvilke feed-verktøy bruker vi?
 - [ ] Bevis: Kundecase med tall fra annonsering, og navngitt spesialist.
 
 **Øvrige:**
@@ -167,6 +168,15 @@ Tekstene skal bare inneholde påstander vi kan stå for. Tidsavhengige fakta sje
 - Bing: Liten andel av søk i Norge, men høyere på desktop (Statcounter, 2026). Vi oppgir ikke tall eller klikkpriser.
 - Benchmarks: Bare tall fra USA eller globalt finnes. De brukes ikke.
 
+**Affiliate, CSS og feed** (research 2026-10-16):
+- Bilder: Minst 500 × 500 piksler for `image_link` og `additional_image_link`. Advarsler siden 14. april 2026, håndheves fra 31. januar 2027. Kilde: Google Merchant Center-hjelp 16989427.
+- Nye feed-attributter (2026): `video_link`, `handling_cutoff_time`, `minimum_order_value` og lojalitetsnivåer i frakt. Samme kilde. Nevnes ikke i teksten ennå.
+- Samtaleattributter for AI-handel er ikke dokumentert i Googles spesifikasjon. Nevnes ikke.
+- Prisjakt: Norsk prissammenligning; butikker betaler per klikk eller en andel av ordreverdien. Kilde: prisjakt.no. Status for Prisguiden/PriceRunner og Kelkoo i Norge er ikke bekreftet, så de nevnes ikke.
+- Affiliate: Adtraction har kontor i Norge og en Shopify-app. Awin har en offisiell Shopify-app (developer.awin.com/docs/shopify). Andre nettverk er ikke bekreftet.
+- Førpris: Laveste pris de siste 30 dagene (prisopplysningsforskriften § 9a, fra 1. oktober 2023). Forbrukertilsynet har ilagt gebyr for ulovlige førpriser (juni 2025).
+- Merking av reklame: Forbrukertilsynets veiledning sier at merkingen skal komme tydelig og først. Ingen egen regel for affiliate-lenker er funnet, så vi skriver generelt.
+
 ## 9. Beslutningslogg
 
 | Dato | Beslutning | Begrunnelse |
@@ -189,3 +199,5 @@ Tekstene skal bare inneholde påstander vi kan stå for. Tidsavhengige fakta sje
 | 2026-10-16 | Første tekstutkast for SEM og Google Ads, i `lib/growthContent.ts` | Bygget på oppdatert research (se §8); bare bekreftede påstander; priser og bevis står igjen som plassholdere |
 | 2026-10-16 | SEM og Google Ads: «for mye på eget merkenavn» i stedet for «betaler for ditt eget merkenavn»; SEO-søkeordsanalyse og negative søkeordslister løftet fram i leveranser, måltall og FAQ | Tydeligere problem (mangler kontroll); viser at SEM og SEO jobber sammen og hvordan vi kutter bortkastet budsjett |
 | 2026-10-16 | Pakkekort på tjenestesidene lenker til pakkeoversikten i stedet for å vise pris | Prisene ligger ett sted, så de ikke spriker mellom sidene |
+| 2026-10-16 | Affiliate-siden blir «Affiliate, CSS og feedoptimalisering», med feeden som kjerne; menynavnet forblir «Affiliate» | Den samme feeden driver Shopping, CSS, prissammenligning, affiliate og Meta-katalog; menyen holdes kort |
+| 2026-10-16 | Ny seksjon «Fungerer best sammen med» på tjenestesidene (felt `related`) | Viser at tjenestene henger sammen, og gir intern lenking for SEO |
