@@ -81,7 +81,7 @@ export default function ServiceHero({ eyebrow, title, highlight, description, bu
         </div>
 
         {visual && (
-          <div className={visualFrame ? 'relative overflow-hidden rounded-lg border border-sc-ink-100 bg-sc-ink-50 p-4 lg:p-6' : 'relative'}>{visual}</div>
+          <div className={visualFrame ? 'relative rounded-lg border border-sc-ink-100 bg-sc-ink-50 px-10 pt-8 pb-12 lg:px-12 lg:pt-10 lg:pb-14' : 'relative'}>{visual}</div>
         )}
       </div>
     </section>

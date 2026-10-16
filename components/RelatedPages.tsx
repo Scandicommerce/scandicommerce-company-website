@@ -100,7 +100,7 @@ export default async function RelatedPages() {
 
   return (
     <aside aria-label={T[language] ?? T.en} className="border-t border-sc-ink-100 bg-white">
-      <div className="section_container mx-auto page-padding-x py-12 lg:py-16">
+      <div className="mx-auto max-w-[1100px] px-5 py-12 lg:px-8 lg:py-16">
         <h2 className="text-xl lg:text-2xl font-bold tracking-[-0.02em] text-sc-ink-900 mb-6">{T[language] ?? T.en}</h2>
         <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {items.slice(0, 4).map((item) => (

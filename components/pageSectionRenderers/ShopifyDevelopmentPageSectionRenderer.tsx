@@ -32,7 +32,7 @@ export function ShopifyDevelopmentPageSectionRenderer({ sections }: { sections: 
             )
           }
           case 'shopifyDevelopmentPageWhyShopifySection':
-            return <WhyShopifyWins key={_key} whyShopify={rest as Parameters<typeof WhyShopifyWins>[0]['whyShopify']} />
+            return <WhyShopifyWins key={_key} whyShopify={{ whyShopifyEyebrow: 'Hvorfor Shopify', ...(rest as Parameters<typeof WhyShopifyWins>[0]['whyShopify']) }} />
           case 'shopifyDevelopmentPageScenariosSection':
             return <CommonScenarios key={_key} scenarios={rest as Parameters<typeof CommonScenarios>[0]['scenarios']} />
           case 'shopifyDevelopmentPageHowWeWorkSection':
