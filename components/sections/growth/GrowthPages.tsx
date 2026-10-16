@@ -2,11 +2,13 @@ import React from 'react'
 import {
   ArrowRight,
   ChartLine,
+  Check,
   ChevronRight,
   Compass,
   Handshake,
   Info,
   Mail,
+  Minus,
   MousePointerClick,
   Search,
   Share2,
@@ -23,44 +25,54 @@ import {
   findGrowthService,
   type GrowthService,
 } from '@/lib/growthServices'
+import { findGrowthContent, type GrowthPageContent } from '@/lib/growthContent'
 
 /**
  * Service-page template for the Growth marketing area, rendered with
  * placeholder blocks. Each block names what the finished section must hold, so
  * the dummy doubles as the content brief for whoever writes the page.
  */
-const SERVICE_TEMPLATE: { eyebrow: string; title: string; hint: string }[] = [
+type TemplateKey = 'situations' | 'deliverables' | 'packages' | 'process' | 'proof' | 'kpis' | 'faq'
+
+const SERVICE_TEMPLATE: { key: TemplateKey; eyebrow: string; title: string; hint: string }[] = [
   {
+    key: 'situations',
     eyebrow: 'Kjøpssituasjoner',
     title: 'Når du trenger dette',
     hint: '4–6 konkrete situasjoner kunden kjenner seg igjen i, med lenke videre der det passer.',
   },
   {
+    key: 'deliverables',
     eyebrow: 'Leveranser',
     title: 'Hva du får',
     hint: 'Leveranser gruppert som Strategi · Gjennomføring · Rapportering, pluss hva som ikke er inkludert.',
   },
   {
+    key: 'packages',
     eyebrow: 'Pakker',
     title: 'Pakker og pris',
     hint: 'Fastpris: engangsleveranse og løpende avtale, med «fra»-pris og hva som skiller dem.',
   },
   {
+    key: 'process',
     eyebrow: 'Prosess',
     title: 'De første 90 dagene',
     hint: 'Hva som skjer etter 30, 60 og 90 dager, og hva vi trenger fra kunden.',
   },
   {
+    key: 'proof',
     eyebrow: 'Bevis',
     title: 'Resultater og folkene bak',
     hint: 'Kundecase med tall, navngitt spesialist med bilde, partnermerker.',
   },
   {
+    key: 'kpis',
     eyebrow: 'Måling',
     title: 'Hva vi måler og rapporterer',
     hint: 'De 3–5 måltallene vi rapporterer på for denne tjenesten, og hvor ofte.',
   },
   {
+    key: 'faq',
     eyebrow: 'FAQ',
     title: 'Ofte stilte spørsmål',
     hint: '5–8 spørsmål kunder faktisk stiller før de kjøper.',
@@ -93,7 +105,7 @@ function DraftNotice() {
     <div className="bg-sc-cyan-50 border-b border-sc-cyan-100">
       <div className={`${containerClasses} py-2.5 text-[13px] text-sc-cyan-800 flex items-center gap-2`}>
         <Info className="w-4 h-4 flex-shrink-0" strokeWidth={ICON_STROKE} aria-hidden="true" />
-        Utkast – denne siden er en plassholder og er ikke indeksert ennå.
+        Utkast – innholdet er ikke godkjent ennå, og siden er ikke indeksert.
       </div>
     </div>
   )
@@ -253,6 +265,7 @@ function PlaceholderSection({ eyebrow, title, hint }: { eyebrow: string; title: 
 export function GrowthServicePage({ service }: { service: GrowthService }) {
   const parent = service.parent ? findGrowthService(service.parent) : undefined
   const channels = growthChildren(service.slug)
+  const content = findGrowthContent(service.slug)
   const trail = [
     { label: growthHub.label, href: growthHref() },
     ...(parent ? [{ label: parent.label, href: growthHref(parent.slug) }] : []),
@@ -275,10 +288,213 @@ export function GrowthServicePage({ service }: { service: GrowthService }) {
           </div>
         </section>
       )}
+      {content?.intro && <IntroSection intro={content.intro} />}
       {SERVICE_TEMPLATE.map((block) => (
-        <PlaceholderSection key={block.title} {...block} />
+        <React.Fragment key={block.key}>
+          {renderTemplateBlock(block, content) ?? <PlaceholderSection {...block} />}
+        </React.Fragment>
       ))}
       <ClosingCta />
     </>
+  )
+}
+
+/** The written section for a template block, or null when the copy is not there yet. */
+function renderTemplateBlock(
+  block: (typeof SERVICE_TEMPLATE)[number],
+  content: GrowthPageContent | undefined
+): React.ReactNode | null {
+  const heading = { eyebrow: block.eyebrow, title: block.title }
+  switch (block.key) {
+    case 'situations':
+      return content?.situations?.length ? <SituationsSection {...heading} items={content.situations} /> : null
+    case 'deliverables':
+      return content?.deliverables ? <DeliverablesSection {...heading} deliverables={content.deliverables} /> : null
+    case 'packages':
+      return content?.packages?.length ? <PackagesSection {...heading} packages={content.packages} /> : null
+    case 'process':
+      return content?.process?.length ? <ProcessSection {...heading} steps={content.process} /> : null
+    case 'kpis':
+      return content?.kpis?.length ? <KpiSection {...heading} kpis={content.kpis} /> : null
+    case 'faq':
+      return content?.faq?.length ? <FaqSection {...heading} faq={content.faq} /> : null
+    // Proof needs real clients and numbers from the team; it stays a placeholder until then
+    case 'proof':
+      return null
+  }
+}
+
+type Heading = { eyebrow: string; title: string }
+
+function SectionShell({ eyebrow, title, children }: Heading & { children: React.ReactNode }) {
+  return (
+    <section className="bg-white py-8 lg:py-12">
+      <div className={containerClasses}>
+        <div className={eyebrowClasses}>{eyebrow}</div>
+        <h2 className={h2Classes}>{title}</h2>
+        <div className="mt-5 lg:mt-7">{children}</div>
+      </div>
+    </section>
+  )
+}
+
+function IntroSection({ intro }: { intro: NonNullable<GrowthPageContent['intro']> }) {
+  return (
+    <section className="bg-white pb-8 lg:pb-12">
+      <div className={containerClasses}>
+        <div className="max-w-[860px]">
+          <h2 className="text-[20px] lg:text-[24px] font-bold text-sc-ink-900 tracking-[-0.01em] m-0">{intro.title}</h2>
+          {intro.paragraphs.map((paragraph, index) => (
+            <p key={index} className="text-base text-sc-ink-600 leading-relaxed mt-3 m-0">
+              {paragraph}
+            </p>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+function SituationsSection({ items, ...heading }: Heading & { items: NonNullable<GrowthPageContent['situations']> }) {
+  return (
+    <SectionShell {...heading}>
+      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 lg:gap-4">
+        {items.map((item) => (
+          <div key={item.title} className="rounded-[10px] border border-sc-ink-100 p-5 lg:p-6">
+            <h3 className="text-base lg:text-lg font-semibold text-sc-ink-900 m-0">{item.title}</h3>
+            <p className="text-sm text-sc-ink-600 leading-normal mt-1.5 m-0">{item.text}</p>
+          </div>
+        ))}
+      </div>
+    </SectionShell>
+  )
+}
+
+function CheckList({ items, muted }: { items: string[]; muted?: boolean }) {
+  const Icon = muted ? Minus : Check
+  return (
+    <ul className="list-none m-0 p-0 space-y-2.5">
+      {items.map((item) => (
+        <li key={item} className="flex gap-2.5 text-sm leading-normal text-sc-ink-700">
+          <Icon
+            className={`w-4 h-4 mt-0.5 flex-shrink-0 ${muted ? 'text-sc-ink-400' : 'text-sc-cyan-600'}`}
+            strokeWidth={ICON_STROKE}
+            aria-hidden="true"
+          />
+          {item}
+        </li>
+      ))}
+    </ul>
+  )
+}
+
+function DeliverablesSection({
+  deliverables,
+  ...heading
+}: Heading & { deliverables: NonNullable<GrowthPageContent['deliverables']> }) {
+  const columns = [
+    { title: 'Strategi', items: deliverables.strategi },
+    { title: 'Gjennomføring', items: deliverables.gjennomforing },
+    { title: 'Rapportering', items: deliverables.rapportering },
+  ]
+  return (
+    <SectionShell {...heading}>
+      <div className="grid lg:grid-cols-3 border border-sc-ink-100 rounded-[10px] overflow-hidden">
+        {columns.map((column, index) => (
+          <div
+            key={column.title}
+            className={`p-5 lg:p-7 border-sc-ink-100 ${index < columns.length - 1 ? 'border-b lg:border-b-0 lg:border-r' : ''}`}
+          >
+            <h3 className="text-xs lg:text-[13px] font-semibold text-sc-cyan-600 uppercase tracking-[0.08em] m-0 mb-3">
+              {column.title}
+            </h3>
+            <CheckList items={column.items} />
+          </div>
+        ))}
+      </div>
+      {deliverables.ikkeInkludert?.length ? (
+        <div className="mt-4 lg:mt-5">
+          <h3 className="text-sm font-semibold text-sc-ink-900 m-0 mb-2.5">Ikke inkludert</h3>
+          <CheckList items={deliverables.ikkeInkludert} muted />
+        </div>
+      ) : null}
+    </SectionShell>
+  )
+}
+
+function PackagesSection({ packages, ...heading }: Heading & { packages: NonNullable<GrowthPageContent['packages']> }) {
+  return (
+    <SectionShell {...heading}>
+      <div className="grid md:grid-cols-2 gap-3 lg:gap-4">
+        {packages.map((pkg) => (
+          <div key={pkg.name} className="rounded-[16px] border border-sc-ink-100 p-6 lg:p-8 flex flex-col">
+            <div className="text-[11px] font-semibold uppercase tracking-[0.12em] text-sc-ink-400">{pkg.kind}</div>
+            <h3 className="text-[22px] lg:text-[26px] font-bold text-sc-ink-900 tracking-[-0.01em] mt-1 m-0">{pkg.name}</h3>
+            <p className="text-sm text-sc-ink-600 mt-2 m-0">{pkg.summary}</p>
+            <div className="mt-5 mb-6 flex-grow">
+              <CheckList items={pkg.includes} />
+            </div>
+            <div className="text-base font-semibold text-sc-ink-900">{pkg.price ?? 'Pris kommer'}</div>
+          </div>
+        ))}
+      </div>
+    </SectionShell>
+  )
+}
+
+function ProcessSection({ steps, ...heading }: Heading & { steps: NonNullable<GrowthPageContent['process']> }) {
+  return (
+    <SectionShell {...heading}>
+      <div className="grid lg:grid-cols-3 border border-sc-ink-100 rounded-[10px] overflow-hidden">
+        {steps.map((step, index) => (
+          <div
+            key={step.period}
+            className={`p-5 lg:px-7 lg:py-8 border-sc-ink-100 ${index < steps.length - 1 ? 'border-b lg:border-b-0 lg:border-r' : ''}`}
+          >
+            <div className="text-xs lg:text-[13px] font-semibold text-sc-cyan-600 mb-1.5 lg:mb-2">
+              {step.period} · {step.title}
+            </div>
+            <p className="text-sm leading-normal text-sc-ink-600 m-0">{step.text}</p>
+          </div>
+        ))}
+      </div>
+    </SectionShell>
+  )
+}
+
+function KpiSection({ kpis, ...heading }: Heading & { kpis: NonNullable<GrowthPageContent['kpis']> }) {
+  return (
+    <SectionShell {...heading}>
+      <dl className="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-5 m-0">
+        {kpis.map((kpi) => (
+          <div key={kpi.name} className="border-t border-sc-ink-100 pt-4">
+            <dt className="text-base font-semibold text-sc-ink-900">{kpi.name}</dt>
+            <dd className="text-sm text-sc-ink-600 leading-normal mt-1 m-0">{kpi.text}</dd>
+          </div>
+        ))}
+      </dl>
+    </SectionShell>
+  )
+}
+
+function FaqSection({ faq, ...heading }: Heading & { faq: NonNullable<GrowthPageContent['faq']> }) {
+  return (
+    <SectionShell {...heading}>
+      <div className="border-t border-sc-ink-100 max-w-[860px]">
+        {faq.map((item) => (
+          <details key={item.question} className="group border-b border-sc-ink-100 py-4">
+            <summary className="flex items-center justify-between gap-4 cursor-pointer list-none text-base font-semibold text-sc-ink-900">
+              {item.question}
+              <ChevronRight
+                className="w-4 h-4 flex-shrink-0 text-sc-ink-400 transition-transform group-open:rotate-90"
+                strokeWidth={ICON_STROKE}
+                aria-hidden="true"
+              />
+            </summary>
+            <p className="text-sm text-sc-ink-600 leading-relaxed mt-2.5 m-0">{item.answer}</p>
+          </details>
+        ))}
+      </div>
+    </SectionShell>
   )
 }

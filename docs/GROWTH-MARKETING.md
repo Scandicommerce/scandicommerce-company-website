@@ -38,7 +38,7 @@ Samleside: `/growth-marketing`. Gjelder bare norsk side (.no). Andre språk gir 
 |---|---|
 | Samleside og 11 tjenestesider | Dummyer med mal og plassholdere, `noindex`, ikke i XML-sitemap |
 | Menyforslag | Ligger i `lib/growthServices.ts` (`growthNavItem()`). **Ikke koblet inn** i headeren ennå (se §5) |
-| Ekte innhold | Ikke startet. Neste steg: samlesiden og SEO |
+| Ekte innhold | **SEM** og **Google Ads** har tekstutkast til gjennomlesning (alle seksjoner unntatt bevis; priser mangler). Resten er dummyer |
 | Innhold i Sanity | Ikke startet. Innholdet ligger i kode til tekstene er klare |
 
 ## 3. Struktur
@@ -119,6 +119,7 @@ i `navigationNo` med `growthNavItem()`.
 
 **Filer**
 - `lib/growthServices.ts`: Alle tjenester (slug, gruppe, navn, H1, ingress), grupper og menyforslag. **Eneste sted å endre tjenestelisten.**
+- `lib/growthContent.ts`: Teksten per tjenesteside (intro, kjøpssituasjoner, leveranser, pakker, 90 dager, måltall, FAQ). Seksjoner uten tekst vises som plassholder. Bevis vises alltid som plassholder til vi har ekte case.
 - `components/sections/growth/GrowthPages.tsx`: Samleside og tjenestesidemal.
 - `app/[lang]/growth-marketing/[[...slug]]/page.tsx`: Rute og metadata (noindex).
 
@@ -138,6 +139,14 @@ npm run dev                 # http://localhost:3000/no/growth-marketing
 
 ## 7. Åpne spørsmål
 
+**Må bekreftes før SEM og Google Ads publiseres:**
+- [ ] Priser for SEM-revisjon, SEM løpende, Google Ads-revisjon og Google Ads løpende.
+- [ ] Vilkår: «Ingen bindingstid – 30 dagers oppsigelse» er hentet fra Growth-pakken. Gjelder det også her?
+- [ ] Leveranser: Stemmer listene med det vi faktisk gjør (Bing som tillegg, CSS-vurdering, AI Max-tester, Demand Gen)?
+- [ ] Bevis: Kundecase med tall fra annonsering, og navngitt spesialist.
+
+**Øvrige:**
+
 - [ ] **Navnekollisjon:** Shopify-pakken heter «Growth» (`/tjenester/alle-pakker/growth`, 8 000 kr/mnd). Gi pakken nytt navn, eller behold? *(Avventer.)*
 - [ ] **Kolonner:** Tre kolonner i Growth-menyen, mot to i de andre fanene. OK?
 - [ ] **Øyvind:** Kobler han inn `growthNavItem()`? Til da viser headeren den gamle Growth-menyen, der bare SEO-lenken treffer en av sidene våre.
@@ -145,7 +154,19 @@ npm run dev                 # http://localhost:3000/no/growth-marketing
 - [ ] **Sanity:** Når teksten er klar, skal innholdet flyttes til en egen sidetype i Sanity.
 - [ ] **Låsefil:** `package-lock.json` er ute av synk med `package.json` (eksisterte fra før). Bør fikses i egen commit.
 
-## 8. Beslutningslogg
+## 8. Faktagrunnlag for innhold
+
+Tekstene skal bare inneholde påstander vi kan stå for. Tidsavhengige fakta sjekkes på nytt før publisering.
+
+**SEM og Google Ads** (research 2026-10-16):
+- CSS: Shopping-annonser i EØS, også Norge, plasseres via en CSS, og Googles egen CSS trekker en fast margin av budet. Kilde: Google Merchant Center-hjelp 12652686 og 12653197. Vi oppgir **ikke** rabatt i prosent: tallene på 15–20 % kommer fra CSS-leverandører, ikke fra Google.
+- Consent Mode v2: Kreves i EØS for personlig tilpasning og modellering (siden mars 2024). Shopify bruker ikke EØS-data til personlige annonser uten gyldig samtykke. Kilde: Shopify Help, «Consent».
+- Performance Max: Har nå kanalrapport, negative søkeord på kampanjenivå, merkeutelukkelser og mål for nye kunder (2025).
+- AI Max for Search: Rullet ut i 2025, men Norge er ikke bekreftet. Derfor skriver vi «der det er tilgjengelig». AI Max for Shopping er usikkert og nevnes ikke.
+- Bing: Liten andel av søk i Norge, men høyere på desktop (Statcounter, 2026). Vi oppgir ikke tall eller klikkpriser.
+- Benchmarks: Bare tall fra USA eller globalt finnes. De brukes ikke.
+
+## 9. Beslutningslogg
 
 | Dato | Beslutning | Begrunnelse |
 |---|---|---|
@@ -164,3 +185,4 @@ npm run dev                 # http://localhost:3000/no/growth-marketing
 | 2026-10-16 | Affiliate (inkl. CSS-partnere for Google Shopping) legges til under Annonsering | Vi bistår kunder med det i dag; betalt kanal med provisjon, nær SEM/SoMe |
 | 2026-10-16 | Ikoner fra designsystemets bibliotek (Lucide, strek 1,75) på samlesidekort, kortpiler, brødsmuler og utkastbanner | Designsystemet bruker Lucide sparsomt; tjenesteikon bare på samlesiden for å unngå gjentakelse på kanalkortene |
 | 2026-10-16 | Draft-PR #2 fra `growth/growth-marketing-seo` til `tjenester` | Growth-arbeidet følger IA-arbeidet inn i `main`; Øyvind ser og kommenterer alt på ett sted |
+| 2026-10-16 | Første tekstutkast for SEM og Google Ads, i `lib/growthContent.ts` | Bygget på oppdatert research (se §8); bare bekreftede påstander; priser og bevis står igjen som plassholdere |
