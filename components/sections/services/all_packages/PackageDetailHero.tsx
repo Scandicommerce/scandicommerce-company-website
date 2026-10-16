@@ -49,7 +49,7 @@ export default function PackageDetailHero({ pkg, tier, shopifyProduct, lang = 'e
       />
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -right-40 -top-40 h-[560px] w-[560px] rounded-full bg-sc-cyan-500/20 blur-[120px]"
+        className="pointer-events-none absolute -right-40 -top-40 h-[560px] w-[560px] rounded-full bg-sc-cyan-500/10 blur-[140px]"
       />
 
       <div className="section_container relative mx-auto max-w-[1320px] page-padding-x pt-14 pb-12 lg:pt-24 lg:pb-20">
@@ -59,7 +59,7 @@ export default function PackageDetailHero({ pkg, tier, shopifyProduct, lang = 'e
             <div className="mb-3 text-[11px] font-semibold uppercase tracking-[0.12em] text-sc-cyan-500 lg:text-xs">
               {t.eyebrow}
             </div>
-            <h1 className="text-3xl font-bold tracking-[-0.02em] text-sc-ink-900 sm:text-4xl lg:text-5xl">
+            <h1 className="text-[40px] font-bold leading-[1.02] tracking-[-0.028em] text-sc-ink-900 lg:text-[56px]">
               {pkg.title}
             </h1>
             {(card?.tagline || pkg.subtitle) && (
@@ -107,7 +107,7 @@ export default function PackageDetailHero({ pkg, tier, shopifyProduct, lang = 'e
           </div>
 
           {/* Facts panel */}
-          <div className="w-full rounded-lg border border-sc-ink-100 bg-white p-6 shadow-[0_24px_60px_rgba(15,23,42,0.08)] lg:p-8">
+          <div className="w-full rounded-lg border border-sc-ink-100 bg-white p-6 lg:p-8">
             {audience && (
               <>
                 <h2 className="text-[11px] font-bold uppercase tracking-[0.12em] text-sc-ink-400">

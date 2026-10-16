@@ -82,7 +82,7 @@ function AddOnCard({ addOn, index }: { addOn: AddOn; index: number }) {
   const isDisabled = isAdding
 
   return (
-    <div className="bg-white p-6 border border-sc-ink-100 shadow-sm relative">
+    <div className="relative rounded-lg border border-sc-ink-100 bg-white p-6">
       {/* Add to Cart button - top right */}
       <button
         onClick={handleAddToCart}

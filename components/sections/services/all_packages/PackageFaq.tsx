@@ -1,8 +1,3 @@
-'use client'
-
-import { useState } from 'react'
-import { FiChevronDown } from 'react-icons/fi'
-
 interface FaqItem {
   question: string
   answer: string
@@ -21,52 +16,27 @@ const T = {
   de: 'Fragen und Antworten',
 } as const
 
-function AccordionItem({ question, answer }: FaqItem) {
-  const [isOpen, setIsOpen] = useState(false)
-
-  return (
-    <div className="bg-sc-cyan-50 px-4 sm:px-8 md:px-12 lg:px-[82px]">
-      <button
-        type="button"
-        onClick={() => setIsOpen(!isOpen)}
-        aria-expanded={isOpen}
-        className="flex w-full items-center justify-between py-4 text-left transition-opacity hover:opacity-80 md:py-5"
-      >
-        <span className="pr-4 text-sm font-medium text-white sm:text-base lg:text-lg">{question}</span>
-        <FiChevronDown
-          className={`flex-shrink-0 text-white transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}
-          size={20}
-        />
-      </button>
-      {/* Grid-rows transition so the panel sizes to its content instead of a
-          fixed max-height, which clipped longer answers. */}
-      <div
-        className={`grid overflow-hidden transition-all duration-300 ${
-          isOpen ? 'grid-rows-[1fr] pb-4 md:pb-5' : 'grid-rows-[0fr]'
-        }`}
-      >
-        <p className="min-h-0 text-xs leading-relaxed text-white/80 sm:text-sm lg:text-base">
-          {answer}
-        </p>
-      </div>
-    </div>
-  )
-}
-
-/** Package FAQ, in the same accordion the rest of the site uses. */
+/** Package FAQ: hairline accordion, first item open, same as the integrations pages. */
 export default function PackageFaq({ items, lang = 'en' }: PackageFaqProps) {
   const faqs = (items ?? []).filter((i) => i?.question && i?.answer)
   if (faqs.length === 0) return null
 
   return (
-    <section id="faq" className="scroll-mt-24 bg-sc-cyan-500 py-12 md:py-16 lg:py-24">
-      <div className="section_container mx-auto page-padding-x">
-        <h2 className="mb-8 text-center text-[26px] font-bold text-white md:mb-10 lg:text-[34px]">
+    <section id="faq" className="scroll-mt-24 bg-sc-ink-50 py-16 lg:py-20">
+      <div className="mx-auto max-w-[880px] px-5 lg:px-8">
+        <h2 className="mb-8 text-[28px] font-bold leading-tight tracking-[-0.02em] text-sc-ink-900 lg:text-[36px]">
           {T[lang as keyof typeof T] ?? T.en}
         </h2>
-        <div className="mx-auto flex max-w-5xl flex-col gap-3 md:gap-4 lg:gap-5">
+        <div className="border-t border-sc-ink-200">
           {faqs.map((item, index) => (
-            <AccordionItem key={index} {...item} />
+            <details key={index} className="group border-b border-sc-ink-200 py-5" open={index === 0}>
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-lg font-semibold text-sc-ink-900">
+                <h3 className="m-0 inline text-lg">{item.question}</h3>
+                <span className="text-sc-ink-500 group-open:hidden">+</span>
+                <span className="hidden text-sc-ink-500 group-open:inline">–</span>
+              </summary>
+              <p className="mt-3 leading-relaxed text-sc-ink-600">{item.answer}</p>
+            </details>
           ))}
         </div>
       </div>
