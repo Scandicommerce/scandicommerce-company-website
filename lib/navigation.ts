@@ -21,6 +21,13 @@ export interface NavLink {
   description?: string
   /** Renders as a nested child of the entry above it. */
   indent?: boolean
+  /**
+   * Set to false while the destination does not exist yet. Such entries are
+   * kept here so the agreed IA stays visible in one place, but are not
+   * rendered — the header must never link to a 404, since it appears on every
+   * page. Delete the flag in the same change that ships the page.
+   */
+  live?: boolean
 }
 
 export interface NavColumn {
@@ -75,6 +82,7 @@ export const navigationNo: NavItem[] = [
             label: 'Apper',
             href: '/apper',
             description: 'NexusShipping, NexusLoyalty, NexusGrow',
+            live: false,
           },
         ],
       },
@@ -82,6 +90,7 @@ export const navigationNo: NavItem[] = [
   },
   {
     label: 'Growth marketing',
+    live: false,
     columns: [
       {
         title: 'Synlighet',
@@ -116,6 +125,7 @@ export const navigationNo: NavItem[] = [
   },
   {
     label: 'Integrasjoner',
+    live: false,
     columns: [
       {
         title: 'Etter system',
@@ -148,8 +158,8 @@ export const navigationNo: NavItem[] = [
       },
     ],
   },
-  { label: 'Agentisk handel', href: '/agentisk-handel' },
-  { label: 'NexusPOS', href: '/nexuspos' },
+  { label: 'Agentisk handel', href: '/agentisk-handel', live: false },
+  { label: 'NexusPOS', href: '/nexuspos', live: false },
   { label: 'Kundecaser', href: '/kundecaser' },
 ]
 
@@ -166,7 +176,7 @@ export const footerColumnsNo: FooterColumn[] = [
       { label: 'Alle pakker', href: '/tjenester/alle-pakker' },
       { label: 'Migrering', href: '/tjenester/migrering' },
       { label: 'Utvikling', href: '/tjenester/utvikling' },
-      { label: 'Apper', href: '/apper' },
+      { label: 'Apper', href: '/apper', live: false },
     ],
   },
   {
@@ -192,8 +202,8 @@ export const footerColumnsNo: FooterColumn[] = [
   {
     title: 'Juridisk',
     links: [
-      { label: 'Personvern og cookies', href: '/personvern' },
-      { label: 'App-personvern', href: '/app-privacy-policy' },
+      { label: 'Personvern og cookies', href: '/personvern', live: false },
+      { label: 'App-personvern', href: '/app-privacy-policy', live: false },
       { label: 'Nettstedskart', href: '/sitemap' },
     ],
   },
@@ -256,6 +266,26 @@ export const footerColumnsEn: FooterColumn[] = [
   { title: 'Resources', links: [{ label: 'Blog & Articles', href: '/blog' }] },
   { title: 'Merch', links: [{ label: 'Merch', href: '/merch' }] },
 ]
+
+/** Entries explicitly marked `live: false` are not rendered. */
+export function isLive(item: { live?: boolean }): boolean {
+  return item.live !== false
+}
+
+/**
+ * Drops unbuilt entries, then any column and any dropdown left without links.
+ * CMS-authored menus pass through unchanged — editors cannot link to a page
+ * that does not exist, because Studio only offers published documents.
+ */
+export function liveNavigation(items: NavItem[]): NavItem[] {
+  return items.filter(isLive).map((item) => {
+    if (!item.columns) return item
+    const columns = item.columns
+      .map((column) => ({ ...column, items: (column.items ?? []).filter(isLive) }))
+      .filter((column) => column.items.length > 0)
+    return { ...item, columns }
+  }).filter((item) => !item.columns || item.columns.length > 0 || Boolean(item.href || item.slug))
+}
 
 /** Menu shown when the language's headerSettings document has no `menu` of its own. */
 export function defaultNavigation(language?: string): NavItem[] {
