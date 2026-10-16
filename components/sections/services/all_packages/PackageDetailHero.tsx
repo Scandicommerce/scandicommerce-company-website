@@ -110,7 +110,7 @@ export default function PackageDetailHero({ pkg, tier, shopifyProduct, lang = 'e
           <div className="w-full rounded-lg border border-sc-ink-100 bg-white p-6 lg:p-8">
             {audience && (
               <>
-                <h2 className="text-[11px] font-bold uppercase tracking-[0.12em] text-sc-ink-400">
+                <h2 className="text-xs font-semibold uppercase tracking-[0.12em] text-sc-ink-400">
                   {t.audience}
                 </h2>
                 <p className="mt-2 text-[15px] leading-relaxed text-sc-ink-700">{audience}</p>
@@ -121,13 +121,13 @@ export default function PackageDetailHero({ pkg, tier, shopifyProduct, lang = 'e
               <dl className="mt-6 grid grid-cols-2 gap-4 border-t border-sc-ink-100 pt-6">
                 {total !== undefined && (
                   <div>
-                    <dt className="text-[12px] text-sc-ink-500">{t.services}</dt>
+                    <dt className="text-sm text-sc-ink-500">{t.services}</dt>
                     <dd className="text-[24px] font-bold text-sc-ink-900">{total}</dd>
                   </div>
                 )}
                 {belowCard && (
                   <div>
-                    <dt className="text-[12px] text-sc-ink-500">Bygger på</dt>
+                    <dt className="text-sm text-sc-ink-500">Bygger på</dt>
                     <dd className="text-[24px] font-bold text-sc-ink-900">{belowCard.name}</dd>
                   </div>
                 )}
@@ -137,7 +137,7 @@ export default function PackageDetailHero({ pkg, tier, shopifyProduct, lang = 'e
             {card && card.bullets.length > 0 && (
               <ul className="mt-6 space-y-2.5 border-t border-sc-ink-100 pt-6">
                 {card.bullets.map((bullet, i) => (
-                  <li key={i} className="flex items-start gap-2.5 text-[14.5px] text-sc-ink-700">
+                  <li key={i} className="flex items-start gap-2.5 text-base text-sc-ink-700">
                     <span
                       aria-hidden="true"
                       className="mt-[8px] h-1.5 w-1.5 shrink-0 rounded-full bg-sc-cyan-500"
@@ -151,7 +151,7 @@ export default function PackageDetailHero({ pkg, tier, shopifyProduct, lang = 'e
             {!card && pkg.highlights.length > 0 && (
               <ul className="mt-6 space-y-2.5 border-t border-sc-ink-100 pt-6">
                 {pkg.highlights.map((highlight, i) => (
-                  <li key={i} className="flex items-start gap-2.5 text-[14.5px] text-sc-ink-700">
+                  <li key={i} className="flex items-start gap-2.5 text-base text-sc-ink-700">
                     <span
                       aria-hidden="true"
                       className="mt-[8px] h-1.5 w-1.5 shrink-0 rounded-full bg-sc-cyan-500"

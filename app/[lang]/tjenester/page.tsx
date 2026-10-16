@@ -6,6 +6,7 @@ import HeaderWrapper from '@/components/layout/HeaderWrapper'
 import FooterWrapper from '@/components/layout/FooterWrapper'
 import LocalizedLink from '@/components/ui/LocalizedLink'
 import ServiceHero from '@/components/sections/services/ServiceHero'
+import DataFlowAnimation from '@/components/integrations/DataFlowAnimation'
 import { getLanguageFromParams } from '@/lib/language'
 import { navigationNo, type NavLink } from '@/lib/navigation'
 import { getPageTeaserText } from '@/lib/pageTeaser'
@@ -114,7 +115,7 @@ export default async function TjenesterOverviewPage({ params }: { params: Promis
             { text: 'Se alle pakker', link: packagesHref(language), variant: 'secondary' },
           ]}
           visual={
-            HERO_IMAGE && (
+            HERO_IMAGE ? (
               <Image
                 src={HERO_IMAGE.src}
                 alt={HERO_IMAGE.alt}
@@ -122,6 +123,24 @@ export default async function TjenesterOverviewPage({ params }: { params: Promis
                 height={HERO_IMAGE.height}
                 priority
                 className="h-auto w-full rounded-lg"
+              />
+            ) : (
+              <DataFlowAnimation
+                variant="overview"
+                systems={[{ name: 'Shopify', role: 'source' }]}
+                steps={[
+                  { from: 'Shopify', to: 'Nettbutikk', payload: 'ny butikk' },
+                  { from: 'Migrering', to: 'Shopify', payload: 'produkter + kunder' },
+                  { from: 'Shopify', to: 'B2B', payload: 'ordreportal' },
+                  { from: 'Utvikling', to: 'Shopify', payload: 'skreddersøm' },
+                ]}
+                language={language}
+                nodes={[
+                  { label: 'Nettbutikk', logos: [] },
+                  { label: 'Migrering', logos: [] },
+                  { label: 'B2B og ordreportal', logos: [] },
+                  { label: 'Utvikling', logos: [] },
+                ]}
               />
             )
           }

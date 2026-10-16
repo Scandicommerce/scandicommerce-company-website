@@ -69,7 +69,7 @@ export default function WhyShopifyWins({ whyShopify }: WhyShopifyWinsProps) {
               </h2>
             )}
             {subtitle && (
-              <p className="text-sc-ink-600 text-sm sm:text-base lg:text-lg max-w-2xl mx-auto">
+              <p className="text-sc-ink-600 text-lg max-w-2xl mx-auto">
                 {subtitle}
               </p>
             )}
@@ -93,14 +93,14 @@ export default function WhyShopifyWins({ whyShopify }: WhyShopifyWinsProps) {
 
                 {/* Title */}
                 {feature.title && (
-                  <h3 className="text-xs sm:text-sm lg:text-base font-semibold text-sc-ink-900 mb-2 sm:mb-3">
+                  <h3 className="text-base font-semibold text-sc-ink-900 mb-2 sm:mb-3">
                     {feature.title}
                   </h3>
                 )}
 
                 {/* Description */}
                 {feature.description && (
-                  <p className="text-[10px] sm:text-xs lg:text-sm text-sc-ink-500 leading-relaxed">
+                  <p className="text-[15px] text-sc-ink-500 leading-relaxed">
                     {feature.description}
                   </p>
                 )}

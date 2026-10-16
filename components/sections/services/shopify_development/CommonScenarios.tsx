@@ -56,14 +56,14 @@ export default function CommonScenarios({ scenarios }: CommonScenariosProps) {
                   </h3>
                 )}
                 {scenario.description && (
-                  <p className="text-xs sm:text-sm lg:text-base text-sc-ink-500 mb-4 sm:mb-6 leading-relaxed">
+                  <p className="text-base text-sc-ink-500 mb-4 sm:mb-6 leading-relaxed">
                     {scenario.description}
                   </p>
                 )}
                 {scenario.link && (
                   <Link
                     href={scenario.link}
-                    className="inline-flex items-center text-sc-cyan-600 text-xs sm:text-sm font-semibold hover:underline"
+                    className="inline-flex items-center text-sc-cyan-600 text-[15px] font-semibold hover:underline"
                   >
                     {linkText}
                     <svg

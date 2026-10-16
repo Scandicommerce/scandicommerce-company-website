@@ -137,7 +137,7 @@ function AddOnCard({ addOn, index }: { addOn: AddOn; index: number }) {
       </h3>
 
       {/* Description */}
-      <p className="text-sm text-sc-ink-500 mb-4">{addOn.description}</p>
+      <p className="text-base text-sc-ink-600 mb-4">{addOn.description}</p>
 
       {/* Price */}
       <p className="text-[4.3vw] xs:text-[2.6vw] sm:text-[2.5vw] md:text-[2.2vw] lg:text-[18px] xl:text-[24px] font-bold text-sc-cyan-600 font-mono tracking-tight sm:pb-0 pb-4">
@@ -147,7 +147,7 @@ function AddOnCard({ addOn, index }: { addOn: AddOn; index: number }) {
       <button
         onClick={handleAddToCart}
         disabled={isDisabled}
-        className={`text-white px-5 py-1.5 text-xs sm:text-sm font-medium transition-all duration-200 sm:hidden flex items-center gap-2 rounded ${isDisabled
+        className={`text-white px-5 py-1.5 text-[15px] font-medium transition-all duration-200 sm:hidden flex items-center gap-2 rounded ${isDisabled
           ? 'bg-gray-300 cursor-not-allowed'
           : showSuccess
             ? 'bg-green-500 hover:bg-green-600'

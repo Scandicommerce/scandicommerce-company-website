@@ -16,7 +16,7 @@ import { AbsoluteFill, Easing, Img, interpolate, useCurrentFrame } from 'remotio
  * still. 1600×900 (overview 1600×600), 30 fps. Tokens from the design system.
  */
 
-export type FlowVariant = 'make' | 'code' | 'direct' | 'overview'
+export type FlowVariant = 'make' | 'code' | 'direct' | 'overview' | 'tiers'
 export type FlowTheme = 'light' | 'dark'
 export type FlowNode = { name: string; logoUrl?: string | null }
 export type FlowStepProp = { payload: string; from: string; to: string; trigger?: 'webhook' | 'schedule' | 'manual' | null; frequency?: string | null }
@@ -43,9 +43,11 @@ export const SIZE: Record<FlowVariant, { width: number; height: number }> = {
   code: { width: 1600, height: 900 },
   direct: { width: 1600, height: 900 },
   overview: { width: 1600, height: 600 },
+  tiers: { width: 1600, height: 600 },
 }
 export function durationFor(props: FlowProps): number {
   if (props.variant === 'overview') return 330
+  if (props.variant === 'tiers') return 330
   const n = Math.max(1, Math.min(props.steps.length, 5))
   return INTRO + n * BEAT + HOLD + FADE
 }
@@ -347,8 +349,77 @@ function OverviewFlow({ theme, source, nodes = [], steps }: FlowProps & { theme:
   )
 }
 
+/* --------------------------------------------------------------- tiers */
+/**
+ * Packages: three tier columns rise in turn; the services that are new in
+ * each tier drop in as pills while the counter ticks; a pulse carries
+ * "everything in the tier below" up to the next column.
+ * nodes[i].label = tier name, nodes[i].logos unused; steps: payload = service,
+ * from = tier label it belongs to.
+ */
+function TiersFlow({ theme, nodes = [], steps, lang = 'no' }: FlowProps & { theme: FlowTheme }) {
+  const f = useCurrentFrame()
+  const c = C[theme]
+  const tiers = nodes.slice(0, 4)
+  const n = Math.max(1, tiers.length)
+  const gap = n > 3 ? 48 : 80
+  const colW = Math.min(400, Math.floor((1600 - 2 * 60 - (n - 1) * gap) / n))
+  const totalW = n * colW + (n - 1) * gap
+  const x0 = (1600 - totalW) / 2
+  const dense = colW < 360
+  const top = 90
+  const colH = 420
+  const perTier = tiers.map((t) => steps.filter((s) => s.from.toLowerCase() === t.label.toLowerCase()).slice(0, 5))
+  const colIn = (i: number) => t01(f, 6 + i * 70, 24 + i * 70)
+  const pillIn = (i: number, k: number) => t01(f, 26 + i * 70 + k * 7, 38 + i * 70 + k * 7)
+  const fade = f > 316 ? 1 - t01(f, 316, 330) : 1
+  const inherits = lang === 'no' ? 'alt i' : 'everything in'
+  const servicesLabel = lang === 'no' ? 'tjenester' : 'services'
+  return (
+    <AbsoluteFill data-frame={f} style={{ background: c.bg, opacity: fade, fontFamily: SANS }}>
+      {tiers.map((t, i) => {
+        const x = x0 + i * (colW + gap)
+        const items = perTier[i]
+        const count = items.reduce((acc, _, k) => acc + (pillIn(i, k) >= 1 ? 1 : 0), 0)
+        const rise = (1 - colIn(i)) * 24
+        const linkP = i > 0 ? t01(f, 2 + i * 70, 22 + i * 70) : 0
+        return (
+          <React.Fragment key={t.label}>
+            {i > 0 && (
+              <>
+                <Edge x1={x - gap} x2={x} y={top + 56} progress={colIn(i)} active={linkP > 0 && linkP < 1} frame={f} theme={theme} />
+                {linkP > 0 && linkP < 1 && <Pulse x={x - gap + gap * linkP} y={top + 56} theme={theme} label={`${inherits} ${tiers[i - 1].label}`} />}
+              </>
+            )}
+            <div style={{ position: 'absolute', left: x, top: top + rise, width: colW, height: colH, opacity: colIn(i), boxSizing: 'border-box', padding: dense ? 20 : 28, borderRadius: 14, background: i === n - 1 ? c.ink : c.card, color: i === n - 1 ? c.inkText : c.text, border: `2px solid ${i === n - 1 ? c.ink : c.cardBorder}`, display: 'flex', flexDirection: 'column', gap: 14 }}>
+              <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between' }}>
+                <div style={{ fontSize: dense ? 26 : 30, fontWeight: 700, letterSpacing: '-0.02em' }}>{t.label}</div>
+                <div style={{ fontFamily: MONO, fontSize: dense ? 15 : 18, color: i === n - 1 ? '#b5bcc4' : c.muted }}>
+                  +{count} {servicesLabel}
+                </div>
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                {items.map((s, k) => {
+                  const p = pillIn(i, k)
+                  return (
+                    <div key={s.payload} style={{ opacity: p, transform: `translateY(${(1 - p) * -14}px)`, display: 'flex', alignItems: 'center', gap: 10, padding: dense ? '8px 12px' : '10px 14px', borderRadius: 8, background: i === n - 1 ? '#1a2124' : c.bg, border: `1px solid ${i === n - 1 ? '#3a444a' : c.cardBorder}`, fontSize: dense ? 17 : 19 }}>
+                      <span style={{ width: 8, height: 8, borderRadius: 999, background: c.pulse, flex: 'none' }} />
+                      <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{s.payload}</span>
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+          </React.Fragment>
+        )
+      })}
+    </AbsoluteFill>
+  )
+}
+
 export default function FlowComposition(props: FlowProps) {
   const theme = props.theme ?? 'light'
   if (props.variant === 'overview') return <OverviewFlow {...props} theme={theme} />
+  if (props.variant === 'tiers') return <TiersFlow {...props} theme={theme} />
   return <StepFlow {...props} theme={theme} />
 }

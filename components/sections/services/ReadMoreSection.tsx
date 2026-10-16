@@ -31,7 +31,7 @@ export default function ReadMoreSection({ eyebrow, title, description, href, lin
               {title}
             </h2>
             {description && (
-              <p className="max-w-[720px] text-sm lg:text-[15px] leading-relaxed text-sc-ink-600 m-0">{description}</p>
+              <p className="max-w-[720px] text-base leading-relaxed text-sc-ink-600 m-0">{description}</p>
             )}
           </div>
           <span className="flex-none text-sm font-medium text-sc-cyan-600 group-hover:text-sc-cyan-700">

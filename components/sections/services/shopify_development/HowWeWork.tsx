@@ -51,7 +51,7 @@ export default function HowWeWork({ howWeWork }: HowWeWorkProps) {
 
                 {/* Description */}
                 {step.description && (
-                  <p className="text-xs sm:text-sm text-sc-ink-500 leading-relaxed">
+                  <p className="text-[15px] text-sc-ink-500 leading-relaxed">
                     {step.description}
                   </p>
                 )}

@@ -48,7 +48,7 @@ export default function RealMigrationResults({ results }: RealMigrationResultsPr
                   </h3>
                 )}
                 {result.description && (
-                  <p className="text-xs sm:text-sm lg:text-base text-[#565454]">
+                  <p className="text-base text-[#565454]">
                     {result.description}
                   </p>
                 )}

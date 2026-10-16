@@ -21,10 +21,10 @@ function ServiceRow({ service }: { service: PackageService }) {
           className="mt-[7px] h-1.5 w-1.5 shrink-0 rounded-full bg-sc-cyan-500"
         />
         <div className="min-w-0">
-          <h4 className="text-[15px] font-semibold text-sc-ink-900">{service.name}</h4>
-          <p className="mt-1 text-[13.5px] leading-relaxed text-sc-ink-600">{service.text}</p>
+          <h4 className="text-[17px] font-semibold text-sc-ink-900">{service.name}</h4>
+          <p className="mt-1 text-[15px] leading-relaxed text-sc-ink-600">{service.text}</p>
           {service.limit && (
-            <p className="mt-2 text-[12.5px] leading-relaxed text-sc-ink-400">
+            <p className="mt-2 text-sm leading-relaxed text-sc-ink-400">
               <span className="font-medium">Omfang:</span> {service.limit}
             </p>
           )}
@@ -61,7 +61,7 @@ export default function PackageIncludes({ tier }: PackageIncludesProps) {
       </div>
 
       {belowCard && (
-        <p className="mb-8 rounded-lg border border-sc-cyan-500/30 bg-sc-cyan-500/5 px-5 py-3.5 text-[14px] text-sc-ink-700">
+        <p className="mb-8 rounded-lg border border-sc-cyan-500/30 bg-sc-cyan-500/5 px-5 py-3.5 text-[15px] text-sc-ink-700">
           <span className="font-semibold">Alt i {belowCard.name}</span> er inkludert, pluss det som
           er merket som nytt under.
         </p>
@@ -71,10 +71,10 @@ export default function PackageIncludes({ tier }: PackageIncludesProps) {
         {groups.map((group) => (
           <section key={group.section}>
             <div className="mb-4 flex items-baseline justify-between gap-4 border-b border-sc-ink-100 pb-2">
-              <h3 className="text-[17px] lg:text-[19px] font-bold text-sc-ink-900">
+              <h3 className="text-xl font-semibold text-sc-ink-900">
                 {group.section}
               </h3>
-              <span className="shrink-0 text-[12px] text-sc-ink-400">
+              <span className="shrink-0 text-sm text-sc-ink-400">
                 {group.added.length + group.inherited.length} tjenester
               </span>
             </div>
@@ -82,7 +82,7 @@ export default function PackageIncludes({ tier }: PackageIncludesProps) {
             {group.added.length > 0 && (
               <>
                 {below && (
-                  <p className="mb-3 text-[11px] font-bold uppercase tracking-[0.12em] text-sc-cyan-500">
+                  <p className="mb-3 text-xs font-semibold uppercase tracking-[0.12em] text-sc-cyan-500">
                     Nytt i {card?.name}
                   </p>
                 )}
@@ -106,7 +106,7 @@ export default function PackageIncludes({ tier }: PackageIncludesProps) {
                   {group.inherited.map((service) => (
                     <li
                       key={service.id}
-                      className="flex items-start gap-2 text-[13.5px] text-sc-ink-600"
+                      className="flex items-start gap-2 text-[15px] text-sc-ink-600"
                     >
                       <span
                         aria-hidden="true"

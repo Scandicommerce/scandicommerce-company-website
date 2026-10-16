@@ -20,7 +20,7 @@ export default function CodeEditorMockup() {
           <span className="h-2.5 w-2.5 rounded-full bg-sc-ink-200" />
           <span className="ml-3 rounded-md bg-sc-ink-50 px-3 py-1 text-[11px] font-medium text-sc-ink-600">configurator.ts</span>
         </div>
-        <pre className="m-0 overflow-hidden px-5 py-4 font-mono text-[12px] sm:text-[13px] leading-6">
+        <pre className="m-0 overflow-hidden px-5 py-4 font-mono text-sm sm:text-[13px] leading-6">
           {LINES.map(([indent, tokens], i) => (
             <div key={i} className="flex whitespace-pre">
               <span className="mr-4 w-4 shrink-0 select-none text-right text-sc-ink-200">{i + 1}</span>

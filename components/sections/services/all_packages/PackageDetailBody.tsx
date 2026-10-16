@@ -22,7 +22,7 @@ function SectionHeading({ id, children }: { id: string; children: React.ReactNod
   return (
     <h2
       id={id}
-      className="mb-6 scroll-mt-24 text-[22px] font-bold tracking-[-0.01em] text-sc-ink-900 lg:text-[28px]"
+      className="mb-6 scroll-mt-24 text-[28px] font-bold leading-tight tracking-[-0.02em] text-sc-ink-900 lg:text-[36px]"
     >
       {children}
     </h2>
@@ -51,7 +51,7 @@ export default function PackageDetailBody({ pkg, tier, lang = 'en' }: PackageDet
       {anchors.length > 1 && (
         <nav className="sticky top-14 z-20 border-b border-sc-ink-100 bg-white/95 backdrop-blur-md lg:top-[62px]">
           <div className="section_container mx-auto max-w-[1320px] page-padding-x">
-            <ul className="flex gap-6 overflow-x-auto py-3.5 text-[13.5px] font-medium">
+            <ul className="flex gap-6 overflow-x-auto py-3.5 text-[15px] font-medium">
               {anchors.map((a) => (
                 <li key={a.id}>
                   <a
@@ -79,12 +79,12 @@ export default function PackageDetailBody({ pkg, tier, lang = 'en' }: PackageDet
                 <div className="space-y-10">
                   {pkg.includedCategories.map((category, i) => (
                     <div key={i}>
-                      <h3 className="mb-4 border-b border-sc-ink-100 pb-2 text-[17px] font-bold text-sc-ink-900 lg:text-[19px]">
+                      <h3 className="mb-4 border-b border-sc-ink-100 pb-2 text-xl font-semibold text-sc-ink-900">
                         {category.category}
                       </h3>
                       <ul className="grid grid-cols-1 gap-x-8 gap-y-2 md:grid-cols-2">
                         {category.items.map((item, j) => (
-                          <li key={j} className="flex items-start gap-2.5 text-[14.5px] text-sc-ink-700">
+                          <li key={j} className="flex items-start gap-2.5 text-base text-sc-ink-700">
                             <span aria-hidden="true" className="mt-[8px] h-1.5 w-1.5 shrink-0 rounded-full bg-sc-cyan-500" />
                             {item}
                           </li>
@@ -96,7 +96,7 @@ export default function PackageDetailBody({ pkg, tier, lang = 'en' }: PackageDet
               ) : (
                 <ul className="grid grid-cols-1 gap-x-8 gap-y-2 md:grid-cols-2">
                   {pkg.included.map((item, i) => (
-                    <li key={i} className="flex items-start gap-2.5 text-[14.5px] text-sc-ink-700">
+                    <li key={i} className="flex items-start gap-2.5 text-base text-sc-ink-700">
                       <span aria-hidden="true" className="mt-[8px] h-1.5 w-1.5 shrink-0 rounded-full bg-sc-cyan-500" />
                       {item}
                     </li>
@@ -113,7 +113,7 @@ export default function PackageDetailBody({ pkg, tier, lang = 'en' }: PackageDet
                   {pkg.idealFor.map((item, i) => (
                     <li
                       key={i}
-                      className="rounded-lg border border-sc-ink-100 bg-sc-ink-50 px-4 py-3.5 text-[14.5px] leading-relaxed text-sc-ink-700"
+                      className="rounded-lg border border-sc-ink-100 bg-sc-ink-50 px-4 py-3.5 text-base leading-relaxed text-sc-ink-700"
                     >
                       {item}
                     </li>
