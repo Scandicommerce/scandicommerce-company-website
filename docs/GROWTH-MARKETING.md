@@ -4,7 +4,7 @@ Arbeidsdokument for Growth marketing-sidene på nettsiden: hva vi bygger, hvorda
 er strukturert, hvilke regler vi følger og hva som er besluttet. Oppdateres i samme
 commit som endringen den beskriver.
 
-**Branch:** `growth/growth-marketing-seo` · **Bygger på:** `tjenester` (ny IA, Øyvind)
+**Branch:** `growth/growth-marketing-seo` · **Bygger på:** `tjenester` (ny IA, Øyvind) · **PR:** [#2](https://github.com/Scandicommerce/scandicommerce-company-website/pull/2) (draft, mot `tjenester`)
 
 ---
 
@@ -163,3 +163,4 @@ npm run dev                 # http://localhost:3000/no/growth-marketing
 | 2026-10-16 | Dummysidene ligger i kode, med noindex | Ingen skrivetilgang til Sanity; sidene skal ikke indekseres med plassholdertekst |
 | 2026-10-16 | Affiliate (inkl. CSS-partnere for Google Shopping) legges til under Annonsering | Vi bistår kunder med det i dag; betalt kanal med provisjon, nær SEM/SoMe |
 | 2026-10-16 | Ikoner fra designsystemets bibliotek (Lucide, strek 1,75) på samlesidekort, kortpiler, brødsmuler og utkastbanner | Designsystemet bruker Lucide sparsomt; tjenesteikon bare på samlesiden for å unngå gjentakelse på kanalkortene |
+| 2026-10-16 | Draft-PR #2 fra `growth/growth-marketing-seo` til `tjenester` | Growth-arbeidet følger IA-arbeidet inn i `main`; Øyvind ser og kommenterer alt på ett sted |
