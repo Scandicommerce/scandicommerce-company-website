@@ -67,6 +67,7 @@ export const TRANSLATABLE_SCHEMA_TYPES = [
   "caseStudy",
   "pillarPage",
   "integrationPage",
+  "integrationCategory",
   "migrationPage",
 ] as const;
 

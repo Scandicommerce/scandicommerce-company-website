@@ -62,6 +62,7 @@ const SERVICE_PAGE_TYPES = new Set([
   'shopifyDevelopmentPage',
   'vippsHurtigkassePage',
   'integrationPage',
+  'integrationCategory',
   'migrationPage',
 ])
 

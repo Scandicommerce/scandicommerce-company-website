@@ -3072,6 +3072,7 @@ const PAGE_TYPES_WITH_SLUG = [
   "packageDetailPage",
   "pillarPage",
   "integrationPage",
+  "integrationCategory",
   "migrationPage",
 ];
 

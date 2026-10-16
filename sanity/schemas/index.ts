@@ -26,7 +26,7 @@ import {
 // ============================================
 // Document Types (e.g. post page builder)
 // ============================================
-import { author, legalPage, post, siteSettings, redirect, pillarPage, integrationPage, migrationPage } from "./documents";
+import { author, legalPage, post, siteSettings, redirect, pillarPage, integrationPage, migrationPage, integrationCategory } from "./documents";
 import { faqItems } from "./objects";
 
 // ============================================
@@ -246,6 +246,7 @@ export const schemaTypes = [
   post,
   pillarPage,
   integrationPage,
+  integrationCategory,
   migrationPage,
   faqItems,
 

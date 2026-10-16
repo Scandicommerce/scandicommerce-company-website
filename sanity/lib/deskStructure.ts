@@ -276,6 +276,10 @@ export const deskStructure = (S: StructureBuilder) =>
                 .schemaType('pillarPage')
                 .child(S.documentTypeList('pillarPage').title('Pillar pages')),
               S.listItem()
+                .title('Integration categories')
+                .schemaType('integrationCategory')
+                .child(S.documentTypeList('integrationCategory').title('Integration categories')),
+              S.listItem()
                 .title('Integration pages')
                 .schemaType('integrationPage')
                 .child(S.documentTypeList('integrationPage').title('Integration pages')),

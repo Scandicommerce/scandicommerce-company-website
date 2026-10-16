@@ -21,7 +21,7 @@ export type ResolvedPage = {
 } | null
 
 type Hit = { _type: string; _id: string; slug?: string } | null
-const TEMPLATE_TYPES = new Set(['pillarPage', 'integrationPage', 'migrationPage'])
+const TEMPLATE_TYPES = new Set(['pillarPage', 'integrationPage', 'integrationCategory', 'migrationPage'])
 const NO_STORE = { next: { revalidate: 0 } }
 
 async function findArticle(slug: string, language: string): Promise<Hit> {

@@ -33,6 +33,8 @@ import MerchProductPage from '../_pages/merchProductPage'
 import CaseStudyPage from '../_pages/caseStudyPage'
 import AuthorPage from '../_pages/authorPage'
 import TemplatePage from '../_pages/templatePage'
+import IntegrationDetailPage from '../_pages/integrationDetailPage'
+import IntegrationCategoryPage from '../_pages/integrationCategoryPage'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -65,7 +67,8 @@ const PAGE_COMPONENTS: Record<string, PageComponent> = {
   merchProduct: MerchProductPage as PageComponent,
   author: AuthorPage as PageComponent,
   pillarPage: TemplatePage as PageComponent,
-  integrationPage: TemplatePage as PageComponent,
+  integrationPage: IntegrationDetailPage as PageComponent,
+  integrationCategory: IntegrationCategoryPage as PageComponent,
   migrationPage: TemplatePage as PageComponent,
 }
 

@@ -5,7 +5,9 @@ import FooterWrapper from '@/components/layout/FooterWrapper'
 import HeaderWrapper from '@/components/layout/HeaderWrapper'
 import { PortableText } from '@/sanity'
 import { sanityPageFetch } from '@/sanity/lib/fetch'
-import { templatePageBySlugQuery } from '@/sanity/lib/templateQueries'
+import { integrationHubQuery, templatePageBySlugQuery } from '@/sanity/lib/templateQueries'
+import IntegrationHubSections, { type HubData } from '@/components/integrations/IntegrationHubSections'
+import { Faq } from '@/components/integrations/LinkBlocks'
 import { getLanguageFromParams } from '@/lib/language'
 import { hrefFor, docHref } from '@/lib/routes'
 import { sanityImg } from '@/lib/sanityImage'
@@ -122,6 +124,29 @@ function Bullets({ items, heading }: { items?: string[]; heading: string }) {
   )
 }
 
+/** Hub (integrations pillar): the long-form sections as a compact 2×2 grid, then the FAQ. */
+function HubSectionsCompact({ sections, faq, faqHeading }: { sections: { _key: string; id: string; heading: string; body?: unknown[] }[]; faq?: { question: string; answer: string }[]; faqHeading: string }) {
+  return (
+    <>
+      {sections.length > 0 && (
+        <section className="max-w-[1100px] mx-auto px-5 lg:px-8 py-16">
+          <div className="grid gap-6 md:grid-cols-2">
+            {sections.map((s) => (
+              <div key={s._key} id={s.id} className="flex flex-col gap-3 rounded-lg border border-sc-ink-100 bg-white p-7">
+                <h2 className="text-xl font-semibold text-sc-ink-900">{s.heading}</h2>
+                <div className="text-[15px] leading-relaxed text-sc-ink-600 [&_a]:text-sc-cyan-600 [&_p]:my-0">
+                  {Array.isArray(s.body) && <PortableText value={s.body as never} />}
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
+      <Faq items={faq} heading={faqHeading} />
+    </>
+  )
+}
+
 export default async function TemplatePage({ params }: { params: Promise<{ lang: string; slug?: string }> }) {
   const { lang, slug } = await params
   const language = getLanguageFromParams({ lang })
@@ -132,6 +157,9 @@ export default async function TemplatePage({ params }: { params: Promise<{ lang:
   const sections = (doc.sections ?? []).map((s) => ({ ...s, id: s.anchor || slugify(s.heading) }))
   const updated = doc._updatedAt ? new Date(doc._updatedAt) : null
   const isNo = language === 'no'
+  // Integrations hub: the pillar at /integrasjoner (/integrations) gets the category grid and filterable list.
+  const isIntegrationsHub = doc._type === 'pillarPage' && /^integra(sjoner|tions)$/i.test(doc.slug)
+  const hub = isIntegrationsHub ? await sanityPageFetch<HubData>(integrationHubQuery, { language }, { next: { revalidate: 0 } }) : null
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -192,7 +220,11 @@ export default async function TemplatePage({ params }: { params: Promise<{ lang:
           </div>
         )}
 
-        <article className="max-w-[880px] mx-auto px-5 lg:px-8 prose prose-lg prose-headings:tracking-[-0.02em] prose-a:text-sc-cyan-600">
+        {hub && hub.categories?.length ? <IntegrationHubSections data={hub} language={language} /> : null}
+
+        {hub && <HubSectionsCompact sections={sections} faq={doc.faq} faqHeading={t.faq} />}
+        {!hub && (
+        <article className="max-w-[880px] mx-auto px-5 lg:px-8 text-sc-ink-700 leading-relaxed text-[17px] [&_h2]:mt-12 [&_h2]:mb-3 [&_h2]:text-[28px] [&_h2]:font-bold [&_h2]:leading-tight [&_h2]:tracking-[-0.02em] [&_h2]:text-sc-ink-900 [&_h3]:mt-6 [&_h3]:mb-2 [&_h3]:text-xl [&_h3]:font-semibold [&_h3]:text-sc-ink-900 [&_p]:my-4 [&_a]:text-sc-cyan-600 [&_ol]:list-decimal [&_ol]:pl-6 [&_ul]:list-disc [&_ul]:pl-6 [&_li]:my-1 [&_figure]:my-8">
           {Array.isArray(doc.intro) && doc.intro.length > 0 && <PortableText value={doc.intro} />}
 
           {/* Template-specific blocks */}
@@ -321,9 +353,10 @@ export default async function TemplatePage({ params }: { params: Promise<{ lang:
             </section>
           ) : null}
         </article>
+        )}
 
-        <LinkList items={doc.children} pageLanguage={language} heading={t.children} />
-        <LinkList items={doc.clusterLinks} pageLanguage={language} heading={t.cluster} />
+        {!hub && <LinkList items={doc.children} pageLanguage={language} heading={t.children} />}
+        {!hub && <LinkList items={doc.clusterLinks} pageLanguage={language} heading={t.cluster} />}
         <LinkList items={doc.relatedCaseStudies as LinkDoc[] | undefined} pageLanguage={language} heading={t.cases} />
 
         {doc.cta && (
