@@ -75,8 +75,8 @@ export default function ServiceHero({ eyebrow, title, highlight, description, bu
                     href={button.link}
                     className={
                       primary
-                        ? 'inline-flex items-center justify-center rounded-lg bg-sc-ink-900 px-[22px] py-3 text-sm font-semibold tracking-[0.02em] text-white transition-colors hover:bg-sc-ink-700'
-                        : 'inline-flex items-center justify-center rounded-lg border border-sc-ink-200 bg-white px-[22px] py-3 text-sm font-semibold tracking-[0.02em] text-sc-ink-900 transition-colors hover:bg-sc-ink-50'
+                        ? 'inline-flex items-center justify-center rounded-lg bg-[#1EEFFA] px-[22px] py-3 text-sm font-semibold tracking-[0.02em] text-sc-ink-900 transition-colors hover:bg-teal'
+                        : 'inline-flex items-center justify-center rounded-lg border border-sc-ink-200 bg-[#1EEFFA] px-[22px] py-3 text-sm font-semibold tracking-[0.02em] text-sc-ink-900 transition-colors hover:bg-teal'
                     }
                   >
                     {button.text}

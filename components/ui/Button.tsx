@@ -48,7 +48,7 @@ export default function Button({
 
   const typeStyles =
     type === 'primary'
-      ? 'bg-sc-ink-900 text-white hover:bg-sc-ink-700'
+      ? 'bg-[#1EEFFA] text-sc-ink-900 hover:bg-teal'
       : 'bg-white text-sc-ink-900 border border-sc-ink-200 hover:bg-sc-ink-50'
 
   const combinedClassName = `${baseStyles} ${typeStyles} ${className}`.trim()

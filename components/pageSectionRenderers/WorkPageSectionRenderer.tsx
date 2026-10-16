@@ -1,5 +1,5 @@
 import Hero from '@/components/sections/work/Hero'
-import CaseStudies, { buildCaseItems, type CaseStudiesData } from '@/components/sections/work/CaseStudies'
+import CaseStudies, { buildCaseItems, type CasePost, type CaseStudiesData } from '@/components/sections/work/CaseStudies'
 import type { CaseCard } from '@/components/sections/work/CaseStudiesGrid'
 import CTA from '@/components/sections/work/CTA'
 import type { SanitySectionItem } from '@/lib/sanity/normalizeDocumentSections'
@@ -7,15 +7,17 @@ import type { SanitySectionItem } from '@/lib/sanity/normalizeDocumentSections'
 export function WorkPageSectionRenderer({
   sections,
   allCases,
+  casePosts,
   lang = 'no',
 }: {
   sections: SanitySectionItem[]
   allCases?: CaseCard[]
+  casePosts?: CasePost[]
   lang?: string
 }) {
   // The hero's jump links and the case cards come from the same list.
   const caseSection = sections.find((s) => s._type === 'workPageCaseStudiesSection') as CaseStudiesData | undefined
-  const items = buildCaseItems(caseSection, allCases, lang)
+  const items = buildCaseItems(caseSection, allCases, casePosts, lang)
   const jumpLinks = items.map((item) => ({ id: item.id, label: item.client || item.category || item.title }))
 
   return (

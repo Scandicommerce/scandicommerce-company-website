@@ -17,105 +17,111 @@ export interface CaseItem {
   imageUrl?: string
   imageAlt?: string
   href?: string
-}
-
-interface CaseStudyProps {
-  item: CaseItem
-  /** Image on the right instead of the left (desktop). */
-  reverse?: boolean
-  ctaText: string
-  lang: string
+  date?: string
 }
 
 const PACKAGE_TAGS = new Set(['foundation', 'growth', 'premium', 'enterprise'])
 
-function Summary({ value }: { value?: string | unknown[] }) {
+export function CaseTags({ category, tags, lang }: { category?: string; tags: string[]; lang: string }) {
+  if (!category && tags.length === 0) return null
+  return (
+    <div className="flex flex-wrap gap-1.5">
+      {category && <span className={ui.tag}>{category}</span>}
+      {tags.map((tag, i) => {
+        const pkg = tag.trim().toLowerCase()
+        return PACKAGE_TAGS.has(pkg) ? (
+          <Link key={`${tag}-${i}`} href={`${packagesHref(lang)}/${pkg}`} className={`${ui.tagOutline} no-underline transition-colors hover:border-sc-ink-900 hover:text-sc-ink-900`}>
+            {tag}
+          </Link>
+        ) : (
+          <span key={`${tag}-${i}`} className={ui.tagOutline}>
+            {tag}
+          </span>
+        )
+      })}
+    </div>
+  )
+}
+
+export function CaseResults({ results, compact = false }: { results: { value: string; label: string }[]; compact?: boolean }) {
+  if (results.length === 0) return null
+  return (
+    <dl className={`m-0 flex flex-wrap ${compact ? 'gap-x-5 gap-y-2' : 'gap-x-8 gap-y-3 border-y border-sc-ink-100 py-5'}`}>
+      {results.map((r, i) => (
+        <div key={i} className="flex flex-col gap-0.5">
+          <dd className={`m-0 font-mono font-medium leading-none tracking-tight text-sc-ink-900 ${compact ? 'text-[18px]' : 'text-[26px] md:text-[32px]'}`}>{r.value}</dd>
+          <dt className={`leading-snug text-sc-ink-500 ${compact ? 'text-[12px]' : 'text-[13px]'}`}>{r.label}</dt>
+        </div>
+      ))}
+    </dl>
+  )
+}
+
+export function Summary({ value, className = '' }: { value?: string | unknown[]; className?: string }) {
   if (!value) return null
-  const className =
-    'text-[15px] leading-relaxed text-sc-ink-600 [&_p]:m-0 [&_p+p]:mt-2 [&_ul]:list-disc [&_ul]:ml-4 [&_a]:underline [&_a]:decoration-sc-cyan-300'
+  const cls = `text-sc-ink-600 [&_p]:m-0 [&_p+p]:mt-2 [&_ul]:list-disc [&_ul]:ml-4 [&_a]:underline [&_a]:decoration-sc-cyan-300 ${className}`
   if (Array.isArray(value)) {
     return (
-      <div className={className}>
+      <div className={cls}>
         <PortableText value={value} />
       </div>
     )
   }
-  return <p className={className}>{value}</p>
+  return <p className={cls}>{value}</p>
+}
+
+interface FeaturedCaseProps {
+  item: CaseItem
+  label: string
+  ctaText: string
+  lang: string
 }
 
 /**
- * One case as a full-width card on the integrations card pattern: hairline,
- * radius 8, image panel on one side, results as mono figures, tags as chips.
- * Package tags link to the package page.
+ * The first case as the featured block, the same shape as the featured
+ * article on the blog: copy left (eyebrow, title, results, summary, button),
+ * tall image right.
  */
-export default function CaseStudy({ item, reverse = false, ctaText, lang }: CaseStudyProps) {
+export default function FeaturedCase({ item, label, ctaText, lang }: FeaturedCaseProps) {
   const { id, client, title, category, tags, summary, results, imageUrl, imageAlt, href } = item
+  const link = href ? ensureInternalHref(href) : undefined
 
   return (
-    <article
-      id={id}
-      className={`flex scroll-mt-24 flex-col overflow-hidden rounded-lg border border-sc-ink-100 bg-white ${reverse ? 'md:flex-row-reverse' : 'md:flex-row'}`}
-    >
-      {/* Image panel */}
-      <div className="relative h-[200px] shrink-0 bg-sc-ink-50 md:h-auto md:min-h-[260px] md:w-[320px] lg:w-[380px]">
-        {imageUrl && (
-          <Image
-            src={sanityImg(imageUrl, 900) as string}
-            alt={imageAlt || client || title}
-            fill
-            className="object-cover"
-            sizes="(max-width: 768px) 100vw, 380px"
-          />
-        )}
-        {client && (
-          <span className="absolute bottom-4 left-4 inline-flex items-center rounded-md bg-white px-2.5 py-1 text-sm font-semibold tracking-[-0.01em] text-sc-ink-900">
-            {client}
-          </span>
-        )}
-      </div>
-
-      {/* Content */}
-      <div className="flex min-w-0 flex-1 flex-col gap-4 p-5 md:p-7 lg:p-8">
-        {(category || tags.length > 0) && (
-          <div className="flex flex-wrap gap-1.5">
-            {category && <span className={ui.tag}>{category}</span>}
-            {tags.map((tag, i) => {
-              const pkg = tag.trim().toLowerCase()
-              return PACKAGE_TAGS.has(pkg) ? (
-                <Link key={`${tag}-${i}`} href={`${packagesHref(lang)}/${pkg}`} className={`${ui.tagOutline} no-underline transition-colors hover:border-sc-ink-900 hover:text-sc-ink-900`}>
-                  {tag}
-                </Link>
-              ) : (
-                <span key={`${tag}-${i}`} className={ui.tagOutline}>
-                  {tag}
-                </span>
-              )
-            })}
+    <article id={id} className="scroll-mt-24 border-b border-sc-ink-100">
+      <div className={`${ui.container} grid grid-cols-1 items-start gap-10 py-16 md:grid-cols-12 md:gap-12 lg:py-20`}>
+        <div className="order-2 flex flex-col gap-6 md:order-1 md:col-span-7">
+          <div className={`${ui.eyebrow} inline-flex items-center gap-2`}>
+            <span aria-hidden="true" className="inline-block h-px w-6 bg-sc-cyan-500" />
+            {label}
+            {client ? ` · ${client}` : category ? ` · ${category}` : ''}
           </div>
-        )}
-
-        <h2 className="m-0 text-[22px] font-bold leading-[1.2] tracking-[-0.02em] text-sc-ink-900 md:text-[26px]">{title}</h2>
-
-        {results.length > 0 && (
-          <dl className="m-0 grid grid-cols-3 gap-4 border-y border-sc-ink-100 py-4">
-            {results.map((r, i) => (
-              <div key={i} className="flex flex-col gap-0.5">
-                <dd className="m-0 font-mono text-[22px] font-medium leading-none tracking-tight text-sc-ink-900 md:text-[26px]">{r.value}</dd>
-                <dt className="text-xs leading-snug text-sc-ink-500 md:text-[13px]">{r.label}</dt>
-              </div>
-            ))}
-          </dl>
-        )}
-
-        <Summary value={summary} />
-
-        {href && (
-          <div className="mt-auto pt-1">
-            <Link href={ensureInternalHref(href)} className={`${ui.btnPrimary} w-full no-underline sm:w-auto`}>
-              {ctaText}
-            </Link>
+          <h2 className="m-0 text-[30px] font-bold leading-[1.08] tracking-[-0.02em] text-sc-ink-900 md:text-[40px] lg:text-[48px]">{title}</h2>
+          <CaseResults results={results} />
+          <Summary value={summary} className="max-w-[560px] text-base leading-relaxed lg:text-lg" />
+          <CaseTags category={category} tags={tags} lang={lang} />
+          {link && (
+            <div className="pt-2">
+              <Link href={link} className={`${ui.btnPrimary} w-full no-underline sm:w-auto`}>
+                {ctaText}
+              </Link>
+            </div>
+          )}
+        </div>
+        <div className="order-1 md:order-2 md:col-span-5">
+          <div className="relative aspect-[4/3] overflow-hidden rounded-lg border border-sc-ink-100 bg-sc-ink-50 md:aspect-[4/5]">
+            {imageUrl && (
+              <Image
+                src={sanityImg(imageUrl, 1200) as string}
+                alt={imageAlt || client || title}
+                fill
+                priority
+                className="object-cover"
+                sizes="(max-width: 768px) 100vw, 42vw"
+              />
+            )}
+            <span aria-hidden="true" className="absolute left-4 top-4 select-none font-mono text-[11px] uppercase tracking-widest text-white/80">01</span>
           </div>
-        )}
+        </div>
       </div>
     </article>
   )

@@ -1638,6 +1638,10 @@ export const workPageQuery = groq`
         eyebrow,
         heading,
         intro,
+        featuredLabel,
+        deckLabel,
+        archiveLabel,
+        includeDocuments,
         ctaText,
         studies[] {
           title,
@@ -1781,6 +1785,23 @@ export const caseStudyCardsQuery = groq`
     "heroImageUrl": heroImage.asset->url,
     heroVideo,
     "clientLogoUrl": clientLogo.asset->url
+  }
+`;
+
+// Blog posts that tell a customer story (tagged "Case study" / "Case-studie").
+// Shown on the work page after the curated studies, and lend their image to a
+// curated study that links to them. Not language-filtered; the page dedupes.
+export const caseStudyPostsQuery = groq`
+  *[_type in ["blogPost", "post"] && defined(slug.current) && count(tags[@ match "case*" || @ match "kundecase*"]) > 0]
+    | order(coalesce(publishedAt, _createdAt) desc) {
+    _id,
+    _type,
+    language,
+    title,
+    "slug": slug.current,
+    "excerpt": coalesce(description, excerpt),
+    "imageUrl": coalesce(featuredImage.asset->url, image.asset->url),
+    publishedAt
   }
 `;
 

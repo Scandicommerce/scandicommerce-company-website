@@ -55,8 +55,8 @@ interface Labels {
   more: (n: number) => string
 }
 
-const BTN_PRIMARY = 'inline-flex min-h-[46px] items-center justify-center rounded-lg bg-sc-ink-900 px-[22px] py-3 text-sm font-semibold tracking-[0.02em] text-white transition-colors hover:bg-sc-ink-700'
-const BTN_SECONDARY = 'inline-flex min-h-[46px] items-center justify-center rounded-lg border border-sc-ink-200 bg-white px-[22px] py-3 text-sm font-semibold tracking-[0.02em] text-sc-ink-900 transition-colors hover:bg-sc-ink-50'
+const BTN_PRIMARY = 'inline-flex min-h-[46px] items-center justify-center rounded-lg bg-[#1EEFFA] px-[22px] py-3 text-sm font-semibold tracking-[0.02em] text-sc-ink-900 transition-colors hover:bg-teal'
+const BTN_SECONDARY = 'inline-flex min-h-[46px] items-center justify-center rounded-lg border border-sc-ink-200 bg-[#1EEFFA] px-[22px] py-3 text-sm font-semibold tracking-[0.02em] text-sc-ink-900 transition-colors hover:bg-teal'
 
 /**
  * Package card on the integrations card pattern: hairline, radius 8, one
@@ -117,7 +117,7 @@ function PackageCard({ pkg, labels, featured }: { pkg: Package; labels: Labels; 
 
       <div className="mt-auto flex flex-col gap-3 pt-2 sm:flex-row">
         {(pkg.slug || pkg.href) && (
-          <LocalizedLink href={pkg.slug ? `/${pkg.slug}` : pkg.href!} className={featured ? 'inline-flex min-h-[46px] items-center justify-center rounded-lg bg-white px-[22px] py-3 text-sm font-semibold tracking-[0.02em] text-sc-ink-900 transition-colors hover:bg-sc-ink-50' : BTN_PRIMARY}>
+          <LocalizedLink href={pkg.slug ? `/${pkg.slug}` : pkg.href!} className={featured ? 'inline-flex min-h-[46px] items-center justify-center rounded-lg bg-[#1EEFFA] px-[22px] py-3 text-sm font-semibold tracking-[0.02em] text-sc-ink-900 transition-colors hover:bg-teal' : BTN_PRIMARY}>
             {labels.viewDetails}
           </LocalizedLink>
         )}
