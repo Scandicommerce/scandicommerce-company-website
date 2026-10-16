@@ -11,6 +11,8 @@
  * override everything from Studio; this keeps the site shippable without them.
  */
 
+import { growthNavColumns } from '@/lib/growthServices'
+
 export interface NavLink {
   label?: string
   /** Sanity page slug, when the link points at a referenced document. */
@@ -82,46 +84,8 @@ export const navigationNo: NavItem[] = [
   },
   {
     label: 'Growth marketing',
-    columns: [
-      {
-        title: 'Synlighet',
-        items: [
-          {
-            label: 'Growth marketing',
-            href: '/growth-marketing',
-            description: 'Oversikt og pakketering',
-          },
-          {
-            label: 'Merkevare og strategi',
-            href: '/growth-marketing/merkevare-og-strategi',
-          },
-          {
-            // GEO / AI visibility is part of the SEO offer, not a page of its own
-            label: 'SEO',
-            href: '/growth-marketing/seo',
-            description: 'Teknisk SEO, innhold og synlighet i AI-søk',
-          },
-          { label: 'SEM', href: '/growth-marketing/sem', description: 'Betalt søk' },
-          { label: 'Google Ads', href: '/growth-marketing/sem/google-ads', indent: true },
-          { label: 'Bing Ads', href: '/growth-marketing/sem/bing-ads', indent: true },
-        ],
-      },
-      {
-        title: 'Kunder og måling',
-        items: [
-          { label: 'SoMe', href: '/growth-marketing/some', description: 'Organisk og betalt sosiale medier' },
-          { label: 'Meta Ads', href: '/growth-marketing/some/meta-ads', indent: true },
-          {
-            label: 'E-post og SMS',
-            href: '/growth-marketing/e-postmarkedsforing',
-            description: 'Klaviyo, flyter og segmentering – 1:1 i stor skala',
-          },
-          // Canonical CRO page lives under Tjenester; linked here too because it is a growth lever
-          { label: 'CRO', href: '/tjenester/cro', description: 'Konverteringsoptimalisering' },
-          { label: 'Sporing og analyse', href: '/growth-marketing/sporing-og-analyse' },
-        ],
-      },
-    ],
+    // Built from the same data as the /growth-marketing pages
+    columns: growthNavColumns(),
   },
   {
     label: 'Integrasjoner',
