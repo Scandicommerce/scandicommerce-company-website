@@ -2,7 +2,9 @@
 
 import { useState } from 'react'
 import { Package } from '@/lib/packages'
+import { PACKAGE_TIERS, type PackageTier } from '@/lib/packageMatrix'
 import IdealFor from './IdealFor'
+import PackageIncludes from './PackageIncludes'
 
 interface TabLabels {
   overview?: string
@@ -23,6 +25,14 @@ interface PackageTabsProps {
 export default function PackageTabs({ pkg, tabLabels, lang }: PackageTabsProps) {
   const [activeTab, setActiveTab] = useState('overview')
   const isNo = lang === 'no' || lang === 'nb-NO' || (lang ?? '').startsWith('nb')
+
+  // Growth, Premium and Enterprise come from the package matrix; anything else
+  // keeps the CMS-authored list. The slug arrives as a full path
+  // ("tjenester/alle-pakker/growth"), so match on its last segment.
+  const slugTail = (pkg.slug || '').split('/').filter(Boolean).pop() ?? ''
+  const tier = PACKAGE_TIERS.includes(slugTail as PackageTier)
+    ? (slugTail as PackageTier)
+    : undefined
 
   const tabs = [
     { id: 'overview', label: tabLabels?.overview || (isNo ? 'Oversikt' : 'Overview') },
@@ -63,7 +73,9 @@ export default function PackageTabs({ pkg, tabLabels, lang }: PackageTabsProps) 
           >
             {activeTab === 'overview' && <IdealFor idealFor={pkg.idealFor} label={tabLabels?.idealFor || (isNo ? 'Passer for:' : 'Ideal for:')} />}
 
-            {activeTab === 'included' && (
+            {activeTab === 'included' && tier && isNo && <PackageIncludes tier={tier} />}
+
+            {activeTab === 'included' && !(tier && isNo) && (
               <div className="space-y-10">
                 {pkg.includedCategories ? (
                   // Categorized view
