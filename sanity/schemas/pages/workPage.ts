@@ -51,6 +51,12 @@ export const workPageCaseStudiesSection = defineType({
           type: "object",
           fields: [
             defineField({ name: "title", title: "Title", type: "string" }),
+            defineField({
+              name: "client",
+              title: "Client name",
+              type: "string",
+              description: "Shown on the card and in the hero jump links, e.g. 'Lanullva'.",
+            }),
             defineField({ name: "category", title: "Category", type: "string" }),
             defineField({
               name: "tags",

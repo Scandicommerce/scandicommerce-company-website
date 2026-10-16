@@ -1,116 +1,135 @@
-'use client'
-
-import CaseStudy from './CaseStudy'
-import CaseStudiesGrid, { type CaseCard } from './CaseStudiesGrid'
-
-interface Result {
-  value?: string
-  label?: string
-}
+import CaseStudy, { type CaseItem } from './CaseStudy'
+import type { CaseCard } from './CaseStudiesGrid'
+import { hrefFor } from '@/lib/routes'
 
 interface Study {
   title?: string
+  client?: string
   category?: string
   tags?: string[]
   challenge?: string | unknown[]
   solution?: string | unknown[]
-  results?: Result[]
+  results?: { value?: string; label?: string }[]
   imageUrl?: string
   imageAlt?: string
   link?: string
 }
 
-interface CaseStudiesData {
+export interface CaseStudiesData {
   ctaText?: string
   studies?: Study[]
 }
 
 interface CaseStudiesProps {
   caseStudies?: CaseStudiesData
-  /** All case-study documents, surfaced as a filterable grid below the featured studies. */
-  allCases?: CaseCard[]
-  /** Language of the page, used for same-vs-cross-language grid hrefs. */
-  lang?: string
+  items: CaseItem[]
+  lang: string
 }
 
-// Default case studies
-const defaultStudies: Study[] = [
-  {
-    title: 'Nordic Fashion Co.',
-    category: 'Fashion & Apparel',
-    tags: ['Migration', 'Growth Package'],
-    challenge: 'Slow WooCommerce site with poor mobile experience',
-    solution: 'Migrated to Shopify with custom theme and CRO optimization',
-    results: [
-      { value: '+156%', label: 'Conversion rate' },
-      { value: '-68%', label: 'Page load time' },
-      { value: '+2.1M kr', label: 'Additional revenue' },
-    ],
-    imageUrl: '/images/work/caseStudies/nordic.png',
-    imageAlt: 'Nordic Fashion Co. store interior',
-  },
-  {
-    title: 'Oslo Electronics',
-    category: 'Consumer Electronics',
-    tags: ['Premium Package', 'B2B'],
-    challenge: 'Complex product catalog with poor search and filtering',
-    solution: 'Custom Shopify Plus build with advanced search and B2B portal',
-    results: [
-      { value: '+89%', label: 'Search usage' },
-      { value: '3x', label: 'AOV increase' },
-      { value: '+127%', label: 'B2B orders' },
-    ],
-    imageUrl: '/images/work/caseStudies/oslo.jpg',
-    imageAlt: 'Oslo Electronics store',
-  },
-  {
-    title: 'Bergen Home Goods',
-    category: 'Home & Living',
-    tags: ['Growth Package', 'Launch'],
-    challenge: 'Launching D2C brand from scratch',
-    solution: 'Growth package with brand-focused design and SEO',
-    results: [
-      { value: '€450k', label: 'Year 1 revenue' },
-      { value: '2.8%', label: 'Conversion rate' },
-      { value: '12k', label: 'Email subscribers' },
-    ],
-    imageUrl: '/images/work/caseStudies/bergen.png',
-    imageAlt: 'Bergen Home Goods showroom',
-  },
-]
+function hasContent(value: string | unknown[] | undefined): value is string | unknown[] {
+  return Array.isArray(value) ? value.length > 0 : Boolean(value && value.trim())
+}
 
-export default function CaseStudies({ caseStudies, allCases, lang }: CaseStudiesProps) {
-  const studies = caseStudies?.studies && caseStudies.studies.length > 0
-    ? caseStudies.studies
-    : defaultStudies
-  const ctaText = caseStudies?.ctaText || 'Read full case study'
+/** Plain text of a string or Portable Text value, for matching only. */
+function plainText(value: string | unknown[] | undefined): string {
+  if (!value) return ''
+  if (typeof value === 'string') return value
+  return value
+    .flatMap((block) => ((block as { children?: { text?: string }[] }).children ?? []).map((c) => c.text ?? ''))
+    .join(' ')
+}
+
+function anchorId(label: string, used: Set<string>): string {
+  const base =
+    'case-' +
+    (label
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[̀-ͯ]/g, '')
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-|-$/g, '')
+      .slice(0, 40) || 'item')
+  let id = base
+  for (let n = 2; used.has(id); n++) id = `${base}-${n}`
+  used.add(id)
+  return id
+}
+
+// Slug words that say nothing about which client a case is about.
+const GENERIC_SLUG_WORDS = new Set(
+  'case study studies shopify scandicommerce how helped achieve achieved modernizing modernising their foundation sales growth percent went from full ecommerce control conversion grew unified brands delivered with and the store nettbutikk kundecase'.split(' ')
+)
+
+/** Client-identifying words of a case-study slug, e.g. "lanullva" or "groupe", "marcelle". */
+function clientWords(slug: string): string[] {
+  return slug
+    .toLowerCase()
+    .split(/[^a-z0-9æøå]+/)
+    .filter((w) => w.length >= 5 && !GENERIC_SLUG_WORDS.has(w) && !/^\d+$/.test(w))
+}
+
+/**
+ * Every case shown as a full card: the curated studies on the work page first,
+ * then each case-study document nothing shown so far already covers. A document
+ * counts as covered when one of its client words appears in a shown case's
+ * client, title, link or text (the curated studies hold no reference to the
+ * documents, and the same case exists once per language with its own slug).
+ * Documents in the page language win over other languages.
+ */
+export function buildCaseItems(caseStudies: CaseStudiesData | undefined, allCases: CaseCard[] = [], lang = 'no'): CaseItem[] {
+  const used = new Set<string>()
+  const studies = caseStudies?.studies ?? []
+
+  const items: CaseItem[] = studies.map((s) => ({
+    id: anchorId(s.client || s.title || '', used),
+    client: s.client,
+    title: s.title ?? '',
+    category: s.category,
+    tags: s.tags ?? [],
+    summary: hasContent(s.solution) ? s.solution : hasContent(s.challenge) ? s.challenge : undefined,
+    results: (s.results ?? []).filter((r) => r.value).map((r) => ({ value: r.value ?? '', label: r.label ?? '' })),
+    imageUrl: s.imageUrl,
+    imageAlt: s.imageAlt,
+    href: s.link || undefined,
+  }))
+
+  let covered = studies
+    .map((s) => [s.client, s.title, s.link, plainText(s.solution), plainText(s.challenge)].join(' '))
+    .join(' ')
+    .toLowerCase()
+  const byLanguage = [...allCases].sort((a, b) => Number(b.language === lang) - Number(a.language === lang))
+  for (const c of byLanguage) {
+    if (!c.slug) continue
+    const words = clientWords(c.slug)
+    const isCovered = words.length > 0 ? words.some((w) => covered.includes(w)) : covered.includes(c.slug.toLowerCase())
+    if (isCovered) continue
+    covered += ` ${c.slug.toLowerCase()} ${(c.title ?? '').toLowerCase()}`
+    items.push({
+      id: anchorId(c.title || c.slug, used),
+      title: c.title ?? '',
+      category: c.industry,
+      tags: c.tags ?? [],
+      summary: c.excerpt,
+      results: [],
+      imageUrl: c.heroImageUrl,
+      imageAlt: c.title,
+      href: hrefFor({ _type: 'caseStudy', slug: c.slug, language: c.language ?? lang }, lang),
+    })
+  }
+  return items
+}
+
+export default function CaseStudies({ caseStudies, items, lang }: CaseStudiesProps) {
+  if (items.length === 0) return null
+  const ctaText = caseStudies?.ctaText || 'Les hele casen'
 
   return (
-    <>
-      <section className="bg-white py-16 lg:py-24 lg:pb-12">
-        <div className="section_container mx-auto page-padding-x">
-          {studies.map((study, index) => (
-            <CaseStudy
-              key={index}
-              title={study.title || ''}
-              category={study.category || ''}
-              tags={study.tags || []}
-              challenge={study.challenge ?? ''}
-              solution={study.solution ?? ''}
-              results={study.results?.map(r => ({
-                value: r.value || '',
-                label: r.label || ''
-              })) || []}
-              image={study.imageUrl || ''}
-              imageAlt={study.imageAlt || ''}
-              imagePosition={index % 2 === 0 ? 'left' : 'right'}
-              link={study.link}
-              ctaText={ctaText}
-            />
-          ))}
-        </div>
-      </section>
-      <CaseStudiesGrid cases={allCases} ctaText={ctaText} lang={lang} />
-    </>
+    <section className="bg-white py-10 lg:py-12">
+      <div className="section_container mx-auto page-padding-x flex flex-col gap-4 lg:gap-6">
+        {items.map((item, index) => (
+          <CaseStudy key={item.id} item={item} reverse={index % 2 === 1} ctaText={ctaText} lang={lang} />
+        ))}
+      </div>
+    </section>
   )
 }

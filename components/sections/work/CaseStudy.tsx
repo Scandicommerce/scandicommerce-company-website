@@ -1,161 +1,131 @@
+import { Fragment } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { IoMdArrowForward } from 'react-icons/io'
 import { PortableText } from '@/sanity'
+import { sanityImg } from '@/lib/sanityImage'
+import { ensureInternalHref, packagesHref } from '@/lib/routes'
 
-interface CaseStudyProps {
+export interface CaseItem {
+  /** Anchor id, also used by the hero jump links. */
+  id: string
+  client?: string
   title: string
-  category: string
+  category?: string
   tags: string[]
-  challenge: string | unknown[] | null | undefined
-  solution: string | unknown[] | null | undefined
-  results: {
-    value: string
-    label: string
-  }[]
-  image: string
-  imageAlt: string
-  imagePosition: 'left' | 'right'
-  link?: string
-  ctaText?: string
+  summary?: string | unknown[]
+  results: { value: string; label: string }[]
+  imageUrl?: string
+  imageAlt?: string
+  href?: string
 }
 
-function RichText({
-  value,
-  className,
-}: {
-  value: string | unknown[] | null | undefined
-  className?: string
-}) {
-  if (value == null) return null
+interface CaseStudyProps {
+  item: CaseItem
+  /** Image on the right instead of the left (desktop). */
+  reverse?: boolean
+  ctaText: string
+  lang: string
+}
+
+const PACKAGE_TAGS = new Set(['foundation', 'growth', 'premium', 'enterprise'])
+
+const tagLink =
+  'text-sc-ink-900 underline decoration-sc-cyan-300 decoration-2 underline-offset-[3px] hover:decoration-sc-cyan-500'
+
+function Summary({ value }: { value?: string | unknown[] }) {
+  if (!value) return null
+  const className =
+    'text-sm leading-normal text-sc-ink-600 [&_p]:m-0 [&_p+p]:mt-2 [&_ul]:list-disc [&_ul]:ml-4 [&_a]:underline [&_a]:decoration-sc-cyan-300'
   if (Array.isArray(value)) {
-    if (value.length === 0) return null
     return (
       <div className={className}>
         <PortableText value={value} />
       </div>
     )
   }
-  return <p className={className}>{String(value)}</p>
+  return <p className={className}>{value}</p>
 }
 
-export default function CaseStudy({
-  title,
-  category,
-  tags,
-  challenge,
-  solution,
-  results,
-  image,
-  imageAlt,
-  imagePosition,
-  link = '#',
-  ctaText = 'Read full case study',
-}: CaseStudyProps) {
-  const isImageLeft = imagePosition === 'left'
+export default function CaseStudy({ item, reverse = false, ctaText, lang }: CaseStudyProps) {
+  const { id, client, title, category, tags, summary, results, imageUrl, imageAlt, href } = item
 
   return (
-    <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden mb-8 lg:mb-12">
-      <div
-        className={`flex flex-col ${isImageLeft ? 'lg:flex-row' : 'lg:flex-row-reverse'
-          }`}
-      >
-        {/* Image Section */}
-        <div className="w-full lg:w-1/2 relative h-[300px] lg:h-[560px]">
+    <article
+      id={id}
+      className={`scroll-mt-24 flex flex-col ${reverse ? 'md:flex-row-reverse' : 'md:flex-row'} bg-white border border-sc-ink-100 rounded-[14px] md:rounded-[20px] overflow-hidden shadow-[0_2px_6px_rgba(10,13,15,0.08)]`}
+    >
+      {/* Image panel */}
+      <div className="relative shrink-0 h-[150px] md:h-auto md:min-h-[240px] md:w-[300px] lg:w-[340px] bg-sc-cyan-50">
+        {imageUrl && (
           <Image
-            src={image}
-            alt={imageAlt}
+            src={sanityImg(imageUrl, 900) as string}
+            alt={imageAlt || client || title}
             fill
             className="object-cover"
-            sizes="(max-width: 1024px) 100vw, 50vw"
+            sizes="(max-width: 768px) 100vw, 340px"
           />
-        </div>
-
-        {/* Text Section */}
-        <div className="w-full lg:w-1/2 p-3 sm:p-8 lg:p-10 flex flex-col justify-center">
-          <div className="space-y-[18px]">
-            {/* Title, Category and Tags */}
-            <div className="flex sm:flex-row flex-col justify-between sm:items-center items-start sm:gap-0 gap-4">
-              <div className="sm:order-1 order-2">
-                <h3 className="text-[5.3vw] xs:text-[3.5vw] sm:text-[3.2vw] md:text-[3.2vw] lg:text-[28px] xl:text-[34px] font-bold text-[#1F1D1D] mb-1">
-                  {title}
-                </h3>
-                <p className="2xl:text-base xl:text-sm text-xs text-[#565454]">
-                  {category}
-                </p>
-              </div>
-
-              {/* Tags positioned top right */}
-            </div>
-            <div className="flex flex-wrap gap-2 justify-start sm:order-2 order-1">
-              {tags.map((tag, index) => (
-                <span
-                  key={index}
-                  className="2xl:px-[21px] xl:px-4 px-2 py-0.5 bg-[#F5F5F5] text-[#565454] 2xl:text-sm xl:text-xs text-[10px] font-medium whitespace-nowrap"
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
-
-            {/* Challenge */}
-            <div>
-              <h4 className="text-[4.3vw] xs:text-[2.6vw] sm:text-[2.5vw] md:text-[2.2vw] lg:text-[18px] xl:text-[24px] font-semibold text-[#1F1D1D] uppercase tracking-wide mb-1">
-                {category}
-              </h4>
-              <RichText
-                value={challenge}
-                className="2xl:text-base xl:text-sm text-xs text-[#565454] [&_ul]:list-disc [&_ol]:list-decimal [&_ul]:ml-4 [&_ol]:ml-4 [&_li]:my-0.5"
-              />
-            </div>
-
-            {/* Solution */}
-            <div>
-              <h4 className="text-[4.3vw] xs:text-[2.6vw] sm:text-[2.5vw] md:text-[2.2vw] lg:text-[18px] xl:text-[24px] font-semibold text-[#1F1D1D] uppercase tracking-wide mb-1">
-                Solution
-              </h4>
-              <RichText
-                value={solution}
-                className="2xl:text-base xl:text-sm text-xs text-[#565454] [&_ul]:list-disc [&_ol]:list-decimal [&_ul]:ml-4 [&_ol]:ml-4 [&_li]:my-0.5"
-              />
-            </div>
-
-            <div className="border border-[#56545480]"></div>
-
-            {/* Results */}
-            <div>
-              <h4 className="text-[4.3vw] xs:text-[2.6vw] sm:text-[2.5vw] md:text-[2.2vw] lg:text-[18px] xl:text-[24px] font-semibold text-[#1F1D1D] uppercase tracking-wide mb-[18px]">
-                Results
-              </h4>
-              <div className="flex justify-between items-start gap-6">
-                {results.map((result, index) => (
-                  <div key={index} className="flex flex-col items-start">
-                    <div className="text-[5.3vw] xs:text-[3.5vw] sm:text-[3.2vw] md:text-[3.2vw] lg:text-[28px] xl:text-[34px] font-bold !leading-[166%] text-[#03C1CA] font-mono tracking-tight">
-                      {result.value}
-                    </div>
-                    <div className="2xl:text-base xl:text-sm sm:text-xs text-[9px] text-[#565454] leading-tight font-sans">
-                      {result.label}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* CTA Link */}
-            <div className="pt-2">
-              <Link
-                href={link || '#'}
-                className="inline-flex items-center text-[#03C1CA] font-semibold 2xl:text-xl xl:text-lg sm:text-base text-sm"
-              >
-                {ctaText}
-                <span className="ml-2">
-                  <IoMdArrowForward />
-                </span>
-              </Link>
-            </div>
-          </div>
-        </div>
+        )}
+        {category && (
+          <span className="absolute top-3.5 left-4 md:top-5 md:left-5 bg-white text-sc-cyan-700 text-[11px] md:text-xs px-2.5 py-1 rounded-full">
+            {category}
+          </span>
+        )}
+        {client && (
+          <span className="absolute bottom-3.5 left-4 md:bottom-5 md:left-5 bg-white text-sc-ink-900 text-lg md:text-xl font-bold tracking-[-0.02em] px-3 py-1 rounded-full">
+            {client}
+          </span>
+        )}
       </div>
-    </div>
+
+      {/* Content */}
+      <div className="flex-1 min-w-0 p-4 md:px-7 md:py-6 flex flex-col gap-3 md:gap-3.5">
+        {tags.length > 0 && (
+          <div className="text-xs md:text-[13px] text-sc-ink-500">
+            {tags.map((tag, i) => {
+              const pkg = tag.trim().toLowerCase()
+              return (
+                <Fragment key={`${tag}-${i}`}>
+                  {i > 0 && ' · '}
+                  {PACKAGE_TAGS.has(pkg) ? (
+                    <Link href={`${packagesHref(lang)}/${pkg}`} className={tagLink}>
+                      {tag}
+                    </Link>
+                  ) : (
+                    tag
+                  )}
+                </Fragment>
+              )
+            })}
+          </div>
+        )}
+
+        <h2 className="m-0 text-lg md:text-[22px] leading-[1.2] font-bold tracking-[-0.02em] text-sc-ink-900">
+          {title}
+        </h2>
+
+        {results.length > 0 && (
+          <dl className="m-0 grid grid-cols-3 gap-2 py-3 border-y border-sc-ink-100 md:flex md:flex-wrap md:gap-x-7 md:gap-y-2 md:py-0 md:border-0">
+            {results.map((r, i) => (
+              <div key={i} className="md:flex md:items-baseline md:gap-1.5">
+                <dt className="sr-only">{r.label}</dt>
+                <dd className="m-0 text-xl md:text-2xl font-bold text-sc-cyan-600">{r.value}</dd>
+                <dd className="m-0 text-xs md:text-[13px] text-sc-ink-500">{r.label}</dd>
+              </div>
+            ))}
+          </dl>
+        )}
+
+        <Summary value={summary} />
+
+        {href && (
+          <Link
+            href={ensureInternalHref(href)}
+            className="block text-center md:inline-block md:self-start mt-1 bg-sc-cyan-500 hover:bg-sc-cyan-600 text-sc-ink-900 font-bold text-[15px] md:text-sm px-5 py-3 md:py-[11px] rounded-full transition-colors"
+          >
+            {ctaText} →
+          </Link>
+        )}
+      </div>
+    </article>
   )
 }

@@ -1636,6 +1636,7 @@ export const workPageQuery = groq`
         ctaText,
         studies[] {
           title,
+          client,
           category,
           tags,
           challenge[] {
@@ -1688,6 +1689,7 @@ export const workPageQuery = groq`
     caseStudies {
       studies[] {
         title,
+        client,
         category,
         tags,
         challenge[] {
