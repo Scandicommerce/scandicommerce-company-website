@@ -38,7 +38,7 @@ Samleside: `/growth-marketing`. Gjelder bare norsk side (.no). Andre språk gir 
 |---|---|
 | Samleside og 11 tjenestesider | Dummyer med mal og plassholdere, `noindex`, ikke i XML-sitemap |
 | Menyforslag | Ligger i `lib/growthServices.ts` (`growthNavItem()`). **Ikke koblet inn** i headeren ennå (se §5) |
-| Ekte innhold | **SEM**, **Google Ads** og **Affiliate, CSS og feed** har tekstutkast til gjennomlesning (alle seksjoner unntatt bevis; priser via pakkeoversikten). Resten er dummyer |
+| Ekte innhold | **Merkevare og strategi**, **SEM**, **Google Ads** og **Affiliate, CSS og feed** har tekstutkast til gjennomlesning (alle seksjoner unntatt bevis; priser via pakkeoversikten). Resten er dummyer |
 | Innhold i Sanity | Ikke startet. Innholdet ligger i kode til tekstene er klare |
 
 ## 3. Struktur
@@ -91,6 +91,8 @@ SEM og SoMe viser i tillegg kanalene sine som kort under hero.
 - **Ekte ekspertise:** Navngitt forfatter eller spesialist og egne tall. Ikke masseprodusert tekst.
 - **Ikke ranger oss selv:** Ingen «beste SEO-byrå»-lister der vi står øverst. Slike sider har mistet synlighet i Google siden januar 2026.
 - **Ingen egne stjerner:** Ingen stjernemerking av egne anmeldelser. FAQ-markering gir ikke lenger egen visning i Google, så skriv FAQ for leseren.
+- **Grafer:** Én farge pluss grå: det som er poenget i cyan 600, konteksten i grått. All tekst i blekkfarger. Datagrafer har «Vis tallene»-tabell og kilde. Prinsippskisser merkes «Prinsippskisse, ikke målte data». Bare tall vi har kilde på.
+- **Eksterne lenker:** Til primærkilder (forskning, Google, IPA osv.), åpnes i ny fane. Sjekk at lenken virker og går til riktig side før publisering.
 - **Priser:** Står i pakkeoversikten (`/tjenester/alle-pakker`), ikke på tjenestesidene. Pakkekortene lenker dit. Én kilde for priser, så de ikke spriker.
 - **Fjern noindex først når ekte tekst er på plass:** `seo.noIndex = true` i `app/[lang]/growth-marketing/[[...slug]]/page.tsx`.
 
@@ -121,7 +123,8 @@ i `navigationNo` med `growthNavItem()`.
 **Filer**
 - `lib/growthServices.ts`: Alle tjenester (slug, gruppe, navn, H1, ingress), grupper og menyforslag. **Eneste sted å endre tjenestelisten.**
 - `lib/growthContent.ts`: Teksten per tjenesteside (intro, kjøpssituasjoner, leveranser, pakker, 90 dager, måltall, FAQ). Seksjoner uten tekst vises som plassholder. Bevis vises alltid som plassholder til vi har ekte case.
-- `components/sections/growth/GrowthPages.tsx`: Samleside og tjenestesidemal.
+- `components/sections/growth/GrowthPages.tsx`: Samleside og tjenestesidemal, inkludert «Hva forskningen sier» (felt `insights`), «Kilder og videre lesning» (`sources`) og «Fungerer best sammen med» (`related`).
+- `components/sections/growth/GrowthCharts.tsx`: SVG-grafer uten bibliotek: stolper, delt stolpe og prinsippskisse for kort og lang effekt.
 - `app/[lang]/growth-marketing/[[...slug]]/page.tsx`: Rute og metadata (noindex).
 
 **Ny tjeneste:** Legg til et objekt i `growthServices`, med `group` og eventuelt `parent`.
@@ -146,6 +149,7 @@ npm run dev                 # http://localhost:3000/no/growth-marketing
 - [ ] Leveranser: Stemmer listene med det vi faktisk gjør (Bing som tillegg, CSS-vurdering, AI Max-tester, Demand Gen)?
 - [ ] Affiliate og feed: Stemmer leveransene (feed-revisjon, distribusjon til prissammenligning, oppfølging av affiliate-partnere)? Nevner vi riktige eksempler (Prisjakt; Adtraction og Awin)? Hvilke feed-verktøy bruker vi?
 - [ ] Bevis: Kundecase med tall fra annonsering, og navngitt spesialist.
+- [ ] Merkevare og strategi: Stemmer leveransene og pakkene (strategi som engangsleveranse, strategisk partner månedlig)? «Logodesign og full visuell identitet» står som ikke inkludert. Stemmer det?
 
 **Øvrige:**
 
@@ -167,6 +171,13 @@ Tekstene skal bare inneholde påstander vi kan stå for. Tidsavhengige fakta sje
 - AI Max for Search: Rullet ut i 2025, men Norge er ikke bekreftet. Derfor skriver vi «der det er tilgjengelig». AI Max for Shopping er usikkert og nevnes ikke.
 - Bing: Liten andel av søk i Norge, men høyere på desktop (Statcounter, 2026). Vi oppgir ikke tall eller klikkpriser.
 - Benchmarks: Bare tall fra USA eller globalt finnes. De brukes ikke.
+
+**Merkevare og strategi** (research 2026-10-16, alle lenker sjekket):
+- How Brands Grow og Ehrenberg-Bass: Vekst kommer først og fremst fra flere kjøpere (penetrasjon), og mental og fysisk tilgjengelighet er det som driver den. Lenke: marketingscience.info. Undersiden om How Brands Grow sender videre til forsiden deres.
+- Binet & Field, The Long and the Short of It (IPA): Salgsaktivering gir kortsiktige topper, merkevarebygging gir langsiktig vekst. Om lag 60:40 for B2C er et utgangspunkt, og Effectiveness in Context (IPA) viser at fordelingen varierer. Grafen for kort og lang effekt er en **prinsippskisse**, ikke data.
+- Share of search (Binet, IPA 2020): Andelen merkenavnsøk er en tidlig indikator på markedsandel, og den kan måles i Google Trends.
+- Ahrefs (75 000 merkevarer, publisert 26. mai 2025, oppdatert 27. april 2026): Korrelasjon med synlighet i AI-oversikter. Omtale av merkevaren 0,664, merkenavn i lenketekst 0,527, søk på merkenavnet 0,392, domenestyrke 0,326, lenkende domener 0,295 og trafikk fra merkenavnsøk 0,274. Tallene er sjekket mot artikkelen. Det er korrelasjon, ikke årsak, og det står i teksten.
+- Romaniuk, Building Distinctive Brand Assets (2018): Elementene må være kjente og unike. Forlagets side svarer 403, så den lenkes ikke.
 
 **Affiliate, CSS og feed** (research 2026-10-16):
 - Bilder: Minst 500 × 500 piksler for `image_link` og `additional_image_link`. Advarsler siden 14. april 2026, håndheves fra 31. januar 2027. Kilde: Google Merchant Center-hjelp 16989427.
@@ -201,3 +212,4 @@ Tekstene skal bare inneholde påstander vi kan stå for. Tidsavhengige fakta sje
 | 2026-10-16 | Pakkekort på tjenestesidene lenker til pakkeoversikten i stedet for å vise pris | Prisene ligger ett sted, så de ikke spriker mellom sidene |
 | 2026-10-16 | Affiliate-siden blir «Affiliate, CSS og feedoptimalisering», med feeden som kjerne; menynavnet forblir «Affiliate» | Den samme feeden driver Shopping, CSS, prissammenligning, affiliate og Meta-katalog; menyen holdes kort |
 | 2026-10-16 | Ny seksjon «Fungerer best sammen med» på tjenestesidene (felt `related`) | Viser at tjenestene henger sammen, og gir intern lenking for SEO |
+| 2026-10-16 | Merkevare og strategi får tekstutkast med forskningsinnsikt, tre grafer og eksterne kilder | Brukeren ba om oppdatert merkevareinnsikt med grafer og lenker; forskningen kobles til hvordan nettbutikker vokser (mental og fysisk tilgjengelighet) |

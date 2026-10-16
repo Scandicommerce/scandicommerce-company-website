@@ -11,9 +11,28 @@
  * Prices and proof stay placeholders until the team supplies them.
  */
 
+/** Chart specs rendered by components/sections/growth/GrowthCharts.tsx. */
+export type GrowthChart =
+  | {
+      kind: 'bars'
+      /** Unit shown in the table header, e.g. "Korrelasjon". */
+      valueLabel: string
+      legend: { emphasis: string; context: string }
+      items: { label: string; value: number; emphasis: boolean }[]
+    }
+  | {
+      kind: 'split'
+      items: { label: string; value: number; emphasis: boolean }[]
+    }
+  | { kind: 'longShortConcept' }
+
 export interface GrowthPageContent {
   /** Short definition right under the hero: what the service is, in plain words. */
   intro?: { title: string; paragraphs: string[] }
+  /** "Hva forskningen sier": evidence points, each optionally with a chart and its source. */
+  insights?: { title: string; text: string; chart?: GrowthChart; source?: { label: string; href: string } }[]
+  /** "Kilder og videre lesning": external links shown at the end of the page. */
+  sources?: { label: string; publisher: string; href: string }[]
   /** "Når du trenger dette": buying situations the reader recognises. */
   situations?: { title: string; text: string }[]
   /** "Hva du får". */
@@ -35,6 +54,205 @@ export interface GrowthPageContent {
 }
 
 export const growthContent: Record<string, GrowthPageContent> = {
+  'merkevare-og-strategi': {
+    intro: {
+      title: 'Hvordan merkevarer vokser – også på nett',
+      paragraphs: [
+        'Forskningen fra Ehrenberg-Bass Institute, kjent fra boken How Brands Grow, viser at merkevarer først og fremst vokser ved å nå flere kjøpere – ikke ved å presse mer ut av de lojale. De fleste kundene dine handler sjelden, og de velger den butikken de kommer på først og finner lettest.',
+        'For en nettbutikk betyr det to ting. Du må bli husket i situasjonene der folk skal kjøpe (mental tilgjengelighet), og du må være lett å finne og handle hos – i Google, i Shopping, i AI-svar og i kassen (fysisk tilgjengelighet). Merkevarearbeidet tar seg av det første. SEO, SEM, feed og CRO tar seg av det andre. Vi planlegger dem sammen.',
+      ],
+    },
+    insights: [
+      {
+        title: 'Merkevare og salg virker på ulik tid',
+        text: 'Binet og Field fant i IPAs database over effektive kampanjer at salgsaktivering gir raske topper som faller tilbake, mens merkevarebygging løfter grunnsalget gradvis. Over tid er det merkevaren som gjør at hver annonsekrone gir mer.',
+        chart: { kind: 'longShortConcept' },
+        source: {
+          label: 'IPA: The Long and the Short of It (Binet & Field)',
+          href: 'https://ipa.co.uk/knowledge/publications-reports/the-long-and-the-short-of-it-balancing-short-and-long-term-marketing-strategies',
+        },
+      },
+      {
+        title: 'Et utgangspunkt for fordelingen',
+        text: 'For forbrukermerkevarer har rundt 60 % merkevarebygging og 40 % salgsaktivering vært IPAs utgangspunkt. Senere analyser viser at riktig fordeling varierer med kategori, størrelse og fase – mindre og nye merkevarer trenger ofte mer aktivering i starten. Vi setter fordelingen ut fra din situasjon, ikke fra en fasit.',
+        chart: {
+          kind: 'split',
+          items: [
+            { label: 'Merkevarebygging', value: 60, emphasis: true },
+            { label: 'Salgsaktivering', value: 40, emphasis: false },
+          ],
+        },
+        source: {
+          label: 'IPA: Effectiveness in Context',
+          href: 'https://ipa.co.uk/knowledge/publications-reports/effectiveness-in-context',
+        },
+      },
+      {
+        title: 'Merkevaren avgjør også synlighet i AI-søk',
+        text: 'Ahrefs analyserte 75 000 merkevarer og fant at det som henger sterkest sammen med å bli nevnt i Googles AI-oversikter, er merkevaresignaler – omtale, merkenavn i lenker og søk på navnet – mer enn klassisk lenkebygging. Det er sammenheng, ikke bevist årsak, men retningen er tydelig: kjente merkevarer blir oftere anbefalt.',
+        chart: {
+          kind: 'bars',
+          valueLabel: 'Korrelasjon',
+          legend: { emphasis: 'Merkevaresignal', context: 'Lenke- og domenesignal' },
+          items: [
+            { label: 'Omtale av merkevaren', value: 0.664, emphasis: true },
+            { label: 'Merkenavn i lenketekst', value: 0.527, emphasis: true },
+            { label: 'Søk på merkenavnet', value: 0.392, emphasis: true },
+            { label: 'Domenestyrke (DR)', value: 0.326, emphasis: false },
+            { label: 'Lenkende domener', value: 0.295, emphasis: false },
+            { label: 'Trafikk fra merkenavnsøk', value: 0.274, emphasis: true },
+          ],
+        },
+        source: {
+          label: 'Ahrefs: AI Overview Brand Visibility Factors (75K Brands Studied)',
+          href: 'https://ahrefs.com/blog/ai-overview-brand-correlation/',
+        },
+      },
+      {
+        title: 'Mål merkevaren med søk',
+        text: 'Les Binet viste at din andel av søkene på merkenavn i kategorien – share of search – er en tidlig indikator på markedsandel. Det kan måles gratis i Google Trends mot konkurrentene dine, måned for måned, lenge før det synes i omsetningen.',
+        source: {
+          label: 'IPA: Binet presents Share of Search',
+          href: 'https://ipa.co.uk/news/binet-presents-fast-cheap-predictive-share-of-search-metric/',
+        },
+      },
+    ],
+    situations: [
+      {
+        title: 'Du konkurrerer bare på pris',
+        text: 'Kundene ser ingen grunn til å velge deg fremfor neste butikk, så rabatten blir det eneste argumentet.',
+      },
+      {
+        title: 'Annonsene blir dyrere, men ingen søker på navnet ditt',
+        text: 'Du betaler for hver eneste kunde, fordi få kjenner merkevaren fra før.',
+      },
+      {
+        title: 'Ingen vet helt hva dere står for',
+        text: 'Budskap, tone og uttrykk varierer fra kanal til kanal, og ingenting setter seg.',
+      },
+      {
+        title: 'Du er usynlig i AI-svar',
+        text: 'ChatGPT og Googles AI-oversikter nevner konkurrentene når folk spør om produkter i kategorien din.',
+      },
+      {
+        title: 'Kampanjene virker, men veksten flater ut',
+        text: 'Hvert salg gir en topp, men grunnsalget mellom kampanjene står stille.',
+      },
+      {
+        title: 'Nytt marked eller ny kategori',
+        text: 'Du skal lansere i Sverige, åpne en ny produktlinje eller nå en ny målgruppe og trenger en plan.',
+      },
+    ],
+    deliverables: {
+      strategi: [
+        'Posisjonering: hvorfor velge deg, sagt så kort at det huskes',
+        'Kjøpssituasjoner: når og hvorfor folk handler i kategorien din',
+        'Gjenkjennelige merkevareelementer: farger, form, tone og budskap som skal eies',
+        'Fordeling mellom merkevarebygging og salgsaktivering',
+        'Vekstplan for de neste 12 månedene',
+      ],
+      gjennomforing: [
+        'Merkevareplattform og tone of voice som teamet kan bruke',
+        'Retningslinjer for innhold, annonser og nettbutikk',
+        'Kampanjekonsept som binder SEO, SEM, SoMe og e-post sammen',
+        'Gjennomgang av nettbutikken: kommer merkevaren tydelig fram?',
+      ],
+      rapportering: [
+        'Andel av søk mot konkurrentene, målt månedlig i Google Trends',
+        'Merkevaresøk og direktetrafikk over tid',
+        'Synlighet i AI-svar for de viktigste spørsmålene i kategorien',
+      ],
+      ikkeInkludert: [
+        'Logodesign og full visuell identitet fra bunnen',
+        'Produksjon av film og foto',
+        'Medieinnkjøp',
+      ],
+    },
+    packages: [
+      {
+        name: 'Merkevare- og vekststrategi',
+        kind: 'Engangsleveranse',
+        summary: 'En kort, konkret strategi dere faktisk bruker – ikke en rapport som blir liggende.',
+        includes: [
+          'Workshop og innsikt om kunder og konkurrenter',
+          'Posisjonering, kjøpssituasjoner og merkevareelementer',
+          'Fordeling mellom merkevare og aktivering',
+          'Vekstplan og prioriterte tiltak',
+        ],
+      },
+      {
+        name: 'Strategisk partner',
+        kind: 'Månedlig',
+        summary: 'Vi følger strategien opp i kampanjer, innhold og kanaler, og måler om den virker.',
+        includes: [
+          'Månedlig strategimøte',
+          'Oppfølging av merkevaren på tvers av kanaler',
+          'Rapport på andel av søk og merkevaresøk',
+          'Ingen bindingstid – 30 dagers oppsigelse',
+        ],
+      },
+    ],
+    process: [
+      {
+        period: '0–30 dager',
+        title: 'Innsikt',
+        text: 'Workshop, kundedata, konkurrenter og søkedata. Vi finner kjøpssituasjonene og hva som skiller deg ut.',
+      },
+      {
+        period: '30–60 dager',
+        title: 'Strategi',
+        text: 'Posisjonering, merkevareelementer, fordeling mellom merkevare og aktivering, og en vekstplan.',
+      },
+      {
+        period: '60–90 dager',
+        title: 'Ut i kanalene',
+        text: 'Strategien omsettes i kampanjer, innhold og nettbutikk – og vi starter målingen.',
+      },
+    ],
+    kpis: [
+      { name: 'Andel av søk', text: 'Din andel av merkenavnsøkene i kategorien, mot konkurrentene.' },
+      { name: 'Merkevaresøk', text: 'Hvor mange som søker på navnet ditt, over tid.' },
+      { name: 'Direktetrafikk', text: 'Besøk fra folk som skriver inn adressen eller kommer tilbake av seg selv.' },
+      { name: 'Andel nye kunder', text: 'Om veksten kommer fra flere kjøpere, ikke bare de samme.' },
+      { name: 'Synlighet i AI-svar', text: 'Om merkevaren nevnes når folk spør AI om produkter i kategorien.' },
+    ],
+    faq: [
+      {
+        question: 'Merkevare eller performance – hva bør vi satse på?',
+        answer: 'Begge. Salgsaktivering gir salg nå, merkevarebygging gjør at det blir billigere å selge senere. Mindre og nye merkevarer trenger ofte mer aktivering i starten, men uten noe merkevarearbeid blir hver ny kunde dyrere å vinne.',
+      },
+      {
+        question: 'Hvordan måler dere merkevare?',
+        answer: 'Med tall som kan følges månedlig: andel av søk mot konkurrentene i Google Trends, merkevaresøk i Search Console, direktetrafikk, andel nye kunder og synlighet i AI-svar. Ved behov supplerer vi med en enkel kundeundersøkelse.',
+      },
+      {
+        question: 'Er dette bare for store merkevarer?',
+        answer: 'Nei. Små merkevarer har mest å vinne på å bli husket, fordi de ellers betaler full pris for hver kunde. Strategien tilpasses budsjettet – det viktigste er at den brukes konsekvent.',
+      },
+      {
+        question: 'Hva er gjenkjennelige merkevareelementer?',
+        answer: 'Det som får folk til å kjenne deg igjen uten å se navnet: farger, former, typografi, tone og faste formuleringer. Forskningen til Jenni Romaniuk viser at de må være både kjente og unike – og brukt likt over lang tid.',
+      },
+      {
+        question: 'Hvorfor har merkevaren betydning for AI-søk?',
+        answer: 'Fordi AI-tjenester gjengir det som sies om deg på nettet. Merkevarer som omtales ofte og søkes etter, nevnes oftere i AI-svar. Det gjør merkevarearbeid til en del av synligheten i søk, ikke noe ved siden av.',
+      },
+    ],
+    sources: [
+      { label: 'How Brands Grow og forskningen bak', publisher: 'Ehrenberg-Bass Institute for Marketing Science', href: 'https://marketingscience.info/' },
+      { label: 'The Long and the Short of It (Binet & Field)', publisher: 'IPA', href: 'https://ipa.co.uk/knowledge/publications-reports/the-long-and-the-short-of-it-balancing-short-and-long-term-marketing-strategies' },
+      { label: 'Effectiveness in Context', publisher: 'IPA', href: 'https://ipa.co.uk/knowledge/publications-reports/effectiveness-in-context' },
+      { label: 'Share of Search (Les Binet, 2020)', publisher: 'IPA', href: 'https://ipa.co.uk/news/binet-presents-fast-cheap-predictive-share-of-search-metric/' },
+      { label: 'AI Overview Brand Visibility Factors (75K Brands Studied)', publisher: 'Ahrefs, 2025 (oppdatert 2026)', href: 'https://ahrefs.com/blog/ai-overview-brand-correlation/' },
+      { label: 'Google Trends – mål andel av søk selv', publisher: 'Google', href: 'https://trends.google.com/trends/' },
+    ],
+    related: [
+      { slug: 'seo', why: 'Merkevaresignaler og synlighet i Google og AI-søk henger tett sammen.' },
+      { slug: 'some', why: 'Sosiale medier er der merkevaren bygges bredt, også mot de som ikke leter ennå.' },
+      { slug: 'sporing-og-analyse', why: 'Mål andel av søk, merkevaresøk og nye kunder, ikke bare siste klikk.' },
+    ],
+  },
+
   sem: {
     intro: {
       title: 'Hva er SEM?',

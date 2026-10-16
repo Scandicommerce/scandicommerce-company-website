@@ -1,6 +1,7 @@
 import React from 'react'
 import {
   ArrowRight,
+  ArrowUpRight,
   ChartLine,
   Check,
   ChevronRight,
@@ -27,6 +28,7 @@ import {
 } from '@/lib/growthServices'
 import { findGrowthContent, type GrowthPageContent } from '@/lib/growthContent'
 import { PACKAGES_SLUG } from '@/lib/routes'
+import { GrowthChartView } from './GrowthCharts'
 
 /** Package overview with every price; growth pages link here instead of repeating prices. */
 const PACKAGES_HREF = `/${PACKAGES_SLUG.no}`
@@ -293,14 +295,82 @@ export function GrowthServicePage({ service }: { service: GrowthService }) {
         </section>
       )}
       {content?.intro && <IntroSection intro={content.intro} />}
+      {content?.insights?.length ? <InsightsSection insights={content.insights} /> : null}
       {SERVICE_TEMPLATE.map((block) => (
         <React.Fragment key={block.key}>
           {renderTemplateBlock(block, content) ?? <PlaceholderSection {...block} />}
         </React.Fragment>
       ))}
+      {content?.sources?.length ? <SourcesSection sources={content.sources} /> : null}
       {content?.related?.length ? <RelatedServicesSection related={content.related} /> : null}
       <ClosingCta />
     </>
+  )
+}
+
+function InsightsSection({ insights }: { insights: NonNullable<GrowthPageContent['insights']> }) {
+  return (
+    <SectionShell eyebrow="Innsikt" title="Hva forskningen sier">
+      <div className="space-y-8 lg:space-y-10">
+        {insights.map((insight) => (
+          <figure key={insight.title} className="m-0 grid lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] gap-4 lg:gap-10 items-start">
+            <div>
+              <h3 className="text-lg lg:text-xl font-semibold text-sc-ink-900 m-0">{insight.title}</h3>
+              <p className="text-sm lg:text-base text-sc-ink-600 leading-relaxed mt-2 m-0">{insight.text}</p>
+              {insight.source && (
+                <p className="text-[13px] text-sc-ink-500 mt-3 m-0">
+                  Kilde:{' '}
+                  <a
+                    href={insight.source.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="underline underline-offset-2 hover:text-sc-cyan-600"
+                  >
+                    {insight.source.label}
+                  </a>
+                </p>
+              )}
+            </div>
+            {insight.chart && (
+              <div className="rounded-[10px] border border-sc-ink-100 p-4 lg:p-6">
+                <GrowthChartView chart={insight.chart} />
+              </div>
+            )}
+          </figure>
+        ))}
+      </div>
+    </SectionShell>
+  )
+}
+
+function SourcesSection({ sources }: { sources: NonNullable<GrowthPageContent['sources']> }) {
+  return (
+    <SectionShell eyebrow="Kilder" title="Kilder og videre lesning">
+      <ul className="list-none m-0 p-0 border-t border-sc-ink-100 max-w-[860px]">
+        {sources.map((source) => (
+          <li key={source.href} className="border-b border-sc-ink-100">
+            <a
+              href={source.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group flex items-center justify-between gap-4 py-3.5"
+            >
+              <span>
+                <span className="block text-sm lg:text-base font-semibold text-sc-ink-900 group-hover:text-sc-cyan-600 transition-colors">
+                  {source.label}
+                </span>
+                <span className="block text-[13px] text-sc-ink-500">{source.publisher}</span>
+              </span>
+              <ArrowUpRight
+                className="w-4 h-4 flex-shrink-0 text-sc-ink-400 group-hover:text-sc-cyan-600 transition-colors"
+                strokeWidth={ICON_STROKE}
+                aria-hidden="true"
+              />
+            </a>
+          </li>
+        ))}
+      </ul>
+    </SectionShell>
   )
 }
 

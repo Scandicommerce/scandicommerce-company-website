@@ -55,7 +55,7 @@ export const growthServices: GrowthService[] = [
     group: 'strategi',
     label: 'Merkevare og strategi',
     title: 'Merkevare- og vekststrategi for Shopify-butikker',
-    lead: 'Posisjonering, målgrupper og en vekstplan som gjør resten av markedsføringen enklere å treffe med.',
+    lead: 'En merkevare kundene husker når de skal handle – og en vekstplan som får resten av markedsføringen til å treffe.',
   },
   {
     slug: 'sporing-og-analyse',
