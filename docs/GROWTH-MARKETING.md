@@ -48,14 +48,14 @@ Samleside: `/growth-marketing`. Gjelder bare norsk side (.no). Andre språk gir 
 Growth marketing ▾
   STRATEGI OG INNSIKT          ANNONSERING     EGNE KANALER
   Growth marketing oversikt    SEM             SEO
-  Merkevare og strategi        SoMe            E-postmarkedsføring
+  Merkevare og strategi        SoMe            E-post
   Sporing og analyse                           CRO
 ```
 
 Regler for menyen:
 - **Overskrifter:** Kolonner med overskrift, som Tjenester og Integrasjoner.
 - **Oversikt først:** Oversiktslenken står først i første kolonne.
-- **Bare navn:** Ingen undertekster i Growth-menyen.
+- **Bare navn:** Ingen undertekster i Growth-menyen. Korte navn (SEO, SEM, SoMe, CRO, E-post); H1 og URL bruker søkeordet (f.eks. «E-postmarkedsføring»).
 - **Ingen undersider:** Kanalsidene (Google Ads, Bing Ads, Meta Ads) står ikke i menyen.
 
 ### Mal for tjenestesider
@@ -130,7 +130,9 @@ npm install                 # ikke npm ci, låsefilen er ute av synk med package
 npm run dev                 # http://localhost:3000/no/growth-marketing
 ```
 
-**Før push:** `npx tsc -p tsconfig.typecheck.json --noEmit` og `npx next lint`.
+**Se menyforslaget lokalt:** Erstatt Growth marketing-objektet i `navigationNo` med `growthNavItem()` (og importen) i `lib/navigation.ts`, men **ikke commit** det. Tilbakestill med `git checkout -- lib/navigation.ts`.
+
+**Før push:** `npx tsc -p tsconfig.typecheck.json --noEmit` og `npx next lint`, og sjekk at `lib/navigation.ts` ikke er med i commiten.
 
 ## 7. Åpne spørsmål
 
@@ -151,6 +153,7 @@ npm run dev                 # http://localhost:3000/no/growth-marketing
 | 2026-10-16 | SEM med Google Ads og Bing Ads som undersider; SoMe med Meta Ads | Kanalene får egne sider uten å fylle menyen |
 | 2026-10-16 | «Direkte markedsføring» → «E-postmarkedsføring», med 1:1 som vinkling | Det folk søker på og det vi leverer (Klaviyo); «direkte markedsføring» er tvetydig på norsk |
 | 2026-10-16 | Ikke SMS i navn eller meny | Fokus på e-post |
+| 2026-10-16 | Menynavn «E-post»; H1 og URL beholder «E-postmarkedsføring» | Kort som de andre punktene; «CRM» forveksles med CRM-systemer, «EDM» er lite brukt i Norge |
 | 2026-10-16 | Ingen undersider og ingen undertekster i menyen | Menyen ble for tung |
 | 2026-10-16 | Menyen grupperes i Strategi og innsikt · Annonsering · Egne kanaler | Følger strukturen i de andre fanene; skiller betalt og eid |
 | 2026-10-16 | CRO flyttes til `/growth-marketing/cro` | Fjernet fra Tjenester-menyen av Øyvind (e13b72b) |

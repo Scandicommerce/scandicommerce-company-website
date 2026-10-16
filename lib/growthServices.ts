@@ -113,7 +113,8 @@ export const growthServices: GrowthService[] = [
   {
     slug: 'e-postmarkedsforing',
     group: 'egne-kanaler',
-    label: 'E-postmarkedsføring',
+    // Short like SEO / SEM / CRO in the menu; the H1 and URL keep the searched term
+    label: 'E-post',
     title: 'E-postmarkedsføring for Shopify-butikker',
     lead: 'Klaviyo-flyter, segmentering og kampanjer som snakker til hver kunde – 1:1 i stor skala.',
   },
