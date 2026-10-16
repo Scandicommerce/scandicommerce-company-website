@@ -40,150 +40,6 @@ export interface Package {
 
 export const packages: Package[] = [
   {
-    slug: 'foundation',
-    title: 'Foundation',
-    subtitle: 'Everything you need to launch your Shopify store',
-    price: '89.000 kr',
-    priceType: 'one-time payment',
-    timeline: '6-8 weeks',
-    rating: 4.9,
-    ratingValue: '4.9',
-    reviewCount: 23,
-    description: 'Perfect for new brands ready to launch their first Shopify store. The Foundation package includes everything you need to go live with a professional, conversion-optimized store.',
-    bestFor: [
-      'New brands launching D2C',
-      'Simple product catalogs',
-      'Migrating from basic platforms',
-    ],
-    idealFor: [
-      'New brands launching D2C',
-      'Businesses with 10-50 products',
-      'Migrating from Wix, Squarespace, or basic WooCommerce',
-      'Brands ready to invest in growth',
-    ],
-    included: [
-      'Kick-off workshop & brand discovery',
-      'Competitor analysis',
-      'User journey mapping',
-      'Conversion strategy',
-      'Custom Shopify theme setup',
-      'Mobile-responsive design',
-      'Up to 50 product imports',
-      'Basic SEO optimization',
-      'Payment & shipping setup',
-      '2 weeks post-launch support',
-    ],
-    includedCategories: [
-      {
-        category: 'Strategy',
-        items: [
-          'Kick-off workshop & brand discovery',
-          'Competitor analysis',
-          'User journey mapping',
-          'Conversion strategy',
-        ],
-      },
-      {
-        category: 'Build',
-        items: [
-          'Custom Shopify theme configuration',
-          'Mobile-responsive design',
-          'Up to 50 product imports with SEO',
-          'Collection & navigation setup',
-          'Custom homepage, product & collection templates',
-          'Shopping cart & checkout optimization',
-        ],
-      },
-      {
-        category: 'Launch',
-        items: [
-          'Payment gateway integration',
-          'Shipping & tax configuration',
-          'Domain connection',
-          'Google Analytics 4 setup',
-          'Basic SEO optimization',
-          'SSL & security setup',
-        ],
-      },
-      {
-        category: 'Support',
-        items: [
-          '2 weeks post-launch support',
-          'Training documentation',
-          'Email support',
-        ],
-      },
-    ],
-    highlights: [
-      'Kick-off workshop & brand discovery',
-      'Competitor analysis',
-      'User journey mapping',
-      'Conversion strategy',
-    ],
-    process: [
-      'Discovery & Planning (Week 1)',
-      'Design & Development (Weeks 2-5)',
-      'Testing & Optimization (Week 6)',
-      'Launch & Support (Weeks 7-8)',
-    ],
-    processSteps: [
-      {
-        week: 'Week 1-2',
-        title: 'Discovery & Planning',
-        description: 'Workshop, strategy, and design direction',
-      },
-      {
-        week: 'Week 3-4',
-        title: 'Design & Build',
-        description: 'Theme setup, customization, and content',
-      },
-      {
-        week: 'Week 5-6',
-        title: 'Content & Testing',
-        description: 'Product import, QA, and optimization',
-      },
-      {
-        week: 'Week 7-8',
-        title: 'Launch & Support',
-        description: 'Go live and post-launch support',
-      },
-    ],
-    faq: [
-      {
-        question: 'What if I have more than 50 products?',
-        answer: 'We can accommodate larger catalogs with an additional fee of 100 kr per product. Or consider our Growth package which includes up to 200 products.',
-      },
-      {
-        question: 'Can I use my own design?',
-        answer: "Yes! If you have existing designs or brand guidelines, we'll adapt them to Shopify best practices.",
-      },
-      {
-        question: "What's included in post-launch support?",
-        answer: '2 weeks of email support for bug fixes, minor adjustments, and questions about managing your store.',
-      },
-    ],
-    reviews: [
-      {
-        name: 'Maria Hansen',
-        rating: 5,
-        comment: 'ScandiCommerce delivered exactly what they promised, on time and on budget. Our store launched flawlessly.',
-        title: 'Founder, Nordic Beauty Co.',
-      },
-      {
-        name: 'Erik Johansson',
-        rating: 5,
-        comment: 'The team was professional, responsive, and really understood our brand. Highly recommend!',
-        title: 'CEO, Scandinavian Design Co.',
-      },
-      {
-        name: 'Anna Lindberg',
-        rating: 5,
-        comment: 'Smooth migration from our old platform. The store looks amazing and conversion rates improved immediately.',
-        title: 'Marketing Director, Nordic Fashion',
-      },
-    ],
-  },
-  {
     slug: 'growth',
     title: 'Growth',
     subtitle: 'Scale your existing store',
@@ -206,10 +62,9 @@ export const packages: Package[] = [
       'Multi-channel sellers',
     ],
     included: [
-      'Everything in Foundation',
       'Custom feature development',
       'CRO optimization & testing',
-      'Advanced integrations (Klaviyo, etc.)',
+      'Advanced integrations (email, CRM, ERP)',
       'Performance optimization',
       '4 weeks post-launch support',
     ],
@@ -217,8 +72,7 @@ export const packages: Package[] = [
       {
         category: 'Strategy',
         items: [
-          'Everything in Foundation',
-          'Advanced competitor analysis',
+              'Advanced competitor analysis',
           'Conversion rate optimization audit',
           'Multi-channel strategy',
         ],
@@ -237,7 +91,7 @@ export const packages: Package[] = [
       {
         category: 'Integrate',
         items: [
-          'Klaviyo email marketing',
+          'Email marketing and automation',
           'Advanced analytics setup',
           'Inventory management system',
           'Customer review platform',
@@ -256,7 +110,6 @@ export const packages: Package[] = [
       },
     ],
     highlights: [
-      'Everything in Foundation',
       'Custom feature development',
       'CRO optimization & testing',
       'Advanced integrations',
@@ -290,7 +143,7 @@ export const packages: Package[] = [
       },
       {
         question: 'Can you integrate with my existing systems?',
-        answer: 'Yes! The Growth package includes integrations with popular platforms like Klaviyo, CRM systems, and inventory management tools. We can discuss custom integrations during the discovery phase.',
+        answer: 'Yes! The Growth package includes integrations with popular email, CRM, and inventory management platforms. We can discuss custom integrations during the discovery phase.',
       },
       {
         question: "What's included in the 4 weeks post-launch support?",
@@ -307,7 +160,7 @@ export const packages: Package[] = [
       {
         name: 'Sofia Berg',
         rating: 5,
-        comment: 'Excellent CRO work and the Klaviyo integration is seamless. The team really understands e-commerce growth.',
+        comment: 'Excellent CRO work and the email integration is seamless. The team really understands e-commerce growth.',
         title: 'E-commerce Director, Scandinavian Style',
       },
       {

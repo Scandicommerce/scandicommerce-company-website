@@ -1,0 +1,169 @@
+import { contactHref } from '@/lib/routes'
+import Button from '@/components/ui/Button'
+import AddToCartDropdown from '@/components/sections/merch/AddToCartDropdown'
+import PackageAddToCart from './PackageAddToCart'
+import type { Package } from '@/lib/packages'
+import { cardForTier, serviceCount, tierBelow, type PackageTier } from '@/lib/packageMatrix'
+
+interface ShopifyProduct {
+  variantId: string
+  productTitle: string
+  hasVariants: boolean
+  variants: Parameters<typeof AddToCartDropdown>[0]['variants']
+}
+
+interface PackageDetailHeroProps {
+  pkg: Package
+  /** Set when the package is one of the matrix tiers; drives the facts panel. */
+  tier?: PackageTier
+  shopifyProduct?: ShopifyProduct
+  lang?: string
+}
+
+const T = {
+  no: { eyebrow: 'Pakke', cta: 'Book en samtale', timeline: 'Tidslinje', services: 'tjenester inkludert', inherits: (n: string) => `Alt i ${n}`, audience: 'Passer for' },
+  en: { eyebrow: 'Package', cta: 'Book a discovery call', timeline: 'Timeline', services: 'services included', inherits: (n: string) => `Everything in ${n}`, audience: 'Ideal for' },
+  sv: { eyebrow: 'Paket', cta: 'Boka ett samtal', timeline: 'Tidslinje', services: 'tjänster ingår', inherits: (n: string) => `Allt i ${n}`, audience: 'Passar för' },
+  da: { eyebrow: 'Pakke', cta: 'Book en samtale', timeline: 'Tidslinje', services: 'tjenester inkluderet', inherits: (n: string) => `Alt i ${n}`, audience: 'Passer til' },
+  de: { eyebrow: 'Paket', cta: 'Gespräch buchen', timeline: 'Zeitplan', services: 'Leistungen enthalten', inherits: (n: string) => `Alles in ${n}`, audience: 'Geeignet für' },
+} as const
+
+/**
+ * Package hero: who it is for, what it costs, and how it relates to the package
+ * below. Facts come from the package matrix when the slug is a known tier,
+ * otherwise from the CMS highlights.
+ */
+export default function PackageDetailHero({ pkg, tier, shopifyProduct, lang = 'en' }: PackageDetailHeroProps) {
+  const t = T[lang as keyof typeof T] ?? T.en
+  const card = tier ? cardForTier(tier) : undefined
+  const below = tier ? tierBelow(tier) : undefined
+  const belowCard = below ? cardForTier(below) : undefined
+  const total = tier ? serviceCount(tier) : undefined
+  const audience = card?.audience || pkg.idealFor?.[0]
+
+  return (
+    <section className="relative overflow-hidden bg-sc-ink-50">
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 opacity-60 [background-image:linear-gradient(to_right,rgba(15,23,42,0.06)_1px,transparent_1px),linear-gradient(to_bottom,rgba(15,23,42,0.06)_1px,transparent_1px)] [background-size:48px_48px] [mask-image:linear-gradient(to_bottom,black,transparent)]"
+      />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -right-40 -top-40 h-[560px] w-[560px] rounded-full bg-sc-cyan-500/20 blur-[120px]"
+      />
+
+      <div className="section_container relative mx-auto max-w-[1320px] page-padding-x pt-14 pb-12 lg:pt-24 lg:pb-20">
+        <div className="grid grid-cols-1 items-start gap-10 lg:grid-cols-[1.1fr_1fr] lg:gap-16">
+          {/* Copy */}
+          <div>
+            <div className="mb-3 text-[11px] font-semibold uppercase tracking-[0.12em] text-sc-cyan-500 lg:text-xs">
+              {t.eyebrow}
+            </div>
+            <h1 className="text-3xl font-bold tracking-[-0.02em] text-sc-ink-900 sm:text-4xl lg:text-5xl">
+              {pkg.title}
+            </h1>
+            {(card?.tagline || pkg.subtitle) && (
+              <p className="mt-4 max-w-xl text-[16px] leading-relaxed text-sc-ink-600 lg:text-[18px]">
+                {card?.tagline || pkg.subtitle}
+              </p>
+            )}
+
+            {/* Price */}
+            <div className="mt-8 flex flex-wrap items-baseline gap-x-3 gap-y-1">
+              <span className="text-[32px] font-bold tracking-[-0.02em] text-sc-ink-900 lg:text-[40px]">
+                {card?.price || pkg.price}
+              </span>
+              {(card ? 'per måned' : pkg.priceType) && (
+                <span className="text-[15px] text-sc-ink-500">{card ? 'per måned' : pkg.priceType}</span>
+              )}
+            </div>
+
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+              {shopifyProduct ? (
+                <>
+                  {shopifyProduct.hasVariants ? (
+                    <AddToCartDropdown
+                      variants={shopifyProduct.variants}
+                      productTitle={shopifyProduct.productTitle}
+                      quantity={1}
+                    />
+                  ) : (
+                    <PackageAddToCart
+                      variantId={shopifyProduct.variantId}
+                      productTitle={shopifyProduct.productTitle}
+                      quantity={1}
+                    />
+                  )}
+                  <Button href={pkg.heroButtons?.primaryButtonLink || contactHref(lang)}>
+                    {pkg.heroButtons?.primaryButtonText || t.cta}
+                  </Button>
+                </>
+              ) : (
+                <Button href={pkg.heroButtons?.primaryButtonLink || contactHref(lang)} type="primary">
+                  {pkg.heroButtons?.primaryButtonText || t.cta}
+                </Button>
+              )}
+            </div>
+          </div>
+
+          {/* Facts panel */}
+          <div className="w-full rounded-2xl border border-sc-ink-100 bg-white p-6 shadow-[0_24px_60px_rgba(15,23,42,0.08)] lg:p-8">
+            {audience && (
+              <>
+                <h2 className="text-[11px] font-bold uppercase tracking-[0.12em] text-sc-ink-400">
+                  {t.audience}
+                </h2>
+                <p className="mt-2 text-[15px] leading-relaxed text-sc-ink-700">{audience}</p>
+              </>
+            )}
+
+            {(total !== undefined || belowCard) && (
+              <dl className="mt-6 grid grid-cols-2 gap-4 border-t border-sc-ink-100 pt-6">
+                {total !== undefined && (
+                  <div>
+                    <dt className="text-[12px] text-sc-ink-500">{t.services}</dt>
+                    <dd className="text-[24px] font-bold text-sc-ink-900">{total}</dd>
+                  </div>
+                )}
+                {belowCard && (
+                  <div>
+                    <dt className="text-[12px] text-sc-ink-500">Bygger på</dt>
+                    <dd className="text-[24px] font-bold text-sc-ink-900">{belowCard.name}</dd>
+                  </div>
+                )}
+              </dl>
+            )}
+
+            {card && card.bullets.length > 0 && (
+              <ul className="mt-6 space-y-2.5 border-t border-sc-ink-100 pt-6">
+                {card.bullets.map((bullet, i) => (
+                  <li key={i} className="flex items-start gap-2.5 text-[14.5px] text-sc-ink-700">
+                    <span
+                      aria-hidden="true"
+                      className="mt-[8px] h-1.5 w-1.5 shrink-0 rounded-full bg-sc-cyan-500"
+                    />
+                    {bullet}
+                  </li>
+                ))}
+              </ul>
+            )}
+
+            {!card && pkg.highlights.length > 0 && (
+              <ul className="mt-6 space-y-2.5 border-t border-sc-ink-100 pt-6">
+                {pkg.highlights.map((highlight, i) => (
+                  <li key={i} className="flex items-start gap-2.5 text-[14.5px] text-sc-ink-700">
+                    <span
+                      aria-hidden="true"
+                      className="mt-[8px] h-1.5 w-1.5 shrink-0 rounded-full bg-sc-cyan-500"
+                    />
+                    {highlight}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}

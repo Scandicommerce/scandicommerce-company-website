@@ -30,7 +30,7 @@ export async function generateMetadata(): Promise<Metadata> {
       : 'scandicommerce – Shopify Plus partner agency in Oslo, Norway',
     description: isNo
       ? 'scandicommerce er et Shopify Plus-byrå i Oslo som bygger, migrerer og drifter nettbutikker for norske og nordiske merkevarer – med fastpris og integrasjoner mot Vipps, 24SevenOffice, Tripletex og Bring.'
-      : 'scandicommerce is a Shopify Plus partner agency in Oslo, Norway, serving Norway and the Nordics with headed Shopify themes and headless commerce using Sanity, the Storefront API, Hydrogen, Klaviyo and Make.',
+      : 'scandicommerce is a Shopify Plus partner agency in Oslo, Norway, serving Norway and the Nordics with headed Shopify themes and headless commerce using Sanity, the Storefront API, Hydrogen and email automation.',
     openGraph: {
       siteName: 'scandicommerce',
       locale: site.ogLocale,

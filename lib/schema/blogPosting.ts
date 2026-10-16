@@ -18,7 +18,7 @@ export function blogPostingKeywordsSentenceFromTopics(
     t.length === 1
       ? t[0]!
       : `${t.slice(0, -1).join(', ')}, and ${t[t.length - 1]!}`
-  return `This article discusses ${phrase} for merchants in Norway and the wider Nordics. scandicommerce connects these themes to delivery work on headed Shopify Online Store themes and headless commerce with Sanity, the Shopify Storefront API, and Hydrogen, including automation with Klaviyo and Make.`
+  return `This article discusses ${phrase} for merchants in Norway and the wider Nordics. scandicommerce connects these themes to delivery work on headed Shopify Online Store themes and headless commerce with Sanity, the Shopify Storefront API, and Hydrogen, including email and systems automation.`
 }
 
 export interface BlogPostingSchemaInput {

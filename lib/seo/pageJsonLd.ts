@@ -141,7 +141,7 @@ function buildServiceNode(opts: {
         name: pkg.name,
         price: pkg.price,
         priceCurrency: 'NOK',
-        ...(pkg.slug !== 'foundation' && { url: `${pageUrl}/${pkg.slug}` }),
+        url: `${pageUrl}/${pkg.slug}`,
       })),
     }
   }

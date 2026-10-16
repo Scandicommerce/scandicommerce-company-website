@@ -6,7 +6,7 @@ export const ORGANIZATION_BRAND_NAME = 'scandicommerce'
 
 /** WebSite JSON-LD (homepage): shorter blurb than Organization `description`. */
 export const WEB_SITE_DESCRIPTION =
-  'scandicommerce is a Shopify Plus partner agency in Oslo, Norway, that serves Norway and the wider Nordics with fixed-price, productized e-commerce services. The team ships headed Shopify Online Store experiences and headless storefronts using Sanity, the Shopify Storefront API, and Hydrogen, and ties the stack to growth with Klaviyo, Make, CRO, technical SEO, migrations, and ongoing retainers.'
+  'scandicommerce is a Shopify Plus partner agency in Oslo, Norway, that serves Norway and the wider Nordics with fixed-price, productized e-commerce services. The team ships headed Shopify Online Store experiences and headless storefronts using Sanity, the Shopify Storefront API, and Hydrogen, and ties the stack to growth with email automation, CRO, technical SEO, migrations, and ongoing retainers.'
 
 export const WEB_SITE_ALTERNATE_NAME = 'scandicommerce.no'
 
@@ -17,7 +17,7 @@ export const ORGANIZATION_LEGAL_NAME = 'scandicommerce'
 export const ORGANIZATION_ALTERNATE_NAMES = ['scandicommerce.no', 'Scandicommerce AS'] as const
 
 export const ORGANIZATION_DESCRIPTION =
-  'scandicommerce is a Norwegian Shopify Plus partner agency based in Oslo that delivers productized e-commerce services at fixed prices with no billable hours. The team serves brands across Norway and the Nordics by combining headed Shopify Online Store themes with headless commerce programs that use Sanity as a headless CMS, Shopify’s Storefront API, and Shopify Hydrogen for custom frontends. Core services include full store builds and migrations from WooCommerce, Magento, and Drupal Commerce to Shopify Plus, conversion rate optimization, technical SEO, custom Liquid theme development, third-party app integrations, marketing automation with Klaviyo and Make (Integromat), performance optimization, AI-driven personalization, and ongoing retainer support. Every engagement is packaged as transparent, fixed-price tiers from a 3,500 NOK/month Foundation plan to a 30,000+ NOK/month Enterprise plan, without binding contracts. scandicommerce supports more than 20 Norwegian e-commerce brands and has helped clients generate more than €12 million in revenue.'
+  'scandicommerce is a Norwegian Shopify Plus partner agency based in Oslo that delivers productized e-commerce services at fixed prices with no billable hours. The team serves brands across Norway and the Nordics by combining headed Shopify Online Store themes with headless commerce programs that use Sanity as a headless CMS, Shopify’s Storefront API, and Shopify Hydrogen for custom frontends. Core services include full store builds and migrations from WooCommerce, Magento, and Drupal Commerce to Shopify Plus, conversion rate optimization, technical SEO, custom Liquid theme development, third-party app integrations, email and marketing automation, performance optimization, AI-driven personalization, and ongoing retainer support. Every engagement is packaged as transparent, fixed-price tiers from a 10,000 NOK/month Growth plan to a 30,000+ NOK/month Enterprise plan, without binding contracts. scandicommerce supports more than 20 Norwegian e-commerce brands and has helped clients generate more than €12 million in revenue.'
 
 export const ORGANIZATION_TELEPHONE = '+4733394000'
 
@@ -81,7 +81,7 @@ export const ORGANIZATION_KNOWS_ABOUT = [
   'Implementation work spans migrations from WooCommerce, Magento, and Drupal Commerce into Shopify Plus with careful URL, redirect, and data hygiene for Oslo-based and Nordic teams.',
   'Technical SEO programs focus on crawl clarity, structured data, and performance for Shopify stores that must compete in Norway and neighboring Nordic markets.',
   'Conversion rate optimization engagements translate analytics, user research, and experimentation into measurable lifts on both headed themes and headless routes.',
-  'Klaviyo is used to orchestrate lifecycle email and SMS automation that reflects real purchase behavior fed from Shopify and connected data sources.',
+  'Lifecycle email and SMS automation is orchestrated that reflects real purchase behavior fed from Shopify and connected data sources.',
   'Make (Integromat) workflows stitch Shopify to ERPs, spreadsheets, support tools, and legacy systems so operators spend less time on manual data entry.',
   'The team integrates Shopify apps, custom app proxies, and private middleware when off-the-shelf connectors cannot cover a Nordic retailer’s requirements.',
   'Vipps and other local payment expectations are folded into checkout flows so Norwegian shoppers see familiar, trusted payment methods.',
@@ -110,18 +110,11 @@ export const ORGANIZATION_LOGO_DIMENSIONS = { width: 200, height: 50 } as const
 /** Path segments after origin for package landing pages (Norwegian production URLs). */
 export const ORGANIZATION_SERVICE_PACKAGES = [
   {
-    slug: 'foundation',
-    name: 'Foundation',
-    description:
-      'Monthly Shopify retainer for small brands and startups. Includes website maintenance, basic SEO and CRO advisory, and security updates. Ideal for stores with simple product catalogs that need ongoing support and guidance to grow their online presence on Shopify.',
-    price: '3500',
-  },
-  {
     slug: 'growth',
     name: 'Growth',
     description:
-      'Shopify growth retainer for established businesses ready to scale. Includes everything in Foundation plus conversion rate optimization, content updates, marketing automation setup with tools like Klaviyo and Make, and advanced analytics. Designed for mid-size product catalogs needing custom code, improved checkout flows, and data-driven growth strategies.',
-    price: '8000',
+      'Shopify growth retainer for established businesses ready to scale. Includes conversion rate optimization, content updates, email and marketing automation setup, and advanced analytics. Designed for mid-size product catalogs needing custom code, improved checkout flows, and data-driven growth strategies.',
+    price: '10000',
   },
   {
     slug: 'premium',

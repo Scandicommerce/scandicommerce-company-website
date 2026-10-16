@@ -55,6 +55,24 @@ SANITISE = [
 # Prefixes that mark the author's suggestion rather than agreed copy.
 STRIP_PREFIXES = ["Forslag: "]
 
+# The spreadsheet names specific vendors. Service copy stays tool-agnostic so a
+# package does not promise a particular product; the tooling is a delivery
+# detail agreed per customer. Applied to service names, customer text and card
+# bullets.
+VENDOR_NEUTRAL = [
+    (r"Klaviyo og e-postautomatisering", "E-post og markedsf\u00f8ringsautomatisering"),
+    (r"kampanjeoppsett i Klaviyo", "kampanjeoppsett i e-postplattformen din"),
+    (r"\bKlaviyo, ", "E-post, "),
+    (r"\bKlaviyo\b", "e-postplattformen din"),
+]
+
+
+def neutralise(text):
+    """Strip vendor names from customer-facing copy."""
+    for pattern, replacement in VENDOR_NEUTRAL:
+        text = re.sub(pattern, replacement, text)
+    return text
+
 
 def sheets(path):
     z = zipfile.ZipFile(path)
@@ -130,8 +148,8 @@ def main(path):
         elif raw_limit and limit != raw_limit:
             dropped.append((sid, f"{raw_limit}  ->  {limit}"))
         services.append({
-            "id": sid, "section": r.get("B", ""), "name": r.get("C", ""),
-            "tier": TIERS[r["D"]], "text": r.get("H", ""), "limit": limit,
+            "id": sid, "section": r.get("B", ""), "name": neutralise(r.get("C", "")),
+            "tier": TIERS[r["D"]], "text": neutralise(r.get("H", "")), "limit": neutralise(limit),
         })
 
     cards = []
@@ -141,8 +159,9 @@ def main(path):
         bullets = [r.get(c, "") for c in ("F", "G", "H", "I", "J", "K")]
         cards.append({
             "tier": TIERS[r["A"]], "name": r["A"], "price": r.get("B", ""),
-            "hours": r.get("C", ""), "tagline": r.get("D", ""),
-            "audience": r.get("E", ""), "bullets": [b for b in bullets if b],
+            "hours": r.get("C", ""), "tagline": neutralise(r.get("D", "")),
+            "audience": neutralise(r.get("E", "")),
+            "bullets": [neutralise(b) for b in bullets if b],
         })
 
     out = [HEADER, "export const packageServices: PackageService[] = ["]

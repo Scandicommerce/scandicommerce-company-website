@@ -59,7 +59,7 @@ export const packageServices: PackageService[] = [
   { id: 'N06', section: 'Bygg', name: 'Oppsett og justering av apper', text: 'Vi setter opp og tilpasser apper for ønskeliste, filtrering og søk og kundeanmeldelser.', limit: 'Ferdige apper, ingen egenutvikling', tier: 'growth' },
   { id: 'N07', section: 'Bygg', name: 'Flere valutaer via Shopify Markets', text: 'Oppsett av ekstra valutaer og språk i Shopify Markets.', limit: 'Standardoppsett', tier: 'growth' },
   { id: 'N34', section: 'Bygg', name: 'Universell utforming (WCAG)', text: 'Løpende utbedringer som gjør butikken tilgjengelig for alle.', limit: 'Vanlige feil (kontrast, tastatur, alt-tekster). Full WCAG-revisjon er prosjekt', tier: 'growth' },
-  { id: 'N08', section: 'Integrer og data', name: 'Klaviyo og e-postautomatisering', text: 'Flows, segmenter og kampanjeoppsett i Klaviyo.', tier: 'growth' },
+  { id: 'N08', section: 'Integrer og data', name: 'E-post og markedsføringsautomatisering', text: 'Flows, segmenter og kampanjeoppsett i e-postplattformen din.', tier: 'growth' },
   { id: 'N09', section: 'Integrer og data', name: 'Analyse og sporing', text: 'GA4, hendelser og konverteringssporing er satt opp riktig og holdes ved like.', tier: 'growth' },
   { id: 'N10', section: 'Integrer og data', name: 'Standardintegrasjoner', text: 'Kobling mot anmeldelsesplattform, CRM og sosiale medier med ferdige apper.', limit: 'Konfigurasjon av eksisterende apper. Egenutviklede integrasjoner er Premium', tier: 'growth' },
   { id: 'N11', section: 'Drift og støtte', name: 'Teknisk vedlikehold og feilretting', text: 'Vi retter feil og holder butikken oppdatert.', tier: 'growth' },
@@ -112,7 +112,7 @@ export const packageCards: PackageCard[] = [
     bullets: [
       'Drift, vedlikehold og feilretting',
       'Innholdsoppdateringer og mindre tilpasninger',
-      'Klaviyo, analyse og månedlig rapport',
+      'E-post, analyse og månedlig rapport',
       'Support på e-post og chat',
       'Universell utforming (WCAG) og ytelse',
       '10 timer i måneden',
