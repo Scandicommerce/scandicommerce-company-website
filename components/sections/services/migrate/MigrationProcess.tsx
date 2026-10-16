@@ -44,10 +44,10 @@ export default function MigrationProcess({ process }: MigrationProcessProps) {
             {phases.map((phase, index) => (
               <div
                 key={index}
-                className="bg-[#F8F8F8] rounded-sm p-6 lg:p-8 shadow-md"
+                className="bg-sc-ink-50 rounded-sm p-6 lg:p-8 shadow-md"
               >
                 {phase.week && (
-                  <div className="text-[#03C1CA] text-sm lg:text-base font-semibold mb-3">
+                  <div className="text-sc-cyan-600 text-sm lg:text-base font-semibold mb-3">
                     {phase.week}
                   </div>
                 )}

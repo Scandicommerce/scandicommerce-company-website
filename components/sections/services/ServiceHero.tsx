@@ -44,7 +44,7 @@ export default function ServiceHero({ eyebrow, title, highlight, description, bu
       {/* Cyan glow behind the visual */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -right-40 -top-40 h-[560px] w-[560px] rounded-full bg-sc-cyan-500/20 blur-[120px]"
+        className="pointer-events-none absolute -right-40 -top-40 h-[560px] w-[560px] rounded-full bg-sc-cyan-500/10 blur-[140px]"
       />
 
       <div
@@ -58,7 +58,7 @@ export default function ServiceHero({ eyebrow, title, highlight, description, bu
               {eyebrow}
             </div>
           )}
-          <h1 className="text-[36px] sm:text-[44px] lg:text-[60px] font-bold text-sc-ink-900 tracking-[-0.03em] leading-[1.05] mb-5 lg:mb-6">
+          <h1 className="text-[36px] sm:text-[44px] lg:text-[60px] font-bold text-sc-ink-900 tracking-[-0.028em] leading-[1.02] mb-5 lg:mb-6">
             {renderTitle(title, highlight)}
           </h1>
           {description && (
@@ -75,8 +75,8 @@ export default function ServiceHero({ eyebrow, title, highlight, description, bu
                     href={button.link}
                     className={
                       primary
-                        ? 'inline-flex items-center justify-center rounded-lg bg-sc-cyan-500 px-6 py-3.5 text-sm font-semibold tracking-[0.02em] text-white shadow-[0_10px_30px_rgba(22,167,179,0.3)] transition-colors hover:bg-sc-cyan-600'
-                        : 'inline-flex items-center justify-center rounded-lg border border-sc-ink-200 bg-white px-6 py-3.5 text-sm font-semibold tracking-[0.02em] text-sc-ink-900 transition-colors hover:border-sc-ink-900'
+                        ? 'inline-flex items-center justify-center rounded-lg bg-sc-ink-900 px-[22px] py-3 text-sm font-semibold tracking-[0.02em] text-white transition-colors hover:bg-sc-ink-700'
+                        : 'inline-flex items-center justify-center rounded-lg border border-sc-ink-200 bg-white px-[22px] py-3 text-sm font-semibold tracking-[0.02em] text-sc-ink-900 transition-colors hover:bg-sc-ink-50'
                     }
                   >
                     {button.text}

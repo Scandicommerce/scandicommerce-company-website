@@ -56,12 +56,12 @@ function PackageCard({ pkg, labels }: { pkg: Package; labels: Labels }) {
       {/* Header - Title & Subtitle */}
       <div className="text-center mb-5 sm:mb-6">
         {pkg.title && (
-          <h3 className="text-[5.3vw] xs:text-[3.5vw] sm:text-[3.2vw] md:text-[3.2vw] lg:text-[28px] xl:text-[34px] font-bold text-gray-900 mb-1.5 sm:mb-2">
+          <h3 className="text-[28px] lg:text-[44px] leading-[1.25] font-bold tracking-[-0.02em] text-sc-ink-900 mb-1.5 sm:mb-2">
             {pkg.title}
           </h3>
         )}
         {pkg.subtitle && (
-          <p className="text-xs sm:text-sm lg:text-base text-gray-500">
+          <p className="text-xs sm:text-sm lg:text-base text-sc-ink-500">
             {pkg.subtitle}
           </p>
         )}
@@ -70,7 +70,7 @@ function PackageCard({ pkg, labels }: { pkg: Package; labels: Labels }) {
       {/* Description */}
       {pkg.description && (
         <div className="mb-4 sm:mb-5">
-          <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">
+          <p className="text-xs sm:text-sm text-sc-ink-600 leading-relaxed">
             {pkg.description}
           </p>
         </div>
@@ -79,19 +79,19 @@ function PackageCard({ pkg, labels }: { pkg: Package; labels: Labels }) {
       {/* Row 1: Price/Timeline Box + Rating Box */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mb-3 sm:mb-4">
         {/* Price & Timeline Box */}
-        <div className="bg-gray-50 p-3 sm:p-4 lg:p-5">
+        <div className="bg-sc-ink-50 p-3 sm:p-4 lg:p-5">
           <div className="flex items-baseline gap-1 mb-1 flex-wrap">
             {pkg.price && (
-              <span className="text-[5.3vw] xs:text-[3.5vw] sm:text-[3.2vw] md:text-[3.2vw] lg:text-[28px] xl:text-[34px] font-bold text-[#03C1CA] font-mono tracking-tight">
+              <span className="text-[5.3vw] xs:text-[3.5vw] sm:text-[3.2vw] md:text-[3.2vw] lg:text-[28px] xl:text-[34px] font-bold text-sc-cyan-600 font-mono tracking-tight">
                 {pkg.price}
               </span>
             )}
             {pkg.priceType && (
-              <span className="text-xs text-gray-500 font-sans">{pkg.priceType}</span>
+              <span className="text-xs text-sc-ink-500 font-sans">{pkg.priceType}</span>
             )}
           </div>
           {pkg.timeline && (
-            <p className="text-xs sm:text-sm text-gray-600">
+            <p className="text-xs sm:text-sm text-sc-ink-600">
               {labels.timeline}: {pkg.timeline}
             </p>
           )}
@@ -103,13 +103,13 @@ function PackageCard({ pkg, labels }: { pkg: Package; labels: Labels }) {
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mb-5 sm:mb-6 flex-grow">
         {/* Best For Box */}
         {pkg.bestFor && pkg.bestFor.length > 0 && (
-          <div className="bg-gray-50 p-3 sm:p-4 lg:p-5">
-            <h4 className="text-xs sm:text-sm lg:text-base font-semibold text-gray-900 mb-2 sm:mb-3">
+          <div className="bg-sc-ink-50 p-3 sm:p-4 lg:p-5">
+            <h4 className="text-xs sm:text-sm lg:text-base font-semibold text-sc-ink-900 mb-2 sm:mb-3">
               {labels.bestFor}
             </h4>
             <ul className="space-y-1.5 sm:space-y-2">
               {pkg.bestFor.map((item, index) => (
-                <li key={index} className="text-xs lg:text-sm text-gray-600">
+                <li key={index} className="text-xs lg:text-sm text-sc-ink-600">
                   {item}
                 </li>
               ))}
@@ -119,13 +119,13 @@ function PackageCard({ pkg, labels }: { pkg: Package; labels: Labels }) {
 
         {/* What's Included Box */}
         {pkg.included && pkg.included.length > 0 && (
-          <div className="bg-gray-50 p-3 sm:p-4 lg:p-5">
-            <h4 className="text-xs sm:text-sm lg:text-base font-semibold text-gray-900 mb-2 sm:mb-3">
+          <div className="bg-sc-ink-50 p-3 sm:p-4 lg:p-5">
+            <h4 className="text-xs sm:text-sm lg:text-base font-semibold text-sc-ink-900 mb-2 sm:mb-3">
               {labels.whatsIncluded}
             </h4>
             <ul className="space-y-1.5 sm:space-y-2">
               {pkg.included.map((item, index) => (
-                <li key={index} className="text-xs lg:text-sm text-gray-600">
+                <li key={index} className="text-xs lg:text-sm text-sc-ink-600">
                   {item}
                 </li>
               ))}
@@ -139,7 +139,7 @@ function PackageCard({ pkg, labels }: { pkg: Package; labels: Labels }) {
         {(pkg.slug || pkg.href) && (
           <LocalizedLink
             href={pkg.slug ? `/${pkg.slug}` : pkg.href!}
-            className="bg-[#03C1CA] hover:bg-[#02a9b1] text-white text-sm lg:text-base font-semibold py-3 sm:py-3.5 px-4 text-center transition-colors duration-200"
+            className="bg-sc-cyan-500 hover:bg-[#02a9b1] text-white text-sm lg:text-base font-semibold py-3 sm:py-3.5 px-4 text-center transition-colors duration-200"
           >
             {labels.viewDetails}
           </LocalizedLink>
@@ -150,14 +150,14 @@ function PackageCard({ pkg, labels }: { pkg: Package; labels: Labels }) {
               href={resolveBookCallHref(pkg)!}
               target="_blank"
               rel="noopener noreferrer"
-              className="border-2 border-gray-200 hover:border-gray-300 text-gray-700 text-sm lg:text-base font-semibold py-3 sm:py-3.5 px-4 text-center transition-colors duration-200 bg-white flex-1"
+              className="border-2 border-sc-ink-100 hover:border-gray-300 text-sc-ink-600 text-sm lg:text-base font-semibold py-3 sm:py-3.5 px-4 text-center transition-colors duration-200 bg-white flex-1"
             >
               {labels.bookCall}
             </a>
           ) : (
             <LocalizedLink
               href={resolveBookCallHref(pkg) || '/contact'}
-              className="border-2 border-gray-200 hover:border-gray-300 text-gray-700 text-sm lg:text-base font-semibold py-3 sm:py-3.5 px-4 text-center transition-colors duration-200 bg-white flex-1"
+              className="border-2 border-sc-ink-100 hover:border-gray-300 text-sc-ink-600 text-sm lg:text-base font-semibold py-3 sm:py-3.5 px-4 text-center transition-colors duration-200 bg-white flex-1"
             >
               {labels.bookCall}
             </LocalizedLink>
@@ -188,7 +188,7 @@ export default function PricingPackages({ packages, lang }: PricingPackagesProps
   }
 
   return (
-    <section className="bg-[#F8F8F8] pb-8 xs:pb-12 sm:pb-16 lg:pt-24 lg:pb-24">
+    <section className="bg-sc-ink-50 pb-8 xs:pb-12 sm:pb-16 lg:pt-24 lg:pb-24">
       <div className="section_container mx-auto page-padding-x">
         {items && items.length > 0 && (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 max-w-6xl mx-auto">

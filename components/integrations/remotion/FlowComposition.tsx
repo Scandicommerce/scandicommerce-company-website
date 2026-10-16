@@ -205,7 +205,7 @@ function StepFlow(props: FlowProps & { theme: FlowTheme }) {
   })()
   const isActive = (a: NodeIdx, b: NodeIdx) => !!activeSeg && activeSeg[0] === a && activeSeg[1] === b
 
-  const module = (i: number) => (proc <= 0 ? 0 : Math.min(1, Math.max(0, (proc - i * 0.3) / 0.35)))
+  const moduleFill = (i: number) => (proc <= 0 ? 0 : Math.min(1, Math.max(0, (proc - i * 0.3) / 0.35)))
   const modLabels = [l.lookup, l.map, l.create]
   const codeLines = [
     { t: `POST /webhooks/${names[from].replace(/\s+/g, '-')}`, a: true },
@@ -251,7 +251,7 @@ function StepFlow(props: FlowProps & { theme: FlowTheme }) {
           </div>
           <div style={{ display: 'flex', gap: 20 }}>
             {[0, 1, 2].map((i) => {
-              const m = module(i)
+              const m = moduleFill(i)
               return <div key={i} style={{ width: 46, height: 46, borderRadius: 999, border: `3px solid ${m > 0 ? c.pulse : '#b5bcc4'}`, background: m > 0 ? c.pulse : 'transparent', boxShadow: m > 0 && m < 1 ? `0 0 0 ${12 * (1 - m)}px ${c.halo}` : 'none', transform: `scale(${m > 0 ? 1 + 0.08 * (1 - m) : 1})` }} />
             })}
           </div>
@@ -265,7 +265,7 @@ function StepFlow(props: FlowProps & { theme: FlowTheme }) {
             <span>{middleware?.name ?? 'scandicommerce'}</span>
           </div>
           {codeLines.map((ln, i) => {
-            const m = module(i)
+            const m = moduleFill(i)
             if (m <= 0) return null
             return (
               <div key={i} style={{ color: ln.a ? '#1EEFFA' : '#d6dade', whiteSpace: 'nowrap', overflow: 'hidden' }}>

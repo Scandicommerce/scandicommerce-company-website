@@ -26,7 +26,7 @@ export default function RisksAndProtection({ risksProtection }: RisksAndProtecti
   const protections = risksProtection?.protectionItems
 
   return (
-    <section className="bg-[#F8F8F8] py-16 lg:py-[170px]">
+    <section className="bg-sc-ink-50 py-16 lg:py-[170px]">
       <div className="section_container mx-auto page-padding-x">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
           {/* Left Column: Migration risks we eliminate */}
@@ -67,7 +67,7 @@ export default function RisksAndProtection({ risksProtection }: RisksAndProtecti
                     key={index}
                     className="bg-white h-[98px] p-6 flex items-center gap-4 backdrop-blur-[10px]"
                   >
-                    <IoCheckmarkSharp className="w-6 h-6 text-[#03C1CA] flex-shrink-0" />
+                    <IoCheckmarkSharp className="w-6 h-6 text-sc-cyan-600 flex-shrink-0" />
                     <div>
                       {protection.title && (
                         <h3 className="text-[4.3vw] xs:text-[2.6vw] sm:text-[2.5vw] md:text-[2.2vw] lg:text-[18px] xl:text-[24px] font-bold text-[#565454] mb-1">

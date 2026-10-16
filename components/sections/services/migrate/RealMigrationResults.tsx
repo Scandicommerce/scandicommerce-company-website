@@ -18,7 +18,7 @@ export default function RealMigrationResults({ results }: RealMigrationResultsPr
   const items = results?.resultsItems
 
   return (
-    <section className="bg-[#F8F8F8] py-16 lg:py-24">
+    <section className="bg-sc-ink-50 py-16 lg:py-24">
       <div className="section_container mx-auto page-padding-x">
         {title && (
           <div className="text-center mb-6 lg:mb-16">
@@ -38,7 +38,7 @@ export default function RealMigrationResults({ results }: RealMigrationResultsPr
                 }`}
               >
                 {result.metric && (
-                  <div className="text-[5.3vw] xs:text-[3.5vw] sm:text-[3.2vw] md:text-[3.2vw] lg:text-[28px] xl:text-[34px] font-bold text-[#03C1CA] mb-7 font-mono tracking-tight">
+                  <div className="text-[5.3vw] xs:text-[3.5vw] sm:text-[3.2vw] md:text-[3.2vw] lg:text-[28px] xl:text-[34px] font-bold text-sc-cyan-600 mb-7 font-mono tracking-tight">
                     {result.metric}
                   </div>
                 )}

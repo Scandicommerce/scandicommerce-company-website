@@ -12,7 +12,7 @@ export default function MigrationMockup({ fromPlatforms = ['WooCommerce', 'Magen
   return (
     <div aria-hidden="true" className="relative mx-auto flex w-full max-w-[560px] items-center gap-3 sm:gap-5">
       {/* From */}
-      <div className="flex-1 rounded-2xl border border-dashed border-sc-ink-200 bg-white/70 p-4 sm:p-5">
+      <div className="flex-1 rounded-lg border border-dashed border-sc-ink-200 bg-white/70 p-4 sm:p-5">
         <div className="mb-3 text-[11px] font-semibold uppercase tracking-[0.1em] text-sc-ink-600">Fra</div>
         <ul className="list-none space-y-2 p-0 m-0">
           {fromPlatforms.slice(0, 3).map((name) => (
@@ -28,7 +28,7 @@ export default function MigrationMockup({ fromPlatforms = ['WooCommerce', 'Magen
       </div>
 
       {/* To */}
-      <div className="flex-[1.2] rounded-2xl border border-sc-ink-100 bg-white p-4 sm:p-5 shadow-[0_30px_80px_rgba(15,23,42,0.12)]">
+      <div className="flex-[1.2] rounded-lg border border-sc-ink-100 bg-white p-4 sm:p-5 shadow-[0_30px_80px_rgba(15,23,42,0.12)]">
         <div className="mb-3 text-[11px] font-semibold uppercase tracking-[0.1em] text-sc-cyan-500">Til Shopify</div>
         <ul className="list-none space-y-2.5 p-0 m-0">
           {MOVED.map((item) => (

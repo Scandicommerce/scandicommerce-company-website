@@ -32,14 +32,14 @@ export default function Hero({ hero }: HeroProps) {
     const parts = titleText.split(titleHighlight)
     return (
       <>
-        <span className="text-[#1DEFFA]">{titleHighlight}</span>
+        <span className="text-sc-cyan-500">{titleHighlight}</span>
         <span className="xl:text-[#FFFFFF] text-[#222222]">{parts[1]}</span>
       </>
     )
   }
 
   return (
-    <section className="hero-section-responsive relative bg-[#F8F8F8] py-16 lg:py-24 overflow-hidden min-h-[calc(100vh-80px)] flex items-center justify-center">
+    <section className="hero-section-responsive relative bg-sc-ink-50 py-16 lg:py-24 overflow-hidden min-h-[calc(100vh-80px)] flex items-center justify-center">
       <style dangerouslySetInnerHTML={{ __html: `
         @media (max-height: 425px) {
           .liquid-blob-small-height {
@@ -251,8 +251,8 @@ export default function Hero({ hero }: HeroProps) {
         enableMouseFollow={true}
       />
 
-      <div className="absolute top-[35%] left-[25%] xl:block hidden w-40 h-40 rounded-full bg-[#1DEFFA33]"></div>
-      <div className="absolute bottom-[44%] right-[32%] xl:block hidden w-[60px] h-[60px] rounded-full bg-[#1DEFFA33]"></div>
+      <div className="absolute top-[35%] left-[25%] xl:block hidden w-40 h-40 rounded-full bg-sc-cyan-50"></div>
+      <div className="absolute bottom-[44%] right-[32%] xl:block hidden w-[60px] h-[60px] rounded-full bg-sc-cyan-50"></div>
 
       <div className="section_container flex flex-col justify-center items-center mx-auto page-padding-x relative z-10 gap-[42px]">
         <div className="hero-content-375-405 hero-content-406-460 hero-content-461-470 hero-content-461-535 hero-content-470 hero-content-474-477 hero-content-474-492 hero-content-474-508 hero-content-478-492 hero-content-493-503 hero-content-504-508 hero-content-521-535 hero-content-536-639 hero-content-574-602 flex flex-col justify-start items-center gap-[53px] sm:w-3/4 2xl:w-1/2 w-full">
@@ -273,7 +273,7 @@ export default function Hero({ hero }: HeroProps) {
           <div className="hero-buttons-gap hero-buttons-gap-461-535 hero-buttons-gap-536-639 flex flex-col sm:flex-row gap-4 items-center justify-center w-full">
             <Link
               href={buttonLink}
-              className="min-w-[286px] bg-black text-white md:bg-white md:text-[#1F1D1D] px-8 py-4 hover:bg-gray-800 md:hover:bg-gray-100 transition-colors text-center w-full sm:w-auto"
+              className="min-w-[286px] bg-black text-white md:bg-white md:text-[#1F1D1D] px-8 py-4 hover:bg-gray-800 md:hover:bg-sc-ink-50 transition-colors text-center w-full sm:w-auto"
             >
               {buttonText}
             </Link>

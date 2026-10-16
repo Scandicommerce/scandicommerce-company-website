@@ -80,7 +80,7 @@ export default function OmnichannelFeatures({ features }: OmnichannelFeaturesPro
                 className="bg-[#F5F5F5] rounded-sm p-6 lg:p-8 shadow-md flex flex-col items-center text-center"
               >
                 {/* Icon */}
-                <div className="w-12 h-12 sm:w-16 sm:h-16 lg:w-20 lg:h-20 rounded-full bg-[#03C1CA] flex items-center justify-center mb-4 lg:mb-6 text-white">
+                <div className="w-12 h-12 sm:w-16 sm:h-16 lg:w-20 lg:h-20 rounded-full bg-sc-cyan-500 flex items-center justify-center mb-4 lg:mb-6 text-white">
                   {(() => {
                     const Icon = iconMap[feature.icon || 'inventory'] ?? iconMap.inventory
                     return <Icon className={iconClassName} />

@@ -25,9 +25,9 @@ export default function Testimonial({ testimonial }: TestimonialProps) {
   const buttonLink = testimonial?.testimonialButtonLink
 
   return (
-    <section className="bg-[#F8F8F8] py-12 sm:py-16 lg:py-24">
+    <section className="bg-sc-ink-50 py-12 sm:py-16 lg:py-24">
       <div className="section_container mx-auto page-padding-x">
-        <div className="bg-white rounded-lg sm:rounded-xl p-5 sm:p-8 lg:p-12 shadow-sm">
+        <div className="bg-white rounded-lg sm:rounded-lg p-5 sm:p-8 lg:p-12 shadow-sm">
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 sm:gap-8 lg:gap-10">
             {/* Left Content */}
             <div className="flex-1">
@@ -37,7 +37,7 @@ export default function Testimonial({ testimonial }: TestimonialProps) {
                   <svg
                     key={star}
                     className={`w-5 h-5 sm:w-6 sm:h-6 ${
-                      star <= rating ? 'text-amber-400' : 'text-gray-300'
+                      star <= rating ? 'text-amber-400' : 'text-sc-ink-200'
                     }`}
                     fill="currentColor"
                     viewBox="0 0 20 20"
@@ -49,7 +49,7 @@ export default function Testimonial({ testimonial }: TestimonialProps) {
 
               {/* Quote */}
               {quote && (
-                <p className="text-gray-600 text-sm sm:text-lg lg:text-xl leading-relaxed mb-5 sm:mb-8">
+                <p className="text-sc-ink-600 text-sm sm:text-lg lg:text-xl leading-relaxed mb-5 sm:mb-8">
                   &quot;{quote}&quot;
                 </p>
               )}
@@ -58,12 +58,12 @@ export default function Testimonial({ testimonial }: TestimonialProps) {
               {(authorName || authorTitle) && (
                 <div>
                   {authorName && (
-                    <p className="font-bold text-gray-900 text-base sm:text-lg">
+                    <p className="font-bold text-sc-ink-900 text-base sm:text-lg">
                       {authorName}
                     </p>
                   )}
                   {authorTitle && (
-                    <p className="text-gray-500 text-sm sm:text-base">
+                    <p className="text-sc-ink-500 text-sm sm:text-base">
                       {authorTitle}
                     </p>
                   )}
@@ -76,7 +76,7 @@ export default function Testimonial({ testimonial }: TestimonialProps) {
               <div className="lg:flex-shrink-0">
                 <Link
                   href={buttonLink}
-                  className="inline-block w-full sm:w-auto text-center bg-[#03C1CA] hover:bg-[#02a9b1] text-white font-semibold py-3 sm:py-4 px-8 sm:px-10 transition-colors duration-200"
+                  className="inline-block w-full sm:w-auto text-center bg-sc-cyan-500 hover:bg-[#02a9b1] text-white font-semibold py-3 sm:py-4 px-8 sm:px-10 transition-colors duration-200"
                 >
                   {buttonText}
                 </Link>

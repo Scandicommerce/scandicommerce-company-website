@@ -23,12 +23,12 @@ export default function CommonScenarios({ scenarios }: CommonScenariosProps) {
   const items = scenarios?.scenariosItems
 
   return (
-    <section className="bg-[#F8F8F8] py-12 sm:py-16 lg:py-24">
+    <section className="bg-sc-ink-50 py-12 sm:py-16 lg:py-24">
       <div className="section_container mx-auto page-padding-x">
         {/* Header */}
         {title && (
           <div className="text-center mb-8 sm:mb-12 lg:mb-16">
-            <h2 className="text-[5.3vw] xs:text-[3.5vw] sm:text-[3.2vw] md:text-[3.2vw] lg:text-[28px] xl:text-[34px] font-bold text-gray-900">
+            <h2 className="text-[28px] lg:text-[44px] leading-[1.25] font-bold tracking-[-0.02em] text-sc-ink-900">
               {title}
             </h2>
           </div>
@@ -40,7 +40,7 @@ export default function CommonScenarios({ scenarios }: CommonScenariosProps) {
             {items.map((scenario, index) => (
               <div
                 key={index}
-                className={`py-6 sm:py-8 lg:py-10 px-4 sm:px-6 lg:px-10 border-l-2 border-[#03C1CA] ${
+                className={`py-6 sm:py-8 lg:py-10 px-4 sm:px-6 lg:px-10 border-l-2 border-sc-cyan-500 ${
                   index % 2 === 0 ? 'md:border-r md:border-r-gray-200' : ''
                 } ${
                   index < 2 ? 'border-b border-b-gray-200' : ''
@@ -51,19 +51,19 @@ export default function CommonScenarios({ scenarios }: CommonScenariosProps) {
                 }`}
               >
                 {scenario.title && (
-                  <h3 className="text-[4.3vw] xs:text-[2.6vw] sm:text-[2.5vw] md:text-[2.2vw] lg:text-[18px] xl:text-[24px] font-bold text-gray-900 mb-2 sm:mb-3">
+                  <h3 className="text-xl font-semibold text-sc-ink-900 mb-2 sm:mb-3">
                     {scenario.title}
                   </h3>
                 )}
                 {scenario.description && (
-                  <p className="text-xs sm:text-sm lg:text-base text-gray-500 mb-4 sm:mb-6 leading-relaxed">
+                  <p className="text-xs sm:text-sm lg:text-base text-sc-ink-500 mb-4 sm:mb-6 leading-relaxed">
                     {scenario.description}
                   </p>
                 )}
                 {scenario.link && (
                   <Link
                     href={scenario.link}
-                    className="inline-flex items-center text-[#03C1CA] text-xs sm:text-sm font-semibold hover:underline"
+                    className="inline-flex items-center text-sc-cyan-600 text-xs sm:text-sm font-semibold hover:underline"
                   >
                     {linkText}
                     <svg

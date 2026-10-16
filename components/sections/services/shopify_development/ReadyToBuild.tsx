@@ -21,13 +21,13 @@ export default function ReadyToBuild({ cta }: ReadyToBuildProps) {
   const buttonLink = cta?.ctaButtonLink
 
   return (
-    <section className="bg-[#03C1CA] py-12 sm:py-16 lg:py-24">
+    <section className="bg-sc-cyan-500 py-12 sm:py-16 lg:py-24">
       <div className="section_container mx-auto page-padding-x">
         <div className="rounded-lg py-8 sm:py-12 lg:py-16 px-4 sm:px-6 lg:px-12">
           <div className="text-center max-w-2xl mx-auto">
             {/* Title */}
             {title && (
-              <h2 className="text-[5.3vw] xs:text-[3.5vw] sm:text-[3.2vw] md:text-[3.2vw] lg:text-[28px] xl:text-[34px] font-bold text-white mb-4 sm:mb-5">
+              <h2 className="text-[28px] lg:text-[36px] leading-[1.15] font-bold tracking-[-0.02em] text-white mb-4 sm:mb-5">
                 {title}
               </h2>
             )}
@@ -43,7 +43,7 @@ export default function ReadyToBuild({ cta }: ReadyToBuildProps) {
             {buttonText && buttonLink && (
               <Link
                 href={buttonLink}
-                className="inline-block w-full sm:w-auto bg-white hover:bg-gray-100 text-gray-900 font-semibold py-3 sm:py-4 px-8 sm:px-10 transition-colors duration-200"
+                className="inline-block w-full sm:w-auto bg-white hover:bg-sc-ink-50 text-sc-ink-900 font-semibold py-3 sm:py-4 px-8 sm:px-10 transition-colors duration-200"
               >
                 {buttonText}
               </Link>

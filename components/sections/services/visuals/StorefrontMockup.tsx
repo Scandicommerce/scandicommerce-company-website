@@ -6,7 +6,7 @@ export default function StorefrontMockup() {
   return (
     <div aria-hidden="true" className="relative mx-auto w-full max-w-[560px]">
       {/* Browser window */}
-      <div className="rounded-2xl border border-sc-ink-100 bg-white shadow-[0_30px_80px_rgba(15,23,42,0.12)] overflow-hidden">
+      <div className="rounded-lg border border-sc-ink-100 bg-white shadow-[0_30px_80px_rgba(15,23,42,0.12)] overflow-hidden">
         <div className="flex items-center gap-2 border-b border-sc-ink-100 px-4 py-3">
           <span className="h-2.5 w-2.5 rounded-full bg-sc-ink-200" />
           <span className="h-2.5 w-2.5 rounded-full bg-sc-ink-200" />
@@ -28,7 +28,7 @@ export default function StorefrontMockup() {
           </div>
 
           {/* Store banner */}
-          <div className="mb-5 flex h-28 items-end rounded-xl bg-gradient-to-br from-sc-cyan-500 to-sc-cyan-600 p-4">
+          <div className="mb-5 flex h-28 items-end rounded-lg bg-gradient-to-br from-sc-cyan-500 to-sc-cyan-600 p-4">
             <div className="space-y-2">
               <span className="block h-3 w-36 rounded bg-white/90" />
               <span className="block h-2 w-24 rounded bg-white/60" />
@@ -49,7 +49,7 @@ export default function StorefrontMockup() {
       </div>
 
       {/* Floating order card */}
-      <div className="absolute -bottom-6 -left-4 sm:-left-10 rounded-xl border border-sc-ink-100 bg-white px-4 py-3 shadow-[0_20px_50px_rgba(15,23,42,0.12)]">
+      <div className="absolute -bottom-6 -left-4 sm:-left-10 rounded-lg border border-sc-ink-100 bg-white px-4 py-3 shadow-[0_20px_50px_rgba(15,23,42,0.12)]">
         <div className="text-[11px] font-semibold uppercase tracking-[0.1em] text-sc-cyan-500">Ny ordre</div>
         <div className="mt-1 text-sm font-semibold text-sc-ink-900">Betalt med Vipps</div>
       </div>

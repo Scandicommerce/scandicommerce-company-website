@@ -113,7 +113,7 @@ export default function PackageDetailBody({ pkg, tier, lang = 'en' }: PackageDet
                   {pkg.idealFor.map((item, i) => (
                     <li
                       key={i}
-                      className="rounded-xl border border-sc-ink-100 bg-sc-ink-50 px-4 py-3.5 text-[14.5px] leading-relaxed text-sc-ink-700"
+                      className="rounded-lg border border-sc-ink-100 bg-sc-ink-50 px-4 py-3.5 text-[14.5px] leading-relaxed text-sc-ink-700"
                     >
                       {item}
                     </li>

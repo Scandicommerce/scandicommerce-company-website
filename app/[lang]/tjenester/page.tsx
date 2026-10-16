@@ -121,7 +121,7 @@ export default async function TjenesterOverviewPage({ params }: { params: Promis
                 width={HERO_IMAGE.width}
                 height={HERO_IMAGE.height}
                 priority
-                className="h-auto w-full rounded-2xl"
+                className="h-auto w-full rounded-lg"
               />
             )
           }
@@ -134,10 +134,10 @@ export default async function TjenesterOverviewPage({ params }: { params: Promis
                 <li key={teaser.href}>
                   <LocalizedLink
                     href={teaser.href}
-                    className="group flex h-full flex-col rounded-xl border border-sc-ink-100 bg-white p-6 lg:p-8 transition-shadow hover:shadow-[0_10px_30px_rgba(22,167,179,0.15)]"
+                    className="group flex h-full flex-col rounded-lg border border-sc-ink-100 bg-white p-6 lg:p-8 transition-transform hover:-translate-y-1"
                   >
                     {teaser.Icon && (
-                      <span className="mb-5 flex h-12 w-12 items-center justify-center rounded-full bg-sc-cyan-50 text-sc-cyan-500 transition-colors group-hover:bg-sc-cyan-500 group-hover:text-white">
+                      <span className="mb-5 flex h-12 w-12 items-center justify-center rounded-full bg-sc-cyan-500 text-white">
                         <teaser.Icon className="h-6 w-6" strokeWidth={1.75} aria-hidden="true" />
                       </span>
                     )}
@@ -172,13 +172,13 @@ export default async function TjenesterOverviewPage({ params }: { params: Promis
             <div className="flex flex-wrap gap-3">
               <LocalizedLink
                 href={packagesHref(language)}
-                className="inline-flex items-center justify-center rounded-lg bg-sc-cyan-500 px-[22px] py-3 text-sm font-semibold tracking-[0.02em] text-white shadow-[0_10px_30px_rgba(22,167,179,0.25)] transition-colors hover:bg-sc-cyan-600"
+                className="inline-flex items-center justify-center rounded-lg bg-sc-ink-900 px-[22px] py-3 text-sm font-semibold tracking-[0.02em] text-white transition-colors hover:bg-sc-ink-700"
               >
                 Se alle pakker
               </LocalizedLink>
               <LocalizedLink
                 href={`/${CONTACT_SLUG.no}`}
-                className="inline-flex items-center justify-center rounded-lg border border-sc-ink-900 px-[22px] py-3 text-sm font-semibold tracking-[0.02em] text-sc-ink-900 transition-colors hover:bg-sc-ink-900 hover:text-white"
+                className="inline-flex items-center justify-center rounded-lg border border-sc-ink-200 bg-white px-[22px] py-3 text-sm font-semibold tracking-[0.02em] text-sc-ink-900 transition-colors hover:bg-sc-ink-50"
               >
                 Book møte
               </LocalizedLink>

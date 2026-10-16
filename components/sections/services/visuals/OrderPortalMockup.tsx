@@ -8,7 +8,7 @@ const ROWS = [
 export default function OrderPortalMockup() {
   return (
     <div aria-hidden="true" className="relative mx-auto w-full max-w-[560px]">
-      <div className="overflow-hidden rounded-2xl border border-sc-ink-100 bg-white shadow-[0_30px_80px_rgba(15,23,42,0.12)]">
+      <div className="overflow-hidden rounded-lg border border-sc-ink-100 bg-white shadow-[0_30px_80px_rgba(15,23,42,0.12)]">
         <div className="flex items-center justify-between border-b border-sc-ink-100 px-5 py-4">
           <div>
             <div className="text-[11px] font-semibold uppercase tracking-[0.1em] text-sc-cyan-500">Ordreportal</div>

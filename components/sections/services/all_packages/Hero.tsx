@@ -30,14 +30,14 @@ export default function Hero({ hero }: HeroProps) {
     return (
       <>
         <span className="xl:text-[#FFFFFF] text-[#222222]">{parts[0]}</span>
-        <span className="text-[#1DEFFA]">{titleHighlight}</span>
+        <span className="text-sc-cyan-500">{titleHighlight}</span>
         <span className="xl:text-[#FFFFFF] text-[#222222]">{parts[1]}</span>
       </>
     )
   }
 
   return (
-    <section className="hero-section-responsive relative bg-[#F8F8F8] py-16 lg:py-24 overflow-hidden min-h-[calc(100vh-80px)] flex items-center justify-center">
+    <section className="hero-section-responsive relative bg-sc-ink-50 py-16 lg:py-24 overflow-hidden min-h-[calc(100vh-80px)] flex items-center justify-center">
       <style
         dangerouslySetInnerHTML={{
           __html: `
@@ -257,8 +257,8 @@ export default function Hero({ hero }: HeroProps) {
         enableMouseFollow={true}
       />
 
-      <div className="absolute top-[35%] left-[25%] xl:block hidden w-40 h-40 rounded-full bg-[#1DEFFA33]"></div>
-      <div className="absolute bottom-[44%] right-[32%] xl:block hidden w-[60px] h-[60px] rounded-full bg-[#1DEFFA33]"></div>
+      <div className="absolute top-[35%] left-[25%] xl:block hidden w-40 h-40 rounded-full bg-sc-cyan-50"></div>
+      <div className="absolute bottom-[44%] right-[32%] xl:block hidden w-[60px] h-[60px] rounded-full bg-sc-cyan-50"></div>
 
       <div className="section_container flex flex-col justify-center items-center mx-auto page-padding-x relative z-10 gap-[42px]">
         <div className="hero-content-320-374 hero-content-375-405 hero-content-375-460 hero-content-406-460 hero-content-460-483 hero-content-461-470 hero-content-461-535 hero-content-474-477 hero-content-474-492 hero-content-474-508 hero-content-474-640 hero-content-478-508 hero-content-536-639 hero-content-550-558 hero-content-640-767 flex flex-col justify-start items-center gap-[53px] sm:w-3/4 2xl:w-1/2 w-[75%]">

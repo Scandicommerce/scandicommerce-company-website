@@ -52,8 +52,8 @@ export default function PackageAddToCart({
         onClick={handleAddToCart}
         disabled={isAddingToCart || !variantId}
         className={`${isAddingToCart || !variantId
-          ? '!bg-gray-300 text-gray-500 cursor-not-allowed'
-          : '!bg-[#03C1CA] text-white hover:bg-[#02A8B0]'
+          ? '!bg-gray-300 text-sc-ink-500 cursor-not-allowed'
+          : '!bg-sc-cyan-500 text-white hover:bg-[#02A8B0]'
           }`}
       >
         {isAddingToCart ? (

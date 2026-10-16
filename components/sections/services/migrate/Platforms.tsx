@@ -32,7 +32,7 @@ export default function Platforms({ platforms }: PlatformsProps) {
             {items.map((platform, index) => (
               <div
                 key={index}
-                className="bg-[#F8F8F8] p-6 lg:p-8 text-center shadow-md"
+                className="bg-sc-ink-50 p-6 lg:p-8 text-center shadow-md"
               >
                 {platform.name && (
                   <h3 className="text-[4.3vw] xs:text-[2.6vw] sm:text-[2.5vw] md:text-[2.2vw] lg:text-[18px] xl:text-[24px] font-bold text-[#565454] mb-3">

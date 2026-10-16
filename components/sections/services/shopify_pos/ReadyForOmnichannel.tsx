@@ -20,13 +20,13 @@ export default function ReadyForOmnichannel({ cta }: ReadyForOmnichannelProps) {
   const buttonLink = cta?.ctaButtonLink
 
   return (
-    <section className="bg-[#03C1CA] py-16 lg:py-[170px]">
+    <section className="bg-sc-cyan-500 py-16 lg:py-[170px]">
       <div className="section_container mx-auto page-padding-x">
         <div className="text-center flex flex-col items-center justify-start lg:gap-[91px] gap-16">
           {(title || description) && (
             <div className="flex flex-col items-center justify-start lg:gap-7 gap-4">
               {title && (
-                <h2 className="text-[5.3vw] xs:text-[3.5vw] sm:text-[3.2vw] md:text-[3.2vw] lg:text-[28px] xl:text-[34px] font-bold text-white mb-4 lg:mb-6">
+                <h2 className="text-[28px] lg:text-[36px] leading-[1.15] font-bold tracking-[-0.02em] text-white mb-4 lg:mb-6">
                   {title}
                 </h2>
               )}
@@ -41,7 +41,7 @@ export default function ReadyForOmnichannel({ cta }: ReadyForOmnichannelProps) {
           {buttonText && buttonLink && (
             <Link
               href={buttonLink}
-              className="inline-block bg-white text-[#1F1D1D] px-[30px] sm:px-[50px] py-3 lg:px-[80px] lg:py-[18px] font-semibold md:text-base text-sm hover:bg-gray-100"
+              className="inline-block bg-white text-[#1F1D1D] px-[30px] sm:px-[50px] py-3 lg:px-[80px] lg:py-[18px] font-semibold md:text-base text-sm hover:bg-sc-ink-50"
             >
               {buttonText}
             </Link>

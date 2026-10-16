@@ -25,7 +25,7 @@ function AccordionItem({ question, answer }: FaqItem) {
   const [isOpen, setIsOpen] = useState(false)
 
   return (
-    <div className="bg-[#1DEFFA33] px-4 sm:px-8 md:px-12 lg:px-[82px]">
+    <div className="bg-sc-cyan-50 px-4 sm:px-8 md:px-12 lg:px-[82px]">
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
@@ -59,7 +59,7 @@ export default function PackageFaq({ items, lang = 'en' }: PackageFaqProps) {
   if (faqs.length === 0) return null
 
   return (
-    <section id="faq" className="scroll-mt-24 bg-[#03C1CA] py-12 md:py-16 lg:py-24">
+    <section id="faq" className="scroll-mt-24 bg-sc-cyan-500 py-12 md:py-16 lg:py-24">
       <div className="section_container mx-auto page-padding-x">
         <h2 className="mb-8 text-center text-[26px] font-bold text-white md:mb-10 lg:text-[34px]">
           {T[lang as keyof typeof T] ?? T.en}

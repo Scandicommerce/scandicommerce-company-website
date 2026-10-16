@@ -17,7 +17,7 @@ export default function FAQ({ faq }: FAQProps) {
   const items = faq?.faqItems
 
   return (
-    <section className="bg-[#03C1CA] py-12 sm:py-16 lg:py-24 relative overflow-hidden">
+    <section className="bg-sc-cyan-500 py-12 sm:py-16 lg:py-24 relative overflow-hidden">
       {/* Decorative circles - hidden on mobile for cleaner look */}
       <div className="absolute top-10 sm:top-20 left-5 sm:left-10 w-20 sm:w-40 h-20 sm:h-40 rounded-full bg-white/5 hidden sm:block"></div>
       <div className="absolute bottom-10 sm:bottom-20 right-5 sm:right-10 w-16 sm:w-32 h-16 sm:h-32 rounded-full bg-white/5 hidden sm:block"></div>
@@ -25,7 +25,7 @@ export default function FAQ({ faq }: FAQProps) {
 
       <div className="section_container mx-auto page-padding-x relative z-10">
         {title && (
-          <h2 className="text-[5.3vw] xs:text-[3.5vw] sm:text-[3.2vw] md:text-[3.2vw] lg:text-[28px] xl:text-[34px] font-bold text-white text-center mb-8 sm:mb-12">
+          <h2 className="text-[28px] lg:text-[36px] leading-[1.15] font-bold tracking-[-0.02em] text-white text-center mb-8 sm:mb-12">
             {title}
           </h2>
         )}

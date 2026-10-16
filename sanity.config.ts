@@ -6,6 +6,7 @@ import { documentInternationalization } from "@sanity/document-internationalizat
 import { assist } from "@sanity/assist";
 import { schemaTypes } from "@/sanity/schemas";
 import { deskStructure } from "@/sanity/lib/deskStructure";
+import { presentationLocations } from "@/sanity/lib/presentationLocations";
 import {
   supportedLanguages,
   TRANSLATABLE_SCHEMA_TYPES,
@@ -40,6 +41,7 @@ export default defineConfig({
           enable: "/api/draft-mode/enable",
         },
       },
+      resolve: { locations: presentationLocations },
     }),
     visionTool(),
     documentInternationalization({

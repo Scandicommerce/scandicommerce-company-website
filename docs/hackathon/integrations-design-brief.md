@@ -257,3 +257,20 @@ Done on branch `hackathon/chris-marketing-pillar`, uncommitted:
 Open: commit checkpoint, English content, inbound links from existing pages in
 Sanity, case study references, Studio visual check, align the hub hero width
 (880) with the new sections (1100).
+
+## 10. scandicommerce.com must mirror .no
+
+The English site (.com, `x-default`) has to carry the same structure, content and
+design as .no. For the integrations pillar that means:
+
+- English `pillarPage` at slug `integrations`, English `integrationCategory` docs at
+  `integrations/erp` … `integrations/booking`, and English `integrationPage` docs at
+  `integrations/<vendor>`, each linked to its Norwegian sibling through the
+  document-internationalization plugin so hreflang pairs are emitted.
+- The seed script is Norwegian only. The English set is either translated in
+  Studio (AI Assist "Translate document" is enabled for these types) or added to
+  the seed with `LANG='en'` and English copy.
+- The header on .com needs the same Integrations dropdown; that is navigation,
+  Øyvind's area.
+- Same rule for the services area: every `/tjenester/*` page needs its
+  `/services/*` sibling with matching sections and the shared design tokens.

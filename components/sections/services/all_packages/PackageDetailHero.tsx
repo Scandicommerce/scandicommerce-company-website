@@ -107,7 +107,7 @@ export default function PackageDetailHero({ pkg, tier, shopifyProduct, lang = 'e
           </div>
 
           {/* Facts panel */}
-          <div className="w-full rounded-2xl border border-sc-ink-100 bg-white p-6 shadow-[0_24px_60px_rgba(15,23,42,0.08)] lg:p-8">
+          <div className="w-full rounded-lg border border-sc-ink-100 bg-white p-6 shadow-[0_24px_60px_rgba(15,23,42,0.08)] lg:p-8">
             {audience && (
               <>
                 <h2 className="text-[11px] font-bold uppercase tracking-[0.12em] text-sc-ink-400">

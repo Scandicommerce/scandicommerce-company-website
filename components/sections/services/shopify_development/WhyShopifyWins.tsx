@@ -64,12 +64,12 @@ export default function WhyShopifyWins({ whyShopify }: WhyShopifyWinsProps) {
         {(title || subtitle) && (
           <div className="text-center mb-8 sm:mb-12 lg:mb-16">
             {title && (
-              <h2 className="text-[5.3vw] xs:text-[3.5vw] sm:text-[3.2vw] md:text-[3.2vw] lg:text-[28px] xl:text-[34px] font-bold text-gray-900 mb-3 sm:mb-4">
+              <h2 className="text-[28px] lg:text-[44px] leading-[1.25] font-bold tracking-[-0.02em] text-sc-ink-900 mb-3 sm:mb-4">
                 {title}
               </h2>
             )}
             {subtitle && (
-              <p className="text-gray-600 text-sm sm:text-base lg:text-lg max-w-2xl mx-auto">
+              <p className="text-sc-ink-600 text-sm sm:text-base lg:text-lg max-w-2xl mx-auto">
                 {subtitle}
               </p>
             )}
@@ -82,10 +82,10 @@ export default function WhyShopifyWins({ whyShopify }: WhyShopifyWinsProps) {
             {features.map((feature, index) => (
               <div
                 key={index}
-                className="bg-[#F8F8F8] rounded-lg p-4 sm:p-6 lg:p-8 text-center"
+                className="rounded-lg border border-sc-ink-100 bg-white p-4 sm:p-6 lg:p-8 text-center"
               >
                 {/* Icon */}
-                <div className="w-10 h-10 sm:w-12 sm:h-12 lg:w-14 lg:h-14 bg-[#03C1CA] rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4 lg:mb-5">
+                <div className="w-10 h-10 sm:w-12 sm:h-12 lg:w-14 lg:h-14 bg-sc-cyan-500 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4 lg:mb-5">
                   <div className="scale-75 sm:scale-90 lg:scale-100">
                     {iconMap[feature.icon || 'cart'] || iconMap.cart}
                   </div>
@@ -93,14 +93,14 @@ export default function WhyShopifyWins({ whyShopify }: WhyShopifyWinsProps) {
 
                 {/* Title */}
                 {feature.title && (
-                  <h3 className="text-xs sm:text-sm lg:text-base font-semibold text-gray-900 mb-2 sm:mb-3">
+                  <h3 className="text-xs sm:text-sm lg:text-base font-semibold text-sc-ink-900 mb-2 sm:mb-3">
                     {feature.title}
                   </h3>
                 )}
 
                 {/* Description */}
                 {feature.description && (
-                  <p className="text-[10px] sm:text-xs lg:text-sm text-gray-500 leading-relaxed">
+                  <p className="text-[10px] sm:text-xs lg:text-sm text-sc-ink-500 leading-relaxed">
                     {feature.description}
                   </p>
                 )}

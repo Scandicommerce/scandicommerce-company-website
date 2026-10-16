@@ -17,7 +17,7 @@ export default function PerfectFor({ perfectFor }: PerfectForProps) {
   const items = perfectFor?.perfectForItems
 
   return (
-    <section className="bg-[#F8F8F8] py-16 lg:py-24">
+    <section className="bg-sc-ink-50 py-16 lg:py-24">
       <div className="section_container mx-auto page-padding-x">
         {title && (
           <div className="text-center mb-12 lg:mb-16">
@@ -37,7 +37,7 @@ export default function PerfectFor({ perfectFor }: PerfectForProps) {
                 }`}
               >
                 {useCase.title && (
-                  <h3 className="text-[4.3vw] xs:text-[2.6vw] sm:text-[2.5vw] md:text-[2.2vw] lg:text-[18px] xl:text-[24px] font-bold text-[#03C1CA] mb-4 lg:mb-7">
+                  <h3 className="text-[4.3vw] xs:text-[2.6vw] sm:text-[2.5vw] md:text-[2.2vw] lg:text-[18px] xl:text-[24px] font-bold text-sc-cyan-600 mb-4 lg:mb-7">
                     {useCase.title}
                   </h3>
                 )}

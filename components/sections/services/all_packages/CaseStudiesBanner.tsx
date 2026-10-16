@@ -21,12 +21,12 @@ export default function CaseStudiesBanner({ packageName, caseStudiesBanner }: Ca
   const buttonLink = caseStudiesBanner?.buttonLink || '/work'
 
   return (
-    <section className="bg-[#F8F8F8] py-12 lg:py-16">
+    <section className="bg-sc-ink-50 py-12 lg:py-16">
       <div className="section_container mx-auto page-padding-x">
         <div className="max-w-5xl mx-auto">
           {/* Teal banner with rounded corners */}
-          <div className="bg-[#03C1CA] rounded-lg py-16 lg:py-20 px-8 text-center">
-            <h2 className="text-[5.3vw] xs:text-[3.5vw] sm:text-[3.2vw] md:text-[3.2vw] lg:text-[28px] xl:text-[34px] font-bold text-white mb-4">
+          <div className="bg-sc-cyan-500 rounded-lg py-16 lg:py-20 px-8 text-center">
+            <h2 className="text-[28px] lg:text-[36px] leading-[1.15] font-bold tracking-[-0.02em] text-white mb-4">
               {title}
             </h2>
             <p className="text-base lg:text-lg text-white/90 mb-8">
@@ -34,7 +34,7 @@ export default function CaseStudiesBanner({ packageName, caseStudiesBanner }: Ca
             </p>
             <Link
               href={buttonLink}
-              className="inline-block bg-white hover:bg-gray-50 text-gray-700 font-medium py-3 px-8 border border-gray-200 transition-colors duration-200"
+              className="inline-block bg-white hover:bg-sc-ink-50 text-sc-ink-600 font-medium py-3 px-8 border border-sc-ink-100 transition-colors duration-200"
             >
               {buttonText}
             </Link>

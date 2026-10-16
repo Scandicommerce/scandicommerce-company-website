@@ -14,7 +14,7 @@ interface PackageIncludesProps {
 /** One service: name, what the customer gets, and what it does not cover. */
 function ServiceRow({ service }: { service: PackageService }) {
   return (
-    <div className="rounded-xl border border-sc-ink-100 bg-white p-4 lg:p-5">
+    <div className="rounded-lg border border-sc-ink-100 bg-white p-4 lg:p-5">
       <div className="flex items-start gap-2.5">
         <span
           aria-hidden="true"
@@ -49,7 +49,7 @@ export default function PackageIncludes({ tier }: PackageIncludesProps) {
   return (
     <div>
       {/* Summary strip */}
-      <div className="mb-8 flex flex-wrap items-baseline gap-x-8 gap-y-2 rounded-xl border border-sc-ink-100 bg-white px-5 py-4">
+      <div className="mb-8 flex flex-wrap items-baseline gap-x-8 gap-y-2 rounded-lg border border-sc-ink-100 bg-white px-5 py-4">
         {card && (
           <span className="text-[13px] text-sc-ink-500">
             <span className="text-[20px] font-bold text-sc-ink-900">{card.price}</span> per måned
@@ -61,7 +61,7 @@ export default function PackageIncludes({ tier }: PackageIncludesProps) {
       </div>
 
       {belowCard && (
-        <p className="mb-8 rounded-xl border border-sc-cyan-500/30 bg-sc-cyan-500/5 px-5 py-3.5 text-[14px] text-sc-ink-700">
+        <p className="mb-8 rounded-lg border border-sc-cyan-500/30 bg-sc-cyan-500/5 px-5 py-3.5 text-[14px] text-sc-ink-700">
           <span className="font-semibold">Alt i {belowCard.name}</span> er inkludert, pluss det som
           er merket som nytt under.
         </p>
