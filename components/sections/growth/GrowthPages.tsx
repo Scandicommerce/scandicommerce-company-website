@@ -1,13 +1,11 @@
 import React from 'react'
 import LocalizedLink from '@/components/ui/LocalizedLink'
 import {
-  GROWTH_COLUMN_TITLES,
   growthChildren,
-  growthColumnEntries,
+  growthEntries,
   growthHref,
   growthHub,
   findGrowthService,
-  type GrowthColumn,
   type GrowthService,
 } from '@/lib/growthServices'
 
@@ -155,25 +153,20 @@ function ClosingCta() {
 }
 
 export function GrowthHubPage() {
-  const columns = Object.keys(GROWTH_COLUMN_TITLES) as GrowthColumn[]
   return (
     <>
       <DraftNotice />
       <Hero trail={[{ label: growthHub.label }]} title={growthHub.title} lead={growthHub.lead} />
-      {columns.map((column) => (
-        <section key={column} className="bg-white pb-10 lg:pb-16">
-          <div className={containerClasses}>
-            <div className={eyebrowClasses}>{GROWTH_COLUMN_TITLES[column]}</div>
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 lg:gap-4 mt-3">
-              {growthColumnEntries(column)
-                .filter((entry) => !entry.indent)
-                .map((entry) => (
-                  <ServiceCard key={entry.href} label={entry.label} summary={entry.summary} href={entry.href} />
-                ))}
-            </div>
+      <section className="bg-white pb-10 lg:pb-16">
+        <div className={containerClasses}>
+          <div className={eyebrowClasses}>Tjenester</div>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 lg:gap-4 mt-3">
+            {growthEntries().map((entry) => (
+              <ServiceCard key={entry.href} label={entry.label} summary={entry.lead} href={entry.href} />
+            ))}
           </div>
-        </section>
-      ))}
+        </div>
+      </section>
       <PlaceholderSection eyebrow="Pakker" title="Growth-pakker" hint="Pakketering av growth-tjenestene med fastpris." />
       <PlaceholderSection eyebrow="Bevis" title="Resultater" hint="2–3 kundecaser med tall fra growth-arbeid." />
       <ClosingCta />
