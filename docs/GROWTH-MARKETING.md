@@ -36,7 +36,8 @@ Samleside: `/growth-marketing`. Gjelder bare norsk side (.no). Andre språk gir 
 
 | Del | Status |
 |---|---|
-| Samleside og 11 tjenestesider | Dummyer med mal og plassholdere, `noindex`, ikke i XML-sitemap |
+| Samleside | Tekstutkast: modellen «Slik henger det sammen», prinsipper, forskningsinnsikt, oppstart, måltall, pakker (lenke) og FAQ. Bevis står igjen som plassholder |
+| Tjenestesider (11) | `noindex`, ikke i XML-sitemap. Status per side: se «Ekte innhold» |
 | Menyforslag | Ligger i `lib/growthServices.ts` (`growthNavItem()`). **Ikke koblet inn** i headeren ennå (se §5) |
 | Ekte innhold | **SoMe**, **Sporing og analyse**, **Merkevare og strategi**, **SEM**, **Google Ads** og **Affiliate, CSS og feed** har tekstutkast til gjennomlesning (alle seksjoner unntatt bevis; priser via pakkeoversikten). Resten er dummyer |
 | Innhold i Sanity | Ikke startet. Innholdet ligger i kode til tekstene er klare |
@@ -122,7 +123,7 @@ i `navigationNo` med `growthNavItem()`.
 
 **Filer**
 - `lib/growthServices.ts`: Alle tjenester (slug, gruppe, navn, H1, ingress), grupper og menyforslag. **Eneste sted å endre tjenestelisten.**
-- `lib/growthContent.ts`: Teksten per tjenesteside (intro, kjøpssituasjoner, leveranser, pakker, 90 dager, måltall, FAQ). Seksjoner uten tekst vises som plassholder. Bevis vises alltid som plassholder til vi har ekte case.
+- `lib/growthContent.ts`: `growthHubContent` er teksten til samlesiden (modell, prinsipper og resten). Teksten per tjenesteside (intro, kjøpssituasjoner, leveranser, pakker, 90 dager, måltall, FAQ). Seksjoner uten tekst vises som plassholder. Bevis vises alltid som plassholder til vi har ekte case.
 - `components/sections/growth/GrowthPages.tsx`: Samleside og tjenestesidemal, inkludert «Hva forskningen sier» (felt `insights`), «Kilder og videre lesning» (`sources`) og «Fungerer best sammen med» (`related`).
 - `components/sections/growth/GrowthCharts.tsx`: SVG-grafer uten bibliotek: stolper, delt stolpe og prinsippskisse for kort og lang effekt.
 - `app/[lang]/growth-marketing/[[...slug]]/page.tsx`: Rute og metadata (noindex).
@@ -149,6 +150,7 @@ npm run dev                 # http://localhost:3000/no/growth-marketing
 - [ ] Leveranser: Stemmer listene med det vi faktisk gjør (Bing som tillegg, CSS-vurdering, AI Max-tester, Demand Gen)?
 - [ ] Affiliate og feed: Stemmer leveransene (feed-revisjon, distribusjon til prissammenligning, oppfølging av affiliate-partnere)? Nevner vi riktige eksempler (Prisjakt; Adtraction og Awin)? Hvilke feed-verktøy bruker vi?
 - [ ] Bevis: Kundecase med tall fra annonsering, og navngitt spesialist.
+- [ ] Samlesiden: Stemmer modellen (merkevare og etterspørsel → fange etterspørselen → salg og gjenkjøp, med data som grunnmur) og de seks prinsippene med hvordan vi jobber? FAQ-en om samarbeid med andre byråer bygger på FAQ-en til Growth-pakken i Sanity.
 - [ ] SoMe: Stemmer pakkene (revisjon og kreativ plan, løpende drift med nye kreativer hver måned)? Hvilke kanaler leverer vi i praksis (Meta, TikTok, Snapchat, Pinterest, LinkedIn)? Lager vi kreativer selv, eller med partnere?
 - [ ] Sporing og analyse: Stemmer leveransene og de tre pakkene (sporingsrevisjon, server-side sporing, analyse og dashboards månedlig)? Lover vi «varsling og retting når sporingen brytes»? Hvilke dashboardverktøy bruker vi i praksis (Looker, Looker Studio, annet)?
 - [ ] Merkevare og strategi: Stemmer leveransene og pakkene (strategi som engangsleveranse, strategisk partner månedlig)? «Logodesign og full visuell identitet» står som ikke inkludert. Stemmer det?
@@ -238,3 +240,4 @@ Tekstene skal bare inneholde påstander vi kan stå for. Tidsavhengige fakta sje
 | 2026-10-16 | Ny seksjon «Fungerer best sammen med» på tjenestesidene (felt `related`) | Viser at tjenestene henger sammen, og gir intern lenking for SEO |
 | 2026-10-16 | Merkevare og strategi får tekstutkast med forskningsinnsikt, tre grafer og eksterne kilder | Brukeren ba om oppdatert merkevareinnsikt med grafer og lenker; forskningen kobles til hvordan nettbutikker vokser (mental og fysisk tilgjengelighet) |
 | 2026-10-16 | SoMe: fokus på merkevarebygging, gode og varierte kreativer, og på å skape etterspørsel, ikke bare fange den | Brukerens prioritering; støttet av Meta (Andromeda), Binet & Field, System1 og Ipsos |
+| 2026-10-16 | Samlesiden viser vår måte å jobbe på: en modell i tre steg (bygg merkevare og etterspørsel → fang den → gjør besøk til salg og kunder til gjengangere) på en grunnmur av data, pluss seks prinsipper | Samler det vi har landet på for tjenestene: merkevare og salg sammen, data først, én feed, kreativ variasjon, lønnsomhet, bare Shopify |

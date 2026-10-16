@@ -18,15 +18,18 @@ import {
 } from 'lucide-react'
 import LocalizedLink from '@/components/ui/LocalizedLink'
 import {
-  GROWTH_GROUPS,
   growthChildren,
-  growthGroupServices,
   growthHref,
   growthHub,
   findGrowthService,
   type GrowthService,
 } from '@/lib/growthServices'
-import { findGrowthContent, type GrowthPageContent } from '@/lib/growthContent'
+import {
+  findGrowthContent,
+  growthHubContent,
+  type GrowthHubContent,
+  type GrowthPageContent,
+} from '@/lib/growthContent'
 import { PACKAGES_SLUG } from '@/lib/routes'
 import { GrowthChartView } from './GrowthCharts'
 
@@ -225,32 +228,124 @@ function ClosingCta() {
 }
 
 export function GrowthHubPage() {
+  const content = growthHubContent
   return (
     <>
       <DraftNotice />
       <Hero trail={[{ label: growthHub.label }]} title={growthHub.title} lead={growthHub.lead} />
-      {GROWTH_GROUPS.map((group) => (
-        <section key={group.id} className="bg-white pb-10 lg:pb-16">
-          <div className={containerClasses}>
-            <div className={eyebrowClasses}>{group.title}</div>
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 lg:gap-4 mt-3">
-              {growthGroupServices(group.id).map((service) => (
-                <ServiceCard
-                  key={service.slug}
-                  label={service.label}
-                  summary={service.lead}
-                  href={growthHref(service.slug)}
-                  icon={SERVICE_ICONS[service.slug]}
-                />
-              ))}
-            </div>
-          </div>
-        </section>
-      ))}
-      <PlaceholderSection eyebrow="Pakker" title="Growth-pakker" hint="Pakketering av growth-tjenestene med fastpris." />
+      {content.intro && <IntroSection intro={content.intro} />}
+      <ModelSection model={content.model} />
+      <PrinciplesSection principles={content.principles} />
+      {content.insights?.length ? <InsightsSection insights={content.insights} /> : null}
+      {content.process?.length ? <ProcessSection eyebrow="Prosess" title="Slik starter vi" steps={content.process} /> : null}
+      {content.kpis?.length ? <KpiSection eyebrow="Måling" title="Det vi styrer etter" kpis={content.kpis} /> : null}
+      <PackagesCtaSection />
       <PlaceholderSection eyebrow="Bevis" title="Resultater" hint="2–3 kundecaser med tall fra growth-arbeid." />
+      {content.faq?.length ? <FaqSection eyebrow="FAQ" title="Ofte stilte spørsmål" faq={content.faq} /> : null}
+      {content.related?.length ? <RelatedServicesSection related={content.related} /> : null}
       <ClosingCta />
     </>
+  )
+}
+
+function ModelServiceLink({ slug, onDark }: { slug: string; onDark?: boolean }) {
+  const service = findGrowthService(slug)
+  if (!service) return null
+  const Icon = SERVICE_ICONS[slug]
+  return (
+    <LocalizedLink
+      href={growthHref(slug)}
+      className={`group flex items-center gap-2.5 rounded-lg px-3 py-2.5 transition-colors ${
+        onDark ? 'bg-white/70 hover:bg-white' : 'bg-sc-ink-50 hover:bg-sc-cyan-50'
+      }`}
+    >
+      {Icon && <Icon className="w-4 h-4 flex-shrink-0 text-sc-cyan-600" strokeWidth={ICON_STROKE} aria-hidden="true" />}
+      <span className="text-sm font-semibold text-sc-ink-900">{service.label}</span>
+      <ArrowRight
+        className="w-3.5 h-3.5 ml-auto text-sc-ink-400 group-hover:text-sc-cyan-600 group-hover:translate-x-0.5 transition-all"
+        strokeWidth={ICON_STROKE}
+        aria-hidden="true"
+      />
+    </LocalizedLink>
+  )
+}
+
+function ModelSection({ model }: { model: GrowthHubContent['model'] }) {
+  return (
+    <SectionShell eyebrow="Modellen" title="Slik henger det sammen">
+      <div className="flex flex-col lg:flex-row lg:items-stretch gap-2 lg:gap-0">
+        {model.stages.map((stage, index) => (
+          <React.Fragment key={stage.title}>
+            {index > 0 && (
+              <div className="flex items-center justify-center lg:px-2 text-sc-ink-300" aria-hidden="true">
+                <ArrowRight className="w-5 h-5 rotate-90 lg:rotate-0" strokeWidth={ICON_STROKE} />
+              </div>
+            )}
+            <div className="flex-1 rounded-[10px] border border-sc-ink-100 p-5 lg:p-6 flex flex-col">
+              <div className="text-xs lg:text-[13px] font-semibold text-sc-cyan-600 mb-1.5">
+                {String(index + 1).padStart(2, '0')}
+              </div>
+              <h3 className="text-base lg:text-lg font-semibold text-sc-ink-900 m-0">{stage.title}</h3>
+              <p className="text-sm text-sc-ink-600 mt-1.5 mb-4 m-0">{stage.text}</p>
+              <div className="mt-auto space-y-2">
+                {stage.services.map((slug) => (
+                  <ModelServiceLink key={slug} slug={slug} />
+                ))}
+              </div>
+            </div>
+          </React.Fragment>
+        ))}
+      </div>
+      <div className="mt-3 lg:mt-4 rounded-[10px] border border-sc-cyan-200 bg-sc-cyan-50 p-5 lg:p-6 flex flex-col lg:flex-row lg:items-center gap-3 lg:gap-8">
+        <div className="lg:flex-1">
+          <h3 className="text-base lg:text-lg font-semibold text-sc-ink-900 m-0">{model.foundation.title}</h3>
+          <p className="text-sm text-sc-ink-600 mt-1.5 m-0">{model.foundation.text}</p>
+        </div>
+        <div className="lg:w-[320px] space-y-2">
+          {model.foundation.services.map((slug) => (
+            <ModelServiceLink key={slug} slug={slug} onDark />
+          ))}
+        </div>
+      </div>
+    </SectionShell>
+  )
+}
+
+function PrinciplesSection({ principles }: { principles: GrowthHubContent['principles'] }) {
+  return (
+    <SectionShell eyebrow="Prinsipper" title="Slik jobber vi">
+      <div className="grid sm:grid-cols-2 lg:grid-cols-3 border-t border-l border-sc-ink-100 rounded-[10px] overflow-hidden">
+        {principles.map((principle, index) => (
+          <div key={principle.title} className="p-5 lg:p-7 border-r border-b border-sc-ink-100">
+            <div className="text-xs lg:text-[13px] font-semibold text-sc-cyan-600 mb-1.5">
+              {String(index + 1).padStart(2, '0')}
+            </div>
+            <h3 className="text-base lg:text-lg font-semibold text-sc-ink-900 m-0">{principle.title}</h3>
+            <p className="text-sm text-sc-ink-600 leading-normal mt-1.5 m-0">{principle.text}</p>
+          </div>
+        ))}
+      </div>
+    </SectionShell>
+  )
+}
+
+function PackagesCtaSection() {
+  return (
+    <SectionShell eyebrow="Pakker" title="Pakker og pris">
+      <div className="rounded-[16px] border border-sc-ink-100 p-6 lg:p-8 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-5">
+        <p className="text-sm lg:text-base text-sc-ink-600 m-0 max-w-[640px]">
+          Hver tjeneste leveres som pakker med fastpris – en engangsleveranse for å komme i gang, og løpende avtaler
+          uten overraskelser. Alle pakker og priser står i pakkeoversikten.
+        </p>
+        <LocalizedLink
+          href={PACKAGES_HREF}
+          className="inline-flex items-center justify-center gap-1.5 rounded-lg px-[22px] py-3 text-sm font-semibold bg-sc-ink-900 text-white hover:bg-sc-ink-700 transition-colors flex-shrink-0"
+        >
+          Se pakkeoversikten
+          <ArrowRight className="w-4 h-4" strokeWidth={ICON_STROKE} aria-hidden="true" />
+        </LocalizedLink>
+      </div>
+    </SectionShell>
   )
 }
 

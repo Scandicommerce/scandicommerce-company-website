@@ -1150,6 +1150,155 @@ export const growthContent: Record<string, GrowthPageContent> = {
   },
 }
 
+/** The /growth-marketing hub: the shared page content plus the working model and principles. */
+export interface GrowthHubContent extends GrowthPageContent {
+  /** "Slik henger det sammen": stages of the model, each listing services by slug, on a shared foundation. */
+  model: {
+    stages: { title: string; text: string; services: string[] }[]
+    foundation: { title: string; text: string; services: string[] }
+  }
+  /** "Slik jobber vi": short principles. */
+  principles: { title: string; text: string }[]
+}
+
+export const growthHubContent: GrowthHubContent = {
+  intro: {
+    title: 'Vekst på nett handler om to ting',
+    paragraphs: [
+      'Merkevarer vokser først og fremst ved å nå flere kjøpere. For en nettbutikk betyr det å bli husket når folk skal handle – og å være lett å finne og kjøpe hos når de gjør det. Det første bygges med merkevare og sosiale medier. Det andre med søk, Shopping, feed og en nettbutikk som konverterer.',
+      'Derfor selger vi ikke kanaler hver for seg. Vi ser på hele veien fra første inntrykk til gjenkjøp, legger riktig data i bunnen, og styrer etter lønnsomhet og nye kunder – ikke etter klikk.',
+    ],
+  },
+  model: {
+    stages: [
+      {
+        title: 'Bygg merkevare og etterspørsel',
+        text: 'Bli husket av de som ikke leter ennå.',
+        services: ['merkevare-og-strategi', 'some'],
+      },
+      {
+        title: 'Fang etterspørselen',
+        text: 'Vær der når folk søker og sammenligner.',
+        services: ['seo', 'sem', 'affiliate'],
+      },
+      {
+        title: 'Gjør besøk til salg – og kunder til gjengangere',
+        text: 'Flere kjøp fra trafikken du har, og flere som kommer tilbake.',
+        services: ['cro', 'e-postmarkedsforing'],
+      },
+    ],
+    foundation: {
+      title: 'Grunnmuren: riktig data',
+      text: 'Server-side sporing, samtykke og analyse som alle kanalene – og budstrategiene – lærer av.',
+      services: ['sporing-og-analyse'],
+    },
+  },
+  principles: [
+    {
+      title: 'Merkevare og salg, sammen',
+      text: 'Kampanjer som skaper etterspørsel og kampanjer som fanger den, med hver sin jobb – i en fordeling tilpasset din fase.',
+    },
+    {
+      title: 'Data først',
+      text: 'Server-side sporing og samtykke på plass før vi skalerer. Automatikken er bare så god som dataene den lærer av.',
+    },
+    {
+      title: 'Én feed, mange kanaler',
+      text: 'Produktdataene optimaliseres én gang og driver Shopping, Performance Max, CSS, prissammenligning, affiliate og Meta.',
+    },
+    {
+      title: 'Kreativet er målrettingen',
+      text: 'Algoritmene velger publikum ut fra kreativene. Derfor satser vi på mange, varierte og tydelige kreativer i stedet for smal målretting.',
+    },
+    {
+      title: 'Lønnsomhet, ikke klikk',
+      text: 'Vi måler margin, nye kunder og inkrementell effekt – og bruker søk og SEO sammen, så du ikke betaler for det du vinner gratis.',
+    },
+    {
+      title: 'Bare Shopify',
+      text: 'Vi jobber kun med Shopify-butikker. Du betaler ikke for at vi skal lære plattformen.',
+    },
+  ],
+  insights: [
+    {
+      title: 'Merkevare og salg virker på ulik tid',
+      text: 'Salgsaktivering gir raske topper, merkevarebygging løfter grunnsalget over tid. Begge trengs – og de gjør det best med hver sin jobb.',
+      chart: { kind: 'longShortConcept' },
+      source: {
+        label: 'IPA: The Long and the Short of It (Binet & Field)',
+        href: 'https://ipa.co.uk/knowledge/publications-reports/the-long-and-the-short-of-it-balancing-short-and-long-term-marketing-strategies',
+      },
+    },
+    {
+      title: 'Kjente merkevarer blir oftere anbefalt av AI',
+      text: 'Det som henger sterkest sammen med å bli nevnt i Googles AI-oversikter, er merkevaresignaler – omtale, merkenavn i lenker og søk på navnet. Merkevare og søk er ikke lenger to separate fag.',
+      chart: {
+        kind: 'bars',
+        valueLabel: 'Korrelasjon',
+        legend: { emphasis: 'Merkevaresignal', context: 'Lenke- og domenesignal' },
+        items: [
+          { label: 'Omtale av merkevaren', value: 0.664, emphasis: true },
+          { label: 'Merkenavn i lenketekst', value: 0.527, emphasis: true },
+          { label: 'Søk på merkenavnet', value: 0.392, emphasis: true },
+          { label: 'Domenestyrke (DR)', value: 0.326, emphasis: false },
+          { label: 'Lenkende domener', value: 0.295, emphasis: false },
+        ],
+      },
+      source: {
+        label: 'Ahrefs: AI Overview Brand Visibility Factors (75K Brands Studied)',
+        href: 'https://ahrefs.com/blog/ai-overview-brand-correlation/',
+      },
+    },
+  ],
+  process: [
+    {
+      period: '0–30 dager',
+      title: 'Revisjon og måling',
+      text: 'Vi går gjennom sporing, kontoer, feed og merkevare, og setter opp målingen vi skal styre etter.',
+    },
+    {
+      period: '30–60 dager',
+      title: 'Plan og oppsett',
+      text: 'Vekstplan på tvers av kanalene, data i orden og de første kampanjene og testene i gang.',
+    },
+    {
+      period: '60–90 dager',
+      title: 'Skaler det som virker',
+      text: 'Mer innsats der lønnsomheten og de nye kundene kommer fra – og en fast rytme for oppfølging.',
+    },
+  ],
+  kpis: [
+    { name: 'Lønnsomhet', text: 'Hva som er igjen etter varekost og markedsføring – ikke bare omsetning.' },
+    { name: 'Nye kunder', text: 'Andel og kostnad per ny kunde, skilt fra gjenkjøp og merkevaresøk.' },
+    { name: 'Andel av søk', text: 'Din andel av merkenavnsøkene i kategorien – en tidlig indikator på markedsandel.' },
+    { name: 'Inkrementell effekt', text: 'Salg som ikke ville kommet uten markedsføringen, målt med tester der det går.' },
+    { name: 'Datakvalitet', text: 'Andel sporede ordre og avvik mellom Shopify og plattformene.' },
+  ],
+  faq: [
+    {
+      question: 'Må vi kjøpe alle tjenestene?',
+      answer: 'Nei. Du kan starte med én tjeneste, for eksempel sporing eller Google Ads. Vi ser likevel på helheten, slik at det du kjøper, spiller sammen med resten.',
+    },
+    {
+      question: 'Hvor bør vi starte?',
+      answer: 'Som regel med sporing og en revisjon. Uten riktige data vet du ikke hva som virker – og budstrategiene i Google og Meta optimaliserer mot feil mål.',
+    },
+    {
+      question: 'Jobber dere sammen med andre byråer?',
+      answer: 'Ja. Mange kunder har allerede et kreativt byrå, en innholdsprodusent eller et internt team. Vi tar den delen som trengs og samarbeider med resten.',
+    },
+    {
+      question: 'Hvordan fungerer pris og avtale?',
+      answer: 'Tjenestene leveres som pakker med fastpris – engangsleveranser og løpende avtaler. Alle pakker og priser står i pakkeoversikten.',
+    },
+  ],
+  related: [
+    { slug: 'sporing-og-analyse', why: 'Start med grunnmuren: riktige data til alle kanalene.' },
+    { slug: 'merkevare-og-strategi', why: 'Posisjonering og vekstplan som resten bygger på.' },
+    { slug: 'sem/google-ads', why: 'Søk, Shopping og Performance Max styrt mot lønnsomhet.' },
+  ],
+}
+
 export function findGrowthContent(slug: string): GrowthPageContent | undefined {
   return growthContent[slug]
 }
