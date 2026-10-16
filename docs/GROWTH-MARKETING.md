@@ -83,6 +83,7 @@ SEM og SoMe viser i tillegg kanalene sine som kort under hero.
 - **Overskrifter:** Stor forbokstav bare på første ord. Ingen emoji. Midtprikk (·) som skilletegn.
 - **Tall:** Konkrete tall, ikke superlativer.
 - **Posisjonering:** «… for Shopify-butikker». Vi jobber bare med Shopify, og det skal synes.
+- **Ikoner:** Lucide (`lucide-react`), strek 1,75, brukt sparsomt, slik designsystemet sier. Ikonvalget per tjeneste ligger i `SERVICE_ICONS` i `components/sections/growth/GrowthPages.tsx`. Bare kortene på samlesiden har tjenesteikon; i tillegg brukes pil på kort, chevron i brødsmuler og info på utkastbanneret.
 
 **SEO.** Følg i tillegg `docs/SEO-OPERATIONS.md`, §4.
 - **Grenser:** `metaTitle` ≤ 60 tegn, `metaDescription` ≤ 155 tegn, ikke merkenavn i tittelen.
@@ -161,3 +162,4 @@ npm run dev                 # http://localhost:3000/no/growth-marketing
 | 2026-10-16 | `lib/navigation.ts` eies av Øyvind; Growth endrer den ikke | Unngå merge-konflikter |
 | 2026-10-16 | Dummysidene ligger i kode, med noindex | Ingen skrivetilgang til Sanity; sidene skal ikke indekseres med plassholdertekst |
 | 2026-10-16 | Affiliate (inkl. CSS-partnere for Google Shopping) legges til under Annonsering | Vi bistår kunder med det i dag; betalt kanal med provisjon, nær SEM/SoMe |
+| 2026-10-16 | Ikoner fra designsystemets bibliotek (Lucide, strek 1,75) på samlesidekort, kortpiler, brødsmuler og utkastbanner | Designsystemet bruker Lucide sparsomt; tjenesteikon bare på samlesiden for å unngå gjentakelse på kanalkortene |

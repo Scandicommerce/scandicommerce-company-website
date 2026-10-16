@@ -1,4 +1,18 @@
 import React from 'react'
+import {
+  ArrowRight,
+  ChartLine,
+  ChevronRight,
+  Compass,
+  Handshake,
+  Info,
+  Mail,
+  MousePointerClick,
+  Search,
+  Share2,
+  TrendingUp,
+  type LucideIcon,
+} from 'lucide-react'
 import LocalizedLink from '@/components/ui/LocalizedLink'
 import {
   GROWTH_GROUPS,
@@ -53,6 +67,22 @@ const SERVICE_TEMPLATE: { eyebrow: string; title: string; hint: string }[] = [
   },
 ]
 
+/**
+ * One Lucide icon per top-level service, shown on the hub cards only
+ * (design system: Lucide, 1.75 stroke, used sparingly).
+ */
+const SERVICE_ICONS: Record<string, LucideIcon> = {
+  'merkevare-og-strategi': Compass,
+  'sporing-og-analyse': ChartLine,
+  sem: MousePointerClick,
+  some: Share2,
+  affiliate: Handshake,
+  seo: Search,
+  'e-postmarkedsforing': Mail,
+  cro: TrendingUp,
+}
+const ICON_STROKE = 1.75
+
 const containerClasses = 'section_container max-w-[1320px] mx-auto page-padding-x'
 const eyebrowClasses =
   'text-[11px] lg:text-xs font-semibold uppercase tracking-[0.12em] text-sc-cyan-500 mb-2 lg:mb-2.5'
@@ -61,7 +91,8 @@ const h2Classes = 'text-[26px] lg:text-[40px] font-bold text-sc-ink-900 tracking
 function DraftNotice() {
   return (
     <div className="bg-sc-cyan-50 border-b border-sc-cyan-100">
-      <div className={`${containerClasses} py-2.5 text-[13px] text-sc-cyan-800`}>
+      <div className={`${containerClasses} py-2.5 text-[13px] text-sc-cyan-800 flex items-center gap-2`}>
+        <Info className="w-4 h-4 flex-shrink-0" strokeWidth={ICON_STROKE} aria-hidden="true" />
         Utkast – denne siden er en plassholder og er ikke indeksert ennå.
       </div>
     </div>
@@ -70,10 +101,12 @@ function DraftNotice() {
 
 function Breadcrumbs({ trail }: { trail: { label: string; href?: string }[] }) {
   return (
-    <nav aria-label="Brødsmuler" className="text-[13px] text-sc-ink-500 mb-4 lg:mb-6">
+    <nav aria-label="Brødsmuler" className="flex flex-wrap items-center text-[13px] text-sc-ink-500 mb-4 lg:mb-6">
       {trail.map((crumb, index) => (
         <React.Fragment key={index}>
-          {index > 0 && <span className="mx-1.5 text-sc-ink-300">/</span>}
+          {index > 0 && (
+            <ChevronRight className="w-3.5 h-3.5 mx-1 text-sc-ink-300" strokeWidth={ICON_STROKE} aria-hidden="true" />
+          )}
           {crumb.href ? (
             <LocalizedLink href={crumb.href} className="hover:text-sc-ink-900 transition-colors">
               {crumb.label}
@@ -123,13 +156,33 @@ function Hero({
   )
 }
 
-function ServiceCard({ label, summary, href }: { label: string; summary?: string; href: string }) {
+function ServiceCard({
+  label,
+  summary,
+  href,
+  icon: Icon,
+}: {
+  label: string
+  summary?: string
+  href: string
+  icon?: LucideIcon
+}) {
   return (
     <LocalizedLink
       href={href}
-      className="block rounded-[10px] border border-sc-ink-100 p-5 lg:p-6 hover:border-sc-cyan-300 hover:-translate-y-0.5 transition-all"
+      className="group block rounded-[10px] border border-sc-ink-100 p-5 lg:p-6 hover:border-sc-cyan-300 hover:-translate-y-0.5 transition-all"
     >
-      <div className="text-base lg:text-lg font-semibold text-sc-ink-900">{label} →</div>
+      {Icon && (
+        <Icon className="w-6 h-6 text-sc-cyan-600 mb-3 lg:mb-4" strokeWidth={ICON_STROKE} aria-hidden="true" />
+      )}
+      <div className="flex items-center gap-1.5 text-base lg:text-lg font-semibold text-sc-ink-900">
+        {label}
+        <ArrowRight
+          className="w-4 h-4 text-sc-ink-400 group-hover:text-sc-cyan-600 group-hover:translate-x-0.5 transition-all"
+          strokeWidth={ICON_STROKE}
+          aria-hidden="true"
+        />
+      </div>
       {summary && <p className="text-sm text-sc-ink-600 mt-1.5 m-0">{summary}</p>}
     </LocalizedLink>
   )
@@ -169,6 +222,7 @@ export function GrowthHubPage() {
                   label={service.label}
                   summary={service.lead}
                   href={growthHref(service.slug)}
+                  icon={SERVICE_ICONS[service.slug]}
                 />
               ))}
             </div>
