@@ -1,8 +1,9 @@
 import React from 'react'
 import LocalizedLink from '@/components/ui/LocalizedLink'
 import {
+  GROWTH_GROUPS,
   growthChildren,
-  growthEntries,
+  growthGroupServices,
   growthHref,
   growthHub,
   findGrowthService,
@@ -157,16 +158,23 @@ export function GrowthHubPage() {
     <>
       <DraftNotice />
       <Hero trail={[{ label: growthHub.label }]} title={growthHub.title} lead={growthHub.lead} />
-      <section className="bg-white pb-10 lg:pb-16">
-        <div className={containerClasses}>
-          <div className={eyebrowClasses}>Tjenester</div>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 lg:gap-4 mt-3">
-            {growthEntries().map((entry) => (
-              <ServiceCard key={entry.href} label={entry.label} summary={entry.lead} href={entry.href} />
-            ))}
+      {GROWTH_GROUPS.map((group) => (
+        <section key={group.id} className="bg-white pb-10 lg:pb-16">
+          <div className={containerClasses}>
+            <div className={eyebrowClasses}>{group.title}</div>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 lg:gap-4 mt-3">
+              {growthGroupServices(group.id).map((service) => (
+                <ServiceCard
+                  key={service.slug}
+                  label={service.label}
+                  summary={service.lead}
+                  href={growthHref(service.slug)}
+                />
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      ))}
       <PlaceholderSection eyebrow="Pakker" title="Growth-pakker" hint="Pakketering av growth-tjenestene med fastpris." />
       <PlaceholderSection eyebrow="Bevis" title="Resultater" hint="2–3 kundecaser med tall fra growth-arbeid." />
       <ClosingCta />

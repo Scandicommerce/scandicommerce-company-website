@@ -2,22 +2,33 @@
  * Growth marketing service area (Norwegian site): the hub at /growth-marketing
  * and one placeholder page per service.
  *
- * Single source for both the pages (app/[lang]/growth-marketing) and the
- * Growth marketing dropdown in the header (lib/navigation.ts), so the menu and
- * the pages cannot drift apart.
+ * Source for the pages (app/[lang]/growth-marketing) and for the proposed
+ * Growth marketing dropdown (`growthNavItem`). lib/navigation.ts is owned by
+ * the IA work and is not edited from here: it can adopt the dropdown with
+ * `growthNavItem()` so menu and pages stay in step.
  *
  * These are dummies: the pages render the agreed service-page template with
  * placeholder blocks and are noindex until real copy replaces them (at which
  * point the content is expected to move into Sanity).
  */
 
-import type { NavColumn } from '@/lib/navigation'
+import type { NavColumn, NavItem } from '@/lib/navigation'
 
 export const GROWTH_BASE_PATH = '/growth-marketing'
+
+/** Menu columns and hub sections, in order. */
+export const GROWTH_GROUPS = [
+  { id: 'strategi', title: 'Strategi og innsikt' },
+  { id: 'annonsering', title: 'Annonsering' },
+  { id: 'egne-kanaler', title: 'Egne kanaler' },
+] as const
+
+export type GrowthGroup = (typeof GROWTH_GROUPS)[number]['id']
 
 export interface GrowthService {
   /** Path below /growth-marketing, e.g. "sem/google-ads". */
   slug: string
+  group: GrowthGroup
   /**
    * Slug of the parent service when this is a channel page (Google Ads under SEM).
    * Channel pages are linked from their parent page only, not from the menu or hub.
@@ -31,15 +42,6 @@ export interface GrowthService {
   lead: string
 }
 
-/** A link that lives outside /growth-marketing but belongs to the area. */
-interface ExternalGrowthLink {
-  label: string
-  href: string
-  lead: string
-  /** Insert after this slug. */
-  after: string
-}
-
 export const growthHub = {
   label: 'Growth marketing',
   title: 'Growth marketing for Shopify-butikker',
@@ -50,25 +52,28 @@ export const growthHub = {
 export const growthServices: GrowthService[] = [
   {
     slug: 'merkevare-og-strategi',
+    group: 'strategi',
     label: 'Merkevare og strategi',
     title: 'Merkevare- og vekststrategi for Shopify-butikker',
     lead: 'Posisjonering, målgrupper og en vekstplan som gjør resten av markedsføringen enklere å treffe med.',
   },
   {
-    // GEO / AI visibility is part of the SEO offer, not a page of its own
-    slug: 'seo',
-    label: 'SEO',
-    title: 'SEO for Shopify-butikker',
-    lead: 'Teknisk SEO, innhold og synlighet i Google og AI-søk – for Shopify-butikker som vil ha mer trafikk som kjøper.',
+    slug: 'sporing-og-analyse',
+    group: 'strategi',
+    label: 'Sporing og analyse',
+    title: 'Sporing og analyse for Shopify-butikker',
+    lead: 'GA4, Consent Mode og server-side sporing satt opp riktig, så du vet hva markedsføringen faktisk gir.',
   },
   {
     slug: 'sem',
+    group: 'annonsering',
     label: 'SEM',
     title: 'Betalt søk (SEM) for Shopify-butikker',
     lead: 'Annonser i Google og Bing som styres mot lønnsomhet, ikke klikk.',
   },
   {
     slug: 'sem/google-ads',
+    group: 'annonsering',
     parent: 'sem',
     label: 'Google Ads',
     title: 'Google Ads for Shopify-butikker',
@@ -76,6 +81,7 @@ export const growthServices: GrowthService[] = [
   },
   {
     slug: 'sem/bing-ads',
+    group: 'annonsering',
     parent: 'sem',
     label: 'Bing Ads',
     title: 'Bing Ads (Microsoft Advertising) for Shopify-butikker',
@@ -83,38 +89,40 @@ export const growthServices: GrowthService[] = [
   },
   {
     slug: 'some',
+    group: 'annonsering',
     label: 'SoMe',
     title: 'Markedsføring i sosiale medier for Shopify-butikker',
     lead: 'Organisk innhold og betalte kampanjer i sosiale medier som bygger merkevare og driver salg.',
   },
   {
     slug: 'some/meta-ads',
+    group: 'annonsering',
     parent: 'some',
     label: 'Meta Ads',
     title: 'Meta Ads (Facebook og Instagram) for Shopify-butikker',
     lead: 'Kampanjer i Facebook og Instagram koblet til produktkatalogen og målt mot salg i Shopify.',
   },
   {
+    // GEO / AI visibility is part of the SEO offer, not a page of its own
+    slug: 'seo',
+    group: 'egne-kanaler',
+    label: 'SEO',
+    title: 'SEO for Shopify-butikker',
+    lead: 'Teknisk SEO, innhold og synlighet i Google og AI-søk – for Shopify-butikker som vil ha mer trafikk som kjøper.',
+  },
+  {
     slug: 'e-postmarkedsforing',
+    group: 'egne-kanaler',
     label: 'E-postmarkedsføring',
     title: 'E-postmarkedsføring for Shopify-butikker',
     lead: 'Klaviyo-flyter, segmentering og kampanjer som snakker til hver kunde – 1:1 i stor skala.',
   },
   {
-    slug: 'sporing-og-analyse',
-    label: 'Sporing og analyse',
-    title: 'Sporing og analyse for Shopify-butikker',
-    lead: 'GA4, Consent Mode og server-side sporing satt opp riktig, så du vet hva markedsføringen faktisk gir.',
-  },
-]
-
-/** CRO keeps its canonical page under Tjenester but is a growth lever, so the area links to it. */
-const externalGrowthLinks: ExternalGrowthLink[] = [
-  {
+    slug: 'cro',
+    group: 'egne-kanaler',
     label: 'CRO',
-    href: '/tjenester/cro',
-    lead: 'Flere kjøp fra trafikken du allerede har.',
-    after: 'e-postmarkedsforing',
+    title: 'Konverteringsoptimalisering (CRO) for Shopify-butikker',
+    lead: 'Flere kjøp fra trafikken du allerede har – med data, tester og forbedringer i butikken.',
   },
 ]
 
@@ -130,32 +138,26 @@ export function growthChildren(slug: string): GrowthService[] {
   return growthServices.filter((s) => s.parent === slug)
 }
 
-export interface GrowthEntry {
-  label: string
-  lead: string
-  href: string
+/** Top-level services of one group, in order; channel pages excluded. */
+export function growthGroupServices(group: GrowthGroup): GrowthService[] {
+  return growthServices.filter((s) => s.group === group && !s.parent)
 }
 
-/** Top-level services in menu order, with external links in place; channel pages excluded. */
-export function growthEntries(): GrowthEntry[] {
-  const entries: GrowthEntry[] = []
-  for (const service of growthServices.filter((s) => !s.parent)) {
-    entries.push({ label: service.label, lead: service.lead, href: growthHref(service.slug) })
-    for (const link of externalGrowthLinks.filter((l) => l.after === service.slug)) {
-      entries.push({ label: link.label, lead: link.lead, href: link.href })
-    }
-  }
-  return entries
-}
-
-/** The Growth marketing dropdown: one plain list, overview first. */
+/** Columns for the Growth marketing dropdown: one per group, overview first, labels only. */
 export function growthNavColumns(): NavColumn[] {
-  return [
-    {
-      items: [
-        { label: 'Oversikt', href: GROWTH_BASE_PATH },
-        ...growthEntries().map((entry) => ({ label: entry.label, href: entry.href })),
-      ],
-    },
-  ]
+  return GROWTH_GROUPS.map((group, index) => ({
+    title: group.title,
+    items: [
+      ...(index === 0 ? [{ label: 'Growth marketing oversikt', href: GROWTH_BASE_PATH }] : []),
+      ...growthGroupServices(group.id).map((service) => ({
+        label: service.label,
+        href: growthHref(service.slug),
+      })),
+    ],
+  }))
+}
+
+/** Drop-in replacement for the Growth marketing entry in lib/navigation.ts. */
+export function growthNavItem(): NavItem {
+  return { label: growthHub.label, columns: growthNavColumns() }
 }

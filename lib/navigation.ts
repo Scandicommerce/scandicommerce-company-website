@@ -11,8 +11,6 @@
  * override everything from Studio; this keeps the site shippable without them.
  */
 
-import { growthNavColumns } from '@/lib/growthServices'
-
 export interface NavLink {
   label?: string
   /** Sanity page slug, when the link points at a referenced document. */
@@ -84,8 +82,37 @@ export const navigationNo: NavItem[] = [
   },
   {
     label: 'Growth marketing',
-    // Built from the same data as the /growth-marketing pages
-    columns: growthNavColumns(),
+    columns: [
+      {
+        title: 'Synlighet',
+        items: [
+          {
+            label: 'Growth marketing',
+            href: '/growth-marketing',
+            description: 'Oversikt og pakketering',
+          },
+          {
+            label: 'SEO',
+            href: '/growth-marketing/seo',
+            description: 'Leveres allerede i dag',
+          },
+          {
+            label: 'GEO og AI-synlighet',
+            href: '/growth-marketing/geo',
+            description: 'Bli funnet, sitert og anbefalt av AI',
+          },
+        ],
+      },
+      {
+        title: 'Betalt og måling',
+        items: [
+          { label: 'Google Ads', href: '/growth-marketing/google-ads' },
+          { label: 'Meta Ads', href: '/growth-marketing/meta-ads' },
+          { label: 'Bing Ads', href: '/growth-marketing/bing-ads' },
+          { label: 'Analyse og sporing', href: '/growth-marketing/analyse' },
+        ],
+      },
+    ],
   },
   {
     label: 'Integrasjoner',
