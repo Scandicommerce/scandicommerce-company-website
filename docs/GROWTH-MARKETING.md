@@ -21,6 +21,7 @@ Tjenestene vi leverer:
 | Sporing og analyse | `/growth-marketing/sporing-og-analyse` |
 | SEM (betalt søk) | `/growth-marketing/sem` |
 | SoMe | `/growth-marketing/some` |
+| Affiliate (inkl. CSS for Google Shopping) | `/growth-marketing/affiliate` |
 | SEO (inkl. GEO / AI-søk) | `/growth-marketing/seo` |
 | E-postmarkedsføring | `/growth-marketing/e-postmarkedsforing` |
 | CRO | `/growth-marketing/cro` |
@@ -35,7 +36,7 @@ Samleside: `/growth-marketing`. Gjelder bare norsk side (.no). Andre språk gir 
 
 | Del | Status |
 |---|---|
-| Samleside og 10 tjenestesider | Dummyer med mal og plassholdere, `noindex`, ikke i XML-sitemap |
+| Samleside og 11 tjenestesider | Dummyer med mal og plassholdere, `noindex`, ikke i XML-sitemap |
 | Menyforslag | Ligger i `lib/growthServices.ts` (`growthNavItem()`). **Ikke koblet inn** i headeren ennå (se §5) |
 | Ekte innhold | Ikke startet. Neste steg: samlesiden og SEO |
 | Innhold i Sanity | Ikke startet. Innholdet ligger i kode til tekstene er klare |
@@ -49,7 +50,7 @@ Growth marketing ▾
   STRATEGI OG INNSIKT          ANNONSERING     EGNE KANALER
   Growth marketing oversikt    SEM             SEO
   Merkevare og strategi        SoMe            E-post
-  Sporing og analyse                           CRO
+  Sporing og analyse           Affiliate       CRO
 ```
 
 Regler for menyen:
@@ -159,3 +160,4 @@ npm run dev                 # http://localhost:3000/no/growth-marketing
 | 2026-10-16 | CRO flyttes til `/growth-marketing/cro` | Fjernet fra Tjenester-menyen av Øyvind (e13b72b) |
 | 2026-10-16 | `lib/navigation.ts` eies av Øyvind; Growth endrer den ikke | Unngå merge-konflikter |
 | 2026-10-16 | Dummysidene ligger i kode, med noindex | Ingen skrivetilgang til Sanity; sidene skal ikke indekseres med plassholdertekst |
+| 2026-10-16 | Affiliate (inkl. CSS-partnere for Google Shopping) legges til under Annonsering | Vi bistår kunder med det i dag; betalt kanal med provisjon, nær SEM/SoMe |

@@ -103,6 +103,14 @@ export const growthServices: GrowthService[] = [
     lead: 'Kampanjer i Facebook og Instagram koblet til produktkatalogen og målt mot salg i Shopify.',
   },
   {
+    // Includes CSS partners (Comparison Shopping Services) for Google Shopping
+    slug: 'affiliate',
+    group: 'annonsering',
+    label: 'Affiliate',
+    title: 'Affiliate og CSS for Shopify-butikker',
+    lead: 'Affiliate-nettverk og CSS-partnere for Google Shopping – flere salgskanaler, satt opp og fulgt opp mot salg i Shopify.',
+  },
+  {
     // GEO / AI visibility is part of the SEO offer, not a page of its own
     slug: 'seo',
     group: 'egne-kanaler',
