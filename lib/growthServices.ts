@@ -44,9 +44,9 @@ export interface GrowthService {
 
 export const growthHub = {
   label: 'Growth marketing',
-  title: 'Growth marketing for Shopify-butikker',
+  title: 'Growth marketing for nettbutikker',
   lead:
-    'Merkevare, SEO, betalt søk, sosiale medier, e-post og sporing – levert av folk som bare jobber med Shopify, til fastpris.',
+    'Merkevare, SEO, betalt søk, sosiale medier, e-post og sporing – levert av folk som bare jobber med netthandel, til fastpris.',
 }
 
 export const growthServices: GrowthService[] = [
@@ -54,21 +54,21 @@ export const growthServices: GrowthService[] = [
     slug: 'merkevare-og-strategi',
     group: 'strategi',
     label: 'Merkevare og strategi',
-    title: 'Merkevare- og vekststrategi for Shopify-butikker',
+    title: 'Merkevare- og vekststrategi for nettbutikker',
     lead: 'En merkevare kundene husker når de skal handle – og en vekstplan som får resten av markedsføringen til å treffe.',
   },
   {
     slug: 'sporing-og-analyse',
     group: 'strategi',
     label: 'Sporing og analyse',
-    title: 'Sporing og analyse for Shopify-butikker',
+    title: 'Sporing og analyse for nettbutikker',
     lead: 'Server-side sporing med Tracklution, analyse i GA4 og BigQuery, og dashboards som viser hva markedsføringen faktisk gir.',
   },
   {
     slug: 'sem',
     group: 'annonsering',
     label: 'SEM',
-    title: 'Betalt søk (SEM) for Shopify-butikker',
+    title: 'Betalt søk (SEM) for nettbutikker',
     lead: 'Annonser i Google og Bing som styres mot lønnsomhet, ikke klikk.',
   },
   {
@@ -76,7 +76,7 @@ export const growthServices: GrowthService[] = [
     group: 'annonsering',
     parent: 'sem',
     label: 'Google Ads',
-    title: 'Google Ads for Shopify-butikker',
+    title: 'Google Ads for nettbutikker',
     lead: 'Søk, Shopping og Performance Max satt opp og drevet mot det som faktisk selger i butikken din.',
   },
   {
@@ -84,14 +84,14 @@ export const growthServices: GrowthService[] = [
     group: 'annonsering',
     parent: 'sem',
     label: 'Bing Ads',
-    title: 'Bing Ads (Microsoft Advertising) for Shopify-butikker',
+    title: 'Bing Ads (Microsoft Advertising) for nettbutikker',
     lead: 'Den billigere delen av betalt søk – ofte rimeligere klikk og en annen målgruppe enn i Google.',
   },
   {
     slug: 'some',
     group: 'annonsering',
     label: 'SoMe',
-    title: 'Markedsføring i sosiale medier for Shopify-butikker',
+    title: 'Markedsføring i sosiale medier for nettbutikker',
     lead: 'Merkevarebygging og kreativer som skaper etterspørsel – organisk og betalt, der kundene dine bruker tiden sin.',
   },
   {
@@ -99,38 +99,38 @@ export const growthServices: GrowthService[] = [
     group: 'annonsering',
     parent: 'some',
     label: 'Meta Ads',
-    title: 'Meta Ads (Facebook og Instagram) for Shopify-butikker',
-    lead: 'Kampanjer i Facebook og Instagram koblet til produktkatalogen og målt mot salg i Shopify.',
+    title: 'Meta Ads (Facebook og Instagram) for nettbutikker',
+    lead: 'Kampanjer i Facebook og Instagram koblet til produktkatalogen og målt mot salg i nettbutikken.',
   },
   {
     // Includes CSS partners (Comparison Shopping Services) for Google Shopping
     slug: 'affiliate',
     group: 'annonsering',
     label: 'Affiliate',
-    title: 'Affiliate, CSS og feedoptimalisering for Shopify-butikker',
-    lead: 'Én god produktfeed – ut til Google Shopping, CSS, prissammenligning og affiliate-partnere, og fulgt opp mot salg i Shopify.',
+    title: 'Affiliate, CSS og feedoptimalisering for nettbutikker',
+    lead: 'Én god produktfeed – ut til Google Shopping, CSS, prissammenligning og affiliate-partnere, og fulgt opp mot salg i nettbutikken.',
   },
   {
     // GEO / AI visibility is part of the SEO offer, not a page of its own
     slug: 'seo',
     group: 'egne-kanaler',
     label: 'SEO',
-    title: 'SEO for Shopify-butikker',
-    lead: 'Teknisk SEO, innhold og synlighet i Google og AI-søk – for Shopify-butikker som vil ha mer trafikk som kjøper.',
+    title: 'SEO for nettbutikker',
+    lead: 'Teknisk SEO, innhold og synlighet i Google og AI-søk – for nettbutikker som vil ha mer trafikk som kjøper.',
   },
   {
     slug: 'e-postmarkedsforing',
     group: 'egne-kanaler',
     // Short like SEO / SEM / CRO in the menu; the H1 and URL keep the searched term
     label: 'E-post',
-    title: 'E-postmarkedsføring for Shopify-butikker',
+    title: 'E-postmarkedsføring for nettbutikker',
     lead: 'Klaviyo-flyter, segmentering og kampanjer som snakker til hver kunde – 1:1 i stor skala.',
   },
   {
     slug: 'cro',
     group: 'egne-kanaler',
     label: 'CRO',
-    title: 'Konverteringsoptimalisering (CRO) for Shopify-butikker',
+    title: 'Konverteringsoptimalisering (CRO) for nettbutikker',
     lead: 'Flere kjøp fra trafikken du allerede har – med data, tester og forbedringer i butikken.',
   },
 ]

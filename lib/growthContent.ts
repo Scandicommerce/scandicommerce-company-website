@@ -283,18 +283,18 @@ export const growthContent: Record<string, GrowthPageContent> = {
     flows: [
       {
         title: 'Server-side sporing med Tracklution',
-        text: 'Tracklution kobles til Shopify via kundehendelser og en webhook for ordre, på et eget førstepartsdomene. Hendelsene sendes videre til annonseplattformene og analyse – med samtykke fra Shopifys samtykkebanner og Consent Mode v2.',
+        text: 'Tracklution kobles til nettbutikken på et eget førstepartsdomene – i Shopify via kundehendelser og en webhook for ordre, og med egne koblinger for blant annet WooCommerce og Magento. Hendelsene sendes videre til annonseplattformene og analyse – med samtykke fra samtykkebanneret og Consent Mode v2.',
         stages: [
-          { title: 'Shopify', items: ['Kundehendelser (sidevisning, handlekurv, kasse)', 'Webhook ved ny ordre', 'Samtykke fra Shopifys banner'] },
+          { title: 'Nettbutikken', items: ['Hendelser (sidevisning, handlekurv, kasse)', 'Ordre fra nettbutikken', 'Samtykke fra banneret'] },
           { title: 'Tracklution', items: ['Førsteparts domene (DNS)', 'Server-side behandling', 'Datasenter i Stockholm (AWS)'] },
           { title: 'Plattformer', items: ['Meta (Conversions API)', 'Google Ads (forbedrede konverteringer)', 'Google Analytics 4', 'TikTok, Pinterest, Microsoft Ads, Klaviyo m.fl.'] },
         ],
       },
       {
         title: 'Analyse og dashboards i Google Cloud',
-        text: 'For de som vil eie dataene sine og se alt samlet, henter vi data fra Shopify, GA4 og annonseplattformene inn i BigQuery og bygger dashboards og rapporter oppå.',
+        text: 'For de som vil eie dataene sine og se alt samlet, henter vi data fra nettbutikken, GA4 og annonseplattformene inn i BigQuery og bygger dashboards og rapporter oppå.',
         stages: [
-          { title: 'Kilder', items: ['Shopify', 'Google Analytics 4', 'Google Ads og Merchant Center', 'Meta, Klaviyo og andre'] },
+          { title: 'Kilder', items: ['Nettbutikken (Shopify m.fl.)', 'Google Analytics 4', 'Google Ads og Merchant Center', 'Meta, Klaviyo og andre'] },
           { title: 'Google Cloud', items: ['BigQuery-eksport fra GA4', 'BigQuery Data Transfer Service', 'Koblinger for øvrige kilder'] },
           { title: 'Innsikt', items: ['Egne dashboards', 'Rapporter på lønnsomhet og kanal', 'Integrasjoner mot andre systemer'] },
         ],
@@ -302,7 +302,7 @@ export const growthContent: Record<string, GrowthPageContent> = {
     ],
     situations: [
       {
-        title: 'Tallene i Shopify, GA4 og annonsene spriker',
+        title: 'Tallene i nettbutikken, GA4 og annonsene spriker',
         text: 'Ingen kilder er enige om hvor mange ordre markedsføringen ga, og du vet ikke hvilken du skal stole på.',
       },
       {
@@ -334,9 +334,9 @@ export const growthContent: Record<string, GrowthPageContent> = {
         'Valg av analyseplattform og datamodell',
       ],
       gjennomforing: [
-        'Tracklution i Shopify: kundehendelser, ordre-webhook og førsteparts domene',
+        'Tracklution i nettbutikken med førsteparts domene – i Shopify via kundehendelser og ordre-webhook',
         'Metas Conversions API og Googles forbedrede konverteringer',
-        'Consent Mode v2 koblet til Shopifys samtykke',
+        'Consent Mode v2 koblet til samtykkebanneret',
         'GA4 med e-handelshendelser, og eksport til BigQuery',
         'Data fra Google Ads, Merchant Center og andre kilder inn i BigQuery',
         'Egne dashboards og integrasjoner mellom systemene dine',
@@ -344,13 +344,13 @@ export const growthContent: Record<string, GrowthPageContent> = {
       ],
       rapportering: [
         'Dashboards med omsetning, kanaler og lønnsomhet',
-        'Månedlig kontroll av datakvalitet: avvik mot Shopify og hendelsesmatchkvalitet',
+        'Månedlig kontroll av datakvalitet: avvik mot nettbutikken og hendelsesmatchkvalitet',
         'Varsling og retting når sporingen brytes, for eksempel etter en temaendring',
       ],
       ikkeInkludert: [
         'Lisens til Tracklution og kostnader i Google Cloud – det betaler du direkte',
         'Juridisk rådgivning om personvern; ansvaret for gyldig samtykke ligger hos deg',
-        'Utvikling av egne apper i Shopify',
+        'Utvikling av egne apper i nettbutikkplattformen',
       ],
     },
     packages: [
@@ -361,7 +361,7 @@ export const growthContent: Record<string, GrowthPageContent> = {
         includes: [
           'Gjennomgang av piksler, tagger og apper',
           'Samtykke og Consent Mode v2',
-          'Avvik mellom Shopify, GA4 og annonseplattformene',
+          'Avvik mellom nettbutikken, GA4 og annonseplattformene',
           'Prioritert tiltaksliste',
         ],
       },
@@ -370,10 +370,10 @@ export const growthContent: Record<string, GrowthPageContent> = {
         kind: 'Engangsleveranse',
         summary: 'Komplett oppsett med Tracklution og kobling til annonseplattformene dine.',
         includes: [
-          'Tracklution i Shopify med førsteparts domene',
+          'Tracklution i nettbutikken med førsteparts domene',
           'Meta, Google Ads, GA4 og øvrige plattformer',
-          'Samtykke koblet til Shopifys banner',
-          'Test og kontroll mot ordre i Shopify',
+          'Samtykke koblet til samtykkebanneret',
+          'Test og kontroll mot ordrene i nettbutikken',
         ],
       },
       {
@@ -392,12 +392,12 @@ export const growthContent: Record<string, GrowthPageContent> = {
       {
         period: '0–30 dager',
         title: 'Revisjon og plan',
-        text: 'Vi kartlegger dagens sporing og samtykke, finner avvikene og lager en måleplan. Vi trenger tilgang til Shopify, GA4, annonsekontoene og domenets DNS.',
+        text: 'Vi kartlegger dagens sporing og samtykke, finner avvikene og lager en måleplan. Vi trenger tilgang til nettbutikken, GA4, annonsekontoene og domenets DNS.',
       },
       {
         period: '30–60 dager',
         title: 'Server-side på plass',
-        text: 'Tracklution settes opp, plattformene kobles på, samtykket testes, og tallene kontrolleres mot ordrene i Shopify.',
+        text: 'Tracklution settes opp, plattformene kobles på, samtykket testes, og tallene kontrolleres mot ordrene i nettbutikken.',
       },
       {
         period: '60–90 dager',
@@ -406,9 +406,9 @@ export const growthContent: Record<string, GrowthPageContent> = {
       },
     ],
     kpis: [
-      { name: 'Andel sporede ordre', text: 'Hvor mange av ordrene i Shopify som også registreres i annonseplattformene og GA4.' },
+      { name: 'Andel sporede ordre', text: 'Hvor mange av ordrene i nettbutikken som også registreres i annonseplattformene og GA4.' },
       { name: 'Hendelsesmatchkvalitet', text: 'Metas mål på hvor godt hendelsene kan kobles til riktige personer.' },
-      { name: 'Avvik mot Shopify', text: 'Forskjellen mellom ordre og omsetning i Shopify og i plattformene, over tid.' },
+      { name: 'Avvik mot nettbutikken', text: 'Forskjellen mellom ordre og omsetning i nettbutikken og i plattformene, over tid.' },
       { name: 'Samtykkeandel', text: 'Hvor mange som godtar sporing, og hvordan endringer i banneret påvirker det.' },
       { name: 'Ferske data', text: 'Om dashboardene er oppdatert og kildene leverer som de skal.' },
     ],
@@ -423,7 +423,7 @@ export const growthContent: Record<string, GrowthPageContent> = {
       },
       {
         question: 'Hvorfor Tracklution?',
-        answer: 'Tracklution er en ferdig server-side løsning med koblinger til de vanligste annonse- og analyseplattformene, oppsett i Shopify via kundehendelser og datasenter i Stockholm. Det gir sikker sporing uten at du må drifte egne servere. Derfor er det vår standard.',
+        answer: 'Tracklution er en ferdig server-side løsning med koblinger til de vanligste annonse- og analyseplattformene, oppsett i blant annet Shopify, WooCommerce og Magento, og datasenter i Stockholm. Det gir sikker sporing uten at du må drifte egne servere. Derfor er det vår standard.',
       },
       {
         question: 'Kan dere bruke andre løsninger?',
@@ -709,7 +709,7 @@ export const growthContent: Record<string, GrowthPageContent> = {
     intro: {
       title: 'Hva er SEM?',
       paragraphs: [
-        'SEM – search engine marketing – er betalt synlighet i søkemotorer. For en Shopify-butikk betyr det i praksis Google Ads og Microsoft Advertising (Bing): søkeannonser, Shopping-annonser med produktene dine og kampanjer som Performance Max som går på tvers av Google sine flater.',
+        'SEM – search engine marketing – er betalt synlighet i søkemotorer. For en nettbutikk betyr det i praksis Google Ads og Microsoft Advertising (Bing): søkeannonser, Shopping-annonser med produktene dine og kampanjer som Performance Max som går på tvers av Google sine flater.',
         'Vi kjører SEM som én helhet med SEO, sporing og produktfeeden din. Målet er ikke flest mulig klikk, men mest mulig lønnsomt salg per krone du bruker.',
       ],
     },
@@ -731,7 +731,7 @@ export const growthContent: Record<string, GrowthPageContent> = {
         text: 'Du ser totalen, men ikke hva som skjer i Søk, Shopping og YouTube hver for seg.',
       },
       {
-        title: 'Tallene i Google Ads og Shopify spriker',
+        title: 'Tallene i Google Ads og nettbutikken spriker',
         text: 'Sporing og samtykke er ikke satt opp riktig, så automatikken optimaliserer mot feil data.',
       },
       {
@@ -866,7 +866,7 @@ export const growthContent: Record<string, GrowthPageContent> = {
       title: 'Slik fungerer Google Ads for nettbutikker nå',
       paragraphs: [
         'Google Ads er mer automatisert enn noen gang: Performance Max, AI Max for Search og Smart Bidding tar mange av beslutningene som før ble tatt for hånd. Det gjør tre ting viktigere enn før – produktfeeden, sporingen og hvilke rammer du gir automatikken.',
-        'Vi setter opp og driver Google Ads for Shopify-butikker med fokus på nettopp det: riktig data inn, tydelige mål og kontroll på hva Google gjør med pengene dine.',
+        'Vi setter opp og driver Google Ads for nettbutikker med fokus på nettopp det: riktig data inn, tydelige mål og kontroll på hva Google gjør med pengene dine.',
       ],
     },
     situations: [
@@ -883,7 +883,7 @@ export const growthContent: Record<string, GrowthPageContent> = {
         text: 'Bredt samsvar og automatikk viser annonsene dine på søk du aldri ville valgt – og ingen negative søkeordslister holder det i sjakk.',
       },
       {
-        title: 'Konverteringene stemmer ikke med Shopify',
+        title: 'Konverteringene stemmer ikke med nettbutikken',
         text: 'Dobbeltelling, manglende samtykkesignaler eller feil konverteringsverdi gjør at budstrategien styrer i blinde.',
       },
       {
@@ -903,9 +903,9 @@ export const growthContent: Record<string, GrowthPageContent> = {
         'Mål på lønnsomhet og nye kunder, ikke bare ROAS',
       ],
       gjennomforing: [
-        'Merchant Center og feed via Shopifys Google & YouTube-app – GTIN, titler, frakt, retur og bilder (minst 500 × 500 piksler)',
+        'Merchant Center og produktfeed fra nettbutikken, for eksempel via Shopifys Google & YouTube-app – GTIN, titler, frakt, retur og bilder (minst 500 × 500 piksler)',
         'Egendefinerte etiketter i feeden for margin, bestselgere og sesong, så kampanjene kan styres etter lønnsomhet',
-        'Google-tagg, forbedrede konverteringer og Consent Mode v2 koblet til Shopifys samtykke',
+        'Google-tagg, forbedrede konverteringer og Consent Mode v2 koblet til samtykkebanneret',
         'Varekost i feeden for rapportering på lønnsomhet',
         'Performance Max med merkeutelukkelser, negative søkeord og søketemaer',
         'Negative søkeordslister på kontonivå, oppdatert fra søkeordsrapporten hver måned',
@@ -967,7 +967,7 @@ export const growthContent: Record<string, GrowthPageContent> = {
       },
     ],
     kpis: [
-      { name: 'Konverteringsverdi og ROAS', text: 'Inntekt fra Google Ads per annonsekrone, målt mot Shopify.' },
+      { name: 'Konverteringsverdi og ROAS', text: 'Inntekt fra Google Ads per annonsekrone, målt mot nettbutikken.' },
       { name: 'Lønnsomhet', text: 'Bruttofortjeneste etter varekost når varekost ligger i feeden.' },
       { name: 'Nye kunder', text: 'Andel og kostnad per ny kunde, skilt fra gjenkjøp og merkevaresøk.' },
       { name: 'Shopping-dekning', text: 'Andel godkjente produkter og visningsandel i Shopping.' },
@@ -996,7 +996,7 @@ export const growthContent: Record<string, GrowthPageContent> = {
       },
       {
         question: 'Hva trenger dere fra oss for å starte?',
-        answer: 'Tilgang til Google Ads, Merchant Center, Google Analytics 4 og Shopify, og en prat om marginer, sesonger og hvilke produkter som er viktigst.',
+        answer: 'Tilgang til Google Ads, Merchant Center, Google Analytics 4 og nettbutikken, og en prat om marginer, sesonger og hvilke produkter som er viktigst.',
       },
     ],
     related: [
@@ -1011,7 +1011,7 @@ export const growthContent: Record<string, GrowthPageContent> = {
       title: 'Én feed, mange salgskanaler',
       paragraphs: [
         'Produktfeeden er listen over varene dine med pris, lager, bilder og egenskaper – og det er den Google Shopping, Performance Max, prissammenligningstjenester, affiliate-partnere og Meta bruker for å vise produktene dine. Er feeden svak, betaler du for det i alle kanalene samtidig.',
-        'Vi optimaliserer feeden fra Shopify én gang og sender den ut dit den gir salg: Google Shopping via en CSS-partner, prissammenligning som Prisjakt, og affiliate-nettverk der partnere selger for deg mot provisjon.',
+        'Vi optimaliserer feeden fra nettbutikken én gang og sender den ut dit den gir salg: Google Shopping via en CSS-partner, prissammenligning som Prisjakt, og affiliate-nettverk der partnere selger for deg mot provisjon.',
       ],
     },
     situations: [
@@ -1021,7 +1021,7 @@ export const growthContent: Record<string, GrowthPageContent> = {
       },
       {
         title: 'Titlene er skrevet for butikken, ikke for søk',
-        text: 'Produktnavnet i Shopify sier lite om merke, type og størrelse, så produktene matcher dårlig på det folk søker etter.',
+        text: 'Produktnavnet i nettbutikken sier lite om merke, type og størrelse, så produktene matcher dårlig på det folk søker etter.',
       },
       {
         title: 'Du kan ikke styre etter margin',
@@ -1052,14 +1052,14 @@ export const growthContent: Record<string, GrowthPageContent> = {
         'GTIN, merke, produkttype og Google-kategori på plass',
         'Egendefinerte etiketter for margin, bestselgere, sesong og prisklasse',
         'Bilder som oppfyller Googles krav på minst 500 × 500 piksler – helst større',
-        'Tilleggsfeeder og feed-regler for det Shopify-appen ikke dekker',
+        'Tilleggsfeeder og feed-regler for det plattformens egen feed ikke dekker',
         'Feed til prissammenligning og affiliate-partnere, med samme priser som i butikken',
-        'Affiliate-sporing i Shopify satt opp med samtykke, og kansellerte ordre trukket fra',
+        'Affiliate-sporing i nettbutikken satt opp med samtykke, og kansellerte ordre trukket fra',
       ],
       rapportering: [
         'Feed-helse: godkjente produkter, avvisninger og advarsler',
         'Salg og kostnad per kanal og per etikett',
-        'Provisjon og ordre fra affiliate-partnere, mot bekreftede ordre i Shopify',
+        'Provisjon og ordre fra affiliate-partnere, mot bekreftede ordre i nettbutikken',
       ],
       ikkeInkludert: [
         'Klikkostnader og provisjon til kanalene – det betaler du direkte',
@@ -1165,8 +1165,7 @@ export const growthHubContent: GrowthHubContent = {
   intro: {
     title: 'Vekst på nett handler om to ting',
     paragraphs: [
-      'Merkevarer vokser først og fremst ved å nå flere kjøpere. For en nettbutikk betyr det å bli husket når folk skal handle – og å være lett å finne og kjøpe hos når de gjør det. Det første bygges med merkevare og sosiale medier. Det andre med søk, Shopping, feed og en nettbutikk som konverterer.',
-      'Derfor selger vi ikke kanaler hver for seg. Vi ser på hele veien fra første inntrykk til gjenkjøp, legger riktig data i bunnen, og styrer etter lønnsomhet og nye kunder – ikke etter klikk.',
+      'Merkevarer vokser ved å nå flere kjøpere: bli husket når folk skal handle, og vær lett å finne og kjøpe hos når de gjør det. Derfor selger vi ikke kanaler hver for seg – vi ser på hele veien fra første inntrykk til gjenkjøp, legger riktig data i bunnen og styrer etter lønnsomhet og nye kunder.',
     ],
   },
   model: {
@@ -1215,8 +1214,8 @@ export const growthHubContent: GrowthHubContent = {
       text: 'Vi måler margin, nye kunder og inkrementell effekt – og bruker søk og SEO sammen, så du ikke betaler for det du vinner gratis.',
     },
     {
-      title: 'Bare Shopify',
-      text: 'Vi jobber kun med Shopify-butikker. Du betaler ikke for at vi skal lære plattformen.',
+      title: 'Bare netthandel',
+      text: 'Vi jobber kun med e-handel – på Shopify og andre plattformer. Du betaler ikke for at vi skal lære bransjen.',
     },
   ],
   insights: [
@@ -1272,7 +1271,7 @@ export const growthHubContent: GrowthHubContent = {
     { name: 'Nye kunder', text: 'Andel og kostnad per ny kunde, skilt fra gjenkjøp og merkevaresøk.' },
     { name: 'Andel av søk', text: 'Din andel av merkenavnsøkene i kategorien – en tidlig indikator på markedsandel.' },
     { name: 'Inkrementell effekt', text: 'Salg som ikke ville kommet uten markedsføringen, målt med tester der det går.' },
-    { name: 'Datakvalitet', text: 'Andel sporede ordre og avvik mellom Shopify og plattformene.' },
+    { name: 'Datakvalitet', text: 'Andel sporede ordre og avvik mellom nettbutikken og plattformene.' },
   ],
   faq: [
     {

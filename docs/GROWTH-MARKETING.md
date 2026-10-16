@@ -36,7 +36,7 @@ Samleside: `/growth-marketing`. Gjelder bare norsk side (.no). Andre språk gir 
 
 | Del | Status |
 |---|---|
-| Samleside | Tekstutkast: modellen «Slik henger det sammen», prinsipper, forskningsinnsikt, oppstart, måltall, pakker (lenke) og FAQ. Bevis står igjen som plassholder |
+| Samleside | Tekstutkast og navigasjonsside: tjenesteoversikt øverst (alle tjenester med kanalsider som lenker), modellen «Slik henger det sammen», prinsipper, to forskningsgrafer side om side, oppstart og måltall i én seksjon, FAQ, og pakker i den avsluttende knappeseksjonen. Kompakt layout. Bevis står igjen som plassholder |
 | Tjenestesider (11) | `noindex`, ikke i XML-sitemap. Status per side: se «Ekte innhold» |
 | Menyforslag | Ligger i `lib/growthServices.ts` (`growthNavItem()`). **Ikke koblet inn** i headeren ennå (se §5) |
 | Ekte innhold | **SoMe**, **Sporing og analyse**, **Merkevare og strategi**, **SEM**, **Google Ads** og **Affiliate, CSS og feed** har tekstutkast til gjennomlesning (alle seksjoner unntatt bevis; priser via pakkeoversikten). Resten er dummyer |
@@ -64,7 +64,7 @@ Regler for menyen:
 
 Rekkefølgen er fast. Plassholderne på dummysidene er briefen for den som skriver teksten.
 
-1. **Hero:** Brødsmuler, H1 «[Tjeneste] for Shopify-butikker», én setning om hvem, hva og pris, og knappene «Book møte» og «Se pakker».
+1. **Hero:** Brødsmuler, H1 «[Tjeneste] for nettbutikker», én setning om hvem, hva og pris, og knappene «Book møte» og «Se pakker».
 2. **Når du trenger dette:** 4–6 konkrete kjøpssituasjoner.
 3. **Hva du får:** Strategi · Gjennomføring · Rapportering, og hva som *ikke* er inkludert.
 4. **Pakker og pris:** Fastpris, med «fra»-pris.
@@ -83,7 +83,7 @@ SEM og SoMe viser i tillegg kanalene sine som kort under hero.
 - **Tone:** Direkte, vennlig og pragmatisk, aldri korporativ. «Vi» og «du».
 - **Overskrifter:** Stor forbokstav bare på første ord. Ingen emoji. Midtprikk (·) som skilletegn.
 - **Tall:** Konkrete tall, ikke superlativer.
-- **Posisjonering:** «… for Shopify-butikker». Vi jobber bare med Shopify, og det skal synes.
+- **Posisjonering:** «… for nettbutikker». Growth-tjenestene er åpne for de fleste e-handelsbedrifter, ikke bare Shopify. Shopify nevnes der det gjelder konkret teknikk (apper, kundehendelser, integrasjoner), som en styrke, men ikke som en betingelse.
 - **Ikoner:** Lucide (`lucide-react`), strek 1,75, brukt sparsomt, slik designsystemet sier. Ikonvalget per tjeneste ligger i `SERVICE_ICONS` i `components/sections/growth/GrowthPages.tsx`. Bare kortene på samlesiden har tjenesteikon; i tillegg brukes pil på kort, chevron i brødsmuler og info på utkastbanneret.
 
 **SEO.** Følg i tillegg `docs/SEO-OPERATIONS.md`, §4.
@@ -241,3 +241,5 @@ Tekstene skal bare inneholde påstander vi kan stå for. Tidsavhengige fakta sje
 | 2026-10-16 | Merkevare og strategi får tekstutkast med forskningsinnsikt, tre grafer og eksterne kilder | Brukeren ba om oppdatert merkevareinnsikt med grafer og lenker; forskningen kobles til hvordan nettbutikker vokser (mental og fysisk tilgjengelighet) |
 | 2026-10-16 | SoMe: fokus på merkevarebygging, gode og varierte kreativer, og på å skape etterspørsel, ikke bare fange den | Brukerens prioritering; støttet av Meta (Andromeda), Binet & Field, System1 og Ipsos |
 | 2026-10-16 | Samlesiden viser vår måte å jobbe på: en modell i tre steg (bygg merkevare og etterspørsel → fang den → gjør besøk til salg og kunder til gjengangere) på en grunnmur av data, pluss seks prinsipper | Samler det vi har landet på for tjenestene: merkevare og salg sammen, data først, én feed, kreativ variasjon, lønnsomhet, bare Shopify |
+| 2026-10-16 | Growth-området posisjoneres mot nettbutikker generelt, ikke bare Shopify («… for nettbutikker»); prinsippet «Bare Shopify» blir «Bare netthandel» | Vi tar de fleste e-handelsbedrifter innen growth; Shopify er fortsatt hjemmebanen |
+| 2026-10-16 | Samlesiden er også navigasjonsside, og layouten er strammet inn: tjenesteoversikt med alle undersider rett under hero, mindre luft og titler, færre og sammenslåtte seksjoner | Brukeren ville ha mindre luft, og siden skal fungere som hub; alle undersider ett klikk unna gir også intern lenking |

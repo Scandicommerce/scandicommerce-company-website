@@ -20,6 +20,7 @@ import LocalizedLink from '@/components/ui/LocalizedLink'
 import {
   growthChildren,
   growthHref,
+  growthServices,
   growthHub,
   findGrowthService,
   type GrowthService,
@@ -145,20 +146,22 @@ function Hero({
   trail,
   title,
   lead,
+  compact,
 }: {
   trail: { label: string; href?: string }[]
   title: string
   lead: string
+  compact?: boolean
 }) {
   return (
-    <section className="bg-white pt-8 pb-10 lg:pt-14 lg:pb-16">
+    <section className={`bg-white ${compact ? 'pt-6 pb-6 lg:pt-10 lg:pb-8' : 'pt-8 pb-10 lg:pt-14 lg:pb-16'}`}>
       <div className={containerClasses}>
         <Breadcrumbs trail={trail} />
         <h1 className="text-[32px] lg:text-[56px] font-bold text-sc-ink-900 tracking-[-0.02em] leading-[1.05] m-0 max-w-[900px]">
           {title}
         </h1>
         <p className="text-base lg:text-lg text-sc-ink-600 mt-4 lg:mt-5 m-0 max-w-[720px]">{lead}</p>
-        <div className="flex flex-col sm:flex-row gap-2.5 lg:gap-3 mt-6 lg:mt-8">
+        <div className={`flex flex-col sm:flex-row gap-2.5 lg:gap-3 ${compact ? 'mt-5 lg:mt-6' : 'mt-6 lg:mt-8'}`}>
           <LocalizedLink
             href="/kontakt"
             className="inline-flex items-center justify-center rounded-lg px-[22px] py-3 text-sm font-semibold bg-sc-cyan-500 text-white hover:bg-sc-cyan-600 transition-colors"
@@ -209,19 +212,36 @@ function ServiceCard({
   )
 }
 
-function ClosingCta() {
+function ClosingCta({ packagesLink }: { packagesLink?: boolean }) {
   return (
     <section className="bg-sc-ink-900">
       <div className={`${containerClasses} py-11 lg:py-[72px] flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6`}>
-        <h2 className="text-[26px] lg:text-[40px] font-bold text-white tracking-[-0.02em] leading-tight m-0">
-          Klar for mer vekst?
-        </h2>
-        <LocalizedLink
-          href="/kontakt"
-          className="inline-flex items-center justify-center rounded-lg px-[22px] py-3 text-sm font-semibold bg-sc-cyan-500 text-white hover:bg-sc-cyan-600 transition-colors"
-        >
-          Book en uforpliktende samtale
-        </LocalizedLink>
+        <div>
+          <h2 className="text-[26px] lg:text-[40px] font-bold text-white tracking-[-0.02em] leading-tight m-0">
+            Klar for mer vekst?
+          </h2>
+          {packagesLink && (
+            <p className="text-sm lg:text-base text-sc-ink-300 mt-2 m-0">
+              Fastpris, ingen bindingstid. Alle pakker og priser står i pakkeoversikten.
+            </p>
+          )}
+        </div>
+        <div className="flex flex-col sm:flex-row gap-2.5 lg:gap-3 flex-none">
+          <LocalizedLink
+            href="/kontakt"
+            className="inline-flex items-center justify-center rounded-lg px-[22px] py-3 text-sm font-semibold bg-sc-cyan-500 text-white hover:bg-sc-cyan-600 transition-colors"
+          >
+            Book en uforpliktende samtale
+          </LocalizedLink>
+          {packagesLink && (
+            <LocalizedLink
+              href={PACKAGES_HREF}
+              className="inline-flex items-center justify-center rounded-lg px-[22px] py-3 text-sm font-semibold bg-white text-sc-ink-900 hover:bg-sc-ink-100 transition-colors"
+            >
+              Se pakker og priser
+            </LocalizedLink>
+          )}
+        </div>
       </div>
     </section>
   )
@@ -232,19 +252,104 @@ export function GrowthHubPage() {
   return (
     <>
       <DraftNotice />
-      <Hero trail={[{ label: growthHub.label }]} title={growthHub.title} lead={growthHub.lead} />
-      {content.intro && <IntroSection intro={content.intro} />}
-      <ModelSection model={content.model} />
+      <Hero trail={[{ label: growthHub.label }]} title={growthHub.title} lead={growthHub.lead} compact />
+      <ServiceNavSection />
+      <ModelSection model={content.model} lead={content.intro?.paragraphs[0]} />
       <PrinciplesSection principles={content.principles} />
-      {content.insights?.length ? <InsightsSection insights={content.insights} /> : null}
-      {content.process?.length ? <ProcessSection eyebrow="Prosess" title="Slik starter vi" steps={content.process} /> : null}
-      {content.kpis?.length ? <KpiSection eyebrow="Måling" title="Det vi styrer etter" kpis={content.kpis} /> : null}
-      <PackagesCtaSection />
-      <PlaceholderSection eyebrow="Bevis" title="Resultater" hint="2–3 kundecaser med tall fra growth-arbeid." />
-      {content.faq?.length ? <FaqSection eyebrow="FAQ" title="Ofte stilte spørsmål" faq={content.faq} /> : null}
-      {content.related?.length ? <RelatedServicesSection related={content.related} /> : null}
-      <ClosingCta />
+      {content.insights?.length ? <InsightsSection insights={content.insights} compact /> : null}
+      {content.process?.length && content.kpis?.length ? (
+        <ProcessAndKpiSection steps={content.process} kpis={content.kpis} />
+      ) : null}
+      <PlaceholderSection eyebrow="Bevis" title="Resultater" hint="2–3 kundecaser med tall fra growth-arbeid." compact />
+      {content.faq?.length ? <FaqSection eyebrow="FAQ" title="Ofte stilte spørsmål" faq={content.faq} compact /> : null}
+      <ClosingCta packagesLink />
     </>
+  )
+}
+
+/** Every growth page, top-level services first with their channel pages as small links. */
+function ServiceNavSection() {
+  const services = growthServices.filter((service) => !service.parent)
+  return (
+    <section className="bg-white pb-5 lg:pb-8">
+      <div className={containerClasses}>
+        <nav aria-label="Growth-tjenester" className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 lg:gap-3">
+          {services.map((service) => {
+            const Icon = SERVICE_ICONS[service.slug]
+            const children = growthChildren(service.slug)
+            return (
+              <div
+                key={service.slug}
+                className="rounded-[10px] border border-sc-ink-100 hover:border-sc-cyan-300 transition-colors p-4 flex flex-col"
+              >
+                <LocalizedLink href={growthHref(service.slug)} className="group flex items-start gap-2.5">
+                  {Icon && (
+                    <Icon className="w-5 h-5 mt-0.5 flex-shrink-0 text-sc-cyan-600" strokeWidth={ICON_STROKE} aria-hidden="true" />
+                  )}
+                  <span className="min-w-0">
+                    <span className="flex items-center gap-1 text-[15px] font-semibold text-sc-ink-900 group-hover:text-sc-cyan-700 transition-colors">
+                      {service.label}
+                      <ArrowRight
+                        className="w-3.5 h-3.5 text-sc-ink-400 group-hover:text-sc-cyan-600 group-hover:translate-x-0.5 transition-all"
+                        strokeWidth={ICON_STROKE}
+                        aria-hidden="true"
+                      />
+                    </span>
+                    <span className="text-[13px] leading-snug text-sc-ink-500 mt-1 line-clamp-2">{service.lead}</span>
+                  </span>
+                </LocalizedLink>
+                {children.length > 0 && (
+                  <div className="flex flex-wrap gap-1.5 mt-3 pl-[30px]">
+                    {children.map((child) => (
+                      <LocalizedLink
+                        key={child.slug}
+                        href={growthHref(child.slug)}
+                        className="text-[12px] font-medium text-sc-ink-700 bg-sc-ink-50 hover:bg-sc-cyan-50 hover:text-sc-cyan-700 rounded-md px-2 py-1 transition-colors"
+                      >
+                        {child.label}
+                      </LocalizedLink>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )
+          })}
+        </nav>
+      </div>
+    </section>
+  )
+}
+
+function ProcessAndKpiSection({
+  steps,
+  kpis,
+}: {
+  steps: NonNullable<GrowthPageContent['process']>
+  kpis: NonNullable<GrowthPageContent['kpis']>
+}) {
+  return (
+    <SectionShell eyebrow="Oppstart og måling" title="Slik starter vi – og det vi styrer etter" compact>
+      <div className="grid lg:grid-cols-2 gap-3 lg:gap-4">
+        <ol className="list-none m-0 p-0 rounded-[10px] border border-sc-ink-100 divide-y divide-sc-ink-100">
+          {steps.map((step) => (
+            <li key={step.period} className="p-4 lg:p-5">
+              <div className="text-xs lg:text-[13px] font-semibold text-sc-cyan-600 mb-1">
+                {step.period} · {step.title}
+              </div>
+              <p className="text-sm leading-normal text-sc-ink-600 m-0">{step.text}</p>
+            </li>
+          ))}
+        </ol>
+        <dl className="m-0 rounded-[10px] border border-sc-ink-100 divide-y divide-sc-ink-100">
+          {kpis.map((kpi) => (
+            <div key={kpi.name} className="p-4 lg:px-5 lg:py-3.5">
+              <dt className="text-sm font-semibold text-sc-ink-900">{kpi.name}</dt>
+              <dd className="text-sm text-sc-ink-600 leading-normal mt-0.5 m-0">{kpi.text}</dd>
+            </div>
+          ))}
+        </dl>
+      </div>
+    </SectionShell>
   )
 }
 
@@ -270,9 +375,10 @@ function ModelServiceLink({ slug, onDark }: { slug: string; onDark?: boolean }) 
   )
 }
 
-function ModelSection({ model }: { model: GrowthHubContent['model'] }) {
+function ModelSection({ model, lead }: { model: GrowthHubContent['model']; lead?: string }) {
   return (
-    <SectionShell eyebrow="Modellen" title="Slik henger det sammen">
+    <SectionShell eyebrow="Modellen" title="Slik henger det sammen" compact>
+      {lead && <p className="text-sm lg:text-base text-sc-ink-600 leading-relaxed m-0 mb-4 lg:mb-5 max-w-[860px]">{lead}</p>}
       <div className="flex flex-col lg:flex-row lg:items-stretch gap-2 lg:gap-0">
         {model.stages.map((stage, index) => (
           <React.Fragment key={stage.title}>
@@ -281,7 +387,7 @@ function ModelSection({ model }: { model: GrowthHubContent['model'] }) {
                 <ArrowRight className="w-5 h-5 rotate-90 lg:rotate-0" strokeWidth={ICON_STROKE} />
               </div>
             )}
-            <div className="flex-1 rounded-[10px] border border-sc-ink-100 p-5 lg:p-6 flex flex-col">
+            <div className="flex-1 rounded-[10px] border border-sc-ink-100 p-4 lg:p-5 flex flex-col">
               <div className="text-xs lg:text-[13px] font-semibold text-sc-cyan-600 mb-1.5">
                 {String(index + 1).padStart(2, '0')}
               </div>
@@ -296,7 +402,7 @@ function ModelSection({ model }: { model: GrowthHubContent['model'] }) {
           </React.Fragment>
         ))}
       </div>
-      <div className="mt-3 lg:mt-4 rounded-[10px] border border-sc-cyan-200 bg-sc-cyan-50 p-5 lg:p-6 flex flex-col lg:flex-row lg:items-center gap-3 lg:gap-8">
+      <div className="mt-2.5 lg:mt-3 rounded-[10px] border border-sc-cyan-200 bg-sc-cyan-50 p-4 lg:p-5 flex flex-col lg:flex-row lg:items-center gap-3 lg:gap-8">
         <div className="lg:flex-1">
           <h3 className="text-base lg:text-lg font-semibold text-sc-ink-900 m-0">{model.foundation.title}</h3>
           <p className="text-sm text-sc-ink-600 mt-1.5 m-0">{model.foundation.text}</p>
@@ -313,10 +419,10 @@ function ModelSection({ model }: { model: GrowthHubContent['model'] }) {
 
 function PrinciplesSection({ principles }: { principles: GrowthHubContent['principles'] }) {
   return (
-    <SectionShell eyebrow="Prinsipper" title="Slik jobber vi">
+    <SectionShell eyebrow="Prinsipper" title="Slik jobber vi" compact>
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 border-t border-l border-sc-ink-100 rounded-[10px] overflow-hidden">
         {principles.map((principle, index) => (
-          <div key={principle.title} className="p-5 lg:p-7 border-r border-b border-sc-ink-100">
+          <div key={principle.title} className="p-4 lg:p-5 border-r border-b border-sc-ink-100">
             <div className="text-xs lg:text-[13px] font-semibold text-sc-cyan-600 mb-1.5">
               {String(index + 1).padStart(2, '0')}
             </div>
@@ -329,37 +435,17 @@ function PrinciplesSection({ principles }: { principles: GrowthHubContent['princ
   )
 }
 
-function PackagesCtaSection() {
+function PlaceholderSection({ eyebrow, title, hint, compact }: Heading & { hint: string }) {
   return (
-    <SectionShell eyebrow="Pakker" title="Pakker og pris">
-      <div className="rounded-[16px] border border-sc-ink-100 p-6 lg:p-8 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-5">
-        <p className="text-sm lg:text-base text-sc-ink-600 m-0 max-w-[640px]">
-          Hver tjeneste leveres som pakker med fastpris – en engangsleveranse for å komme i gang, og løpende avtaler
-          uten overraskelser. Alle pakker og priser står i pakkeoversikten.
-        </p>
-        <LocalizedLink
-          href={PACKAGES_HREF}
-          className="inline-flex items-center justify-center gap-1.5 rounded-lg px-[22px] py-3 text-sm font-semibold bg-sc-ink-900 text-white hover:bg-sc-ink-700 transition-colors flex-shrink-0"
-        >
-          Se pakkeoversikten
-          <ArrowRight className="w-4 h-4" strokeWidth={ICON_STROKE} aria-hidden="true" />
-        </LocalizedLink>
+    <SectionShell eyebrow={eyebrow} title={title} compact={compact}>
+      <div
+        className={`rounded-[10px] border border-dashed border-sc-ink-200 bg-sc-ink-50 px-5 text-sm text-sc-ink-500 ${
+          compact ? 'py-5' : 'py-8 lg:py-10'
+        }`}
+      >
+        Innhold kommer: {hint}
       </div>
     </SectionShell>
-  )
-}
-
-function PlaceholderSection({ eyebrow, title, hint }: { eyebrow: string; title: string; hint: string }) {
-  return (
-    <section className="bg-white py-8 lg:py-12">
-      <div className={containerClasses}>
-        <div className={eyebrowClasses}>{eyebrow}</div>
-        <h2 className={h2Classes}>{title}</h2>
-        <div className="mt-4 lg:mt-5 rounded-[10px] border border-dashed border-sc-ink-200 bg-sc-ink-50 px-5 py-8 lg:py-10 text-sm text-sc-ink-500">
-          Innhold kommer: {hint}
-        </div>
-      </div>
-    </section>
   )
 }
 
@@ -405,7 +491,45 @@ export function GrowthServicePage({ service }: { service: GrowthService }) {
   )
 }
 
-function InsightsSection({ insights }: { insights: NonNullable<GrowthPageContent['insights']> }) {
+function InsightsSection({
+  insights,
+  compact,
+}: {
+  insights: NonNullable<GrowthPageContent['insights']>
+  compact?: boolean
+}) {
+  if (compact) {
+    return (
+      <SectionShell eyebrow="Innsikt" title="Hva forskningen sier" compact>
+        <div className="grid lg:grid-cols-2 gap-3 lg:gap-4">
+          {insights.map((insight) => (
+            <figure key={insight.title} className="m-0 rounded-[10px] border border-sc-ink-100 p-4 lg:p-5 flex flex-col">
+              <h3 className="text-base lg:text-lg font-semibold text-sc-ink-900 m-0">{insight.title}</h3>
+              <p className="text-sm text-sc-ink-600 leading-normal mt-1.5 mb-3 m-0">{insight.text}</p>
+              {insight.chart && (
+                <div className="mt-auto">
+                  <GrowthChartView chart={insight.chart} />
+                </div>
+              )}
+              {insight.source && (
+                <p className="text-[12px] text-sc-ink-500 mt-2 m-0">
+                  Kilde:{' '}
+                  <a
+                    href={insight.source.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="underline underline-offset-2 hover:text-sc-cyan-600"
+                  >
+                    {insight.source.label}
+                  </a>
+                </p>
+              )}
+            </figure>
+          ))}
+        </div>
+      </SectionShell>
+    )
+  }
   return (
     <SectionShell eyebrow="Innsikt" title="Hva forskningen sier">
       <div className="space-y-8 lg:space-y-10">
@@ -598,15 +722,23 @@ function renderTemplateBlock(
   }
 }
 
-type Heading = { eyebrow: string; title: string }
+type Heading = { eyebrow: string; title: string; compact?: boolean }
 
-function SectionShell({ eyebrow, title, children }: Heading & { children: React.ReactNode }) {
+function SectionShell({ eyebrow, title, compact, children }: Heading & { children: React.ReactNode }) {
   return (
-    <section className="bg-white py-8 lg:py-12">
+    <section className={`bg-white ${compact ? 'py-5 lg:py-8' : 'py-8 lg:py-12'}`}>
       <div className={containerClasses}>
         <div className={eyebrowClasses}>{eyebrow}</div>
-        <h2 className={h2Classes}>{title}</h2>
-        <div className="mt-5 lg:mt-7">{children}</div>
+        <h2
+          className={
+            compact
+              ? 'text-[22px] lg:text-[30px] font-bold text-sc-ink-900 tracking-[-0.02em] leading-tight m-0'
+              : h2Classes
+          }
+        >
+          {title}
+        </h2>
+        <div className={compact ? 'mt-4 lg:mt-5' : 'mt-5 lg:mt-7'}>{children}</div>
       </div>
     </section>
   )
