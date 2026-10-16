@@ -3,12 +3,14 @@ import LocalizedLink from '@/components/ui/LocalizedLink'
 import ManageCookiesLink from '@/components/tracking/ManageCookiesLink'
 import NewsletterForm from '@/components/ui/NewsletterForm'
 import { FaLinkedinIn, FaTwitter, FaInstagram, FaFacebookF, FaYoutube, FaGithub } from 'react-icons/fa'
-import { defaultFooterColumns } from '@/lib/navigation'
+import { defaultFooterColumns, isLive } from '@/lib/navigation'
 
 interface FooterLink {
   label?: string
   slug?: string | null
   href?: string | null
+  /** False while the destination does not exist yet; such links are not rendered. */
+  live?: boolean
 }
 
 interface FooterColumn {
@@ -96,7 +98,9 @@ const columnLinkClasses = 'text-[#8a95a0] hover:text-white transition-colors'
 
 export default function Footer({ settings, language }: FooterProps) {
   // Use Sanity data or fall back to the built-in columns for this language
-  const columns = settings?.columns?.length ? settings.columns : defaultFooterColumns(language)
+  const columns = (settings?.columns?.length ? settings.columns : defaultFooterColumns(language))
+    .map((column) => ({ ...column, links: (column.links ?? []).filter(isLive) }))
+    .filter((column) => column.links.length > 0)
   const connectSection = settings?.connectSection?.email ? settings.connectSection : defaultConnectSection
   const bottomSection = settings?.bottomSection?.badgeText ? settings.bottomSection : defaultBottomSection
 

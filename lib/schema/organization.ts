@@ -131,7 +131,7 @@ export function buildLocalBusinessNode(origin: string): JsonLdObject | null {
         billingDuration: 'P1M',
         unitText: 'month',
       },
-      ...(offerUrl && pkg.slug !== 'foundation' ? { url: offerUrl } : {}),
+      ...(offerUrl ? { url: offerUrl } : {}),
     }
   })
   return {

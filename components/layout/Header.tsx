@@ -6,7 +6,7 @@ import LocalizedLink from '@/components/ui/LocalizedLink'
 import { HiShoppingBag } from 'react-icons/hi2'
 import { useCart } from '@/contexts/CartContext'
 import LanguageSwitcher from '@/components/ui/LanguageSwitcher'
-import { defaultCta, defaultNavigation } from '@/lib/navigation'
+import { defaultCta, defaultNavigation, liveNavigation } from '@/lib/navigation'
 import type { NavCta, NavColumn, NavItem, NavLink } from '@/lib/navigation'
 
 interface HeaderSettings {
@@ -97,7 +97,7 @@ export default function Header({ settings, language }: HeaderProps) {
   useEffect(() => setMounted(true), [])
 
   // Use Sanity data or fall back to the built-in menu for this language
-  const menu = settings?.menu?.length ? settings.menu : defaultNavigation(language)
+  const menu = liveNavigation(settings?.menu?.length ? settings.menu : defaultNavigation(language))
   const ctaButton = settings?.ctaButton?.label ? settings.ctaButton : defaultCta(language)
 
   const closeMenus = () => setOpenIndex(null)

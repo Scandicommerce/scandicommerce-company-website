@@ -142,9 +142,14 @@ export const packageDetailPageIncludedCategoriesSection = defineType({
   preview: { prepare: () => ({ title: "Included categories" }) },
 });
 
+/**
+ * Not rendered. The week-by-week process was removed from the package pages: it
+ * describes a launch project, not a monthly retainer. Kept so existing content
+ * is not dropped from the dataset.
+ */
 export const packageDetailPageProcessStepsSection = defineType({
   name: "packageDetailPageProcessStepsSection",
-  title: "Process steps",
+  title: "Process steps (not shown on the site)",
   type: "object",
   fields: [
     defineField({
@@ -189,9 +194,13 @@ export const packageDetailPageFaqListSection = defineType({
   preview: { prepare: () => ({ title: "FAQ" }) },
 });
 
+/**
+ * Not rendered. Reviews and the star rating were removed from the package pages.
+ * Kept so existing content is not dropped from the dataset.
+ */
 export const packageDetailPageReviewsListSection = defineType({
   name: "packageDetailPageReviewsListSection",
-  title: "Reviews",
+  title: "Reviews (not shown on the site)",
   type: "object",
   fields: [
     defineField({
@@ -217,9 +226,13 @@ export const packageDetailPageReviewsListSection = defineType({
   preview: { prepare: () => ({ title: "Reviews" }) },
 });
 
+/**
+ * Not rendered. The package pages no longer use tabs, so there are no tab labels
+ * to override. Kept so existing content is not dropped from the dataset.
+ */
 export const packageDetailPageTabLabelsSection = defineType({
   name: "packageDetailPageTabLabelsSection",
-  title: "Tab labels",
+  title: "Tab labels (not shown on the site)",
   type: "object",
   description: "Labels for the tabs on the detail page. Leave empty to use English defaults.",
   fields: [

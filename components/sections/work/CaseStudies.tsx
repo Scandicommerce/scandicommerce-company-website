@@ -66,9 +66,9 @@ const defaultStudies: Study[] = [
   {
     title: 'Bergen Home Goods',
     category: 'Home & Living',
-    tags: ['Foundation Package', 'Launch'],
+    tags: ['Growth Package', 'Launch'],
     challenge: 'Launching D2C brand from scratch',
-    solution: 'Foundation package with brand-focused design and SEO',
+    solution: 'Growth package with brand-focused design and SEO',
     results: [
       { value: '€450k', label: 'Year 1 revenue' },
       { value: '2.8%', label: 'Conversion rate' },

@@ -119,7 +119,6 @@ export default async function PackageDetailPage({ params }: { params: Promise<{ 
     if (pkg.moreDeliverablesCount === undefined) pkg.moreDeliverablesCount = staticPkg.included.length - staticPkg.highlights.length
     if (!pkg.processSteps?.length) pkg.processSteps = staticPkg.processSteps
     if (!pkg.faq?.length) pkg.faq = staticPkg.faq
-    if (!pkg.reviews?.length) pkg.reviews = staticPkg.reviews
   }
 
   let shopifyProduct = null
@@ -179,7 +178,6 @@ export default async function PackageDetailPage({ params }: { params: Promise<{ 
                 }
               : undefined
           }
-          tabLabels={sanityData?.tabLabels}
           addOns={{ ...sanityData?.addOns, items: addOnsWithShopify }}
           caseStudiesBanner={sanityData?.caseStudiesBanner}
           lang={lang}
