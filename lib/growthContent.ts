@@ -17,7 +17,12 @@ export type GrowthChart =
       kind: 'bars'
       /** Unit shown in the table header, e.g. "Korrelasjon". */
       valueLabel: string
-      legend: { emphasis: string; context: string }
+      /** First column header in the table view. Defaults to "Faktor". */
+      categoryLabel?: string
+      /** "decimal" (0,664) or "percent" (82 %). Defaults to decimal. */
+      format?: 'decimal' | 'percent'
+      /** Leave out for a single series (all items emphasis): the title names it. */
+      legend?: { emphasis: string; context: string }
       items: { label: string; value: number; emphasis: boolean }[]
     }
   | {
@@ -58,6 +63,215 @@ export interface GrowthPageContent {
 }
 
 export const growthContent: Record<string, GrowthPageContent> = {
+  some: {
+    intro: {
+      title: 'Sosiale medier skaper etterspørsel',
+      paragraphs: [
+        'Søk fanger etterspørsel som allerede finnes – folk som vet hva de vil ha. Sosiale medier er stedet du skaper den: du når folk før de begynner å lete, og sørger for at det er deg de kommer på når behovet melder seg. De fleste av morgendagens kunder er ikke i markedet i dag.',
+        'Det stiller krav til to ting: en merkevare som er lett å kjenne igjen, og kreativer som er gode nok til at folk stopper opp. Algoritmene til Meta og TikTok bestemmer i stor grad selv hvem som ser hvilken annonse – ut fra kreativene du gir dem. Gode, varierte kreativer er derfor blitt den viktigste målrettingen du har.',
+      ],
+    },
+    insights: [
+      {
+        title: 'Kreativet er målrettingen',
+        text: 'Metas annonsesystem Andromeda velger blant titalls millioner annonser og snevrer dem inn til noen tusen kandidater for hver person, før rangeringen. Meta skriver at flere og mer varierte kreativer gir systemet mer å matche mot riktige personer. Derfor jobber vi med bred målretting og mange varierte kreativer, i stedet for smal målretting med få annonser.',
+        source: {
+          label: 'Meta Engineering: Meta Andromeda',
+          href: 'https://engineering.fb.com/2024/12/02/production-engineering/meta-andromeda-advantage-automation-next-gen-personalized-ads-retrieval-engine/',
+        },
+      },
+      {
+        title: 'Skap etterspørsel, ikke bare fang den',
+        text: 'Binet og Field viser at salgsaktivering gir raske topper som faller tilbake, mens merkevarebygging løfter grunnsalget over tid. Les Binet advarer også mot å la merkevare- og salgskampanjer gjøre samme jobb samtidig. I sosiale medier betyr det egne kampanjer for rekkevidde og merkevare, ved siden av salgskampanjene – ikke bare retargeting av dem som allerede kjenner deg.',
+        chart: { kind: 'longShortConcept' },
+        source: {
+          label: 'Marketing Week: Les Binet om merkevare og performance (2024)',
+          href: 'https://www.marketingweek.com/les-binet-brand-performance/',
+        },
+      },
+      {
+        title: 'Kjedelig reklame er dyr reklame',
+        text: 'System1 har testet over 100 000 reklamefilmer: om lag halvparten av reaksjonene er nøytrale – folk føler ingenting. Modellene deres viser at kjedelige annonser bygger langt mindre markedsandel for samme budsjett. Tallene er fra TV og fra en leverandør, men poenget gjelder i feeden også: kreativer som vekker noe, gjør jobben.',
+        source: {
+          label: 'System1: The Extraordinary Cost of Dull',
+          href: 'https://system1group.com/blog/the-extraordinary-cost-of-dull',
+        },
+      },
+      {
+        title: 'Der nordmenn er',
+        text: 'Om lag åtte av ti nordmenn bruker sosiale medier hver dag. Facebook har flest profiler, mens Snapchat og Instagram står sterkest blant de yngre. Tallene under er siste offentlige kvartal fra Ipsos; nyere tall ligger bak betalingsmur.',
+        chart: {
+          kind: 'bars',
+          valueLabel: 'Andel med profil',
+          categoryLabel: 'Plattform',
+          format: 'percent',
+          items: [
+            { label: 'Facebook', value: 82, emphasis: true },
+            { label: 'Snapchat', value: 67, emphasis: true },
+            { label: 'Instagram', value: 66, emphasis: true },
+            { label: 'TikTok', value: 29, emphasis: true },
+            { label: 'X (Twitter)', value: 27, emphasis: true },
+          ],
+        },
+        source: {
+          label: 'Ipsos SoMe-tracker Q4 2023 (nordmenn over 18 år)',
+          href: 'https://www.ipsos.com/nb-no/ipsos-some-tracker-q423',
+        },
+      },
+    ],
+    situations: [
+      {
+        title: 'Kampanjene lever på retargeting',
+        text: 'Det meste av budsjettet går til folk som allerede har besøkt butikken, og publikummet blir mindre for hver måned.',
+      },
+      {
+        title: 'Annonsene ser like ut og slites fort',
+        text: 'Noen få kreativer går lenge, resultatene faller, og ingen har en plan for nye.',
+      },
+      {
+        title: 'Ingen kjenner merkevaren utenfor kundebasen',
+        text: 'De som kjenner dere, kjøper – men nye kunder kommer bare når dere setter ned prisen.',
+      },
+      {
+        title: 'Dere poster jevnt, men lite skjer',
+        text: 'Det organiske innholdet har ingen rød tråd, og ingen vet hva det skal oppnå.',
+      },
+      {
+        title: 'ROAS ser bra ut, men veksten uteblir',
+        text: 'Rapportene gir æren til siste klikk, mens det som faktisk skaper nye kunder, ikke blir målt.',
+      },
+      {
+        title: 'Samarbeid med skapere uten struktur',
+        text: 'Innholdet fra influensere og UGC brukes ikke i annonsene, og merkingen er ikke på plass.',
+      },
+    ],
+    deliverables: {
+      strategi: [
+        'Målgrupper og kjøpssituasjoner, koblet til merkevarestrategien',
+        'Kanalplan for Meta (Facebook og Instagram), TikTok og øvrige kanaler der kundene dine er',
+        'Fordeling mellom rekkevidde og merkevare, og salgskampanjer',
+        'Kreativ plattform: faste merkevareelementer og budskap som går igjen',
+      ],
+      gjennomforing: [
+        'Kreative konsepter og mange varianter: video i 9:16, UGC-stil, bilder og karuseller',
+        'Merkevaren tydelig tidlig i hver annonse',
+        'Løpende testing og utskifting av kreativer før de slites ut',
+        'Salgskampanjer med bred målretting og produktkatalog',
+        'Rekkeviddekampanjer for å nå de som ikke kjenner deg ennå',
+        'Organisk innholdsplan med rød tråd',
+        'Samarbeid med skapere og UGC, med riktig reklamemerking',
+      ],
+      rapportering: [
+        'Rekkevidde og frekvens i målgruppen, ikke bare klikk',
+        'Kreativrapport: hva som virker, og hvorfor',
+        'Inkrementell effekt med løftstester der det er mulig',
+        'Nye kunder og merkevaresøk over tid',
+      ],
+      ikkeInkludert: [
+        'Annonsebudsjett – det betaler du direkte til plattformene',
+        'Større film- og fotoproduksjoner',
+        'Honorarer til influensere og skapere',
+      ],
+    },
+    packages: [
+      {
+        name: 'SoMe-revisjon og kreativ plan',
+        kind: 'Engangsleveranse',
+        summary: 'Vi går gjennom kontoene og kreativene dine og lager en plan for merkevare og salg.',
+        includes: [
+          'Revisjon av kampanjer, målretting og kreativer',
+          'Kanalplan og fordeling mellom rekkevidde og salg',
+          'Kreativ plattform og konseptforslag',
+          'Prioritert tiltaksliste',
+        ],
+      },
+      {
+        name: 'SoMe løpende',
+        kind: 'Månedlig',
+        summary: 'Vi drifter kampanjene og lager nye kreativer hver måned, med fast rapport.',
+        includes: [
+          'Kampanjedrift i Meta og TikTok',
+          'Nye kreative varianter hver måned',
+          'Organisk innhold etter avtale',
+          'Månedlig rapport og statusmøte',
+          'Ingen bindingstid – 30 dagers oppsigelse',
+        ],
+      },
+    ],
+    process: [
+      {
+        period: '0–30 dager',
+        title: 'Innsikt og kreativ plattform',
+        text: 'Revisjon av kontoer og kreativer, målgrupper og kjøpssituasjoner, og en kreativ plattform med faste merkevareelementer.',
+      },
+      {
+        period: '30–60 dager',
+        title: 'Lansering og testing',
+        text: 'Nye kampanjer for rekkevidde og salg, med mange kreative varianter som testes mot hverandre.',
+      },
+      {
+        period: '60–90 dager',
+        title: 'Skaler det som virker',
+        text: 'Mer budsjett til kreativene og kampanjene som gir nye kunder, og en fast rytme for nye kreativer.',
+      },
+    ],
+    kpis: [
+      { name: 'Rekkevidde i målgruppen', text: 'Hvor stor del av målgruppen dere når, og hvor ofte.' },
+      { name: 'Kreativ effekt', text: 'Hvor mange som stopper og ser videre – og hvilke kreativer som gir salg.' },
+      { name: 'Kostnad per ny kunde', text: 'Hva det koster å vinne kunder som ikke har handlet før.' },
+      { name: 'Inkrementell effekt', text: 'Salg som ikke ville kommet uten annonsene, målt med løftstester.' },
+      { name: 'Merkevaresøk', text: 'Om flere søker på navnet ditt – et tegn på at sosiale medier skaper etterspørsel.' },
+    ],
+    faq: [
+      {
+        question: 'Hvorfor fokus på merkevare når vi vil selge?',
+        answer: 'Fordi salgskampanjer bare treffer dem som allerede vurderer å kjøpe. Merkevarebygging gjør at flere kommer på deg når behovet oppstår – og gjør at salgskampanjene, søket og e-posten din fungerer bedre. Vi kjører begge, med ulike mål.',
+      },
+      {
+        question: 'Hvor mange kreativer trenger vi?',
+        answer: 'Det finnes ikke et magisk tall, og Meta oppgir heller ikke ett. Det viktige er variasjon – ulike konsepter, formater og vinkler – og at de byttes ut før de slites ut. Vi lager en fast rytme for nye kreativer som passer budsjettet ditt.',
+      },
+      {
+        question: 'Organisk eller betalt?',
+        answer: 'Begge, men med ulike jobber. Organisk innhold bygger relasjon og gir materiale vi kan teste. Betalt annonsering sørger for rekkevidde til de som ikke følger deg. De beste organiske innleggene blir ofte gode annonser.',
+      },
+      {
+        question: 'Kan vi selge direkte i TikTok Shop?',
+        answer: 'Ikke i Norge ennå. TikTok Shop er lansert i flere europeiske land, men Norge var ikke blant dem i TikToks siste oversikt. Vi bruker TikTok som kanal for kreativer og annonser i mellomtiden.',
+      },
+      {
+        question: 'Hvordan måler dere effekten?',
+        answer: 'Siste klikk undervurderer sosiale medier, fordi mange ser annonsen og kjøper senere via søk. Vi følger rekkevidde, nye kunder og merkevaresøk, bruker konverteringsløftstester der det er mulig, og kan sette opp markedsmiksmodeller med åpne verktøy som Robyn eller Meridian.',
+      },
+      {
+        question: 'Hva må vi passe på med influensere?',
+        answer: 'Reklame skal være tydelig merket, og merkingen bør komme først i teksten. Forbrukertilsynet mener plattformenes egen standardmerking ikke gjør det tydelig nok, og anbefaler å legge til «reklame» eller «annonse». Vi bygger dette inn i alle samarbeid vi setter opp.',
+      },
+    ],
+    sources: [
+      { label: 'Meta Andromeda', publisher: 'Meta Engineering, 2024', href: 'https://engineering.fb.com/2024/12/02/production-engineering/meta-andromeda-advantage-automation-next-gen-personalized-ads-retrieval-engine/' },
+      { label: 'AI Innovation in Meta’s Ads Ranking', publisher: 'Meta, 2025', href: 'https://www.facebook.com/business/news/ai-innovation-in-metas-ads-ranking-driving-advertiser-performance' },
+      { label: 'Advantage+-salgskampanjer', publisher: 'Meta', href: 'https://www.facebook.com/business/ads/meta-advantage-plus/sales-campaigns' },
+      { label: 'Reels-annonser', publisher: 'Meta', href: 'https://www.facebook.com/business/ads/facebook-instagram-reels-ads' },
+      { label: 'Konverteringsøkningstester', publisher: 'Meta', href: 'https://www.facebook.com/business/measurement/conversion-lift' },
+      { label: 'Smart+ Campaigns', publisher: 'TikTok for Business', href: 'https://ads.tiktok.com/help/article/about-smart-plus-campaign' },
+      { label: 'What we mean when we say «Don’t Make Ads»', publisher: 'TikTok for Business', href: 'https://ads.tiktok.com/business/en/blog/what-we-mean-when-we-say-dont-make-ads' },
+      { label: 'The Extraordinary Cost of Dull', publisher: 'System1, 2024', href: 'https://system1group.com/blog/the-extraordinary-cost-of-dull' },
+      { label: 'The next chapter for The Long and the Short of It', publisher: 'IPA', href: 'https://ipa.co.uk/knowledge/ipa-blog/the-next-chapter-for-the-long-and-the-short-of-it' },
+      { label: 'Media Reactions 2025', publisher: 'Kantar', href: 'https://www.kantar.com/north-america/company-news/us-media-reactions-2025' },
+      { label: 'Ipsos SoMe-tracker Q4 2023', publisher: 'Ipsos Norge', href: 'https://www.ipsos.com/nb-no/ipsos-some-tracker-q423' },
+      { label: '8 av 10 nordmenn er på sosiale medier daglig', publisher: 'Ipsos Norge, 2024', href: 'https://www.ipsos.com/nb-no/ukens-tall-38-8-av-10-nordmenn-er-pa-sosiale-medier-daglig' },
+      { label: 'Veileder for merking av reklame i sosiale medier', publisher: 'Forbrukertilsynet', href: 'https://www.forbrukertilsynet.no/lov-og-rett/veiledninger-og-retningslinjer/someveiledning' },
+      { label: 'Robyn – åpen markedsmiksmodell', publisher: 'Meta på GitHub', href: 'https://github.com/facebookexperimental/Robyn' },
+      { label: 'Meridian – åpen markedsmiksmodell', publisher: 'Google på GitHub', href: 'https://github.com/google/meridian' },
+    ],
+    related: [
+      { slug: 'merkevare-og-strategi', why: 'Posisjonering og merkevareelementer gir kreativene en rød tråd.' },
+      { slug: 'some/meta-ads', why: 'Kampanjer i Facebook og Instagram, med katalog og Conversions API.' },
+      { slug: 'sporing-og-analyse', why: 'Conversions API og måling som viser effekten utover siste klikk.' },
+    ],
+  },
+
   'sporing-og-analyse': {
     intro: {
       title: 'Hvorfor server-side sporing?',

@@ -92,7 +92,7 @@ export const growthServices: GrowthService[] = [
     group: 'annonsering',
     label: 'SoMe',
     title: 'Markedsføring i sosiale medier for Shopify-butikker',
-    lead: 'Organisk innhold og betalte kampanjer i sosiale medier som bygger merkevare og driver salg.',
+    lead: 'Merkevarebygging og kreativer som skaper etterspørsel – organisk og betalt, der kundene dine bruker tiden sin.',
   },
   {
     slug: 'some/meta-ads',

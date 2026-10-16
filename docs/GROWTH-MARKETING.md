@@ -38,7 +38,7 @@ Samleside: `/growth-marketing`. Gjelder bare norsk side (.no). Andre språk gir 
 |---|---|
 | Samleside og 11 tjenestesider | Dummyer med mal og plassholdere, `noindex`, ikke i XML-sitemap |
 | Menyforslag | Ligger i `lib/growthServices.ts` (`growthNavItem()`). **Ikke koblet inn** i headeren ennå (se §5) |
-| Ekte innhold | **Sporing og analyse**, **Merkevare og strategi**, **SEM**, **Google Ads** og **Affiliate, CSS og feed** har tekstutkast til gjennomlesning (alle seksjoner unntatt bevis; priser via pakkeoversikten). Resten er dummyer |
+| Ekte innhold | **SoMe**, **Sporing og analyse**, **Merkevare og strategi**, **SEM**, **Google Ads** og **Affiliate, CSS og feed** har tekstutkast til gjennomlesning (alle seksjoner unntatt bevis; priser via pakkeoversikten). Resten er dummyer |
 | Innhold i Sanity | Ikke startet. Innholdet ligger i kode til tekstene er klare |
 
 ## 3. Struktur
@@ -149,6 +149,7 @@ npm run dev                 # http://localhost:3000/no/growth-marketing
 - [ ] Leveranser: Stemmer listene med det vi faktisk gjør (Bing som tillegg, CSS-vurdering, AI Max-tester, Demand Gen)?
 - [ ] Affiliate og feed: Stemmer leveransene (feed-revisjon, distribusjon til prissammenligning, oppfølging av affiliate-partnere)? Nevner vi riktige eksempler (Prisjakt; Adtraction og Awin)? Hvilke feed-verktøy bruker vi?
 - [ ] Bevis: Kundecase med tall fra annonsering, og navngitt spesialist.
+- [ ] SoMe: Stemmer pakkene (revisjon og kreativ plan, løpende drift med nye kreativer hver måned)? Hvilke kanaler leverer vi i praksis (Meta, TikTok, Snapchat, Pinterest, LinkedIn)? Lager vi kreativer selv, eller med partnere?
 - [ ] Sporing og analyse: Stemmer leveransene og de tre pakkene (sporingsrevisjon, server-side sporing, analyse og dashboards månedlig)? Lover vi «varsling og retting når sporingen brytes»? Hvilke dashboardverktøy bruker vi i praksis (Looker, Looker Studio, annet)?
 - [ ] Merkevare og strategi: Stemmer leveransene og pakkene (strategi som engangsleveranse, strategisk partner månedlig)? «Logodesign og full visuell identitet» står som ikke inkludert. Stemmer det?
 
@@ -179,6 +180,16 @@ Tekstene skal bare inneholde påstander vi kan stå for. Tidsavhengige fakta sje
 - Share of search (Binet, IPA 2020): Andelen merkenavnsøk er en tidlig indikator på markedsandel, og den kan måles i Google Trends.
 - Ahrefs (75 000 merkevarer, publisert 26. mai 2025, oppdatert 27. april 2026): Korrelasjon med synlighet i AI-oversikter. Omtale av merkevaren 0,664, merkenavn i lenketekst 0,527, søk på merkenavnet 0,392, domenestyrke 0,326, lenkende domener 0,295 og trafikk fra merkenavnsøk 0,274. Tallene er sjekket mot artikkelen. Det er korrelasjon, ikke årsak, og det står i teksten.
 - Romaniuk, Building Distinctive Brand Assets (2018): Elementene må være kjente og unike. Forlagets side svarer 403, så den lenkes ikke.
+
+**SoMe** (research 2026-10-16, alle lenker sjekket; Meta, Forbrukertilsynet og TikTok blokkerer curl, så de er lest med eget hentverktøy):
+- Meta Andromeda (Meta Engineering, 2. desember 2024): Systemet snevrer «tens of millions» annonser inn til «a few thousand» kandidater. Meta skriver (27. mars 2025) at flere kreativer støtter «a diversification strategy». Vi oppgir **ikke** antall kreativer, og heller ikke Metas eller byråenes tall i prosent.
+- Binet & Field: 60:40 (2013), 62:38 i Effectiveness in Context (2018). Binet sier i Marketing Week (2024) at merkevare og performance ikke bør presses samtidig. Grafen er en prinsippskisse.
+- System1, The Extraordinary Cost of Dull (2024): Over 100 000 tester, om lag halvparten av reaksjonene er nøytrale. Gjelder **TV** og er leverandørens modell, og det står i teksten.
+- Nielsens «47 % av salgseffekten» er ikke funnet i primærkilden og brukes ikke.
+- Ipsos: Profilandel blant nordmenn over 18 år i fjerde kvartal 2023 er Facebook 82, Snapchat 67, Instagram 66, TikTok 29 og X 27 %. Sjekket mot siden. Om lag 8 av 10 bruker sosiale medier daglig (2024). Nyere tall ligger bak betalingsmur.
+- TikTok Shop: Ikke lansert i Norge i TikToks oversikt fra 28. mai 2026.
+- Forbrukertilsynet: Standardmerkingen i plattformene er ikke tydelig nok, og de **anbefaler** å legge til «reklame» eller «annonse». Merkingen bør komme først i teksten.
+- Måling: Konverteringsløftstester i Meta og de åpne verktøyene for markedsmiksmodeller, Robyn (Meta) og Meridian (Google).
 
 **Sporing og analyse** (research 2026-10-16, alle lenker sjekket):
 - Tracklution (Tracklution Oy, Finland): Server-side sporing som tjeneste. I Shopify settes det opp med egen piksel under Kundehendelser, en webhook for ny ordre og en CNAME for førstepartsdomene. Kilde: Tracklution docs. Ingen app i Shopify App Store er bekreftet, så vi skriver ikke «app».
@@ -226,3 +237,4 @@ Tekstene skal bare inneholde påstander vi kan stå for. Tidsavhengige fakta sje
 | 2026-10-16 | Sporing og analyse: server-side sporing med Tracklution som standardpartner, andre løsninger på forespørsel; analyse i GA4, Google Cloud og BigQuery; egne dashboards og integrasjoner | Slik leverer vi i dag (fra brukeren); nye seksjoner for dataflyt (`flows`) og plattformlenker (`platforms`) |
 | 2026-10-16 | Ny seksjon «Fungerer best sammen med» på tjenestesidene (felt `related`) | Viser at tjenestene henger sammen, og gir intern lenking for SEO |
 | 2026-10-16 | Merkevare og strategi får tekstutkast med forskningsinnsikt, tre grafer og eksterne kilder | Brukeren ba om oppdatert merkevareinnsikt med grafer og lenker; forskningen kobles til hvordan nettbutikker vokser (mental og fysisk tilgjengelighet) |
+| 2026-10-16 | SoMe: fokus på merkevarebygging, gode og varierte kreativer, og på å skape etterspørsel, ikke bare fange den | Brukerens prioritering; støttet av Meta (Andromeda), Binet & Field, System1 og Ipsos |

@@ -84,26 +84,30 @@ function BarsChart({ chart }: { chart: Extract<GrowthChart, { kind: 'bars' }> })
   const valueWidth = 56
   const row = 34
   const bar = 18
+  const percent = chart.format === 'percent'
+  const fmt = (value: number) => (percent ? `${Math.round(value)} %` : formatNo(value))
   const max = Math.max(...chart.items.map((i) => i.value))
-  const scaleMax = Math.ceil(max * 10) / 10
+  const scaleMax = percent ? 100 : Math.ceil(max * 10) / 10
+  const step = percent ? 25 : 0.2
   const height = chart.items.length * row + 22
-  const ticks = Array.from({ length: Math.round(scaleMax * 10) / 2 + 1 }, (_, i) => (i * 2) / 10).filter(
-    (t) => t <= scaleMax + 1e-9
-  )
+  const ticks: number[] = []
+  for (let t = 0; t <= scaleMax + 1e-9; t += step) ticks.push(Math.round(t * 100) / 100)
 
   return (
     <div>
-      <Legend
-        items={[
-          { label: chart.legend.emphasis, color: COLOR.emphasis },
-          { label: chart.legend.context, color: COLOR.context },
-        ]}
-      />
+      {chart.legend && (
+        <Legend
+          items={[
+            { label: chart.legend.emphasis, color: COLOR.emphasis },
+            { label: chart.legend.context, color: COLOR.context },
+          ]}
+        />
+      )}
       <svg
         viewBox={`0 0 ${labelWidth + plotWidth + valueWidth} ${height}`}
         className="w-full h-auto"
         role="img"
-        aria-label={chart.items.map((i) => `${i.label}: ${formatNo(i.value)}`).join(', ')}
+        aria-label={chart.items.map((i) => `${i.label}: ${fmt(i.value)}`).join(', ')}
       >
         {ticks.map((t) => {
           const x = labelWidth + (t / scaleMax) * plotWidth
@@ -111,7 +115,7 @@ function BarsChart({ chart }: { chart: Extract<GrowthChart, { kind: 'bars' }> })
             <g key={t}>
               <line x1={x} x2={x} y1={0} y2={height - 20} stroke={COLOR.grid} strokeWidth={1} />
               <text x={x} y={height - 6} textAnchor="middle" fontSize={11} fill={COLOR.muted}>
-                {formatNo(t, 1)}
+                {percent ? `${t} %` : formatNo(t, 1)}
               </text>
             </g>
           )
@@ -125,18 +129,18 @@ function BarsChart({ chart }: { chart: Extract<GrowthChart, { kind: 'bars' }> })
                 {item.label}
               </text>
               <path d={barPath(labelWidth, y, width, bar)} fill={item.emphasis ? COLOR.emphasis : COLOR.context}>
-                <title>{`${item.label}: ${formatNo(item.value)}`}</title>
+                <title>{`${item.label}: ${fmt(item.value)}`}</title>
               </path>
               <text x={labelWidth + width + 6} y={y + bar / 2 + 4} fontSize={12} fill={COLOR.text} className="tabular-nums">
-                {formatNo(item.value)}
+                {fmt(item.value)}
               </text>
             </g>
           )
         })}
       </svg>
       <DataTable
-        head={['Faktor', chart.valueLabel]}
-        rows={chart.items.map((i) => [i.label, formatNo(i.value)] as [string, string])}
+        head={[chart.categoryLabel ?? 'Faktor', chart.valueLabel]}
+        rows={chart.items.map((i) => [i.label, fmt(i.value)] as [string, string])}
       />
     </div>
   )
