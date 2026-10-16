@@ -125,7 +125,6 @@ export const navigationNo: NavItem[] = [
   },
   {
     label: 'Integrasjoner',
-    live: false,
     columns: [
       {
         title: 'Etter system',
@@ -153,7 +152,7 @@ export const navigationNo: NavItem[] = [
         title: 'Partnere',
         items: [
           { label: 'Alle partnere', href: '/partnere', description: '14 partnerselskaper' },
-          { label: 'Bli partner', href: '/partnere/bli-partner' },
+          { label: 'Bli partner', href: '/partnere/bli-partner', live: false },
         ],
       },
     ],
