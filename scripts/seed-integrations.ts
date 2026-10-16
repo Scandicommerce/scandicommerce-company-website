@@ -632,7 +632,7 @@ async function main() {
       author: { _type: 'reference', _ref: author._id },
       integrationName: i.name, vendorUrl: i.vendorUrl,
       whatItIs: blocks(i.whatItIs), whyItMatters: blocks(i.why), implementationSteps: steps(i.steps),
-      prerequisites: i.prereq, namedClients: i.clients,
+      prerequisites: i.prereq, namedClients: i.clients.filter((c) => !c.startsWith('[')),
       logo, category: { _type: 'reference', _ref: catId(i.cat) }, shortDescription: i.short,
       integrationMethod: i.method, status: i.status ?? 'live', syncDirection: i.direction, capabilities: i.capabilities,
       notIncluded: i.notIncluded ?? [], systems: i.systems, dataFlowSteps: i.flows, featured: !!i.featured,
