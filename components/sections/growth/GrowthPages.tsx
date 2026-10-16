@@ -26,6 +26,10 @@ import {
   type GrowthService,
 } from '@/lib/growthServices'
 import { findGrowthContent, type GrowthPageContent } from '@/lib/growthContent'
+import { PACKAGES_SLUG } from '@/lib/routes'
+
+/** Package overview with every price; growth pages link here instead of repeating prices. */
+const PACKAGES_HREF = `/${PACKAGES_SLUG.no}`
 
 /**
  * Service-page template for the Growth marketing area, rendered with
@@ -157,7 +161,7 @@ function Hero({
             Book møte
           </LocalizedLink>
           <LocalizedLink
-            href="/tjenester/alle-pakker"
+            href={PACKAGES_HREF}
             className="inline-flex items-center justify-center rounded-lg px-[22px] py-3 text-sm font-semibold bg-white text-sc-ink-900 border border-sc-ink-200 hover:bg-sc-ink-50 transition-colors"
           >
             Se pakker
@@ -434,10 +438,31 @@ function PackagesSection({ packages, ...heading }: Heading & { packages: NonNull
             <div className="mt-5 mb-6 flex-grow">
               <CheckList items={pkg.includes} />
             </div>
-            <div className="text-base font-semibold text-sc-ink-900">{pkg.price ?? 'Pris kommer'}</div>
+            {pkg.price ? (
+              <div className="text-base font-semibold text-sc-ink-900">{pkg.price}</div>
+            ) : (
+              <LocalizedLink
+                href={PACKAGES_HREF}
+                className="group inline-flex items-center gap-1.5 text-sm font-semibold text-sc-cyan-600 hover:text-sc-cyan-700 transition-colors"
+              >
+                Se pris i pakkeoversikten
+                <ArrowRight
+                  className="w-4 h-4 group-hover:translate-x-0.5 transition-transform"
+                  strokeWidth={ICON_STROKE}
+                  aria-hidden="true"
+                />
+              </LocalizedLink>
+            )}
           </div>
         ))}
       </div>
+      <p className="text-sm text-sc-ink-600 mt-4 lg:mt-5 m-0">
+        Fastpris, ingen overraskelser. Alle pakker og priser finner du i{' '}
+        <LocalizedLink href={PACKAGES_HREF} className="font-semibold text-sc-ink-900 underline underline-offset-2 hover:text-sc-cyan-600">
+          pakkeoversikten
+        </LocalizedLink>
+        .
+      </p>
     </SectionShell>
   )
 }

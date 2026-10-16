@@ -23,7 +23,7 @@ export interface GrowthPageContent {
     rapportering: string[]
     ikkeInkludert?: string[]
   }
-  /** "Pakker og pris". `price` left out renders "Pris kommer". */
+  /** "Pakker og pris". Leave `price` out to link to the package overview (/tjenester/alle-pakker), where prices live. */
   packages?: { name: string; kind: string; summary: string; includes: string[]; price?: string }[]
   /** "De første 90 dagene". */
   process?: { period: string; title: string; text: string }[]

@@ -91,6 +91,7 @@ SEM og SoMe viser i tillegg kanalene sine som kort under hero.
 - **Ekte ekspertise:** Navngitt forfatter eller spesialist og egne tall. Ikke masseprodusert tekst.
 - **Ikke ranger oss selv:** Ingen «beste SEO-byrå»-lister der vi står øverst. Slike sider har mistet synlighet i Google siden januar 2026.
 - **Ingen egne stjerner:** Ingen stjernemerking av egne anmeldelser. FAQ-markering gir ikke lenger egen visning i Google, så skriv FAQ for leseren.
+- **Priser:** Står i pakkeoversikten (`/tjenester/alle-pakker`), ikke på tjenestesidene. Pakkekortene lenker dit. Én kilde for priser, så de ikke spriker.
 - **Fjern noindex først når ekte tekst er på plass:** `seo.noIndex = true` i `app/[lang]/growth-marketing/[[...slug]]/page.tsx`.
 
 ## 5. Samarbeid i repoet
@@ -140,7 +141,7 @@ npm run dev                 # http://localhost:3000/no/growth-marketing
 ## 7. Åpne spørsmål
 
 **Må bekreftes før SEM og Google Ads publiseres:**
-- [ ] Priser for SEM-revisjon, SEM løpende, Google Ads-revisjon og Google Ads løpende.
+- [ ] Priser: Pakkekortene lenker til pakkeoversikten (`/tjenester/alle-pakker`) i stedet for å vise pris. **Pakkeoversikten viser i dag bare Shopify-pakkene.** SEM- og Google Ads-pakkene må legges inn der (i Sanity) før lenken gir mening.
 - [ ] Vilkår: «Ingen bindingstid – 30 dagers oppsigelse» er hentet fra Growth-pakken. Gjelder det også her?
 - [ ] Leveranser: Stemmer listene med det vi faktisk gjør (Bing som tillegg, CSS-vurdering, AI Max-tester, Demand Gen)?
 - [ ] Bevis: Kundecase med tall fra annonsering, og navngitt spesialist.
@@ -187,3 +188,4 @@ Tekstene skal bare inneholde påstander vi kan stå for. Tidsavhengige fakta sje
 | 2026-10-16 | Draft-PR #2 fra `growth/growth-marketing-seo` til `tjenester` | Growth-arbeidet følger IA-arbeidet inn i `main`; Øyvind ser og kommenterer alt på ett sted |
 | 2026-10-16 | Første tekstutkast for SEM og Google Ads, i `lib/growthContent.ts` | Bygget på oppdatert research (se §8); bare bekreftede påstander; priser og bevis står igjen som plassholdere |
 | 2026-10-16 | SEM og Google Ads: «for mye på eget merkenavn» i stedet for «betaler for ditt eget merkenavn»; SEO-søkeordsanalyse og negative søkeordslister løftet fram i leveranser, måltall og FAQ | Tydeligere problem (mangler kontroll); viser at SEM og SEO jobber sammen og hvordan vi kutter bortkastet budsjett |
+| 2026-10-16 | Pakkekort på tjenestesidene lenker til pakkeoversikten i stedet for å vise pris | Prisene ligger ett sted, så de ikke spriker mellom sidene |
