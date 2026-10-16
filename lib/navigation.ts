@@ -56,14 +56,14 @@ export const navigationNo: NavItem[] = [
         title: 'Leveranser',
         items: [
           {
-            label: 'Tjenesteoversikt',
+            label: 'Tjenester oversikt',
             href: '/tjenester',
             description: 'Alle leveranser og hvilke pakker de inngår i',
           },
-          { label: 'Shopify Plus og utvikling', href: '/tjenester/utvikling' },
+          { label: 'Shopify & nettbutikk', href: '/tjenester/shopify' },
           { label: 'Migrering til Shopify', href: '/tjenester/migrering' },
-          { label: 'CRO og konvertering', href: '/tjenester/cro' },
-          { label: 'B2B-handel', href: '/tjenester/b2b' },
+          { label: 'B2B og ordreportal', href: '/tjenester/b2b' },
+          { label: 'Utvikling og skreddersøm', href: '/tjenester/utvikling' },
         ],
       },
       {
@@ -139,7 +139,6 @@ export const footerColumnsNo: FooterColumn[] = [
       { label: 'Alle pakker', href: '/tjenester/alle-pakker' },
       { label: 'Migrering', href: '/tjenester/migrering' },
       { label: 'Utvikling', href: '/tjenester/utvikling' },
-      { label: 'CRO', href: '/tjenester/cro' },
       { label: 'Apper', href: '/apper' },
     ],
   },
