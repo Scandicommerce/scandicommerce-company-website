@@ -3,6 +3,7 @@ import LocalizedLink from '@/components/ui/LocalizedLink'
 import ManageCookiesLink from '@/components/tracking/ManageCookiesLink'
 import NewsletterForm from '@/components/ui/NewsletterForm'
 import { FaLinkedinIn, FaTwitter, FaInstagram, FaFacebookF, FaYoutube, FaGithub } from 'react-icons/fa'
+import { defaultFooterColumns } from '@/lib/navigation'
 
 interface FooterLink {
   label?: string
@@ -43,38 +44,8 @@ interface FooterSettings {
 
 interface FooterProps {
   settings?: FooterSettings
+  language?: string
 }
-
-// Default columns
-const defaultColumns: FooterColumn[] = [
-  {
-    title: 'Company',
-    links: [
-      { label: 'About us', href: '/about' },
-      { label: 'Partners', href: '/partners' },
-      { label: 'Contact', href: '/contact' },
-      { label: 'Sitemap', href: '/sitemap' },
-    ],
-  },
-  {
-    title: 'Services',
-    links: [
-      { label: 'All Packages', href: '/services/all-packages' },
-    ],
-  },
-  {
-    title: 'Resources',
-    links: [
-      { label: 'Blog & Articles', href: '/blog' },
-    ],
-  },
-  {
-    title: 'Merch',
-    links: [
-      { label: 'Merch', href: '/merch' },
-    ],
-  },
-]
 
 const defaultConnectSection = {
   title: 'Connect',
@@ -123,9 +94,9 @@ const getSocialIcon = (platform?: string) => {
 const columnTitleClasses = 'text-white font-bold text-[13px]'
 const columnLinkClasses = 'text-[#8a95a0] hover:text-white transition-colors'
 
-export default function Footer({ settings }: FooterProps) {
-  // Use Sanity data or fallback to defaults
-  const columns = settings?.columns?.length ? settings.columns : defaultColumns
+export default function Footer({ settings, language }: FooterProps) {
+  // Use Sanity data or fall back to the built-in columns for this language
+  const columns = settings?.columns?.length ? settings.columns : defaultFooterColumns(language)
   const connectSection = settings?.connectSection?.email ? settings.connectSection : defaultConnectSection
   const bottomSection = settings?.bottomSection?.badgeText ? settings.bottomSection : defaultBottomSection
 

@@ -1,80 +1,29 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { createPortal } from 'react-dom'
 import LocalizedLink from '@/components/ui/LocalizedLink'
 import { HiShoppingBag } from 'react-icons/hi2'
 import { useCart } from '@/contexts/CartContext'
 import LanguageSwitcher from '@/components/ui/LanguageSwitcher'
-
-interface MenuItem {
-  label?: string
-  href?: string
-  slug?: string
-}
-
-interface MenuSection {
-  label?: string
-  items?: MenuItem[]
-}
+import { defaultCta, defaultNavigation } from '@/lib/navigation'
+import type { NavCta, NavColumn, NavItem, NavLink } from '@/lib/navigation'
 
 interface HeaderSettings {
-  servicesMenu?: MenuSection
-  shopifyMenu?: MenuSection
-  mainNavLinks?: MenuItem[]
-  ctaButton?: {
-    label?: string
-    href?: string
-    slug?: string
-  }
+  menu?: NavItem[]
+  ctaButton?: NavCta
 }
 
 interface HeaderProps {
   settings?: HeaderSettings
-}
-
-// Default menu items
-const defaultServicesMenu: MenuSection = {
-  label: 'Services',
-  items: [
-    { label: 'Shopify Development', href: '/services/shopify-development' },
-    { label: 'Migration to Shopify', href: '/services/migrate' },
-    { label: 'Shopify POS', href: '/services/shopify-pos' },
-    { label: 'All Packages', href: '/services/all-packages' },
-  ],
-}
-
-const defaultShopifyMenu: MenuSection = {
-  label: 'Shopify',
-  items: [
-    { label: 'Shopify', href: '/shopify/shopify-platform' },
-    { label: 'Shopify POS', href: '/shopify/shopify-pos' },
-    { label: 'Shopify Migration', href: '/services/migrate' },
-    { label: 'Shopify TCO calculator', href: '/shopify-tco-calculator' },
-    { label: 'Shopify x PIM', href: '/shopify-pim' },
-    { label: 'Shopify X AI', href: '/shopify/shopify-x-ai' },
-    { label: 'Why Shopify?', href: '/why-shopify' },
-    { label: 'Vipps Hurtigkasse', href: '/shopify/vipps-hurtigkasse' },
-  ],
-}
-
-const defaultMainNavLinks: MenuItem[] = [
-  { label: 'Work', href: '/work' },
-  { label: 'About', href: '/about' },
-  { label: 'Partners', href: '/partners' },
-  { label: 'Contact', href: '/contact' },
-]
-
-const defaultCtaButton = {
-  label: 'GET STARTED',
-  href: '/services/all-packages',
+  language?: string
 }
 
 const LOCALE_IDS_SET = new Set(['en', 'no', 'sv', 'da', 'de'])
 const COUNTRY_SEGMENTS_SET = new Set(['se', 'dk', 'de'])
 
 /** Build href for a nav item: use page slug when set (strip leading locale/country segments so LocalizedLink adds current lang), else use custom href */
-function getNavHref(item: MenuItem | { href?: string; slug?: string }): string {
+function getNavHref(item: NavLink): string {
   if (item.slug) {
     const parts = item.slug.replace(/^\/+/, '').split('/')
     while (parts.length > 1 && (LOCALE_IDS_SET.has(parts[0]) || COUNTRY_SEGMENTS_SET.has(parts[0]))) {
@@ -86,38 +35,72 @@ function getNavHref(item: MenuItem | { href?: string; slug?: string }): string {
   return item.href || '#'
 }
 
+function hasColumns(item: NavItem): boolean {
+  return Boolean(item.columns?.some((column) => column.items?.length))
+}
+
 // Shared 2026 design classes
 const navLinkClasses =
   'text-[14px] font-medium text-sc-ink-600 hover:text-sc-ink-900 transition-colors'
-const dropdownPanelClasses =
-  'absolute top-full left-0 mt-3 w-[280px] bg-white rounded-xl border border-sc-ink-100 shadow-lg py-2 z-[10002]'
 const dropdownItemClasses =
-  'block px-5 py-2.5 text-[14px] font-medium text-sc-ink-600 hover:text-sc-ink-900 hover:bg-sc-ink-50 transition-colors'
+  'block rounded-lg px-2.5 py-2 hover:bg-sc-ink-50 transition-colors'
+const columnTitleClasses =
+  'px-2.5 mb-2.5 text-[11px] font-bold uppercase tracking-[0.12em] text-sc-ink-400'
 
-export default function Header({ settings }: HeaderProps) {
-  const [isServicesOpen, setIsServicesOpen] = useState(false)
-  const [isShopifyOpen, setIsShopifyOpen] = useState(false)
+/** One column of links inside a dropdown panel. */
+function MenuColumn({
+  column,
+  onNavigate,
+}: {
+  column: NavColumn
+  onNavigate: () => void
+}) {
+  return (
+    <div className="min-w-[210px]">
+      {column.title && <p className={columnTitleClasses}>{column.title}</p>}
+      {column.items?.map((item, index) => (
+        <LocalizedLink
+          key={index}
+          href={getNavHref(item)}
+          onClick={onNavigate}
+          className={`${dropdownItemClasses} ${item.indent ? 'pl-6' : ''}`}
+        >
+          <span
+            className={`block text-[14px] ${
+              item.indent ? 'font-normal text-sc-ink-600' : 'font-medium text-sc-ink-900'
+            }`}
+          >
+            {item.label}
+          </span>
+          {item.description && (
+            <span className="mt-0.5 block text-[12.5px] leading-snug text-sc-ink-400">
+              {item.description}
+            </span>
+          )}
+        </LocalizedLink>
+      ))}
+    </div>
+  )
+}
+
+export default function Header({ settings, language }: HeaderProps) {
+  // Index of the open dropdown, or null. One menu is open at a time.
+  const [openIndex, setOpenIndex] = useState<number | null>(null)
+  const [openMobileIndex, setOpenMobileIndex] = useState<number | null>(null)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [mounted, setMounted] = useState(false)
+  const navRef = useRef<HTMLDivElement>(null)
 
   const { cart, openCart } = useCart()
 
   // Portal only after mount to avoid hydration mismatch (server has no portal)
   useEffect(() => setMounted(true), [])
 
-  // Use Sanity data or fallback to defaults
-  const servicesMenu = settings?.servicesMenu?.items?.length
-    ? settings.servicesMenu
-    : defaultServicesMenu
-  const shopifyMenu = settings?.shopifyMenu?.items?.length
-    ? settings.shopifyMenu
-    : defaultShopifyMenu
-  const mainNavLinks = settings?.mainNavLinks?.length
-    ? settings.mainNavLinks
-    : defaultMainNavLinks
-  const ctaButton = settings?.ctaButton?.label
-    ? settings.ctaButton
-    : defaultCtaButton
+  // Use Sanity data or fall back to the built-in menu for this language
+  const menu = settings?.menu?.length ? settings.menu : defaultNavigation(language)
+  const ctaButton = settings?.ctaButton?.label ? settings.ctaButton : defaultCta(language)
+
+  const closeMenus = () => setOpenIndex(null)
 
   // Lock body scroll when mobile menu is open
   useEffect(() => {
@@ -132,26 +115,25 @@ export default function Header({ settings }: HeaderProps) {
   }, [isMobileMenuOpen])
 
   useEffect(() => {
+    if (openIndex === null) return
+
     const handleClickOutside = (event: MouseEvent) => {
-      const target = event.target as HTMLElement
-      const isDesktop = window.innerWidth >= 1024
-      if (isServicesOpen && isDesktop && !target.closest('.services-menu')) {
-        setIsServicesOpen(false)
-      }
-      if (isShopifyOpen && isDesktop && !target.closest('.shopify-menu')) {
-        setIsShopifyOpen(false)
+      if (window.innerWidth < 1024) return
+      if (!navRef.current?.contains(event.target as Node)) {
+        setOpenIndex(null)
       }
     }
-
-    const isDesktop = window.innerWidth >= 1024
-    if ((isServicesOpen || isShopifyOpen) && isDesktop) {
-      document.addEventListener('mousedown', handleClickOutside)
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setOpenIndex(null)
     }
 
+    document.addEventListener('mousedown', handleClickOutside)
+    document.addEventListener('keydown', handleEscape)
     return () => {
       document.removeEventListener('mousedown', handleClickOutside)
+      document.removeEventListener('keydown', handleEscape)
     }
-  }, [isServicesOpen, isShopifyOpen])
+  }, [openIndex])
 
   return (
     <>
@@ -168,101 +150,57 @@ export default function Header({ settings }: HeaderProps) {
             </LocalizedLink>
 
             {/* Desktop nav */}
-            <div className="hidden lg:flex items-center gap-6 xl:gap-[26px] ml-4">
-              {/* Services Menu */}
-              <div className="relative services-menu">
-                <button
-                  onClick={() => {
-                    setIsServicesOpen(!isServicesOpen)
-                    setIsShopifyOpen(false)
-                  }}
-                  onMouseEnter={() => {
-                    setIsServicesOpen(true)
-                    setIsShopifyOpen(false)
-                  }}
-                  className={`flex items-center gap-1 ${navLinkClasses}`}
-                >
-                  {servicesMenu.label}
-                  <svg
-                    className={`w-3.5 h-3.5 text-sc-ink-400 transition-transform ${isServicesOpen ? 'rotate-180' : ''}`}
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                  </svg>
-                </button>
-
-                {/* Always in the DOM (CSS-hidden when closed) so the links are crawlable */}
-                  <div
-                    className={`${dropdownPanelClasses} ${isServicesOpen ? '' : 'hidden'}`}
-                    onMouseLeave={() => setIsServicesOpen(false)}
-                  >
-                  {servicesMenu.items?.map((item, index) => (
+            <div ref={navRef} className="hidden lg:flex items-center gap-2 xl:gap-3 ml-2">
+              {menu.map((item, index) => {
+                if (!hasColumns(item)) {
+                  return (
                     <LocalizedLink
                       key={index}
                       href={getNavHref(item)}
-                      onClick={() => setIsServicesOpen(false)}
-                      className={dropdownItemClasses}
+                      className={`${navLinkClasses} px-2 py-2`}
                     >
                       {item.label}
                     </LocalizedLink>
-                  ))}
-                  </div>
-              </div>
+                  )
+                }
 
-              {/* Shopify Menu */}
-              <div className="relative shopify-menu">
-                <button
-                  onClick={() => {
-                    setIsShopifyOpen(!isShopifyOpen)
-                    setIsServicesOpen(false)
-                  }}
-                  onMouseEnter={() => {
-                    setIsShopifyOpen(true)
-                    setIsServicesOpen(false)
-                  }}
-                  className={`flex items-center gap-1 ${navLinkClasses}`}
-                >
-                  {shopifyMenu.label}
-                  <svg
-                    className={`w-3.5 h-3.5 text-sc-ink-400 transition-transform ${isShopifyOpen ? 'rotate-180' : ''}`}
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                  </svg>
-                </button>
+                const isOpen = openIndex === index
+                const columns = item.columns ?? []
 
-                {/* Always in the DOM (CSS-hidden when closed) so the links are crawlable */}
-                  <div
-                    className={`${dropdownPanelClasses} ${isShopifyOpen ? '' : 'hidden'}`}
-                    onMouseLeave={() => setIsShopifyOpen(false)}
-                  >
-                  {shopifyMenu.items?.map((item, index) => (
-                    <LocalizedLink
-                      key={index}
-                      href={getNavHref(item)}
-                      onClick={() => setIsShopifyOpen(false)}
-                      className={dropdownItemClasses}
+                return (
+                  <div key={index} className="relative" onMouseLeave={closeMenus}>
+                    <button
+                      onClick={() => setOpenIndex(isOpen ? null : index)}
+                      onMouseEnter={() => setOpenIndex(index)}
+                      aria-expanded={isOpen}
+                      className={`flex items-center gap-1 px-2 py-2 ${navLinkClasses}`}
                     >
                       {item.label}
-                    </LocalizedLink>
-                  ))}
-                  </div>
-              </div>
+                      <svg
+                        className={`w-3.5 h-3.5 text-sc-ink-400 transition-transform ${isOpen ? 'rotate-180' : ''}`}
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                      </svg>
+                    </button>
 
-              {/* Main Nav Links */}
-              {mainNavLinks.map((link, index) => (
-                <LocalizedLink
-                  key={index}
-                  href={getNavHref(link)}
-                  className={navLinkClasses}
-                >
-                  {link.label}
-                </LocalizedLink>
-              ))}
+                    {/* Always in the DOM (CSS-hidden when closed) so the links are crawlable.
+                        The outer box starts flush at top-full and pads the gap itself, so the
+                        cursor never crosses dead space on its way from the button to the panel. */}
+                    <div
+                      className={`absolute top-full left-0 pt-3 z-[10002] ${isOpen ? '' : 'hidden'}`}
+                    >
+                      <div className="flex gap-8 bg-white rounded-xl border border-sc-ink-100 shadow-lg p-5">
+                        {columns.map((column, columnIndex) => (
+                          <MenuColumn key={columnIndex} column={column} onNavigate={closeMenus} />
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                )
+              })}
             </div>
 
             {/* Right: language toggle, cart, CTA, hamburger */}
@@ -328,101 +266,81 @@ export default function Header({ settings }: HeaderProps) {
               className={`absolute left-0 top-0 bottom-0 w-[min(400px,100vw)] bg-white shadow-xl overflow-y-auto transition-transform duration-300 ease-out border-t border-sc-ink-100 ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
                 }`}
             >
-              <div className="flex flex-col space-y-4 pt-6 pb-6 px-5">
-                {/* Mobile Services Menu */}
-                <div className="flex flex-col space-y-2">
-                  <button
-                    onClick={() => {
-                      setIsServicesOpen(!isServicesOpen)
-                      setIsShopifyOpen(false)
-                    }}
-                    className="flex items-center justify-between text-sc-ink-900 hover:text-sc-ink-600 transition-colors font-medium text-[15px] w-full"
-                  >
-                    {servicesMenu.label}
-                    <svg
-                      className={`w-4 h-4 text-sc-ink-400 transition-transform ${isServicesOpen ? 'rotate-180' : ''}`}
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                    </svg>
-                  </button>
-                  {isServicesOpen && (
-                    <div className="pl-4 flex flex-col space-y-2">
-                      {servicesMenu.items?.map((item, index) => (
-                        <LocalizedLink
-                          key={index}
-                          href={getNavHref(item)}
-                          className="text-sc-ink-500 hover:text-sc-ink-900 transition-colors text-[14px]"
-                          onClick={(e) => {
-                            e.stopPropagation()
-                            setIsMobileMenuOpen(false)
-                            setIsServicesOpen(false)
-                          }}
-                        >
-                          {item.label}
-                        </LocalizedLink>
-                      ))}
-                    </div>
-                  )}
-                </div>
+              <div className="flex flex-col pt-2 pb-6 px-5">
+                {menu.map((item, index) => {
+                  const closeDrawer = () => {
+                    setIsMobileMenuOpen(false)
+                    setOpenMobileIndex(null)
+                  }
 
-                {/* Mobile Shopify Menu */}
-                <div className="flex flex-col space-y-2">
-                  <button
-                    onClick={() => {
-                      setIsShopifyOpen(!isShopifyOpen)
-                      setIsServicesOpen(false)
-                    }}
-                    className="flex items-center justify-between text-sc-ink-900 hover:text-sc-ink-600 transition-colors font-medium text-[15px] w-full"
-                  >
-                    {shopifyMenu.label}
-                    <svg
-                      className={`w-4 h-4 text-sc-ink-400 transition-transform ${isShopifyOpen ? 'rotate-180' : ''}`}
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                    </svg>
-                  </button>
-                  {isShopifyOpen && (
-                    <div className="pl-4 flex flex-col space-y-2">
-                      {shopifyMenu.items?.map((item, index) => (
-                        <LocalizedLink
-                          key={index}
-                          href={getNavHref(item)}
-                          className="text-sc-ink-500 hover:text-sc-ink-900 transition-colors text-[14px]"
-                          onClick={(e) => {
-                            e.stopPropagation()
-                            setIsMobileMenuOpen(false)
-                            setIsShopifyOpen(false)
-                          }}
-                        >
-                          {item.label}
-                        </LocalizedLink>
-                      ))}
-                    </div>
-                  )}
-                </div>
+                  if (!hasColumns(item)) {
+                    return (
+                      <LocalizedLink
+                        key={index}
+                        href={getNavHref(item)}
+                        className="border-b border-sc-ink-100 py-3.5 text-sc-ink-900 hover:text-sc-ink-600 transition-colors font-medium text-[15px]"
+                        onClick={closeDrawer}
+                      >
+                        {item.label}
+                      </LocalizedLink>
+                    )
+                  }
 
-                {/* Mobile Main Nav Links */}
-                {mainNavLinks.map((link, index) => (
-                  <LocalizedLink
-                    key={index}
-                    href={getNavHref(link)}
-                    className="text-sc-ink-900 hover:text-sc-ink-600 transition-colors font-medium text-[15px]"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    {link.label}
-                  </LocalizedLink>
-                ))}
+                  const isOpen = openMobileIndex === index
+
+                  return (
+                    <div key={index} className="border-b border-sc-ink-100">
+                      <button
+                        onClick={() => setOpenMobileIndex(isOpen ? null : index)}
+                        aria-expanded={isOpen}
+                        className="flex items-center justify-between w-full py-3.5 text-sc-ink-900 hover:text-sc-ink-600 transition-colors font-medium text-[15px]"
+                      >
+                        {item.label}
+                        <svg
+                          className={`w-4 h-4 text-sc-ink-400 transition-transform ${isOpen ? 'rotate-180' : ''}`}
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                        </svg>
+                      </button>
+                      {isOpen && (
+                        <div className="pb-3">
+                          {item.columns?.map((column, columnIndex) => (
+                            <div key={columnIndex} className="mb-2 last:mb-0">
+                              {column.title && (
+                                <p className="px-2.5 mb-1.5 text-[11px] font-bold uppercase tracking-[0.12em] text-sc-ink-400">
+                                  {column.title}
+                                </p>
+                              )}
+                              {column.items?.map((link, linkIndex) => (
+                                <LocalizedLink
+                                  key={linkIndex}
+                                  href={getNavHref(link)}
+                                  className={`block py-2 text-[14px] text-sc-ink-500 hover:text-sc-ink-900 transition-colors ${
+                                    link.indent ? 'pl-7' : 'pl-2.5'
+                                  }`}
+                                  onClick={(e) => {
+                                    e.stopPropagation()
+                                    closeDrawer()
+                                  }}
+                                >
+                                  {link.label}
+                                </LocalizedLink>
+                              ))}
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  )
+                })}
 
                 {/* Mobile CTA */}
                 <LocalizedLink
                   href={getNavHref(ctaButton)}
-                  className="inline-block bg-sc-ink-900 text-white px-5 py-2.5 rounded-lg font-semibold hover:bg-sc-ink-700 transition-colors text-center text-[13px] mt-2"
+                  className="inline-block bg-sc-ink-900 text-white px-5 py-2.5 rounded-lg font-semibold hover:bg-sc-ink-700 transition-colors text-center text-[13px] mt-5"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   {ctaButton.label}

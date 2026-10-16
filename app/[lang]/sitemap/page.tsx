@@ -19,69 +19,126 @@ interface SitemapEntry {
 }
 
 interface SitemapCategory {
+  key: CategoryKey
   label: string
   entries: SitemapEntry[]
 }
 
-const PAGE_TYPE_CATEGORY: Record<string, string> = {
-  landingPage: 'Pages',
-  aboutPage: 'Company',
-  contactPage: 'Company',
-  workPage: 'Company',
-  partnersPage: 'Company',
-  blogPage: 'Resources',
-  blogPost: 'Blog Articles',
-  allPackagesPage: 'Services',
-  packageDetailPage: 'Services',
-  migratePage: 'Services',
-  shopifyDevelopmentPage: 'Services',
-  shopifyPosPage: 'Shopify',
-  shopifyPosInfoPage: 'Shopify',
-  shopifyXAiPage: 'Shopify',
-  shopifyXPimPage: 'Shopify',
-  whyShopifyPage: 'Shopify',
-  shopifyPlatformPage: 'Shopify',
-  vippsHurtigkassePage: 'Shopify',
-  shopifyTcoCalculatorPage: 'Shopify',
-  merchPage: 'Merch',
-  shopifyProduct: 'Products',
+type CategoryKey =
+  | 'pages'
+  | 'company'
+  | 'services'
+  | 'integrations'
+  | 'shopify'
+  | 'resources'
+  | 'articles'
+  | 'caseStudies'
+  | 'legal'
+  | 'merch'
+  | 'products'
+
+/** Order sections the same way the site's own IA orders them. */
+const CATEGORY_ORDER: CategoryKey[] = [
+  'pages',
+  'services',
+  'integrations',
+  'shopify',
+  'caseStudies',
+  'resources',
+  'articles',
+  'company',
+  'merch',
+  'products',
+  'legal',
+]
+
+const CATEGORY_LABELS: Record<CategoryKey, { no: string; en: string }> = {
+  pages: { no: 'Sider', en: 'Pages' },
+  company: { no: 'Selskapet', en: 'Company' },
+  services: { no: 'Tjenester', en: 'Services' },
+  integrations: { no: 'Integrasjoner', en: 'Integrations' },
+  shopify: { no: 'Shopify', en: 'Shopify' },
+  resources: { no: 'Ressurser', en: 'Resources' },
+  articles: { no: 'Artikler', en: 'Articles' },
+  caseStudies: { no: 'Kundecaser', en: 'Case studies' },
+  legal: { no: 'Juridisk', en: 'Legal' },
+  merch: { no: 'Merch', en: 'Merch' },
+  products: { no: 'Produkter', en: 'Products' },
+}
+
+const PAGE_TYPE_CATEGORY: Record<string, CategoryKey> = {
+  landingPage: 'pages',
+  aboutPage: 'company',
+  contactPage: 'company',
+  workPage: 'company',
+  partnersPage: 'company',
+  blogPage: 'resources',
+  allPackagesPage: 'services',
+  packageDetailPage: 'services',
+  migratePage: 'services',
+  shopifyDevelopmentPage: 'services',
+  shopifyPosPage: 'shopify',
+  shopifyPosInfoPage: 'shopify',
+  shopifyXAiPage: 'shopify',
+  shopifyXPimPage: 'shopify',
+  whyShopifyPage: 'shopify',
+  shopifyPlatformPage: 'shopify',
+  vippsHurtigkassePage: 'shopify',
+  shopifyTcoCalculatorPage: 'shopify',
+  merchPage: 'merch',
+  shopifyProduct: 'products',
+  // Template-driven pages behind the new IA's /integrasjoner/* and /tjenester/* hubs
+  pillarPage: 'integrations',
+  integrationPage: 'integrations',
+  migrationPage: 'integrations',
+  legalPage: 'legal',
+  // `post` is the current article type; `blogPost` is the legacy one
+  post: 'articles',
+  blogPost: 'articles',
+  caseStudy: 'caseStudies',
+}
+
+const UI_COPY = {
+  no: {
+    heading: 'Nettstedskart',
+    intro: 'En komplett oversikt over alle sidene på nettstedet vårt.',
+    empty: 'Fant ingen sider.',
+  },
+  en: {
+    heading: 'Sitemap',
+    intro: 'A complete overview of all pages on our website.',
+    empty: 'No pages found.',
+  },
+} as const
+
+function copyFor(language: string) {
+  return language === 'no' ? UI_COPY.no : UI_COPY.en
+}
+
+function labelFor(key: CategoryKey, language: string): string {
+  const label = CATEGORY_LABELS[key]
+  return language === 'no' ? label.no : label.en
 }
 
 function groupByCategory(
   pages: SitemapEntry[],
   blogPosts: SitemapEntry[],
-  products: SitemapEntry[]
+  products: SitemapEntry[],
+  language: string
 ): SitemapCategory[] {
-  const categoryMap = new Map<string, SitemapEntry[]>()
+  const categoryMap = new Map<CategoryKey, SitemapEntry[]>()
 
-  const categoryOrder = [
-    'Pages',
-    'Company',
-    'Services',
-    'Shopify',
-    'Resources',
-    'Blog Articles',
-    'Merch',
-    'Products',
-  ]
-
-  for (const page of pages) {
-    const category = PAGE_TYPE_CATEGORY[page._type] || 'Pages'
+  for (const entry of [...pages, ...blogPosts, ...products]) {
+    const category = PAGE_TYPE_CATEGORY[entry._type] || 'pages'
     if (!categoryMap.has(category)) categoryMap.set(category, [])
-    categoryMap.get(category)!.push(page)
+    categoryMap.get(category)!.push(entry)
   }
 
-  if (blogPosts.length > 0) {
-    categoryMap.set('Blog Articles', blogPosts)
-  }
-
-  if (products.length > 0) {
-    categoryMap.set('Products', products)
-  }
-
-  return categoryOrder
-    .filter((cat) => categoryMap.has(cat))
-    .map((cat) => ({ label: cat, entries: categoryMap.get(cat)! }))
+  return CATEGORY_ORDER.filter((key) => categoryMap.has(key)).map((key) => ({
+    key,
+    label: labelFor(key, language),
+    entries: categoryMap.get(key)!,
+  }))
 }
 
 function getPageHref(entry: SitemapEntry, language: string): string {
@@ -90,9 +147,15 @@ function getPageHref(entry: SitemapEntry, language: string): string {
 }
 
 /** Human-readable sitemap: useful for visitors, but must not compete with real pages (Task 5.4). */
-export async function generateMetadata(): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ lang: string }>
+}): Promise<Metadata> {
+  const { lang } = await params
+  const language = getLanguageFromParams({ lang })
   return {
-    title: 'Sitemap | scandicommerce',
+    title: `${copyFor(language).heading} | scandicommerce`,
     robots: { index: false, follow: true },
   }
 }
@@ -127,7 +190,8 @@ export default async function SitemapPage({
       slug: p.handle,
     }))
 
-  const categories = groupByCategory(pages || [], blogPosts || [], productEntries)
+  const copy = copyFor(language)
+  const categories = groupByCategory(pages || [], blogPosts || [], productEntries, language)
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -137,10 +201,10 @@ export default async function SitemapPage({
           <div className="max-w-4xl mx-auto">
             <div className="mb-12 sm:mb-16">
               <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
-                Sitemap
+                {copy.heading}
               </h1>
               <p className="text-gray-500 text-base sm:text-lg">
-                A complete overview of all pages on our website.
+                {copy.intro}
               </p>
               <div className="mt-4 h-1 w-16 bg-teal rounded-full" />
             </div>
@@ -169,7 +233,7 @@ export default async function SitemapPage({
 
             <div className="grid gap-10 sm:gap-12">
               {categories.map((category) => (
-                <div key={category.label}>
+                <div key={category.key}>
                   <h2 className="text-xl sm:text-2xl font-semibold text-gray-900 mb-1">
                     {category.label}
                   </h2>
@@ -195,7 +259,7 @@ export default async function SitemapPage({
 
             {categories.length === 0 && (
               <p className="text-gray-400 text-center py-12">
-                No pages found.
+                {copy.empty}
               </p>
             )}
           </div>

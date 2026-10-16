@@ -2774,26 +2774,20 @@ export const headerSettingsQuery = groq`
   *[_type == "headerSettings" && (language == $language || !defined(language))] | order(defined(language) desc) [0] {
     _id,
     settingsTitle,
-    servicesMenu {
-      label,
-      items[] {
-        label,
-        href,
-        "slug": page->slug.current
-      }
-    },
-    shopifyMenu {
-      label,
-      items[] {
-        label,
-        href,
-        "slug": page->slug.current
-      }
-    },
-    mainNavLinks[] {
+    menu[] {
       label,
       href,
-      "slug": page->slug.current
+      "slug": page->slug.current,
+      columns[] {
+        title,
+        items[] {
+          label,
+          href,
+          description,
+          indent,
+          "slug": page->slug.current
+        }
+      }
     },
     ctaButton {
       label,
@@ -2968,7 +2962,11 @@ export const sitemapPagesQuery = groq`
     "shopifyTcoCalculatorPage",
     "shopifyDevelopmentPage",
     "merchPage",
-    "packageDetailPage"
+    "packageDetailPage",
+    "pillarPage",
+    "integrationPage",
+    "migrationPage",
+    "legalPage"
   ] && defined(slug.current) && (language == $language || !defined(language))] | order(pageTitle asc) {
     _type,
     "title": pageTitle,
@@ -2976,8 +2974,10 @@ export const sitemapPagesQuery = groq`
   }
 `;
 
+// Articles and case studies. `post` is the current article type; `blogPost` is the
+// legacy one still holding a handful of documents, so the human sitemap lists both.
 export const sitemapBlogPostsQuery = groq`
-  *[_type == "blogPost" && defined(slug.current) && (language == $language || !defined(language))] | order(title asc) {
+  *[_type in ["post", "blogPost", "caseStudy"] && defined(slug.current) && (language == $language || !defined(language))] | order(title asc) {
     _type,
     title,
     "slug": slug.current

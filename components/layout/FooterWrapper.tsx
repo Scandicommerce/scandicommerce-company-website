@@ -50,7 +50,7 @@ export default async function FooterWrapper() {
   return (
     <>
       <RelatedPages />
-      <Footer settings={settings} />
+      <Footer settings={settings} language={language} />
     </>
   )
 }
