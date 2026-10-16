@@ -1626,13 +1626,18 @@ export const workPageQuery = groq`
       _type,
       _key,
       _type == "workPageHeroSection" => {
+        eyebrow,
         heroTitle {
           text,
           highlight
         },
-        heroDescription
+        heroDescription,
+        hideJumpLinks
       },
       _type == "workPageCaseStudiesSection" => {
+        eyebrow,
+        heading,
+        intro,
         ctaText,
         studies[] {
           title,
@@ -1676,7 +1681,10 @@ export const workPageQuery = groq`
         title,
         description,
         buttonText,
-        buttonLink
+        buttonLink,
+        secondaryButtonText,
+        secondaryButtonLink,
+        hideSecondaryButton
       }
     },
     hero {

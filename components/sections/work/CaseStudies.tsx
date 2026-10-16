@@ -1,6 +1,15 @@
 import CaseStudy, { type CaseItem } from './CaseStudy'
 import type { CaseCard } from './CaseStudiesGrid'
 import { hrefFor } from '@/lib/routes'
+import { ui } from '@/components/integrations/labels'
+
+const READ_MORE: Record<string, string> = {
+  no: 'Les hele casen',
+  en: 'Read the full case',
+  sv: 'Läs hela caset',
+  da: 'Læs hele casen',
+  de: 'Ganzes Projekt lesen',
+}
 
 interface Study {
   title?: string
@@ -16,6 +25,9 @@ interface Study {
 }
 
 export interface CaseStudiesData {
+  eyebrow?: string
+  heading?: string
+  intro?: string
   ctaText?: string
   studies?: Study[]
 }
@@ -121,11 +133,19 @@ export function buildCaseItems(caseStudies: CaseStudiesData | undefined, allCase
 
 export default function CaseStudies({ caseStudies, items, lang }: CaseStudiesProps) {
   if (items.length === 0) return null
-  const ctaText = caseStudies?.ctaText || 'Les hele casen'
+  const ctaText = caseStudies?.ctaText || READ_MORE[lang] || READ_MORE.en
+  const hasIntro = Boolean(caseStudies?.heading || caseStudies?.intro)
 
   return (
-    <section className="bg-white py-10 lg:py-12">
-      <div className="section_container mx-auto page-padding-x flex flex-col gap-4 lg:gap-6">
+    <section className="bg-white py-16 lg:py-20">
+      <div className={`${ui.container} flex flex-col gap-6`}>
+        {hasIntro && (
+          <div className="mb-4 flex max-w-[680px] flex-col gap-2.5">
+            {caseStudies?.eyebrow && <div className={ui.eyebrow}>{caseStudies.eyebrow}</div>}
+            {caseStudies?.heading && <h2 className={ui.h2}>{caseStudies.heading}</h2>}
+            {caseStudies?.intro && <p className="m-0 text-lg leading-relaxed text-sc-ink-600">{caseStudies.intro}</p>}
+          </div>
+        )}
         {items.map((item, index) => (
           <CaseStudy key={item.id} item={item} reverse={index % 2 === 1} ctaText={ctaText} lang={lang} />
         ))}

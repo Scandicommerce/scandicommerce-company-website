@@ -13,6 +13,12 @@ export const workPageHeroSection = defineType({
   type: "object",
   fields: [
     defineField({
+      name: "eyebrow",
+      title: "Eyebrow",
+      type: "string",
+      description: "Small label above the title. Defaults to 'Kundecaser' / 'Case studies' in the page language.",
+    }),
+    defineField({
       name: "heroTitle",
       title: "Hero Title",
       type: "object",
@@ -27,6 +33,13 @@ export const workPageHeroSection = defineType({
       ],
     }),
     defineField({ name: "heroDescription", title: "Hero Description", type: "text", rows: 3 }),
+    defineField({
+      name: "hideJumpLinks",
+      title: "Hide jump links",
+      type: "boolean",
+      initialValue: false,
+      description: "The hero shows one chip per case that scrolls to it. Turn on to hide them.",
+    }),
   ],
   preview: {
     select: { t: "heroTitle.text" },
@@ -41,7 +54,10 @@ export const workPageCaseStudiesSection = defineType({
   title: "Case studies",
   type: "object",
   fields: [
-    defineField({ name: "ctaText", title: "Case Study Link Text", type: "string", description: "e.g. 'Les hele case studien' or 'Read full case study'" }),
+    defineField({ name: "eyebrow", title: "Eyebrow", type: "string", description: "Optional small label above the list heading." }),
+    defineField({ name: "heading", title: "Heading", type: "string", description: "Optional heading above the case cards." }),
+    defineField({ name: "intro", title: "Intro", type: "text", rows: 2, description: "Optional short paragraph under the heading." }),
+    defineField({ name: "ctaText", title: "Case Study Link Text", type: "string", description: "Button on every card, e.g. 'Les hele casen'. Defaults per language." }),
     defineField({
       name: "studies",
       title: "Case Studies",
@@ -119,8 +135,11 @@ export const workPageCtaSection = defineType({
   fields: [
     defineField({ name: "title", title: "Title", type: "string" }),
     defineField({ name: "description", title: "Description", type: "text", rows: 2 }),
-    defineField({ name: "buttonText", title: "Button Text", type: "string" }),
+    defineField({ name: "buttonText", title: "Button Text", type: "string", description: "Primary button. Defaults to 'Book en samtale' linking to the contact page." }),
     defineField({ name: "buttonLink", title: "Button Link", type: "string" }),
+    defineField({ name: "secondaryButtonText", title: "Secondary Button Text", type: "string", description: "Defaults to 'Se pakkene' linking to the packages page." }),
+    defineField({ name: "secondaryButtonLink", title: "Secondary Button Link", type: "string" }),
+    defineField({ name: "hideSecondaryButton", title: "Hide secondary button", type: "boolean", initialValue: false }),
   ],
   preview: {
     select: { title: "title" },
