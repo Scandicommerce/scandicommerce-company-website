@@ -158,7 +158,7 @@ export const navigationNo: NavItem[] = [
     ],
   },
   { label: 'Agentisk handel', href: '/agentisk-handel', live: false },
-  { label: 'NexusPOS', href: '/nexuspos', live: false },
+  { label: 'NexusPOS', href: '/nexuspos' },
   { label: 'Kundecaser', href: '/kundecaser' },
 ]
 
@@ -201,8 +201,8 @@ export const footerColumnsNo: FooterColumn[] = [
   {
     title: 'Juridisk',
     links: [
-      { label: 'Personvern og cookies', href: '/personvern', live: false },
-      { label: 'App-personvern', href: '/app-privacy-policy', live: false },
+      { label: 'Personvern og cookies', href: '/legal/personvern' },
+      { label: 'App-personvern', href: '/legal/app-privacy-policy' },
       { label: 'Nettstedskart', href: '/sitemap' },
     ],
   },

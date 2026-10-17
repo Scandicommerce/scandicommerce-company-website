@@ -64,12 +64,11 @@ const defaultBottomSection = {
   badgeText: 'Shopify Plus Partner',
   orgNumber: 'Org.nr: 123 456 789',
   legalLinks: [
-    { label: 'Privacy Policy', href: '/privacy', slug: null },
-    { label: 'Terms', href: '/terms', slug: null },
-    { label: 'Cookies', href: '/cookies', slug: null },
+    { label: 'Personvern', href: '/legal/personvern', slug: null },
+    { label: 'App-personvern', href: '/legal/app-privacy-policy', slug: null },
     { label: 'Sitemap', href: '/sitemap', slug: null },
   ] as FooterLink[],
-  copyrightText: '© 2025 ScandiCommerce. All rights reserved.',
+  copyrightText: '© 2026 Scandicommerce. All rights reserved.',
 }
 
 // Social icon mapping

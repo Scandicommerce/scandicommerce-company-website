@@ -1,7 +1,2 @@
-export { default as Logo } from './Logo'
-export { default as SocialIcons } from './SocialIcons'
-export { default as ServiceCard } from './ServiceCard'
 export { default as LiquidBlob } from './LiquidBlob'
 export { default as Button } from './Button'
-export { ScrollAnimation, StaggerContainer, StaggerItem, Parallax, Counter } from './ScrollAnimation'
-export { FloatingElement, FloatingCircles, FloatingDots, GradientOrb, MovingLine, PulsingElement } from './FloatingElements'
