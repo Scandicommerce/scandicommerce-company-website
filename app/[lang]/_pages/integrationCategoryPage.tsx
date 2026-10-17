@@ -48,7 +48,7 @@ export default async function IntegrationCategoryPage({ params }: { params: Prom
           <div className="mt-5 flex max-w-[880px] flex-col gap-5">
             <div className={ui.eyebrow}>{doc.title}</div>
             <h1 className="text-[40px] font-bold leading-[1.02] tracking-[-0.028em] lg:text-[56px]">
-              {l === 'no' ? `${doc.title} for Shopify` : `${doc.title} for Shopify`}
+              {`${doc.title} ${t.forShopify}`}
             </h1>
             {doc.definition && <p className="text-lg leading-7 text-sc-ink-600">{doc.definition}</p>}
             {Array.isArray(doc.intro) && doc.intro.length > 0 && (

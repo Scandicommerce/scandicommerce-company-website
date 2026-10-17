@@ -76,7 +76,7 @@ export default function IntegrationGrid({
           <IntegrationCard key={item._id} item={item} language={language} />
         ))}
       </div>
-      {visible.length === 0 && <p className="text-sc-ink-500">{l === 'no' ? 'Ingen treff.' : 'No matches.'}</p>}
+      {visible.length === 0 && <p className="text-sc-ink-500">{({ no: 'Ingen treff.', en: 'No matches.', sv: 'Inga träffar.', da: 'Ingen resultater.', de: 'Keine Treffer.' } as Record<string, string>)[l]}</p>}
     </div>
   )
 }

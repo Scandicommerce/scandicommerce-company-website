@@ -326,7 +326,7 @@ const svId = (id: string) => {
   return undefined
 }
 const weak = (r: Doc) => { const ref = svId(r._ref); return ref ? { ...r, _type: 'reference', _ref: ref, _weak: true } : undefined }
-const weakAll = (rs: Doc[]) => rs.map(weak).filter((r): r is Doc => Boolean(r))
+const weakAll = (rs: Doc[]) => rs.map(weak).filter((r): r is NonNullable<typeof r> => Boolean(r))
 const words = (s: string) => s.trim().split(/\s+/).length
 
 function buildSv(no: Doc): Doc {
