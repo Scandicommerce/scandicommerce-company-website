@@ -18,6 +18,8 @@ export type ResolvedPage = {
   slug?: string
   /** Canonical path (no leading slash, no locale prefix) for this document in this language. */
   canonicalPath: string
+  /** Set when the document only exists in another language; the route redirects there. */
+  language?: string
 } | null
 
 type Hit = { _type: string; _id: string; slug?: string } | null
@@ -52,7 +54,7 @@ async function findCaseStudy(slug: string, language: string): Promise<Hit> {
  * The returned `canonicalPath` lets the caller 308 when the request used a
  * legacy prefix, the wrong section, or different casing.
  */
-export async function resolvePageByPath(path: string, language: string): Promise<ResolvedPage> {
+async function resolveInLanguage(path: string, language: string): Promise<ResolvedPage> {
   const clean = trimSlashes(path)
   const segments = clean.split('/').filter(Boolean)
   if (segments.length === 0) return null
@@ -123,4 +125,18 @@ export async function resolvePageByPath(path: string, language: string): Promise
   }
 
   return null
+}
+
+/**
+ * Resolve in the requested language first. Articles and case studies are
+ * published in English, so a prefixed language (sv, da, de) without its own
+ * version resolves to the English document and the route redirects there.
+ */
+export async function resolvePageByPath(path: string, language: string): Promise<ResolvedPage> {
+  const own = await resolveInLanguage(path, language)
+  if (own || ['no', 'en'].includes(language)) return own
+  const { kind } = classifyPath(trimSlashes(path), language)
+  if (kind !== 'article' && kind !== 'case' && kind !== 'legacy-article') return null
+  const en = await resolveInLanguage(path, 'en')
+  return en ? { ...en, language: 'en' } : null
 }

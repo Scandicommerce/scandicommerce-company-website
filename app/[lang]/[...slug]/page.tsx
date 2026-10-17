@@ -80,6 +80,9 @@ const PAGE_COMPONENTS: Record<string, PageComponent> = {
  */
 function redirectIfNotCanonical(path: string, language: string, resolved: NonNullable<ResolvedPage>): void {
   const requested = trimSlashes(path)
+  if (resolved.language && resolved.language !== language) {
+    permanentRedirect(publicPath(resolved.language, resolved.canonicalPath))
+  }
   if (requested !== resolved.canonicalPath) {
     permanentRedirect(publicPath(language, resolved.canonicalPath))
   }
