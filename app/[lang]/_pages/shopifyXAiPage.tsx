@@ -12,14 +12,6 @@ interface ShopifyXAiPageData {
   pageTitle: string
   slug: string
   sections?: Array<{ _type: string; _key: string } & Record<string, unknown>>
-  hero?: Record<string, unknown>
-  enhancingWithAi?: Record<string, unknown>
-  howWeLeverageAi?: Record<string, unknown>
-  aiToolsToolkit?: Record<string, unknown>
-  howWeApplyAi?: Record<string, unknown>
-  aiEnhancedProcess?: Record<string, unknown>
-  faq?: Record<string, unknown>
-  cta?: Record<string, unknown>
 }
 
 export default async function ShopifyXAiPage({ params }: { params: Promise<{ lang: string; slug?: string }> }) {

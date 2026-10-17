@@ -12,12 +12,6 @@ interface VippsHurtigkassePageData {
   pageTitle: string
   slug: string
   sections?: Array<{ _type: string; _key: string } & Record<string, unknown>>
-  hero?: Record<string, unknown>
-  features?: Record<string, unknown>
-  howToGetStarted?: Record<string, unknown>
-  pricing?: Record<string, unknown>
-  orderForm?: Record<string, unknown>
-  support?: Record<string, unknown>
 }
 
 export default async function VippsHurtigkassePage({ params }: { params: Promise<{ lang: string; slug?: string }> }) {

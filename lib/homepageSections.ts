@@ -1,5 +1,5 @@
 /**
- * Homepage / landing page section blocks from Sanity (page builder array or legacy root fields).
+ * Homepage / landing page section blocks from Sanity (`sections[]` page builder array).
  */
 
 export type HomepageSectionBlock =
@@ -128,56 +128,11 @@ export interface TechnicalDepthPayload {
 
 export interface HomepageFromSanity {
   sections?: HomepageSectionBlock[] | null
-  hero?: HomepageHeroPayload | null
-  trustedBy?: HomepageTrustedByPayload | null
-  painPoints?: HomepagePainPointsPayload | null
-  servicesShowcase?: HomepageServicesShowcasePayload | null
-  results?: HomepageResultsPayload | null
-  process?: HomepageProcessPayload | null
-  partners?: HomepagePartnersPayload | null
-  cta?: HomepageCtaPayload | null
 }
 
-function block<T extends Record<string, unknown>>(
-  _type: HomepageSectionBlock["_type"],
-  _key: string,
-  payload: T
-): HomepageSectionBlock {
-  return { _type, _key, ...payload } as HomepageSectionBlock
-}
-
-/** Prefer `sections` when present; otherwise build ordered blocks from legacy root fields. */
+/** Typed `sections[]` reader; malformed entries are dropped. */
 export function normalizeHomepageSections(page: HomepageFromSanity | null | undefined): HomepageSectionBlock[] {
-  if (!page) return []
-  const raw = page.sections
-  if (Array.isArray(raw) && raw.length > 0) {
-    return raw.filter((s): s is HomepageSectionBlock => Boolean(s && typeof s === "object" && "_type" in s))
-  }
-
-  const out: HomepageSectionBlock[] = []
-  if (page.hero && Object.keys(page.hero).length > 0) {
-    out.push(block("heroSection", "legacy-hero", page.hero as Record<string, unknown>))
-  }
-  if (page.trustedBy && Object.keys(page.trustedBy).length > 0) {
-    out.push(block("trustedBySection", "legacy-trustedBy", page.trustedBy as Record<string, unknown>))
-  }
-  if (page.painPoints && Object.keys(page.painPoints).length > 0) {
-    out.push(block("painPointsSection", "legacy-painPoints", page.painPoints as Record<string, unknown>))
-  }
-  if (page.servicesShowcase && Object.keys(page.servicesShowcase).length > 0) {
-    out.push(block("servicesShowcaseSection", "legacy-servicesShowcase", page.servicesShowcase as Record<string, unknown>))
-  }
-  if (page.results && Object.keys(page.results).length > 0) {
-    out.push(block("resultsSection", "legacy-results", page.results as Record<string, unknown>))
-  }
-  if (page.process && Object.keys(page.process).length > 0) {
-    out.push(block("processSection", "legacy-process", page.process as Record<string, unknown>))
-  }
-  if (page.partners && Object.keys(page.partners).length > 0) {
-    out.push(block("partnersSection", "legacy-partners", page.partners as Record<string, unknown>))
-  }
-  if (page.cta && Object.keys(page.cta).length > 0) {
-    out.push(block("ctaSection", "legacy-cta", page.cta as Record<string, unknown>))
-  }
-  return out
+  const raw = page?.sections
+  if (!Array.isArray(raw)) return []
+  return raw.filter((s): s is HomepageSectionBlock => Boolean(s && typeof s === "object" && "_type" in s))
 }

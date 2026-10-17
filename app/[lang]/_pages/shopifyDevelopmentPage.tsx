@@ -12,12 +12,6 @@ interface ShopifyDevPageData {
   pageTitle: string
   slug: string
   sections?: Array<{ _type: string; _key: string } & Record<string, unknown>>
-  hero?: Record<string, unknown>
-  whyShopify?: Record<string, unknown>
-  scenarios?: Record<string, unknown>
-  howWeWork?: Record<string, unknown>
-  testimonial?: Record<string, unknown>
-  cta?: Record<string, unknown>
 }
 
 export default async function ShopifyDevelopmentPage({ params }: { params: Promise<{ lang: string; slug?: string }> }) {

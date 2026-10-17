@@ -16,24 +16,28 @@ interface PackageDetailPageData {
   pageTitle?: string
   slug?: string
   sections?: Array<{ _type: string; _key: string } & Record<string, unknown>>
+  seo?: { metaTitle?: string; metaDescription?: string }
+}
+
+/** Flat shape produced by mergePackageDetailPageData from the page's `sections[]`. */
+interface PackageDetailMerged {
   packageInfo?: { title?: string; subtitle?: string; price?: string; priceType?: string; timeline?: string; rating?: number; ratingValue?: string; reviewCount?: number; description?: string }
-  bestFor?: string[] | { bestFor?: string[] }
-  idealFor?: string[] | { idealFor?: string[] }
-  highlights?: string[] | { highlights?: string[] }
-  moreDeliverablesCount?: number | { moreDeliverablesCount?: number }
-  included?: string[] | { included?: string[] }
-  includedCategories?: { category?: string; items?: string[] }[] | { includedCategories?: { category?: string; items?: string[] }[] }
-  processSteps?: { week?: string; title?: string; description?: string }[] | { processSteps?: { week?: string; title?: string; description?: string }[] }
-  faq?: { question?: string; answer?: string }[] | { faq?: { question?: string; answer?: string }[] }
-  reviews?: { name?: string; rating?: number; comment?: string; title?: string }[] | { reviews?: { name?: string; rating?: number; comment?: string; title?: string }[] }
+  bestFor?: string[]
+  idealFor?: string[]
+  highlights?: string[]
+  moreDeliverablesCount?: number
+  included?: string[]
+  includedCategories?: { category?: string; items?: string[] }[]
+  processSteps?: { week?: string; title?: string; description?: string }[]
+  faq?: { question?: string; answer?: string }[]
+  reviews?: { name?: string; rating?: number; comment?: string; title?: string }[]
   tabLabels?: { overview?: string; whatsIncluded?: string; process?: string; faq?: string; reviews?: string; idealFor?: string; bestFor?: string }
   addOns?: { sectionTitle?: string; sectionSubtitle?: string; items?: { title?: string; description?: string; price?: string }[] }
   heroButtons?: { primaryButtonText?: string; primaryButtonLink?: string; secondaryButtonText?: string; secondaryButtonLink?: string }
   caseStudiesBanner?: { title?: string; description?: string; buttonText?: string; buttonLink?: string }
-  seo?: { metaTitle?: string; metaDescription?: string }
 }
 
-function sanityToPackage(sanityData: PackageDetailPageData, slug: string): Package {
+function sanityToPackage(sanityData: PackageDetailMerged, slug: string): Package {
   return {
     slug,
     title: sanityData.packageInfo?.title || '',
@@ -98,7 +102,7 @@ export default async function PackageDetailPage({ params }: { params: Promise<{ 
   const sections = normalizePageSections('packageDetailPage', raw)
 
   const mergedRecord = mergePackageDetailPageData(raw, sections)
-  const sanityData = mergedRecord as unknown as PackageDetailPageData
+  const sanityData = mergedRecord as PackageDetailMerged
 
   const pkg: Package = raw ? sanityToPackage(sanityData, slug) : staticPkg!
   if (staticPkg && raw) {

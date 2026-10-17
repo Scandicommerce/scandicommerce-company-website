@@ -1,9 +1,10 @@
-import { normalizeContactPageSections } from '@/lib/sanity/normalizeContactPageSections'
 import { normalizeDocumentSections, type SanitySectionItem } from '@/lib/sanity/normalizeDocumentSections'
-import { normalizeHomepageSections, type HomepageFromSanity } from '@/lib/homepageSections'
-import { normalizePackageDetailPageSections } from '@/lib/sanity/packageDetailPageSections'
 
-/** [legacyRootField, section block `_type`] — object fields are spread into the block unchanged. */
+/**
+ * [legacyRootField, section block `_type`] per page type.
+ * Documentation / migration reference only: the site reads `sections[]` exclusively.
+ * Consumed by scripts/sanity-unset-legacy-roots.ts to clear the old root objects in Sanity.
+ */
 export const LEGACY_OBJECT_PAIRS: Record<string, ReadonlyArray<readonly [string, string]>> = {
   workPage: [
     ['hero', 'workPageHeroSection'],
@@ -122,21 +123,10 @@ export type PageBuilderDocumentType =
   | 'packageDetailPage'
   | 'landingPage'
 
+/** Page-builder sections for a page document. `documentType` only documents the caller's page type. */
 export function normalizePageSections(
   documentType: PageBuilderDocumentType,
   doc: object | null | undefined
 ): SanitySectionItem[] {
-  if (!doc) return []
-  if (documentType === 'contactPage') {
-    return normalizeContactPageSections(doc as Record<string, unknown>)
-  }
-  if (documentType === 'packageDetailPage') {
-    return normalizePackageDetailPageSections(doc as Record<string, unknown>)
-  }
-  if (documentType === 'landingPage') {
-    return normalizeHomepageSections(doc as HomepageFromSanity) as unknown as SanitySectionItem[]
-  }
-  const pairs = LEGACY_OBJECT_PAIRS[documentType]
-  if (!pairs) return []
-  return normalizeDocumentSections(doc, pairs.map(([key, type]) => ({ key, type })))
+  return normalizeDocumentSections(doc)
 }

@@ -12,10 +12,6 @@ interface BlogPageData {
   pageTitle?: string
   slug?: string
   sections?: Array<{ _type: string; _key: string } & Record<string, unknown>>
-  hero?: Record<string, unknown>
-  featuredArticle?: Record<string, unknown>
-  articlesGrid?: Record<string, unknown>
-  newsletterCta?: Record<string, unknown>
 }
 
 export default async function BlogPage({ params }: { params: Promise<{ lang: string; slug?: string }> }) {

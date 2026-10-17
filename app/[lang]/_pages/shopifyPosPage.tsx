@@ -12,10 +12,6 @@ interface ShopifyPosPageData {
   pageTitle: string
   slug: string
   sections?: Array<{ _type: string; _key: string } & Record<string, unknown>>
-  hero?: Record<string, unknown>
-  features?: Record<string, unknown>
-  perfectFor?: Record<string, unknown>
-  cta?: Record<string, unknown>
 }
 
 export default async function ShopifyPosPage({ params }: { params: Promise<{ lang: string; slug?: string }> }) {

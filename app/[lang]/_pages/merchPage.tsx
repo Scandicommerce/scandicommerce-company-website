@@ -14,9 +14,6 @@ interface MerchPageData {
   pageTitle?: string
   slug?: string
   sections?: Array<{ _type: string; _key: string } & Record<string, unknown>>
-  hero?: Record<string, unknown>
-  qualityShowcase?: Record<string, unknown>
-  newsletter?: Record<string, unknown>
 }
 
 export default async function MerchPage({ params }: { params: Promise<{ lang: string; slug?: string }> }) {

@@ -1,59 +1,13 @@
 import type { SanitySectionItem } from '@/lib/sanity/normalizeDocumentSections'
 
-/** Normalizes legacy wrapper objects and merges `sections[]` into flat package detail shape for sanityToPackage. */
+/** Flattens `sections[]` blocks onto the page document into the shape sanityToPackage reads. */
 export function mergePackageDetailPageData(
   pageData: object | null | undefined,
   sections: SanitySectionItem[]
 ): Record<string, unknown> {
   const base = { ...((pageData as Record<string, unknown> | null | undefined) ?? {}) }
 
-  const strArr = (v: unknown, inner: string): string[] | undefined => {
-    if (v == null) return undefined
-    if (Array.isArray(v)) return v as string[]
-    if (typeof v === 'object' && inner in (v as object)) {
-      const x = (v as Record<string, unknown>)[inner]
-      return Array.isArray(x) ? (x as string[]) : undefined
-    }
-    return undefined
-  }
-
-  const numField = (v: unknown, inner: string): number | undefined => {
-    if (v == null) return undefined
-    if (typeof v === 'number') return v
-    if (typeof v === 'object' && inner in (v as object)) {
-      const x = (v as Record<string, unknown>)[inner]
-      return typeof x === 'number' ? x : undefined
-    }
-    return undefined
-  }
-
-  const arrField = <T>(v: unknown, inner: string): T[] | undefined => {
-    if (v == null) return undefined
-    if (Array.isArray(v)) return v as T[]
-    if (typeof v === 'object' && inner in (v as object)) {
-      const x = (v as Record<string, unknown>)[inner]
-      return Array.isArray(x) ? (x as T[]) : undefined
-    }
-    return undefined
-  }
-
-  const out: Record<string, unknown> = {
-    ...base,
-    bestFor: strArr(base.bestFor, 'bestFor') ?? base.bestFor,
-    idealFor: strArr(base.idealFor, 'idealFor') ?? base.idealFor,
-    highlights: strArr(base.highlights, 'highlights') ?? base.highlights,
-    included: strArr(base.included, 'included') ?? base.included,
-    moreDeliverablesCount: numField(base.moreDeliverablesCount, 'moreDeliverablesCount') ?? base.moreDeliverablesCount,
-    includedCategories:
-      arrField<{ category?: string; items?: string[] }>(base.includedCategories, 'includedCategories') ??
-      base.includedCategories,
-    processSteps:
-      arrField<{ week?: string; title?: string; description?: string }>(base.processSteps, 'processSteps') ??
-      base.processSteps,
-    faq: arrField<{ question?: string; answer?: string }>(base.faq, 'faq') ?? base.faq,
-    reviews: arrField<{ name?: string; rating?: number; comment?: string; title?: string }>(base.reviews, 'reviews') ??
-      base.reviews,
-  }
+  const out: Record<string, unknown> = { ...base }
 
   for (const s of sections) {
     const { _type, _key, ...rest } = s

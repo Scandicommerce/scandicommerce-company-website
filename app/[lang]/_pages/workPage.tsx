@@ -14,21 +14,6 @@ interface WorkPageData {
   pageTitle?: string
   slug?: string
   sections?: Array<{ _type: string; _key: string } & Record<string, unknown>>
-  hero?: { heroTitle?: { text?: string; highlight?: string }; heroDescription?: string }
-  caseStudies?: {
-    studies?: {
-      title?: string
-      category?: string
-      tags?: string[]
-      challenge?: string | unknown[]
-      solution?: string | unknown[]
-      results?: { value?: string; label?: string }[]
-      imageUrl?: string
-      imageAlt?: string
-      link?: string
-    }[]
-  }
-  cta?: { title?: string; description?: string; buttonText?: string; buttonLink?: string }
   seo?: { metaTitle?: string; metaDescription?: string }
 }
 

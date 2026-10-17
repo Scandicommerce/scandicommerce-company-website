@@ -12,13 +12,6 @@ interface WhyShopifyPageData {
   pageTitle: string
   slug: string
   sections?: Array<{ _type: string; _key: string } & Record<string, unknown>>
-  hero?: Record<string, unknown>
-  whatIsShopify?: Record<string, unknown>
-  shopifyFacts?: Record<string, unknown>
-  whyBusinessesChoose?: Record<string, unknown>
-  whyScandicommerceSpecializes?: Record<string, unknown>
-  shopifyAi?: Record<string, unknown>
-  cta?: Record<string, unknown>
 }
 
 export default async function WhyShopifyPage({ params }: { params: Promise<{ lang: string; slug?: string }> }) {

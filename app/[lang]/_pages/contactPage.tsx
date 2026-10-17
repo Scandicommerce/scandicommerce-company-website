@@ -12,34 +12,6 @@ interface ContactPageData {
   pageTitle?: string
   slug?: string
   sections?: Array<{ _type: string; _key: string } & Record<string, unknown>>
-  hero?: { heroTitle?: { text?: string; highlight?: string }; heroDescription?: string }
-  contactCards?: {
-    cards?: { icon?: string; title?: string; subtitle?: string; detail?: string; href?: string }[]
-  }
-  bookingSection?: {
-    enabled?: boolean
-    useCalendly?: boolean
-    calendlySchedulingUrl?: string | null
-    label?: string
-    title?: string
-    description?: string
-    meetingTypes?: { title?: string; description?: string; durationMinutes?: number }[]
-    availableSlots?: { date?: string; times?: string[] }[]
-    confirmButtonText?: string
-  }
-  messageSection?: {
-    label?: string
-    title?: string
-    description?: string
-    submitButtonText?: string
-  }
-  benefits?: { icon?: string; text?: string }[]
-  mapSection?: { title?: string; description?: string }
-  faq?: {
-    title?: string
-    subtitle?: string
-    faqs?: { question?: string; answer?: string }[]
-  }
   seo?: { metaTitle?: string; metaDescription?: string }
 }
 
