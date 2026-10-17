@@ -17,7 +17,7 @@ import { Faq } from '@/components/integrations/LinkBlocks'
 import { getServicesOverview, serviceLang, type ServiceLang } from '@/lib/servicesDepth'
 
 /** Route path without language prefix, per language. */
-export const SERVICES_OVERVIEW_PATH: Record<ServiceLang, string> = { no: 'tjenester', en: 'services' }
+export const SERVICES_OVERVIEW_PATH: Record<ServiceLang, string> = { no: 'tjenester', en: 'services', sv: 'services', da: 'services', de: 'services' }
 
 /**
  * Illustration to the right of the heading. Set `src` to a file under
@@ -101,6 +101,78 @@ const COPY: Record<ServiceLang, OverviewCopy> = {
     ctaTitle: 'Know what you need?',
     ctaText: 'See the fixed-price packages, or book a meeting and we find the right solution together.',
   },
+  sv: {
+    metaTitle: 'Shopify-tjänster: ny butik, migrering, B2B och utveckling',
+    eyebrow: 'Tjänster',
+    title: 'Tjänster',
+    intro: 'Från ny butik eller migrering till Shopify, till integrerade B2B-portaler och skräddarsydd utveckling byggd för er verksamhet.',
+    bookMeeting: 'Boka möte',
+    allPackages: 'Se alla paket',
+    readMore: 'Läs mer →',
+    flowSteps: [
+      { from: 'Shopify', to: 'Ny butik', payload: 'ny butik' },
+      { from: 'Migrering', to: 'Shopify', payload: 'produkter + kunder' },
+      { from: 'Shopify', to: 'B2B', payload: 'orderportal' },
+      { from: 'Utveckling', to: 'Shopify', payload: 'skräddarsytt' },
+    ],
+    flowNodes: ['Ny butik', 'Migrering', 'B2B och orderportal', 'Utveckling'],
+    chooserEyebrow: 'Vad passar er',
+    chooserTitle: 'Börja med er situation',
+    chooserLead: 'Hitta raden som låter mest som ni. Är ni osäkra gör vi en kartläggning och rekommenderar.',
+    processEyebrow: 'Så arbetar vi',
+    processTitle: 'Samma tillvägagångssätt, oavsett leverans',
+    faqHeading: 'Vanliga frågor',
+    ctaTitle: 'Vet ni vad ni behöver?',
+    ctaText: 'Se paketen med fast pris, eller boka ett möte så hittar vi rätt lösning tillsammans.',
+  },
+  da: {
+    metaTitle: 'Shopify-ydelser: ny webshop, migrering, B2B og udvikling',
+    eyebrow: 'Ydelser',
+    title: 'Ydelser',
+    intro: 'Fra ny webshop eller migrering til Shopify, til integrerede B2B-portaler og skræddersyet udvikling bygget til jeres forretning.',
+    bookMeeting: 'Book møde',
+    allPackages: 'Se alle pakker',
+    readMore: 'Læs mere →',
+    flowSteps: [
+      { from: 'Shopify', to: 'Ny webshop', payload: 'ny webshop' },
+      { from: 'Migrering', to: 'Shopify', payload: 'produkter + kunder' },
+      { from: 'Shopify', to: 'B2B', payload: 'ordreportal' },
+      { from: 'Udvikling', to: 'Shopify', payload: 'skræddersyet' },
+    ],
+    flowNodes: ['Ny webshop', 'Migrering', 'B2B og ordreportal', 'Udvikling'],
+    chooserEyebrow: 'Hvad passer til jer',
+    chooserTitle: 'Start med jeres situation',
+    chooserLead: 'Find den linje, der ligner jer mest. Er I i tvivl, laver vi en afklaring og anbefaler.',
+    processEyebrow: 'Sådan arbejder vi',
+    processTitle: 'Samme fremgangsmåde, uanset hvad vi leverer',
+    faqHeading: 'Ofte stillede spørgsmål',
+    ctaTitle: 'Ved I, hvad I har brug for?',
+    ctaText: 'Se pakkerne med fast pris, eller book et møde, så finder vi den rigtige løsning sammen.',
+  },
+  de: {
+    metaTitle: 'Shopify-Leistungen: neuer Shop, Migration, B2B und Entwicklung',
+    eyebrow: 'Leistungen',
+    title: 'Leistungen',
+    intro: 'Vom neuen Shop oder der Migration zu Shopify bis zu integrierten B2B-Portalen und individueller Entwicklung für Ihr Unternehmen.',
+    bookMeeting: 'Termin vereinbaren',
+    allPackages: 'Alle Pakete ansehen',
+    readMore: 'Mehr erfahren →',
+    flowSteps: [
+      { from: 'Shopify', to: 'Neuer Shop', payload: 'neuer Shop' },
+      { from: 'Migration', to: 'Shopify', payload: 'Produkte + Kunden' },
+      { from: 'Shopify', to: 'B2B', payload: 'Bestellportal' },
+      { from: 'Entwicklung', to: 'Shopify', payload: 'Individualisierung' },
+    ],
+    flowNodes: ['Neuer Shop', 'Migration', 'B2B und Bestellportal', 'Entwicklung'],
+    chooserEyebrow: 'Was zu Ihnen passt',
+    chooserTitle: 'Starten Sie mit Ihrer Situation',
+    chooserLead: 'Finden Sie die Zeile, die am ehesten auf Sie zutrifft. Wenn Sie unsicher sind, machen wir eine Analyse und sprechen eine Empfehlung aus.',
+    processEyebrow: 'So arbeiten wir',
+    processTitle: 'Dieselbe Vorgehensweise, egal was wir liefern',
+    faqHeading: 'Häufige Fragen',
+    ctaTitle: 'Wissen Sie, was Sie brauchen?',
+    ctaText: 'Sehen Sie sich die Festpreispakete an, oder vereinbaren Sie einen Termin und wir finden gemeinsam die richtige Lösung.',
+  },
 }
 
 /**
@@ -139,7 +211,8 @@ interface Teaser {
 
 /**
  * English sub-pages. The English menu has no Leveranser column, so this list
- * is the source of truth for the cards on /services.
+ * is the source of truth for the cards on /services. Swedish, Danish and
+ * German share the English routes and get their own copy below.
  */
 const TEASERS_EN: Teaser[] = [
   {
@@ -168,6 +241,90 @@ const TEASERS_EN: Teaser[] = [
   },
 ]
 
+const TEASERS_SV: Teaser[] = [
+  {
+    label: 'Ny Shopify-butik',
+    href: '/services/shopify',
+    description: 'En ny butik på Shopify eller Shopify Plus, från design och uppsättning till lansering. Fast pris och tydlig omfattning.',
+    Icon: ICONS['services/shopify'],
+  },
+  {
+    label: 'Migrering till Shopify',
+    href: '/services/migrate',
+    description: 'Flytta till Shopify utan risk. Vi migrerar produkter, kunder och ordrar, behåller era SEO-rankingar och undviker driftstopp.',
+    Icon: ICONS['services/migrate'],
+  },
+  {
+    label: 'B2B och orderportal',
+    href: '/services/b2b',
+    description: 'En orderportal och B2B-handel på Shopify: kundspecifika priser, självbetjänad beställning och köp mot faktura.',
+    Icon: ICONS['services/b2b'],
+  },
+  {
+    label: 'Utveckling och skräddarsytt',
+    href: '/services/shopify-development',
+    description: 'Vi bygger er Shopify-butik eller arkitektur precis som ni vill ha den, oavsett om det är en konfigurator, appar, agenter eller ny funktionalitet, anpassat till er butik och affärsmodell.',
+    Icon: ICONS['services/shopify-development'],
+  },
+]
+
+const TEASERS_DA: Teaser[] = [
+  {
+    label: 'Ny Shopify-webshop',
+    href: '/services/shopify',
+    description: 'En ny webshop på Shopify eller Shopify Plus, fra design og opsætning til lancering. Fast pris og tydeligt omfang.',
+    Icon: ICONS['services/shopify'],
+  },
+  {
+    label: 'Migrering til Shopify',
+    href: '/services/migrate',
+    description: 'Flyt til Shopify uden risiko. Vi migrerer produkter, kunder og ordrer, bevarer jeres SEO-placeringer og undgår nedetid.',
+    Icon: ICONS['services/migrate'],
+  },
+  {
+    label: 'B2B og ordreportal',
+    href: '/services/b2b',
+    description: 'En ordreportal og B2B-handel på Shopify: kundespecifikke priser, selvbetjent bestilling og køb på faktura.',
+    Icon: ICONS['services/b2b'],
+  },
+  {
+    label: 'Udvikling og skræddersyet arbejde',
+    href: '/services/shopify-development',
+    description: 'Vi bygger jeres Shopify-webshop eller arkitektur præcis, som I vil have den, uanset om det er en konfigurator, apps, agenter eller ny funktionalitet, tilpasset jeres shop og forretningsmodel.',
+    Icon: ICONS['services/shopify-development'],
+  },
+]
+
+const TEASERS_DE: Teaser[] = [
+  {
+    label: 'Neuer Shopify-Shop',
+    href: '/services/shopify',
+    description: 'Ein neuer Shop auf Shopify oder Shopify Plus, von Design und Einrichtung bis zum Launch. Festpreis und klarer Umfang.',
+    Icon: ICONS['services/shopify'],
+  },
+  {
+    label: 'Migration zu Shopify',
+    href: '/services/migrate',
+    description: 'Wechseln Sie ohne Risiko zu Shopify. Wir migrieren Produkte, Kunden und Bestellungen, erhalten Ihre SEO-Rankings und vermeiden Ausfallzeiten.',
+    Icon: ICONS['services/migrate'],
+  },
+  {
+    label: 'B2B und Bestellportal',
+    href: '/services/b2b',
+    description: 'Ein Bestellportal und B2B-Handel auf Shopify: kundenspezifische Preise, Self-Service-Bestellung und Kauf auf Rechnung.',
+    Icon: ICONS['services/b2b'],
+  },
+  {
+    label: 'Entwicklung und Individualisierung',
+    href: '/services/shopify-development',
+    description: 'Wir bauen Ihren Shopify-Shop oder Ihre Architektur genau so, wie Sie es wollen, ob Konfigurator, Apps, Agenten oder neue Funktionen, zugeschnitten auf Ihren Shop und Ihr Geschäftsmodell.',
+    Icon: ICONS['services/shopify-development'],
+  },
+]
+
+/** Cards per language for the .com site; Norwegian builds its own from the menu. */
+const TEASERS_BY_LANG: Record<Exclude<ServiceLang, 'no'>, Teaser[]> = { en: TEASERS_EN, sv: TEASERS_SV, da: TEASERS_DA, de: TEASERS_DE }
+
 /**
  * The Leveranser column of the Tjenester menu, minus this page itself. The
  * menu is the single source of truth: adding or renaming a Leveranser item
@@ -191,8 +348,9 @@ async function loadTeaser(item: NavLink, language: string): Promise<Teaser> {
 }
 
 async function loadTeasers(language: string): Promise<Teaser[]> {
-  if (serviceLang(language) === 'no') return Promise.all(leveranserItems().map((item) => loadTeaser(item, language)))
-  return TEASERS_EN
+  const l = serviceLang(language)
+  if (l === 'no') return Promise.all(leveranserItems().map((item) => loadTeaser(item, language)))
+  return TEASERS_BY_LANG[l]
 }
 
 export async function servicesOverviewMetadata(language: string): Promise<Metadata> {

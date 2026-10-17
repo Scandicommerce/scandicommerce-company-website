@@ -13,7 +13,7 @@ import { client } from '@/sanity/lib/client'
 import { shopifyDevelopmentPageQuery } from '@/sanity/lib/queries'
 import { getQueryParams } from '@/sanity/lib/queryHelpers'
 
-export const DEVELOPMENT_PATH: Record<ServiceLang, string> = { no: 'tjenester/utvikling', en: 'services/shopify-development' }
+export const DEVELOPMENT_PATH: Record<ServiceLang, string> = { no: 'tjenester/utvikling', en: 'services/shopify-development', sv: 'services/shopify-development', da: 'services/shopify-development', de: 'services/shopify-development' }
 
 interface HeroButton {
   text: string
@@ -61,6 +61,48 @@ const COPY: Record<ServiceLang, Copy> = {
       { text: 'See the packages', link: '/services/all-packages', variant: 'secondary' },
     ],
   },
+  sv: {
+    hero: {
+      eyebrow: 'Utveckling och skräddarsytt',
+      title: 'Shopify, byggt precis som ni vill ha det',
+      highlight: 'precis som ni vill ha det',
+      description:
+        'Vi bygger er Shopify-butik eller arkitektur precis som ni vill ha den, oavsett om det är en konfigurator, appar, agenter eller ny funktionalitet – anpassat till er butik och affärsmodell.',
+      highlights: ['Konfiguratorer', 'Appar och integrationer', 'Agenter och AI'],
+    },
+    fallbackButtons: [
+      { text: 'Boka möte', link: '/contact', variant: 'primary' },
+      { text: 'Se paketen', link: '/services/all-packages', variant: 'secondary' },
+    ],
+  },
+  da: {
+    hero: {
+      eyebrow: 'Udvikling og skræddersyet arbejde',
+      title: 'Shopify, bygget præcis som I vil have det',
+      highlight: 'præcis som I vil have det',
+      description:
+        'Vi bygger jeres Shopify-webshop eller arkitektur præcis, som I vil have den, uanset om det er en konfigurator, apps, agenter eller ny funktionalitet – tilpasset jeres shop og forretningsmodel.',
+      highlights: ['Konfiguratorer', 'Apps og integrationer', 'Agenter og AI'],
+    },
+    fallbackButtons: [
+      { text: 'Book møde', link: '/contact', variant: 'primary' },
+      { text: 'Se pakkerne', link: '/services/all-packages', variant: 'secondary' },
+    ],
+  },
+  de: {
+    hero: {
+      eyebrow: 'Entwicklung und Individualisierung',
+      title: 'Shopify, genau so gebaut, wie Sie es wollen',
+      highlight: 'genau so gebaut, wie Sie es wollen',
+      description:
+        'Wir bauen Ihren Shopify-Shop oder Ihre Architektur genau so, wie Sie es wollen, ob Konfigurator, Apps, Agenten oder neue Funktionen – zugeschnitten auf Ihren Shop und Ihr Geschäftsmodell.',
+      highlights: ['Konfiguratoren', 'Apps und Integrationen', 'Agenten und KI'],
+    },
+    fallbackButtons: [
+      { text: 'Termin vereinbaren', link: '/contact', variant: 'primary' },
+      { text: 'Pakete ansehen', link: '/services/all-packages', variant: 'secondary' },
+    ],
+  },
 }
 
 interface ShopifyDevPageData {
@@ -82,8 +124,8 @@ async function fetchSections(language: string) {
 /** Sections for the page language; a language without its own document renders the English one. */
 async function loadSections(language: string) {
   const sections = await fetchSections(language)
-  if (sections.length > 0 || language === serviceLang(language)) return sections
-  return fetchSections(serviceLang(language))
+  if (sections.length > 0 || language === 'no' || language === 'en') return sections
+  return fetchSections('en')
 }
 
 export async function developmentMetadata(language: string): Promise<Metadata> {

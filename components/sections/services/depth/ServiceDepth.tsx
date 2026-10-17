@@ -6,7 +6,7 @@ import { sanityPageFetch } from '@/sanity/lib/fetch'
 import { INTEGRATION_CARD_PROJECTION } from '@/sanity/lib/templateQueries'
 import { serviceLang, type ServiceDepth as Depth, type ServiceLang } from '@/lib/servicesDepth'
 
-/** Fixed section labels. Norwegian is the original; every other language renders English. */
+/** Fixed section labels. Norwegian is the original; sv, da and de have their own, every other language renders English. */
 const LABELS: Record<ServiceLang, {
   deliverables: string
   scope: string
@@ -42,6 +42,42 @@ const LABELS: Record<ServiceLang, {
     allIntegrations: 'See all partners →',
     allIntegrationsHref: '/partners',
     readMore: 'Read more',
+  },
+  sv: {
+    deliverables: 'Leveranser',
+    scope: 'Omfattning:',
+    prerequisites: 'Förutsättningar',
+    prerequisitesLead: 'Ju mer som är klart, desto snabbare går det. Saknas något hjälper vi er att få det på plats.',
+    youBring: 'Ni har klart',
+    weHandle: 'Vi tar hand om',
+    integrations: 'Integrationer',
+    allIntegrations: 'Se alla partner →',
+    allIntegrationsHref: '/partners',
+    readMore: 'Läs mer',
+  },
+  da: {
+    deliverables: 'Leverancer',
+    scope: 'Omfang:',
+    prerequisites: 'Forudsætninger',
+    prerequisitesLead: 'Jo mere der er klar, jo hurtigere går det. Mangler der noget, hjælper vi med at få det på plads.',
+    youBring: 'I har klar',
+    weHandle: 'Vi tager os af',
+    integrations: 'Integrationer',
+    allIntegrations: 'Se alle partnere →',
+    allIntegrationsHref: '/partners',
+    readMore: 'Læs mere',
+  },
+  de: {
+    deliverables: 'Leistungen',
+    scope: 'Umfang:',
+    prerequisites: 'Voraussetzungen',
+    prerequisitesLead: 'Je mehr bereit ist, desto schneller geht es. Fehlt etwas, helfen wir Ihnen, es bereitzustellen.',
+    youBring: 'Das haben Sie bereit',
+    weHandle: 'Das übernehmen wir',
+    integrations: 'Integrationen',
+    allIntegrations: 'Alle Partner ansehen →',
+    allIntegrationsHref: '/partners',
+    readMore: 'Mehr erfahren',
   },
 }
 

@@ -13,7 +13,7 @@ import { getPageTeaserText } from '@/lib/pageTeaser'
 import { coalescePageSeo, getSiteSettings } from '@/lib/sanity/pageSeo'
 import { buildMetadata } from '@/lib/seo/buildMetadata'
 
-export const B2B_PATH: Record<ServiceLang, string> = { no: 'tjenester/b2b', en: 'services/b2b' }
+export const B2B_PATH: Record<ServiceLang, string> = { no: 'tjenester/b2b', en: 'services/b2b', sv: 'services/b2b', da: 'services/b2b', de: 'services/b2b' }
 
 interface Copy {
   metaTitle: string
@@ -140,6 +140,159 @@ const COPY: Record<ServiceLang, Copy> = {
       ctaTitle: 'Ready to let your customers order on their own?',
       ctaDescription: 'Tell us how you sell to businesses today, and we will show you what it could look like on Shopify.',
       ctaButtonText: 'Book a meeting',
+      ctaButtonLink: '/contact',
+    },
+  },
+  sv: {
+    metaTitle: 'B2B och orderportal på Shopify',
+    metaDescription:
+      'Orderportal och B2B-handel på Shopify: kundspecifika priser, självbetjänad beställning, köp mot faktura och ERP-integration.',
+    hero: {
+      eyebrow: 'B2B och orderportal',
+      title: 'B2B-handel och orderportal på Shopify',
+      highlight: 'orderportal',
+      description:
+        'Låt återförsäljare och företagskunder beställa själva – med sina egna priser, villkor och sortiment. Integrerat med ert ERP, och gärna i samma Shopify-butik som konsumentförsäljningen.',
+      buttons: [
+        { text: 'Boka möte', link: '/contact', variant: 'primary' },
+        { text: 'Se paket och priser', link: '/services/all-packages', variant: 'secondary' },
+      ],
+      highlights: ['Kundspecifika priser', 'Köp mot faktura', 'Integrerat med ERP'],
+    },
+    included: {
+      whyShopifyEyebrow: 'Det här får ni',
+      whyShopifyTitle: 'Det en orderportal måste klara',
+      whyShopifySubtitle: 'Allt era kunder behöver för att beställa själva, och allt ni behöver för att slippa hantera ordrar manuellt.',
+      whyShopifyFeatures: [
+        { icon: 'cart', title: 'Kundspecifika priser', description: 'Prislistor, rabatter och volympriser per kund eller kundgrupp, och ett sortiment anpassat till varje avtal.' },
+        { icon: 'chart', title: 'Självbetjänad beställning', description: 'Kunderna loggar in, ser lagersaldo och beställer eller ombeställer själva, när det passar dem.' },
+        { icon: 'shield', title: 'Faktura och villkor', description: 'Köp mot faktura med betalningsvillkor per kund, vid sidan av kort och Vipps.' },
+        { icon: 'uptime', title: 'Integrerat med ERP', description: 'Ordrar, kunder, priser och lager synkas med ert ERP-system, till exempel Tripletex eller 24SevenOffice.' },
+      ],
+    },
+    process: {
+      howWeWorkEyebrow: 'Process',
+      howWeWorkTitle: 'Så arbetar vi',
+      howWeWorkSteps: [
+        { number: 0, title: 'Kartläggning', description: 'Kundgrupper, prismodeller, villkor och vilka system som behöver prata med varandra.' },
+        { number: 1, title: 'Uppsättning', description: 'Företagskonton, prislistor och sortiment uppsatta i Shopify.' },
+        { number: 2, title: 'Integration', description: 'Koppling till ERP och lager, så att ordrar och priser alltid stämmer.' },
+        { number: 3, title: 'Lansering', description: 'Vi går live och hjälper er att få återförsäljarna in i portalen.' },
+      ],
+    },
+    caseStudy: {
+      href: '/blog/from-24nettbutikk-to-efficient-b2b-operations-on-shopify',
+      eyebrow: 'Kundcase',
+      fallbackTitle: 'Från 24Nettbutikk till effektiv B2B-drift på Shopify',
+      fallbackDescription: 'Hur vi flyttade ett norskt B2B-företag till Shopify Plus, med Tripletex-integration och prisroller.',
+      linkText: 'Läs caset',
+    },
+    cta: {
+      ctaTitle: 'Redo att låta kunderna beställa själva?',
+      ctaDescription: 'Berätta hur ni säljer till företag i dag, så visar vi hur det kan se ut på Shopify.',
+      ctaButtonText: 'Boka möte',
+      ctaButtonLink: '/contact',
+    },
+  },
+  da: {
+    metaTitle: 'B2B og ordreportal på Shopify',
+    metaDescription:
+      'Ordreportal og B2B-handel på Shopify: kundespecifikke priser, selvbetjent bestilling, køb på faktura og ERP-integration.',
+    hero: {
+      eyebrow: 'B2B og ordreportal',
+      title: 'B2B-handel og ordreportal på Shopify',
+      highlight: 'ordreportal',
+      description:
+        'Lad forhandlere og erhvervskunder bestille selv – med deres egne priser, betingelser og sortiment. Integreret med jeres ERP, og gerne i samme Shopify-shop som forbrugersalget.',
+      buttons: [
+        { text: 'Book møde', link: '/contact', variant: 'primary' },
+        { text: 'Se pakker og priser', link: '/services/all-packages', variant: 'secondary' },
+      ],
+      highlights: ['Kundespecifikke priser', 'Køb på faktura', 'Integreret med ERP'],
+    },
+    included: {
+      whyShopifyEyebrow: 'Det får I',
+      whyShopifyTitle: 'Det en ordreportal skal kunne',
+      whyShopifySubtitle: 'Alt jeres kunder skal bruge for at bestille selv, og alt I skal bruge for at slippe for manuelle ordrer.',
+      whyShopifyFeatures: [
+        { icon: 'cart', title: 'Kundespecifikke priser', description: 'Prislister, rabatter og mængdepriser per kunde eller kundegruppe, og et sortiment tilpasset hver aftale.' },
+        { icon: 'chart', title: 'Selvbetjent bestilling', description: 'Kunderne logger ind, ser lagerstatus og bestiller eller genbestiller selv, når det passer dem.' },
+        { icon: 'shield', title: 'Faktura og betingelser', description: 'Køb på faktura med betalingsbetingelser per kunde, ved siden af kort og Vipps.' },
+        { icon: 'uptime', title: 'Integreret med ERP', description: 'Ordrer, kunder, priser og lager synkroniseres med jeres ERP-system, for eksempel Tripletex eller 24SevenOffice.' },
+      ],
+    },
+    process: {
+      howWeWorkEyebrow: 'Proces',
+      howWeWorkTitle: 'Sådan arbejder vi',
+      howWeWorkSteps: [
+        { number: 0, title: 'Afklaring', description: 'Kundegrupper, prismodeller, betingelser og hvilke systemer der skal tale sammen.' },
+        { number: 1, title: 'Opsætning', description: 'Virksomhedskonti, prislister og sortiment sat op i Shopify.' },
+        { number: 2, title: 'Integration', description: 'Kobling til ERP og lager, så ordrer og priser altid stemmer.' },
+        { number: 3, title: 'Lancering', description: 'Vi går live og hjælper jer med at få forhandlerne over i portalen.' },
+      ],
+    },
+    caseStudy: {
+      href: '/blog/from-24nettbutikk-to-efficient-b2b-operations-on-shopify',
+      eyebrow: 'Kundecase',
+      fallbackTitle: 'Fra 24Nettbutikk til effektiv B2B-drift på Shopify',
+      fallbackDescription: 'Hvordan vi flyttede en norsk B2B-virksomhed til Shopify Plus, med Tripletex-integration og prisroller.',
+      linkText: 'Læs casen',
+    },
+    cta: {
+      ctaTitle: 'Klar til at lade kunderne bestille selv?',
+      ctaDescription: 'Fortæl os, hvordan I sælger til virksomheder i dag, så viser vi, hvordan det kan se ud på Shopify.',
+      ctaButtonText: 'Book møde',
+      ctaButtonLink: '/contact',
+    },
+  },
+  de: {
+    metaTitle: 'B2B und Bestellportal auf Shopify',
+    metaDescription:
+      'Bestellportal und B2B-Handel auf Shopify: kundenspezifische Preise, Self-Service-Bestellung, Kauf auf Rechnung und ERP-Integration.',
+    hero: {
+      eyebrow: 'B2B und Bestellportal',
+      title: 'B2B-Handel und Bestellportal auf Shopify',
+      highlight: 'Bestellportal',
+      description:
+        'Lassen Sie Händler und Geschäftskunden selbst bestellen – mit eigenen Preisen, Konditionen und Sortiment. Integriert mit Ihrem ERP, und gern im selben Shopify-Shop wie Ihr Endkundengeschäft.',
+      buttons: [
+        { text: 'Termin vereinbaren', link: '/contact', variant: 'primary' },
+        { text: 'Pakete und Preise ansehen', link: '/services/all-packages', variant: 'secondary' },
+      ],
+      highlights: ['Kundenspezifische Preise', 'Kauf auf Rechnung', 'Integriert mit ERP'],
+    },
+    included: {
+      whyShopifyEyebrow: 'Das bekommen Sie',
+      whyShopifyTitle: 'Was ein Bestellportal können muss',
+      whyShopifySubtitle: 'Alles, was Ihre Kunden brauchen, um selbst zu bestellen, und alles, was Sie brauchen, um Bestellungen nicht mehr manuell zu bearbeiten.',
+      whyShopifyFeatures: [
+        { icon: 'cart', title: 'Kundenspezifische Preise', description: 'Preislisten, Rabatte und Staffelpreise pro Kunde oder Kundengruppe, und ein Sortiment, zugeschnitten auf jede Vereinbarung.' },
+        { icon: 'chart', title: 'Self-Service-Bestellung', description: 'Kunden melden sich an, sehen Lagerbestände und bestellen oder bestellen nach, wann es ihnen passt.' },
+        { icon: 'shield', title: 'Rechnung und Konditionen', description: 'Kauf auf Rechnung mit Zahlungsbedingungen pro Kunde, neben Karte und Vipps.' },
+        { icon: 'uptime', title: 'Integriert mit ERP', description: 'Bestellungen, Kunden, Preise und Bestände werden mit Ihrem ERP synchronisiert, zum Beispiel Tripletex oder 24SevenOffice.' },
+      ],
+    },
+    process: {
+      howWeWorkEyebrow: 'Ablauf',
+      howWeWorkTitle: 'So arbeiten wir',
+      howWeWorkSteps: [
+        { number: 0, title: 'Analyse', description: 'Kundengruppen, Preismodelle, Konditionen und welche Systeme miteinander sprechen müssen.' },
+        { number: 1, title: 'Einrichtung', description: 'Firmenkonten, Preislisten und Sortiment in Shopify eingerichtet.' },
+        { number: 2, title: 'Integration', description: 'Anbindung an ERP und Lager, damit Bestellungen und Preise immer stimmen.' },
+        { number: 3, title: 'Launch', description: 'Wir gehen live und helfen Ihnen, Ihre Händler ins Portal zu holen.' },
+      ],
+    },
+    caseStudy: {
+      href: '/blog/from-24nettbutikk-to-efficient-b2b-operations-on-shopify',
+      eyebrow: 'Kundenprojekt',
+      fallbackTitle: 'Von 24Nettbutikk zu effizientem B2B-Betrieb auf Shopify',
+      fallbackDescription: 'Wie wir ein norwegisches B2B-Unternehmen zu Shopify Plus migriert haben, mit Tripletex-Integration und Preisrollen.',
+      linkText: 'Zum Projekt',
+    },
+    cta: {
+      ctaTitle: 'Bereit, Ihre Kunden selbst bestellen zu lassen?',
+      ctaDescription: 'Erzählen Sie uns, wie Sie heute an Unternehmen verkaufen, und wir zeigen Ihnen, wie das auf Shopify aussehen könnte.',
+      ctaButtonText: 'Termin vereinbaren',
       ctaButtonLink: '/contact',
     },
   },

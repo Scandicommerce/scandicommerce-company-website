@@ -13,7 +13,7 @@ import { client } from '@/sanity/lib/client'
 import { migratePageQuery } from '@/sanity/lib/queries'
 import { getQueryParams } from '@/sanity/lib/queryHelpers'
 
-export const MIGRATION_PATH: Record<ServiceLang, string> = { no: 'tjenester/migrering', en: 'services/migrate' }
+export const MIGRATION_PATH: Record<ServiceLang, string> = { no: 'tjenester/migrering', en: 'services/migrate', sv: 'services/migrate', da: 'services/migrate', de: 'services/migrate' }
 
 /**
  * The content lives in the `migratePage` document per language. The Norwegian
@@ -21,7 +21,7 @@ export const MIGRATION_PATH: Record<ServiceLang, string> = { no: 'tjenester/migr
  * `tjenester/migrering` in Studio is the last step of the move. The page loads
  * the document by type, so it keeps working before and after.
  */
-const SANITY_SLUG: Record<ServiceLang, string> = { no: 'tjenester/shopify-migrering', en: 'services/migrate' }
+const SANITY_SLUG: Record<ServiceLang, string> = { no: 'tjenester/shopify-migrering', en: 'services/migrate', sv: 'services/migrate', da: 'services/migrate', de: 'services/migrate' }
 
 interface Copy {
   eyebrow: string
@@ -42,6 +42,24 @@ const COPY: Record<ServiceLang, Copy> = {
     fallbackTitle: 'Move to Shopify without the risk',
     fallbackHighlight: 'Shopify',
     highlights: ['SEO rankings preserved', 'Zero downtime', 'Over 50 migrations'],
+  },
+  sv: {
+    eyebrow: 'Migrering till Shopify',
+    fallbackTitle: 'Flytta till Shopify utan risk',
+    fallbackHighlight: 'Shopify',
+    highlights: ['SEO-rankingar bevarade', 'Noll driftstopp', 'Över 50 migreringar'],
+  },
+  da: {
+    eyebrow: 'Migrering til Shopify',
+    fallbackTitle: 'Flyt til Shopify uden risiko',
+    fallbackHighlight: 'Shopify',
+    highlights: ['SEO-placeringer bevaret', 'Ingen nedetid', 'Over 50 migreringer'],
+  },
+  de: {
+    eyebrow: 'Migration zu Shopify',
+    fallbackTitle: 'Ohne Risiko zu Shopify wechseln',
+    fallbackHighlight: 'Shopify',
+    highlights: ['SEO-Rankings erhalten', 'Keine Ausfallzeit', 'Über 50 Migrationen'],
   },
 }
 
@@ -70,8 +88,8 @@ async function fetchSections(language: string) {
 /** Sections for the page language; a language without its own document renders the English one. */
 async function loadSections(language: string) {
   const sections = await fetchSections(language)
-  if (sections.length > 0 || language === serviceLang(language)) return sections
-  return fetchSections(serviceLang(language))
+  if (sections.length > 0 || language === 'no' || language === 'en') return sections
+  return fetchSections('en')
 }
 
 export async function migrationMetadata(language: string): Promise<Metadata> {
