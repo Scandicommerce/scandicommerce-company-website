@@ -89,6 +89,7 @@ export function HomepageSectionRenderer({
                 key={_key}
                 data={rest as Parameters<typeof ServicesPackaged>[0]['data']}
                 packages={servicesPackagesFromSection(rest as HomepageServicesShowcasePayload, allPackages)}
+                lang={lang}
               />
             )
           case 'resultsSection':
