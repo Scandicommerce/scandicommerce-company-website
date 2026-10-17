@@ -8,7 +8,7 @@ const ID = 'ef34f26b-c8e9-4846-966b-ebe037e0cb76'
 async function main() {
   const doc = await client.fetch<{ labels: string[]; partnerLinks: string[] }>('*[_id == $id][0]{ "labels": menu[].label, "partnerLinks": menu[_key=="integrasjoner"].columns[_key=="partnere"].items[].label }', { id: ID })
   let p = client.patch(ID)
-  if (!doc.labels.includes('Agentisk handel')) p = p.insert('before', 'menu[_key=="nexuspos"]', [{ _type: 'menuItem', _key: 'agentisk', label: 'Agentisk handel', href: '/agentisk-handel' }])
+  if (!doc.labels.includes('Agentisk handel')) p = p.insert('after', 'menu[_key=="integrasjoner"]', [{ _type: 'menuItem', _key: 'agentisk', label: 'Agentisk handel', href: '/agentisk-handel' }])
   if (!doc.partnerLinks.includes('Bli partner')) p = p.insert('after', 'menu[_key=="integrasjoner"].columns[_key=="partnere"].items[-1]', [{ _type: 'menuLink', _key: 'pa-bli', label: 'Bli partner', href: '/partnere/bli-partner' }])
   await p.commit({ visibility: 'sync' })
   const after = await client.fetch<string[]>('*[_id == $id][0].menu[].label', { id: ID })
