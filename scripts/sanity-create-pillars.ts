@@ -99,7 +99,7 @@ const PAGES: Doc[] = [
   },
   // sv / da / de: relatedPages are resolved per language from the dataset (relatedTypes), not hardcoded ids.
   {
-    id: 'pillar-agentisk-handel-sv', language: 'sv', slug: 'agentisk-handel', pageTitle: 'Agentisk handel: gör din Shopify-butik redo för AI-agenter',
+    id: 'pillar-agentisk-handel-sv', language: 'sv', slug: 'agentic-commerce', pageTitle: 'Agentisk handel: gör din Shopify-butik redo för AI-agenter',
     definition: 'Agentisk handel är köp som sker via AI-agenter: ChatGPT, Perplexity, Google och Shopifys egna agentytor hittar, jämför och beställer produkter för kundens räkning. Butiken måste vara läsbar för agenter, produktdatan måste vara komplett och strukturerad, och kassan måste kunna slutföras utan en människa vid skärmen. Vi gör din Shopify-butik redo för det.',
     sections: [
       section('Vad som händer nu', 'nu', ['AI-assistenter har gått från att svara på frågor till att handla. ChatGPT, Perplexity och Google visar produkter, jämför pris och tillgänglighet och skickar kunden direkt till kassan, eller slutför köpet själva. Shopify kopplar din katalog till dessa agenter genom Shopify Catalog och det öppna protokollet för agentisk handel.', 'Det innebär att en växande andel av trafiken aldrig ser din startsida. Agenten läser produktdata, policyer och lagerstatus och väljer för kundens räkning. Butiker med ordnad data blir rekommenderade. Butiker med luckor hoppas över.']),
@@ -120,7 +120,7 @@ const PAGES: Doc[] = [
     seo: { metaTitle: 'Agentisk handel: gör Shopify redo för AI-agenter | Scandicommerce', metaDescription: 'AI-agenter hittar, jämför och köper för kundernas räkning. Vi gör produktdata, policyer och kassa i din Shopify-butik redo för ChatGPT, Perplexity och Google.' },
   },
   {
-    id: 'pillar-agentisk-handel-da', language: 'da', slug: 'agentisk-handel', pageTitle: 'Agentisk handel: gør din Shopify-butik klar til AI-agenter',
+    id: 'pillar-agentisk-handel-da', language: 'da', slug: 'agentic-commerce', pageTitle: 'Agentisk handel: gør din Shopify-butik klar til AI-agenter',
     definition: 'Agentisk handel er køb, der sker via AI-agenter: ChatGPT, Perplexity, Google og Shopifys egne agentflader finder, sammenligner og bestiller produkter på kundens vegne. Butikken skal være læsbar for agenter, produktdataene skal være komplette og strukturerede, og kassen skal kunne gennemføres uden et menneske ved skærmen. Vi gør din Shopify-butik klar til det.',
     sections: [
       section('Hvad der sker nu', 'nu', ['AI-assistenter er gået fra at svare på spørgsmål til at handle. ChatGPT, Perplexity og Google viser produkter, sammenligner pris og tilgængelighed og sender kunden direkte til kassen, eller gennemfører købet selv. Shopify kobler dit katalog til disse agenter gennem Shopify Catalog og den åbne protokol for agentisk handel.', 'Det betyder, at en voksende andel af trafikken aldrig ser din forside. Agenten læser produktdata, politikker og lagerstatus og vælger på kundens vegne. Butikker med ryddelige data bliver anbefalet. Butikker med huller bliver sprunget over.']),
@@ -162,7 +162,7 @@ const PAGES: Doc[] = [
     seo: { metaTitle: 'Agentic Commerce: Shopify bereit für KI-Agenten machen | Scandicommerce', metaDescription: 'KI-Agenten finden, vergleichen und kaufen im Auftrag der Kunden. Wir machen Produktdaten, Richtlinien und Checkout Ihres Shopify-Shops bereit für ChatGPT, Perplexity und Google.' },
   },
   {
-    id: 'pillar-bli-partner-sv', language: 'sv', slug: 'partners/bli-partner', pageTitle: 'Bli partner med Scandicommerce',
+    id: 'pillar-bli-partner-sv', language: 'sv', slug: 'partners/become-a-partner', pageTitle: 'Bli partner med Scandicommerce',
     definition: 'Scandicommerce samarbetar med teknikleverantörer, byråer och frilansare som vill leverera bättre Shopify-lösningar till svenska och nordiska butiker. Som partner får du en fast kontaktperson, gemensamma projekt, en plats på vår partnersida och ett avtal som säger vem som äger vad. Vi väljer få partner och jobbar nära dem, i stället för att samla logotyper.',
     sections: [
       section('Vilka vi söker', 'vilka', ['Teknikpartner: appar och system med ett API som löser något konkret för nordiska butiker, till exempel betalning, logistik, lojalitet, kundservice eller produktdata. Vi bygger integrationen och du får kunder som är rätt uppsatta.', 'Byråer: design-, innehålls- och marknadsföringsbyråer som behöver ett Shopify-team utan att bygga det själva. Vi tar plattform, integrationer och drift, ni behåller kunden.', 'Frilansare och utvecklare: Shopify-utvecklare som vill jobba på fasta projekt med tydlig omfattning och fast pris.']),
@@ -182,7 +182,7 @@ const PAGES: Doc[] = [
     seo: { metaTitle: 'Bli partner med Scandicommerce', metaDescription: 'Teknikleverantörer, byråer och frilansare som vill leverera bättre Shopify-lösningar till nordiska butiker. Så fungerar partnerskap med Scandicommerce.' },
   },
   {
-    id: 'pillar-bli-partner-da', language: 'da', slug: 'partnere/bliv-partner', pageTitle: 'Bliv partner med Scandicommerce',
+    id: 'pillar-bli-partner-da', language: 'da', slug: 'partners/become-a-partner', pageTitle: 'Bliv partner med Scandicommerce',
     definition: 'Scandicommerce samarbejder med teknologileverandører, bureauer og freelancere, der vil levere bedre Shopify-løsninger til danske og nordiske butikker. Som partner får du en fast kontaktperson, fælles projekter, en plads på vores partnerside og en aftale, der siger, hvem der ejer hvad. Vi vælger få partnere og arbejder tæt sammen med dem, i stedet for at samle logoer.',
     sections: [
       section('Hvem vi leder efter', 'hvem', ['Teknologipartnere: apps og systemer med et API, der løser noget konkret for nordiske butikker, for eksempel betaling, logistik, loyalitet, kundeservice eller produktdata. Vi bygger integrationen, og du får kunder, der er sat rigtigt op.', 'Bureauer: design-, indholds- og marketingbureauer, der har brug for et Shopify-team uden selv at bygge det. Vi tager platform, integrationer og drift, I beholder kunden.', 'Freelancere og udviklere: Shopify-udviklere, der vil arbejde på faste projekter med tydeligt omfang og fast pris.']),
@@ -202,7 +202,7 @@ const PAGES: Doc[] = [
     seo: { metaTitle: 'Bliv partner med Scandicommerce', metaDescription: 'Teknologileverandører, bureauer og freelancere, der vil levere bedre Shopify-løsninger til nordiske butikker. Sådan fungerer partnerskab med Scandicommerce.' },
   },
   {
-    id: 'pillar-bli-partner-de', language: 'de', slug: 'partner/partner-werden', pageTitle: 'Partner von Scandicommerce werden',
+    id: 'pillar-bli-partner-de', language: 'de', slug: 'partners/become-a-partner', pageTitle: 'Partner von Scandicommerce werden',
     definition: 'Scandicommerce arbeitet mit Technologieanbietern, Agenturen und Freelancern zusammen, die bessere Shopify-Lösungen für nordische Shops liefern wollen. Als Partner erhalten Sie einen festen Ansprechpartner, gemeinsame Projekte, einen Platz auf unserer Partnerseite und eine Vereinbarung, die festlegt, wem was gehört. Wir wählen wenige Partner und arbeiten eng mit ihnen, statt Logos zu sammeln.',
     sections: [
       section('Wen wir suchen', 'wen', ['Technologiepartner: Apps und Systeme mit einer API, die etwas Konkretes für nordische Shops lösen, etwa Zahlung, Logistik, Loyalty, Kundenservice oder Produktdaten. Wir bauen die Integration, und Sie bekommen Kunden, die richtig eingerichtet sind.', 'Agenturen: Design-, Content- und Marketingagenturen, die ein Shopify-Team brauchen, ohne selbst eines aufzubauen. Wir übernehmen Plattform, Integrationen und Betrieb, Sie behalten den Kunden.', 'Freelancer und Entwickler: Shopify-Entwickler, die an klar umrissenen Projekten mit festem Umfang und Festpreis arbeiten möchten.']),
