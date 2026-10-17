@@ -58,7 +58,7 @@ const NO: Content = {
         ['< 0,2 %', 'av alle økter i dag'],
       ]),
       p('Det er lite i dag. Men besøkene kommer fra kunder som allerede har fått produktet anbefalt, og i tre av fem butikker kjøpte de oftere enn snittet. ChatGPT står for nesten alt: Perplexity, Gemini og Copilot sendte til sammen færre enn 30 besøk.'),
-      quote('«Agentene leser ikke nettsiden din slik kunden gjør. De leser dataene. Agenter søker ikke, de leser. Sørg for at dere har noe som er verdt å lese.»', 'Øyvind Haagensen, kommersiell leder, på Handelskonferansen 2026'),
+      quote('«Agentene leser ikke nettsiden din slik kunden gjør. De leser dataene. Agenter søker ikke, de leser. Sørg for at dere har noe som er verdt å lese.»', 'Øyvind Haagensen, CCO i Scandicommerce, på Handelskonferansen 2026'),
     ]),
     section('Slik jobber vi', 'slik-jobber-vi', [
       p('Fire steg. Det første tar to virkedager, og du får resultatet uansett om du går videre med oss.'),
@@ -137,7 +137,7 @@ const EN: Content = {
         ['< 0.2%', 'of all sessions today'],
       ]),
       p('It is small today. But these visitors arrive with a product already recommended, and in three of five stores they bought more often than average. ChatGPT accounts for almost all of it: Perplexity, Gemini and Copilot together sent fewer than 30 visits.'),
-      quote('“Agents don’t read your website the way a shopper does. They read the data. Agents don’t search, they read. Make sure you have something worth reading.”', 'Øyvind Haagensen, commercial lead, at Handelskonferansen 2026'),
+      quote('“Agents don’t read your website the way a shopper does. They read the data. Agents don’t search, they read. Make sure you have something worth reading.”', 'Øyvind Haagensen, CCO at Scandicommerce, at Handelskonferansen 2026'),
     ]),
     section('How we work', 'how-we-work', [
       p('Four steps. The first takes two working days, and the result is yours whether or not you continue with us.'),
@@ -216,7 +216,7 @@ const SV: Content = {
         ['< 0,2 %', 'av alla sessioner i dag'],
       ]),
       p('Det är lite i dag. Men besökarna kommer med en produkt som redan har rekommenderats, och i tre av fem butiker köpte de oftare än snittet. ChatGPT står för nästan allt: Perplexity, Gemini och Copilot skickade tillsammans färre än 30 besök.'),
-      quote('”Agenterna läser inte din webbplats som kunden gör. De läser datan. Agenter söker inte, de läser. Se till att ni har något som är värt att läsa.”', 'Øyvind Haagensen, kommersiell chef, på Handelskonferansen 2026'),
+      quote('”Agenterna läser inte din webbplats som kunden gör. De läser datan. Agenter söker inte, de läser. Se till att ni har något som är värt att läsa.”', 'Øyvind Haagensen, CCO på Scandicommerce, på Handelskonferansen 2026'),
     ]),
     section('Så arbetar vi', 'how-we-work', [
       p('Fyra steg. Det första tar två arbetsdagar, och resultatet är ditt oavsett om du går vidare med oss.'),
@@ -295,7 +295,7 @@ const DA: Content = {
         ['< 0,2 %', 'af alle sessioner i dag'],
       ]),
       p('Det er lidt i dag. Men de besøgende kommer med et produkt, der allerede er anbefalet, og i tre af fem butikker købte de oftere end gennemsnittet. ChatGPT står for næsten det hele: Perplexity, Gemini og Copilot sendte tilsammen færre end 30 besøg.'),
-      quote('»Agenterne læser ikke dit website, som kunden gør. De læser dataene. Agenter søger ikke, de læser. Sørg for, at I har noget, der er værd at læse.«', 'Øyvind Haagensen, kommerciel chef, på Handelskonferansen 2026'),
+      quote('»Agenterne læser ikke dit website, som kunden gør. De læser dataene. Agenter søger ikke, de læser. Sørg for, at I har noget, der er værd at læse.«', 'Øyvind Haagensen, CCO i Scandicommerce, på Handelskonferansen 2026'),
     ]),
     section('Sådan arbejder vi', 'how-we-work', [
       p('Fire trin. Det første tager to arbejdsdage, og resultatet er dit, uanset om du fortsætter med os.'),
@@ -374,7 +374,7 @@ const DE: Content = {
         ['< 0,2 %', 'aller Sitzungen heute'],
       ]),
       p('Das ist heute wenig. Aber diese Besucher kommen mit einem bereits empfohlenen Produkt, und in drei von fünf Shops kauften sie häufiger als der Durchschnitt. ChatGPT macht fast alles aus: Perplexity, Gemini und Copilot schickten zusammen weniger als 30 Besuche.'),
-      quote('„Agenten lesen Ihre Website nicht so wie Kunden. Sie lesen die Daten. Agenten suchen nicht, sie lesen. Sorgen Sie dafür, dass es etwas Lesenswertes gibt.“', 'Øyvind Haagensen, Commercial Lead, auf der Handelskonferansen 2026'),
+      quote('„Agenten lesen Ihre Website nicht so wie Kunden. Sie lesen die Daten. Agenten suchen nicht, sie lesen. Sorgen Sie dafür, dass es etwas Lesenswertes gibt.“', 'Øyvind Haagensen, CCO bei Scandicommerce, auf der Handelskonferansen 2026'),
     ]),
     section('So arbeiten wir', 'how-we-work', [
       p('Vier Schritte. Der erste dauert zwei Arbeitstage, und das Ergebnis gehört Ihnen, auch wenn Sie danach nicht mit uns weitermachen.'),

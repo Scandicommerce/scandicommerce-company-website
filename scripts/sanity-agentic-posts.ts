@@ -144,7 +144,7 @@ Stadig oftere kan assistenten også legge varen i handlekurven og ta kunden helt
 ## Hva endrer seg for nettbutikken?
 Før gikk kunden via Google, klikket seg inn på nettsiden, så på bilder, leste og kjøpte. Butikken kunne påvirke underveis med design, bannere og kampanjer.
 Nå skjer en del av den reisen før kunden ser nettsiden din. Agenten har allerede valgt ut de tre produktene som er verdt å vise. Svarer ikke dataene dine på spørsmålet kunden stilte, er du ikke med i utvalget, uansett hvor fin forsiden er.
-> «Agentene leser ikke nettsiden din slik kunden gjør. De leser dataene.» Øyvind Haagensen, kommersiell leder i Scandicommerce, på Handelskonferansen 2026.
+> «Agentene leser ikke nettsiden din slik kunden gjør. De leser dataene.» Øyvind Haagensen, CCO i Scandicommerce, på Handelskonferansen 2026.
 ## Hvor skjer agentisk handel i dag?
 Det er fire flater det er verdt å kjenne til:
 - **ChatGPT.** Den klart største kilden til AI-trafikk i butikkene vi drifter.
@@ -236,7 +236,7 @@ More and more often the assistant can also add the item to a cart and take the s
 ## What changes for an online store?
 The old journey: the shopper searched on Google, clicked through to your site, looked at images, read and bought. You could influence every step with design, banners and campaigns.
 Now part of that journey happens before the shopper ever sees your site. The agent has already picked the three products worth showing. If your data does not answer the question the shopper asked, you are not in that shortlist, however good your homepage looks.
-> “Agents don’t read your website the way a customer does. They read the data.” Øyvind Haagensen, commercial lead at Scandicommerce, on stage at Handelskonferansen 2026.
+> “Agents don’t read your website the way a customer does. They read the data.” Øyvind Haagensen, CCO at Scandicommerce, on stage at Handelskonferansen 2026.
 ## Where does agentic commerce happen today?
 There are four surfaces worth knowing:
 - **ChatGPT.** By far the largest source of AI traffic in the stores we run.
@@ -328,7 +328,7 @@ Allt oftare kan assistenten också lägga varan i varukorgen och ta kunden ända
 ## Vad förändras för e-handlaren?
 Förr gick kunden via Google, klickade sig in på sajten, tittade på bilder, läste och köpte. Butiken kunde påverka varje steg med design, banners och kampanjer.
 Nu sker en del av den resan innan kunden ens ser din sajt. Agenten har redan valt ut de tre produkter som är värda att visa. Svarar inte dina data på kundens fråga är du inte med i urvalet, hur snygg startsidan än är.
-> ”Agenterna läser inte din sajt som kunden gör. De läser datan.” Øyvind Haagensen, kommersiell chef på Scandicommerce, på Handelskonferansen 2026.
+> ”Agenterna läser inte din sajt som kunden gör. De läser datan.” Øyvind Haagensen, CCO på Scandicommerce, på Handelskonferansen 2026.
 ## Var sker agentisk handel i dag?
 Det finns fyra ytor som är värda att känna till:
 - **ChatGPT.** Den överlägset största källan till AI-trafik i butikerna vi driver.
@@ -420,7 +420,7 @@ Oftere og oftere kan assistenten også lægge varen i kurven og føre kunden hel
 ## Hvad ændrer sig for webshoppen?
 Før gik kunden via Google, klikkede ind på sitet, så billeder, læste og købte. Butikken kunne påvirke hvert skridt med design, bannere og kampagner.
 Nu sker en del af den rejse, før kunden overhovedet ser dit site. Agenten har allerede udvalgt de tre produkter, der er værd at vise. Svarer dine data ikke på kundens spørgsmål, er du ikke med i udvalget, uanset hvor flot forsiden er.
-> ”Agenterne læser ikke dit website, som kunden gør. De læser dataene.” Øyvind Haagensen, kommerciel chef i Scandicommerce, på Handelskonferansen 2026.
+> ”Agenterne læser ikke dit website, som kunden gør. De læser dataene.” Øyvind Haagensen, CCO i Scandicommerce, på Handelskonferansen 2026.
 ## Hvor foregår agentisk handel i dag?
 Der er fire flader, det er værd at kende:
 - **ChatGPT.** Klart den største kilde til AI-trafik i de butikker, vi driver.
@@ -512,7 +512,7 @@ Immer häufiger kann der Assistent den Artikel auch in den Warenkorb legen und d
 ## Was ändert sich für Onlineshops?
 Früher lief es so: Die Kundin suchte bei Google, klickte auf Ihre Website, sah sich Bilder an, las und kaufte. Mit Design, Bannern und Kampagnen konnten Sie jeden Schritt beeinflussen.
 Heute passiert ein Teil dieser Reise, bevor die Kundin Ihre Website überhaupt sieht. Der Agent hat die drei Produkte, die sich zu zeigen lohnen, bereits ausgewählt. Beantworten Ihre Daten die Frage der Kundin nicht, sind Sie nicht in dieser Auswahl, ganz gleich, wie gut Ihre Startseite aussieht.
-> „Agenten lesen Ihre Website nicht so, wie Kunden es tun. Sie lesen die Daten.“ Øyvind Haagensen, kaufmännischer Leiter bei Scandicommerce, auf der Handelskonferansen 2026.
+> „Agenten lesen Ihre Website nicht so, wie Kunden es tun. Sie lesen die Daten.“ Øyvind Haagensen, CCO bei Scandicommerce, auf der Handelskonferansen 2026.
 ## Wo findet Agentic Commerce heute statt?
 Vier Oberflächen sollten Sie kennen:
 - **ChatGPT.** Mit Abstand die größte Quelle für KI-Traffic in den Shops, die wir betreuen.
@@ -631,7 +631,7 @@ Det korte svaret: Universal Cart er ikke her ennå, men UCP er allerede en del a
 - **UCP i Shopify:** Shopifys MCP-verktøy implementerer UCP for oppdagelse, handlekurv, kasse og ordreoppfølging ([Shopify](${SRC.shopifyDev})). Shopify Catalog sender kvalifiserte produkter til AI-plattformer, og i [Agentic Storefronts](${SRC.shopifyNews}) skrur du AI-kanalene av og på. Kassen er Shopify Checkout, og du er selger.
 - **Trafikken i dag:** I fem Shopify-butikker vi drifter, kom det rundt 3 400 besøk fra ChatGPT de siste 90 dagene, med en konvertering på rundt 2,2 %. Perplexity, Gemini og Copilot sendte til sammen færre enn 30 besøk. Googles agentflater har altså ikke slått inn i Norge ennå.
 For en Shopify-butikk handler jobben derfor mindre om selve protokollen og mer om det protokollen frakter: produktdata, pris og lager per variant, fraktregler og rabatter som er entydige nok til at en agent kan regne ut riktig sum uten å spørre et menneske.
-> «Agenter søker ikke – de leser. Sørg for at dere har noe som er verdt å lese.» Øyvind Haagensen, kommersiell leder i Scandicommerce, på Handelskonferansen 2026.
+> «Agenter søker ikke – de leser. Sørg for at dere har noe som er verdt å lese.» Øyvind Haagensen, CCO i Scandicommerce, på Handelskonferansen 2026.
 Er du ny i temaet, start med [Hva er agentisk handel?](${postHref('what', l)})
 `),
       b.faq('Ofte stilte spørsmål', [
@@ -707,7 +707,7 @@ The short answer: Universal Cart is not here yet, but UCP is already part of Sho
 - **UCP in Shopify:** Shopify’s MCP tools implement UCP across discovery, carts, checkout and order monitoring ([Shopify](${SRC.shopifyDev})). Shopify Catalog syndicates eligible products to AI platforms, and in [Agentic Storefronts](${SRC.shopifyNews}) you switch AI channels on and off. Checkout is Shopify Checkout, and you are the merchant of record.
 - **Traffic today:** Across five Shopify stores we run, ChatGPT sent about 3,400 visits in the last 90 days, converting at about 2.2%. Perplexity, Gemini and Copilot together sent fewer than 30. Google’s agent surfaces have not reached Norway yet.
 For a Shopify store, the work is therefore less about the protocol itself and more about what the protocol carries: product data, price and stock per variant, and shipping and discount rules clear enough for an agent to calculate the right total without asking a human.
-> “Agents don’t search, they read. Make sure you have something worth reading.” Øyvind Haagensen, commercial lead at Scandicommerce, on stage at Handelskonferansen 2026.
+> “Agents don’t search, they read. Make sure you have something worth reading.” Øyvind Haagensen, CCO at Scandicommerce, on stage at Handelskonferansen 2026.
 New to the topic? Start with [What is agentic commerce?](${postHref('what', l)})
 `),
       b.faq('Frequently asked questions', [
@@ -783,7 +783,7 @@ Det korta svaret: Universal Cart är inte här än, men UCP är redan en del av 
 - **UCP i Shopify:** Shopifys MCP-verktyg implementerar UCP för upptäckt, varukorg, kassa och orderuppföljning ([Shopify](${SRC.shopifyDev})). Shopify Catalog skickar kvalificerade produkter till AI-plattformar, och i [Agentic Storefronts](${SRC.shopifyNews}) slår du på och av AI-kanaler. Kassan är Shopify Checkout och du är säljare.
 - **Trafiken i dag:** I fem Shopify-butiker vi driver kom cirka 3 400 besök från ChatGPT de senaste 90 dagarna, med en konvertering på cirka 2,2 %. Perplexity, Gemini och Copilot skickade tillsammans färre än 30 besök. Googles agentytor har alltså inte nått Norden än.
 För en Shopify-butik handlar jobbet därför mindre om själva protokollet och mer om det protokollet bär: produktdata, pris och lager per variant samt frakt- och rabattregler som är tydliga nog för att en agent ska kunna räkna ut rätt summa utan att fråga en människa.
-> ”Agenter söker inte, de läser. Se till att ni har något som är värt att läsa.” Øyvind Haagensen, kommersiell chef på Scandicommerce, på Handelskonferansen 2026.
+> ”Agenter söker inte, de läser. Se till att ni har något som är värt att läsa.” Øyvind Haagensen, CCO på Scandicommerce, på Handelskonferansen 2026.
 Ny i ämnet? Börja med [Vad är agentisk handel?](${postHref('what', l)})
 `),
       b.faq('Vanliga frågor', [
@@ -859,7 +859,7 @@ Det korte svar: Universal Cart er her ikke endnu, men UCP er allerede en del af 
 - **UCP i Shopify:** Shopifys MCP-værktøjer implementerer UCP til opdagelse, kurv, checkout og ordreopfølgning ([Shopify](${SRC.shopifyDev})). Shopify Catalog sender kvalificerede produkter til AI-platforme, og i [Agentic Storefronts](${SRC.shopifyNews}) slår du AI-kanaler til og fra. Checkout er Shopify Checkout, og du er sælger.
 - **Trafikken i dag:** I fem Shopify-butikker, vi driver, kom der omkring 3.400 besøg fra ChatGPT de seneste 90 dage med en konvertering på omkring 2,2 %. Perplexity, Gemini og Copilot sendte tilsammen færre end 30 besøg. Googles agentflader har altså ikke ramt Norden endnu.
 For en Shopify-butik handler arbejdet derfor mindre om selve protokollen og mere om det, protokollen bærer: produktdata, pris og lager pr. variant og fragt- og rabatregler, der er klare nok til, at en agent kan regne den rigtige total ud uden at spørge et menneske.
-> ”Agenter søger ikke, de læser. Sørg for, at I har noget, der er værd at læse.” Øyvind Haagensen, kommerciel chef i Scandicommerce, på Handelskonferansen 2026.
+> ”Agenter søger ikke, de læser. Sørg for, at I har noget, der er værd at læse.” Øyvind Haagensen, CCO i Scandicommerce, på Handelskonferansen 2026.
 Ny i emnet? Start med [Hvad er agentisk handel?](${postHref('what', l)})
 `),
       b.faq('Ofte stillede spørgsmål', [
@@ -935,7 +935,7 @@ Die kurze Antwort: Universal Cart ist noch nicht da, UCP ist aber bereits Teil v
 - **UCP in Shopify:** Die MCP-Tools von Shopify implementieren UCP für Suche, Warenkorb, Checkout und Bestellverfolgung ([Shopify](${SRC.shopifyDev})). Shopify Catalog gibt geeignete Produkte an KI-Plattformen weiter, und in [Agentic Storefronts](${SRC.shopifyNews}) schalten Sie KI-Kanäle ein und aus. Der Checkout ist Shopify Checkout, und Sie sind Verkäufer.
 - **Traffic heute:** In fünf Shopify-Shops, die wir betreuen, kamen in den letzten 90 Tagen rund 3.400 Besuche von ChatGPT, mit einer Conversion-Rate von rund 2,2 %. Perplexity, Gemini und Copilot schickten zusammen weniger als 30 Besuche. Googles Agenten-Oberflächen sind in Norwegen also noch nicht angekommen.
 Für einen Shopify-Shop geht es deshalb weniger um das Protokoll selbst als um das, was es transportiert: Produktdaten, Preis und Bestand pro Variante sowie Versand- und Rabattregeln, die so eindeutig sind, dass ein Agent die richtige Summe berechnen kann, ohne einen Menschen zu fragen.
-> „Agenten suchen nicht, sie lesen. Sorgen Sie dafür, dass Sie etwas haben, das sich zu lesen lohnt.“ Øyvind Haagensen, kaufmännischer Leiter bei Scandicommerce, auf der Handelskonferansen 2026.
+> „Agenten suchen nicht, sie lesen. Sorgen Sie dafür, dass Sie etwas haben, das sich zu lesen lohnt.“ Øyvind Haagensen, CCO bei Scandicommerce, auf der Handelskonferansen 2026.
 Neu im Thema? Beginnen Sie mit [Was ist Agentic Commerce?](${postHref('what', l)})
 `),
       b.faq('Häufige Fragen', [
