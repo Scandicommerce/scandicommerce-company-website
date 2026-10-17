@@ -1,7 +1,6 @@
-'use client'
-
 import Image from 'next/image'
 import { urlFor } from '@/sanity/lib/image'
+import { ui } from '@/components/integrations/labels'
 import type { Image as SanityImage } from 'sanity'
 
 interface OurStoryData {
@@ -12,43 +11,26 @@ interface OurStoryData {
   imageAlt?: string
 }
 
-interface OurStoryProps {
-  ourStory?: OurStoryData
-}
-
-export default function OurStory({ ourStory }: OurStoryProps) {
-  const title = ourStory?.title || 'Our story'
-  const description = ourStory?.description || "We started ScandiCommerce in 2018 after years of frustration with traditional agency models. Too many proposals, unclear pricing, and scope creep were the norm. We asked ourselves: What if buying agency services felt like buying products? Clear features, transparent pricing, and no BS. Today, we're Norway's most transparent Shopify agency. Our clients know exactly what they're getting, what it costs, and when it will be delivered. No surprises, just results."
-  const imageUrl = ourStory?.image
-    ? urlFor(ourStory.image).url()
-    : ourStory?.imageUrl || '/images/about/story/banner.png'
-  const imageAlt = ourStory?.imageAlt || 'ScandiCommerce office space'
-
+/** The story as readable paragraphs beside the team photo in a hairline frame. */
+export default function OurStory({ ourStory }: { ourStory?: OurStoryData }) {
+  if (!ourStory?.title && !ourStory?.description) return null
+  const src = ourStory?.image && (ourStory.image as { asset?: unknown }).asset ? urlFor(ourStory.image).width(1200).url() : ourStory?.imageUrl
+  const paragraphs = (ourStory?.description ?? '').split(/\n\s*\n|(?<=[.!?])\s+(?=[A-ZÆØÅ][^.]{60,})/).filter(Boolean)
   return (
-    <section className="py-16 lg:py-24">
-      <div className="section_container mx-auto page-padding-x">
-        <div className="bg-[#F5F5F5] grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
-          {/* Left Column - Text Content */}
-          <div className="p-4 sm:p-8 lg:p-12">
-            <h2 className="text-[5.3vw] xs:text-[3.5vw] sm:text-[3.2vw] md:text-[3.2vw] lg:text-[28px] xl:text-[34px] font-bold text-[#222222] mb-6 lg:mb-8">
-              {title}
-            </h2>
-            <p className="text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[16px] xl:text-[18px] text-[#555555] leading-relaxed">
-              {description}
-            </p>
-          </div>
-
-          {/* Right Column - Image */}
-          <div className="relative w-full h-[400px] lg:h-[550px]">
-            <Image
-              src={imageUrl}
-              alt={imageAlt}
-              fill
-              className="object-cover"
-              sizes="(max-width: 1024px) 100vw, 50vw"
-            />
+    <section id="historie" className="scroll-mt-24 bg-white py-16 lg:py-20">
+      <div className={`${ui.container} grid grid-cols-1 items-start gap-10 lg:grid-cols-[1fr_1fr] lg:gap-16`}>
+        <div>
+          <div className={`${ui.eyebrow} mb-4`}>Historien</div>
+          {ourStory?.title && <h2 className={`${ui.h2} mb-6`}>{ourStory.title}</h2>}
+          <div className="flex flex-col gap-4 text-base leading-relaxed text-sc-ink-600 lg:text-[17px]">
+            {paragraphs.map((p, i) => <p key={i} className="m-0">{p.trim()}</p>)}
           </div>
         </div>
+        {src && (
+          <div className="relative aspect-[4/3] overflow-hidden rounded-lg border border-sc-ink-100 bg-sc-ink-50 lg:sticky lg:top-24">
+            <Image src={src} alt={ourStory?.imageAlt || ''} fill className="object-cover" sizes="(max-width: 1024px) 100vw, 540px" />
+          </div>
+        )}
       </div>
     </section>
   )

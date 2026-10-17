@@ -58,7 +58,7 @@ export default async function ContactPage({ params }: { params: Promise<{ lang: 
     <div className="flex flex-col min-h-screen">
       <HeaderWrapper />
       <main className="flex-grow">
-        <ContactPageSectionRenderer sections={sections} />
+        <ContactPageSectionRenderer sections={sections} lang={language} />
         <FooterWrapper />
       </main>
     </div>

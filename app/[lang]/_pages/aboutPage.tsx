@@ -71,7 +71,7 @@ export default async function AboutPage({ params }: { params: Promise<{ lang: st
     <div className="flex flex-col min-h-screen">
       <HeaderWrapper />
       <main className="flex-grow">
-        <AboutPageSectionRenderer sections={sections} />
+        <AboutPageSectionRenderer sections={sections} lang={language} />
         <FooterWrapper />
       </main>
     </div>
