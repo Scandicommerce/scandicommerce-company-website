@@ -4,7 +4,7 @@ import CorePartners from '@/components/sections/partners/CorePartners'
 import PartnerCatalog from '@/components/sections/partners/PartnerCatalog'
 import PartnersCtas from '@/components/sections/partners/PartnersCtas'
 import type { SanitySectionItem } from '@/lib/sanity/normalizeDocumentSections'
-import { mergePartners, partnerCatalog, partnerCategories, type SanityPartner } from '@/lib/partnersCatalog'
+import { localizePartners, mergePartners, partnerCatalog, partnerCategories, type SanityPartner } from '@/lib/partnersCatalog'
 import { urlFor } from '@/sanity/lib/image'
 import { CONTACT_SLUG } from '@/lib/routes'
 
@@ -14,7 +14,8 @@ type GridPartner = { name?: string; category?: string; description?: string; ben
 /**
  * Sanity sections → the partner pages. The hero, "why" title and CTA copy
  * come from the document; the partner list is the code catalog with any
- * Sanity description or logo laid on top (see mergePartners).
+ * Sanity description or logo laid on top (see mergePartners), then swapped
+ * to English copy for non-Norwegian pages (see localizePartners).
  */
 export function PartnersPageSectionRenderer({ sections, lang = 'no' }: { sections: SanitySectionItem[]; lang?: string }) {
   const contactHref = `/${(CONTACT_SLUG as Record<string, string>)[lang] ?? 'kontakt'}`
@@ -27,7 +28,7 @@ export function PartnersPageSectionRenderer({ sections, lang = 'no' }: { section
     url: p.url,
     logoUrl: p.logo?.asset ? urlFor(p.logo).width(160).height(160).fit('crop').url() : null,
   }))
-  const partners = mergePartners(partnerCatalog, sanityPartners)
+  const partners = localizePartners(mergePartners(partnerCatalog, sanityPartners), lang)
   const categoryCount = new Set(partners.map((p) => p.category)).size || partnerCategories.length
 
   return (

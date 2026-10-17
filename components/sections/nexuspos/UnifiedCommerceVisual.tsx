@@ -5,6 +5,8 @@
  * prefers-reduced-motion.
  */
 
+import type { NexusLang } from '@/lib/nexuspos'
+
 const CSS = `
 .ncv-flow{stroke-dasharray:6 8;animation:ncv-dash 1.1s linear infinite}
 @keyframes ncv-dash{to{stroke-dashoffset:-28}}
@@ -19,19 +21,40 @@ const CSS = `
 @media (prefers-reduced-motion:reduce){.ncv-flow,.ncv-ring,.ncv-mark,.ncv-item{animation:none!important}.ncv-item:first-child{opacity:1}.ncv-dots{display:none}}
 `
 
-const CARDS = [
-  { x: 20, y: 36, title: 'Kasse', sub: 'N950 · iPad', icon: 'kasse' },
-  { x: 320, y: 36, title: 'Nettbutikk', sub: 'Shopify', icon: 'shop' },
-  { x: 20, y: 296, title: 'Lager', sub: 'Ett lager, alle kanaler', icon: 'lager' },
-  { x: 320, y: 296, title: 'Regnskap', sub: 'Z-rapport · SAF-T', icon: 'bars' },
-]
+const CARDS = {
+  no: [
+    { x: 20, y: 36, title: 'Kasse', sub: 'N950 · iPad', icon: 'kasse' },
+    { x: 320, y: 36, title: 'Nettbutikk', sub: 'Shopify', icon: 'shop' },
+    { x: 20, y: 296, title: 'Lager', sub: 'Ett lager, alle kanaler', icon: 'lager' },
+    { x: 320, y: 296, title: 'Regnskap', sub: 'Z-rapport · SAF-T', icon: 'bars' },
+  ],
+  en: [
+    { x: 20, y: 36, title: 'Till', sub: 'N950 · iPad', icon: 'kasse' },
+    { x: 320, y: 36, title: 'Online store', sub: 'Shopify', icon: 'shop' },
+    { x: 20, y: 296, title: 'Inventory', sub: 'One stock, every channel', icon: 'lager' },
+    { x: 320, y: 296, title: 'Accounting', sub: 'Z report · SAF-T', icon: 'bars' },
+  ],
+}
 
-const FEED = [
-  { b: 'Salg i butikk', t: '1 249 kr på N950', when: 'nå' },
-  { b: 'Lager oppdatert', t: 'også i nettbutikken', when: 'nå' },
-  { b: 'Klikk og hent', t: 'nettordre klar i butikk', when: 'nå' },
-  { b: 'Z-rapport', t: 'dagsoppgjør klart for regnskap', when: 'kl. 18.00' },
-]
+const FEED = {
+  no: [
+    { b: 'Salg i butikk', t: '1 249 kr på N950', when: 'nå' },
+    { b: 'Lager oppdatert', t: 'også i nettbutikken', when: 'nå' },
+    { b: 'Klikk og hent', t: 'nettordre klar i butikk', when: 'nå' },
+    { b: 'Z-rapport', t: 'dagsoppgjør klart for regnskap', when: 'kl. 18.00' },
+  ],
+  en: [
+    { b: 'In-store sale', t: '1 249 kr on N950', when: 'now' },
+    { b: 'Inventory updated', t: 'in the online store too', when: 'now' },
+    { b: 'Click and collect', t: 'web order ready in store', when: 'now' },
+    { b: 'Z report', t: 'daily settlement ready for accounting', when: '18:00' },
+  ],
+}
+
+const ARIA = {
+  no: 'Kasse, nettbutikk, lager og regnskap koblet sammen i Shopify',
+  en: 'Till, online store, inventory and accounting connected in Shopify',
+}
 
 function Icon({ kind, x, y }: { kind: string; x: number; y: number }) {
   const s = { fill: 'none', stroke: '#0e6a73', strokeWidth: 2, strokeLinejoin: 'round' as const, strokeLinecap: 'round' as const }
@@ -41,11 +64,13 @@ function Icon({ kind, x, y }: { kind: string; x: number; y: number }) {
   return <path d={`M${x + 14} ${y + 36}v-10 M${x + 24} ${y + 36}v-18 M${x + 34} ${y + 36}v-24`} {...s} strokeWidth={3} />
 }
 
-export default function UnifiedCommerceVisual() {
+export default function UnifiedCommerceVisual({ lang = 'no' }: { lang?: NexusLang }) {
+  const cards = CARDS[lang]
+  const feed = FEED[lang]
   return (
     <div className="relative overflow-hidden rounded-lg border border-sc-ink-100 bg-sc-ink-50 p-4 sm:p-6">
       <style dangerouslySetInnerHTML={{ __html: CSS }} />
-      <svg viewBox="0 0 520 420" className="block h-auto w-full" role="img" aria-label="Kasse, nettbutikk, lager og regnskap koblet sammen i Shopify">
+      <svg viewBox="0 0 520 420" className="block h-auto w-full" role="img" aria-label={ARIA[lang]}>
         <g fill="none" stroke="#d6dade" strokeWidth={2}>
           <path d="M260 210 L110 80" />
           <path d="M260 210 L410 80" />
@@ -68,7 +93,7 @@ export default function UnifiedCommerceVisual() {
         <circle cx={260} cy={210} r={62} fill="#12181a" />
         <image className="ncv-mark" href="/images/nexuspos/nexus-mark.svg" x={218} y={168} width={84} height={84} />
         <g fontFamily="inherit">
-          {CARDS.map((c) => (
+          {cards.map((c) => (
             <g key={c.title}>
               <rect x={c.x} y={c.y} width={180} height={88} rx={14} fill="#ffffff" stroke="#eceef0" />
               <rect x={c.x + 16} y={c.y + 20} width={48} height={48} rx={12} fill="#e6fbfc" />
@@ -80,7 +105,7 @@ export default function UnifiedCommerceVisual() {
         </g>
       </svg>
       <div className="ncv-feed" aria-hidden="true">
-        {FEED.map((f) => (
+        {feed.map((f) => (
           <div key={f.b} className="ncv-item text-sc-ink-900">
             <span className="flex h-7 w-7 flex-none items-center justify-center rounded-md bg-sc-ink-900">
               <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="#1EEFFA" strokeWidth="2" strokeLinecap="round"><path d="M3 8.5l3 3 7-7" /></svg>

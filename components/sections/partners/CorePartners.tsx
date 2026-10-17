@@ -26,7 +26,7 @@ export default function CorePartners({ partners, lang = 'no' }: { partners: Part
                 <PartnerLogo partner={p} size={44} />
                 <div className="min-w-0">
                   <div className="truncate text-[17px] font-bold leading-tight">{p.name}</div>
-                  <div className="truncate text-[12px] text-sc-ink-300">{categoryTitle(p.category)}</div>
+                  <div className="truncate text-[12px] text-sc-ink-300">{categoryTitle(p.category, lang)}</div>
                 </div>
               </div>
               <span className="inline-flex w-fit items-center rounded-md bg-sc-cyan-500/15 px-2.5 py-1 text-xs font-medium text-sc-cyan-200">{p.badge}</span>

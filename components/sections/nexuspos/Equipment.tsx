@@ -1,23 +1,54 @@
 import Image from 'next/image'
 import LocalizedLink from '@/components/ui/LocalizedLink'
 import { ui } from '@/components/integrations/labels'
-import { formatNok, type NexusItem } from '@/lib/nexuspos'
+import { formatNok, type NexusItem, type NexusLang } from '@/lib/nexuspos'
 import PackageAddToCart from '@/components/sections/services/all_packages/PackageAddToCart'
-import { SectionHead } from './NexusSections'
+import { SectionHead, exVat } from './NexusSections'
 
-function Price({ value, className = '' }: { value: number; className?: string }) {
+const T = {
+  no: {
+    eyebrow: 'Utstyr',
+    heading: 'Bygg din egen kasse',
+    lead: 'Testet med Shopify POS og Nexus POS. Det meste har vi på lager, og vi setter det opp for deg.',
+    order: 'Bestill →',
+    standIn: 'i',
+    standFeatures: ['350° rotasjon og 90° vinkling', 'Støpt aluminium, klar for Kensington-lås', 'Passer nettbrett fra 7 til 13", også iPad 11"', 'Kabelføring gjennom foten for et ryddig oppsett'],
+    rentEyebrow: 'Pop-up og messe',
+    rentHeading: 'Trenger du kasse for en helg?',
+    rentText: 'Vi leier ut komplette kassepakker. Pris på forespørsel.',
+    rentButton: 'Spør oss',
+    footnote: 'Alle priser eks. mva. Hvite varianter av stativ og skuff leveres på forespørsel.',
+    fromShopify: ' Priser og lagerstatus hentes fra nettbutikken vår.',
+  },
+  en: {
+    eyebrow: 'Equipment',
+    heading: 'Build your own till',
+    lead: 'Tested with Shopify POS and Nexus POS. Most of it is in stock, and we set it up for you.',
+    order: 'Order →',
+    standIn: 'in',
+    standFeatures: ['350° rotation and 90° tilt', 'Cast aluminium, ready for a Kensington lock', 'Fits tablets from 7 to 13", including iPad 11"', 'Cable routing through the base for a tidy setup'],
+    rentEyebrow: 'Pop-up and trade shows',
+    rentHeading: 'Need a till for a weekend?',
+    rentText: 'We rent out complete till kits. Price on request.',
+    rentButton: 'Ask us',
+    footnote: 'All prices excl. VAT. White versions of the stand and drawer are available on request.',
+    fromShopify: ' Prices and stock status come from our online store.',
+  },
+}
+
+function Price({ value, className = '', lang }: { value: number; className?: string; lang: NexusLang }) {
   return (
     <span className={`font-mono font-medium tracking-tight ${className}`}>
-      {formatNok(value)} <span className="text-xs font-sans font-medium text-sc-ink-500">eks. mva</span>
+      {formatNok(value)} <span className="text-xs font-sans font-medium text-sc-ink-500">{exVat(lang)}</span>
     </span>
   )
 }
 
-function Buy({ item, contactHref, dark }: { item: NexusItem; contactHref: string; dark?: boolean }) {
+function Buy({ item, contactHref, dark, lang }: { item: NexusItem; contactHref: string; dark?: boolean; lang: NexusLang }) {
   if (item.variantId && item.shopifyTitle) return <PackageAddToCart variantId={item.variantId} productTitle={item.shopifyTitle} />
   return (
     <LocalizedLink href={contactHref} className={`text-sm font-semibold ${dark ? 'text-sc-cyan-300 hover:text-white' : 'text-sc-ink-900 hover:text-sc-cyan-600'}`}>
-      Bestill →
+      {T[lang].order}
     </LocalizedLink>
   )
 }
@@ -28,7 +59,8 @@ function Buy({ item, contactHref, dark }: { item: NexusItem; contactHref: string
  * chips. Prices and cart buttons come from Shopify when the product exists in
  * the nexus-pos collection; otherwise the card links to contact.
  */
-export default function Equipment({ items, contactHref, fromShopify }: { items: NexusItem[]; contactHref: string; fromShopify: boolean }) {
+export default function Equipment({ items, contactHref, fromShopify, lang = 'no' }: { items: NexusItem[]; contactHref: string; fromShopify: boolean; lang?: NexusLang }) {
+  const t = T[lang]
   const gear = items.filter((i) => i.group === 'equipment')
   const stand = gear.find((i) => i.handle === 'bouncepad-eddy')
   const scanner = gear.find((i) => i.handle === 'socket-mobile-s740')
@@ -38,21 +70,24 @@ export default function Equipment({ items, contactHref, fromShopify }: { items: 
   return (
     <section id="utstyr" className="scroll-mt-24 bg-sc-ink-50 py-16 lg:py-20">
       <div className={ui.container}>
-        <SectionHead eyebrow="Utstyr" heading="Bygg din egen kasse" lead="Testet med Shopify POS og Nexus POS. Det meste har vi på lager, og vi setter det opp for deg." />
+        <SectionHead eyebrow={t.eyebrow} heading={t.heading} lead={t.lead} />
 
         {stand && scanner && (
           <div className="mb-5 grid gap-5 lg:grid-cols-[2fr_1fr]">
             <article className="grid gap-6 rounded-lg border border-sc-ink-100 bg-white p-6 sm:grid-cols-2 sm:items-center lg:p-8">
               <div className="grid grid-cols-2 gap-3">
-                {(stand.variants ?? []).map((v) => (
+                {(stand.variants ?? []).map((v) => {
+                  const label = lang === 'no' ? v.label : v.labelEn ?? v.label
+                  return (
                   <figure key={v.label} className="m-0 flex flex-col gap-2">
-                    <Image src={v.image ?? stand.image!} alt={`${stand.name} i ${v.label.toLowerCase()}`} width={300} height={300} className="h-auto w-full rounded-lg object-cover" />
+                    <Image src={v.image ?? stand.image!} alt={`${stand.name} ${t.standIn} ${label.toLowerCase()}`} width={300} height={300} className="h-auto w-full rounded-lg object-cover" />
                     <figcaption className="flex items-center gap-2 text-[13px] font-semibold text-sc-ink-600">
                       <span className="inline-block h-3.5 w-3.5 rounded-full border border-sc-ink-300" style={{ background: v.swatch }} aria-hidden="true" />
-                      {v.label}
+                      {label}
                     </figcaption>
                   </figure>
-                ))}
+                  )
+                })}
               </div>
               <div className="flex flex-col gap-3">
                 {stand.badge && <span className={ui.tag}>{stand.badge}</span>}
@@ -60,13 +95,13 @@ export default function Equipment({ items, contactHref, fromShopify }: { items: 
                 <h3 className="m-0 text-[26px] font-bold leading-tight tracking-[-0.02em] text-sc-ink-900">{stand.name}</h3>
                 <p className="m-0 text-[15px] leading-relaxed text-sc-ink-600">{stand.description}</p>
                 <ul className="m-0 flex list-none flex-col gap-1.5 p-0 text-[15px] text-sc-ink-600">
-                  {['350° rotasjon og 90° vinkling', 'Støpt aluminium, klar for Kensington-lås', 'Passer nettbrett fra 7 til 13", også iPad 11"', 'Kabelføring gjennom foten for et ryddig oppsett'].map((l) => (
+                  {t.standFeatures.map((l) => (
                     <li key={l} className="flex gap-2.5"><span className="mt-[9px] h-1.5 w-1.5 flex-none rounded-full bg-sc-cyan-500" />{l}</li>
                   ))}
                 </ul>
                 <div className="mt-1 flex flex-wrap items-center justify-between gap-4">
-                  <Price value={stand.price} className="text-[26px] text-sc-ink-900" />
-                  <Buy item={stand} contactHref={contactHref} />
+                  <Price value={stand.price} className="text-[26px] text-sc-ink-900" lang={lang} />
+                  <Buy item={stand} contactHref={contactHref} lang={lang} />
                 </div>
               </div>
             </article>
@@ -79,8 +114,8 @@ export default function Equipment({ items, contactHref, fromShopify }: { items: 
               <h3 className="m-0 text-[22px] font-bold leading-tight">{scanner.name}</h3>
               <p className="m-0 flex-1 text-[14px] leading-relaxed text-sc-ink-200">{scanner.description}</p>
               <div className="flex flex-wrap items-center justify-between gap-3">
-                <span className="font-mono text-[24px] font-medium tracking-tight">{formatNok(scanner.price)} <span className="font-sans text-xs text-sc-ink-300">eks. mva</span></span>
-                <Buy item={scanner} contactHref={contactHref} dark />
+                <span className="font-mono text-[24px] font-medium tracking-tight">{formatNok(scanner.price)} <span className="font-sans text-xs text-sc-ink-300">{exVat(lang)}</span></span>
+                <Buy item={scanner} contactHref={contactHref} dark lang={lang} />
               </div>
             </article>
           </div>
@@ -96,17 +131,17 @@ export default function Equipment({ items, contactHref, fromShopify }: { items: 
               <h3 className="m-0 text-[16px] font-bold leading-snug text-sc-ink-900 lg:text-[17px]">{item.name}</h3>
               <p className="m-0 flex-1 text-[13px] leading-relaxed text-sc-ink-600 lg:text-[14px]">{item.description}</p>
               <div className="flex flex-wrap items-center justify-between gap-2 pt-1">
-                <Price value={item.price} className="text-[18px] text-sc-ink-900" />
-                <Buy item={item} contactHref={contactHref} />
+                <Price value={item.price} className="text-[18px] text-sc-ink-900" lang={lang} />
+                <Buy item={item} contactHref={contactHref} lang={lang} />
               </div>
             </article>
           ))}
           <article className="col-span-2 flex flex-col justify-center gap-3 rounded-lg bg-sc-ink-900 p-5 text-white lg:col-span-1">
-            <div className="text-xs font-semibold uppercase tracking-[0.12em] text-sc-cyan-300">Pop-up og messe</div>
-            <h3 className="m-0 text-[20px] font-bold leading-tight">Trenger du kasse for en helg?</h3>
-            <p className="m-0 text-[14px] leading-relaxed text-sc-ink-200">Vi leier ut komplette kassepakker. Pris på forespørsel.</p>
+            <div className="text-xs font-semibold uppercase tracking-[0.12em] text-sc-cyan-300">{t.rentEyebrow}</div>
+            <h3 className="m-0 text-[20px] font-bold leading-tight">{t.rentHeading}</h3>
+            <p className="m-0 text-[14px] leading-relaxed text-sc-ink-200">{t.rentText}</p>
             <LocalizedLink href={contactHref} className="inline-flex min-h-[46px] w-fit items-center justify-center rounded-lg bg-white px-[22px] py-3 text-sm font-semibold tracking-[0.02em] text-sc-ink-900 hover:bg-sc-ink-50">
-              Spør oss
+              {t.rentButton}
             </LocalizedLink>
           </article>
         </div>
@@ -115,13 +150,13 @@ export default function Equipment({ items, contactHref, fromShopify }: { items: 
           {consumables.map((c) => (
             <div key={c.handle} className="flex items-center justify-between gap-4 rounded-lg border border-sc-ink-100 bg-white px-4 py-3.5 text-[14px] text-sc-ink-700">
               <span>{c.name}</span>
-              <Price value={c.price} className="whitespace-nowrap text-sc-ink-900" />
+              <Price value={c.price} className="whitespace-nowrap text-sc-ink-900" lang={lang} />
             </div>
           ))}
         </div>
         <p className="mb-0 mt-7 text-[13px] text-sc-ink-500">
-          Alle priser eks. mva. Hvite varianter av stativ og skuff leveres på forespørsel.
-          {fromShopify ? ' Priser og lagerstatus hentes fra nettbutikken vår.' : ''}
+          {t.footnote}
+          {fromShopify ? t.fromShopify : ''}
         </p>
       </div>
     </section>

@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from 'react'
 import { ui } from '@/components/integrations/labels'
-import { partnerCategories, type PartnerEntry } from '@/lib/partnersCatalog'
+import { categoryTitle, partnerCategories, type PartnerEntry } from '@/lib/partnersCatalog'
 import PartnerLogo from './PartnerLogo'
 
 const T = {
@@ -29,7 +29,7 @@ export default function PartnerCatalog({ partners, lang, contactHref }: { partne
     const needle = norm(q.trim())
     return partners.filter((p) => (cat === 'alle' || p.category === cat) && (!needle || norm(`${p.name} ${p.why} ${p.together} ${p.badge}`).includes(needle)))
   }, [partners, cat, q])
-  const chips = [{ key: 'alle', title: t.all }, ...partnerCategories.filter((c) => counts[c.key])]
+  const chips = [{ key: 'alle', title: t.all }, ...partnerCategories.filter((c) => counts[c.key]).map((c) => ({ key: c.key, title: categoryTitle(c.key, lang) }))]
 
   return (
     <section id="katalog" className="scroll-mt-24 bg-sc-ink-50 py-16 lg:py-20">
@@ -71,7 +71,7 @@ export default function PartnerCatalog({ partners, lang, contactHref }: { partne
                   <PartnerLogo partner={p} size={44} />
                   <div className="min-w-0">
                     <h3 className="m-0 truncate text-[17px] font-bold leading-tight text-sc-ink-900">{p.name}</h3>
-                    <div className={`${ui.eyebrow} mt-0.5 truncate text-[11px]`}>{partnerCategories.find((c) => c.key === p.category)?.title}</div>
+                    <div className={`${ui.eyebrow} mt-0.5 truncate text-[11px]`}>{categoryTitle(p.category, lang)}</div>
                   </div>
                 </div>
                 <span className={ui.tag}>{p.badge}</span>
