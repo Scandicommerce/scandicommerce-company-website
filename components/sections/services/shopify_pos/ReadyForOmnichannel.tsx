@@ -1,6 +1,5 @@
-'use client'
-
-import Link from 'next/link'
+import { CtaBand } from '@/components/integrations/LinkBlocks'
+import { ensureInternalHref } from '@/lib/routes'
 
 interface CTAData {
   ctaTitle?: string
@@ -13,41 +12,15 @@ interface ReadyForOmnichannelProps {
   cta?: CTAData
 }
 
+/** Closing CTA, the same ink band that ends every other service page. */
 export default function ReadyForOmnichannel({ cta }: ReadyForOmnichannelProps) {
-  const title = cta?.ctaTitle
-  const description = cta?.ctaDescription
-  const buttonText = cta?.ctaButtonText
-  const buttonLink = cta?.ctaButtonLink
-
+  if (!cta?.ctaTitle && !cta?.ctaButtonText) return null
   return (
-    <section className="bg-sc-cyan-500 py-16 lg:py-[170px]">
-      <div className="section_container mx-auto page-padding-x">
-        <div className="text-center flex flex-col items-center justify-start lg:gap-[91px] gap-16">
-          {(title || description) && (
-            <div className="flex flex-col items-center justify-start lg:gap-7 gap-4">
-              {title && (
-                <h2 className="text-[28px] lg:text-[36px] leading-[1.15] font-bold tracking-[-0.02em] text-white mb-4 lg:mb-6">
-                  {title}
-                </h2>
-              )}
-              {description && (
-                <p className="text-[4.3vw] xs:text-[2.6vw] sm:text-[2.5vw] md:text-[2.2vw] lg:text-[18px] xl:text-[24px] text-white">
-                  {description}
-                </p>
-              )}
-            </div>
-          )}
-
-          {buttonText && buttonLink && (
-            <Link
-              href={buttonLink}
-              className="inline-block bg-white text-[#1F1D1D] px-[30px] sm:px-[50px] py-3 lg:px-[80px] lg:py-[18px] font-semibold md:text-base text-sm hover:bg-sc-ink-50"
-            >
-              {buttonText}
-            </Link>
-          )}
-        </div>
-      </div>
-    </section>
+    <CtaBand
+      heading={cta?.ctaTitle || ''}
+      text={cta?.ctaDescription}
+      buttonLabel={cta?.ctaButtonText || 'Kontakt oss'}
+      buttonHref={ensureInternalHref(cta?.ctaButtonLink)}
+    />
   )
 }

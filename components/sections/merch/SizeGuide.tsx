@@ -1,4 +1,4 @@
-'use client'
+import { ui } from '@/components/integrations/labels'
 
 interface SizeData {
   size?: string
@@ -27,6 +27,14 @@ const defaultSizes: SizeData[] = [
   { size: 'XXL', chest: '112-117 cm', length: '78 cm', sleeve: '94 cm' },
 ]
 
+const COLUMNS: Array<{ key: keyof SizeData; label: string }> = [
+  { key: 'size', label: 'Size' },
+  { key: 'chest', label: 'Chest' },
+  { key: 'length', label: 'Length' },
+  { key: 'sleeve', label: 'Sleeve' },
+]
+
+/** Size table on the data-flow table pattern: mono values, hairline rows. */
 export default function SizeGuide({ sizeGuide }: SizeGuideProps) {
   const title = sizeGuide?.title || 'Size Guide'
   const description = sizeGuide?.description || 'All measurements in centimeters. Need help choosing?'
@@ -34,60 +42,39 @@ export default function SizeGuide({ sizeGuide }: SizeGuideProps) {
   const sizes = sizeGuide?.sizes && sizeGuide.sizes.length > 0 ? sizeGuide.sizes : defaultSizes
 
   return (
-    <section className="bg-white py-12 lg:py-20">
-      <div className="section_container mx-auto page-padding-x">
-        {/* Header */}
-        <div className="text-center mb-10 lg:mb-12">
-          <h2 className="text-2xl lg:text-3xl xl:text-4xl font-bold text-[#222222] mb-4">
-            {title}
-          </h2>
-          <p className="text-[#666666]">
+    <section className="bg-sc-ink-50 py-16 lg:py-20">
+      <div className={`${ui.container} flex flex-col gap-10`}>
+        <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between lg:gap-8">
+          <div className="flex flex-col gap-2.5">
+            <div className={ui.eyebrow}>Sizing</div>
+            <h2 className={ui.h2}>{title}</h2>
+          </div>
+          <p className="m-0 max-w-[520px] text-base leading-relaxed text-sc-ink-600 lg:text-lg">
             {description}{' '}
-            <button className="text-[#666666] underline hover:text-[#03C1CA] transition-colors">
+            <a href="/contact" className="font-semibold text-sc-ink-900 underline decoration-sc-ink-300 underline-offset-4 transition-colors hover:text-sc-cyan-600">
               {contactButtonText}
-            </button>
+            </a>
           </p>
         </div>
 
-        {/* Table */}
-        <div className="max-w-4xl mx-auto overflow-x-auto">
-          <table className="w-full border-collapse">
+        <div className="overflow-x-auto rounded-lg border border-sc-ink-100 bg-white">
+          <table className="w-full border-collapse text-left">
             <thead>
-              <tr className="border-b border-[#E5E5E5]">
-                <th className="text-left py-4 px-4 lg:px-6 text-sm font-medium text-[#666666]">
-                  Size
-                </th>
-                <th className="text-left py-4 px-4 lg:px-6 text-sm font-medium text-[#666666]">
-                  Chest
-                </th>
-                <th className="text-left py-4 px-4 lg:px-6 text-sm font-medium text-[#666666]">
-                  Length
-                </th>
-                <th className="text-left py-4 px-4 lg:px-6 text-sm font-medium text-[#666666]">
-                  Sleeve
-                </th>
+              <tr className="border-b border-sc-ink-200">
+                {COLUMNS.map((col) => (
+                  <th key={col.key} className="px-5 py-3.5 text-xs font-semibold uppercase tracking-[0.08em] text-sc-ink-500">
+                    {col.label}
+                  </th>
+                ))}
               </tr>
             </thead>
             <tbody>
               {sizes.map((sizeData, index) => (
-                <tr
-                  key={sizeData.size || index}
-                  className={`border-b border-[#E5E5E5] ${
-                    index % 2 === 0 ? 'bg-[#FAFAFA]' : 'bg-white'
-                  }`}
-                >
-                  <td className="py-4 px-4 lg:px-6 text-sm text-[#222222] font-medium">
-                    {sizeData.size || ''}
-                  </td>
-                  <td className="py-4 px-4 lg:px-6 text-sm text-[#666666]">
-                    {sizeData.chest || ''}
-                  </td>
-                  <td className="py-4 px-4 lg:px-6 text-sm text-[#666666]">
-                    {sizeData.length || ''}
-                  </td>
-                  <td className="py-4 px-4 lg:px-6 text-sm text-[#666666]">
-                    {sizeData.sleeve || ''}
-                  </td>
+                <tr key={sizeData.size || index} className="border-b border-sc-ink-100 last:border-b-0">
+                  <td className="px-5 py-3.5 text-[15px] font-semibold text-sc-ink-900">{sizeData.size || ''}</td>
+                  <td className="px-5 py-3.5 font-mono text-[13px] text-sc-ink-600">{sizeData.chest || ''}</td>
+                  <td className="px-5 py-3.5 font-mono text-[13px] text-sc-ink-600">{sizeData.length || ''}</td>
+                  <td className="px-5 py-3.5 font-mono text-[13px] text-sc-ink-600">{sizeData.sleeve || ''}</td>
                 </tr>
               ))}
             </tbody>

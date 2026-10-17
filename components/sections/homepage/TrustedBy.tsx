@@ -85,7 +85,7 @@ export default function TrustedBy({ trustedBy }: TrustedByProps) {
     // clear air above (separates it from the hero/tier strip) and a large gap
     // (112px desktop / 44px mobile) before the next section.
     <section className="bg-white mt-10 lg:mt-16 mb-11 lg:mb-[112px]">
-      <p className="text-xs lg:text-[13px] text-sc-ink-400 text-center mb-5 lg:mb-7 page-padding-x">
+      <p className="text-xs lg:text-[13px] text-sc-ink-400 text-center mb-5 lg:mb-7 px-5 lg:px-8">
         {title}
       </p>
       <div className="relative">

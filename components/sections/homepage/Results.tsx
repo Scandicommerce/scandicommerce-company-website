@@ -68,7 +68,7 @@ export default function Results({ data , lang = 'no' }: ResultsProps) {
 
   return (
     <section className="relative bg-white py-16 lg:py-28 overflow-hidden">
-      <div className="section_container max-w-[1320px] mx-auto page-padding-x">
+      <div className="w-full max-w-[1320px] mx-auto px-5 lg:px-8">
         <div className="flex items-end justify-between gap-6 mb-6 lg:mb-10">
           <div>
             <div className="text-[11px] lg:text-xs font-semibold uppercase tracking-[0.12em] text-sc-cyan-500 mb-2.5">

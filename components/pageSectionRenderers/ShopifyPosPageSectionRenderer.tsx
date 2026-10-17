@@ -1,8 +1,8 @@
-import Hero from '@/components/layout/Hero'
-import { Button } from '@/components/ui'
+import ServiceHero from '@/components/sections/services/ServiceHero'
 import OmnichannelFeatures from '@/components/sections/services/shopify_pos/OmnichannelFeatures'
 import PerfectFor from '@/components/sections/services/shopify_pos/PerfectFor'
 import ReadyForOmnichannel from '@/components/sections/services/shopify_pos/ReadyForOmnichannel'
+import { ensureInternalHref } from '@/lib/routes'
 import type { SanitySectionItem } from '@/lib/sanity/normalizeDocumentSections'
 
 export function ShopifyPosPageSectionRenderer({ sections }: { sections: SanitySectionItem[] }) {
@@ -12,16 +12,21 @@ export function ShopifyPosPageSectionRenderer({ sections }: { sections: SanitySe
         const { _type, _key, ...rest } = section
         switch (_type) {
           case 'shopifyPosPageHeroSection': {
-            const hero = rest as Parameters<typeof Hero>[0]['hero'] & {
+            const hero = rest as {
+              heroTitle?: { text?: string; highlight?: string }
+              heroDescription?: string
               heroButtonText?: string
               heroButtonLink?: string
             }
             return (
-              <Hero key={_key} hero={hero}>
-                <div className="grid grid-cols-1 lg:gap-4 gap-2">
-                  <Button href={hero.heroButtonLink}>{hero.heroButtonText}</Button>
-                </div>
-              </Hero>
+              <ServiceHero
+                key={_key}
+                eyebrow="Shopify POS"
+                title={hero.heroTitle?.text ?? ''}
+                highlight={hero.heroTitle?.highlight}
+                description={hero.heroDescription}
+                buttons={hero.heroButtonText ? [{ text: hero.heroButtonText, link: ensureInternalHref(hero.heroButtonLink), variant: 'primary' }] : undefined}
+              />
             )
           }
           case 'shopifyPosPageFeaturesSection':

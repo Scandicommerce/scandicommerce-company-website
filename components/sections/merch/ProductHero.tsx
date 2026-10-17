@@ -4,6 +4,7 @@ import { useState, useCallback } from 'react'
 import Image from 'next/image'
 import { HiMinus, HiPlus, HiCheck, HiStar } from 'react-icons/hi2'
 import AddToCartDropdown from './AddToCartDropdown'
+import { ui } from '@/components/integrations/labels'
 
 interface Variant {
   id: string
@@ -35,6 +36,7 @@ const badges = [
   { icon: HiCheck, text: 'Secure Checkout' },
 ]
 
+/** Product hero on the service-hero surface: gallery in a hairline panel left, buy column right. */
 export default function ProductHero({ product }: ProductHeroProps) {
   const [selectedVariant, setSelectedVariant] = useState<Variant | null>(null)
   const [quantity, setQuantity] = useState(1)
@@ -53,128 +55,115 @@ export default function ProductHero({ product }: ProductHeroProps) {
   const restPart = nameParts.slice(2).join(' ')
 
   return (
-    <section className="bg-[#F5F5F5] py-8 lg:py-16">
-      <div className="section_container mx-auto page-padding-x">
-        <div className="overflow-hidden">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 p-6 lg:p-12">
-            <div className="space-y-4">
-              <div className="relative aspect-square bg-[#FFFFFF] overflow-hidden">
-                <Image
-                  src={product.images[activeImage]}
-                  alt={product.name}
-                  fill
-                  className="object-contain p-8"
-                  priority
-                  unoptimized={product.images[activeImage].endsWith('.svg')}
-                />
-              </div>
+    <section className="bg-white">
+      <div className={`${ui.container} grid grid-cols-1 gap-10 pb-14 pt-10 lg:grid-cols-[1.05fr_1fr] lg:gap-16 lg:pb-20 lg:pt-14`}>
+        <div className="flex flex-col gap-4">
+          <div className="relative aspect-square overflow-hidden rounded-lg border border-sc-ink-100 bg-sc-ink-50">
+            <Image
+              src={product.images[activeImage]}
+              alt={product.name}
+              fill
+              className="object-contain p-8"
+              priority
+              unoptimized={product.images[activeImage].endsWith('.svg')}
+            />
+          </div>
 
-              <div className="flex justify-between w-full h-[100px] sm:h-[120px] md:h-[140px] lg:h-[170px] overflow-x-auto pb-2 lg:gap-0 md:gap-2 sm:gap-3">
-                {product.images.map((image, index) => (
-                  <button
-                    key={index}
-                    onClick={() => setActiveImage(index)}
-                    className={`relative w-[80px] sm:w-[100px] md:w-[120px] lg:w-1/4 h-full flex-shrink-0 overflow-hidden border-2 transition-all ${activeImage === index
-                      ? 'border-[#03C1CA]'
-                      : 'border-[#E5E5E5] hover:border-[#03C1CA]/50'
-                      }`}
-                  >
-                    <Image
-                      src={image}
-                      alt={`${product.name} view ${index + 1}`}
-                      fill
-                      className="object-contain p-1 sm:p-2"
-                      unoptimized={image.endsWith('.svg')}
-                    />
-                  </button>
-                ))}
-              </div>
+          {product.images.length > 1 && (
+            <div className="flex gap-3 overflow-x-auto pb-1">
+              {product.images.map((image, index) => (
+                <button
+                  key={index}
+                  onClick={() => setActiveImage(index)}
+                  className={`relative h-20 w-20 flex-shrink-0 overflow-hidden rounded-lg border bg-white transition-colors ${
+                    activeImage === index ? 'border-sc-ink-900' : 'border-sc-ink-200 hover:border-sc-ink-400'
+                  }`}
+                  aria-label={`${product.name} view ${index + 1}`}
+                >
+                  <Image
+                    src={image}
+                    alt={`${product.name} view ${index + 1}`}
+                    fill
+                    className="object-contain p-2"
+                    unoptimized={image.endsWith('.svg')}
+                  />
+                </button>
+              ))}
             </div>
+          )}
+        </div>
 
-            <div className="flex flex-col">
-              {product.isNewArrival && (
-                <span className="inline-flex items-center self-start px-3 py-1 text-xs font-medium bg-[#222222] text-white mb-4">
-                  New Arrival
-                </span>
-              )}
+        <div className="flex flex-col">
+          <div className="mb-4 flex flex-wrap items-center gap-2">
+            <span className={ui.eyebrow}>Merch</span>
+            {product.isNewArrival && <span className={ui.tag}>New arrival</span>}
+          </div>
 
-              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-[#222222] mb-2">
-                <span className="text-[#03C1CA]">{highlightPart}</span>{' '}
-                {restPart}
-              </h1>
+          <h1 className="mb-2 text-[32px] font-bold leading-[1.05] tracking-[-0.025em] text-sc-ink-900 sm:text-[40px] lg:text-[48px]">
+            <span className="text-sc-cyan-500">{highlightPart}</span>
+            {restPart && ` ${restPart}`}
+          </h1>
 
-              <p className="text-sm text-[#666666] mb-4">{product.subtitle}</p>
+          {product.subtitle && <p className="m-0 mb-5 text-sm text-sc-ink-500">{product.subtitle}</p>}
 
-              <div className="flex flex-wrap items-center gap-4 mb-6">
-                <span className="text-2xl font-bold text-[#222222] font-mono tracking-tight">
-                  {selectedVariant ? selectedVariant.price : product.price} {selectedVariant ? selectedVariant.currencyCode : product.currency}
-                </span>
-                <div className="flex items-center gap-2">
-                  <div className="flex">
-                    {[...Array(5)].map((_, i) => (
-                      <HiStar
-                        key={i}
-                        className={`w-5 h-5 ${i < product.rating ? 'text-[#F5A623]' : 'text-[#E5E5E5]'
-                          }`}
-                      />
-                    ))}
-                  </div>
-                  <span className="text-sm text-[#666666]">
-                    ({product.reviewCount} reviews)
-                  </span>
-                </div>
-              </div>
-
-              <p className="text-[#666666] leading-relaxed mb-8">
-                {product.description}
-              </p>
-
-              {/* Quantity Selector */}
-              <div className="mb-6">
-                <span className="text-sm font-medium text-[#222222] mb-3 block">Quantity</span>
-                <div className="flex gap-3 items-center">
-                  <button
-                    onClick={() => handleQuantityChange(-1)}
-                    className="w-12 h-12 flex items-center justify-center border text-black border-[#E5E5E5] hover:bg-[#F8F8F8] transition-colors"
-                    aria-label="Decrease quantity"
-                  >
-                    <HiMinus className="w-4 h-4" />
-                  </button>
-                  <div className="w-20 h-12 flex items-center justify-center border border-[#E5E5E5] text-[#222222] font-medium font-mono">
-                    {quantity}
-                  </div>
-                  <button
-                    onClick={() => handleQuantityChange(1)}
-                    className="w-12 h-12 flex items-center justify-center border text-black border-[#E5E5E5] hover:bg-[#F8F8F8] transition-colors"
-                    aria-label="Increase quantity"
-                  >
-                    <HiPlus className="w-4 h-4" />
-                  </button>
-                </div>
-              </div>
-
-              {/* Add to Cart Dropdown with Variant Selection */}
-              <div className="mb-8">
-                <AddToCartDropdown
-                  variants={product.variants || []}
-                  productTitle={product.name}
-                  quantity={quantity}
-                  onVariantSelect={handleVariantSelect}
-                />
-              </div>
-
-              <div className="flex flex-wrap justify-between items-center gap-4 sm:gap-6 pt-6 border-t border-[#5654544D]">
-                {badges.map((badge, index) => (
-                  <div key={index} className="flex items-center gap-2">
-                    <div className="w-5 h-5 flex items-center justify-center border border-[#565454]">
-                      <badge.icon className="w-3 h-3 text-[#565454]" />
-                    </div>
-                    <span className="text-sm text-[#565454]">{badge.text}</span>
-                  </div>
+          <div className="mb-6 flex flex-wrap items-center gap-4">
+            <span className="font-mono text-[28px] font-medium leading-none tracking-tight text-sc-ink-900">
+              {selectedVariant ? selectedVariant.price : product.price} {selectedVariant ? selectedVariant.currencyCode : product.currency}
+            </span>
+            <div className="flex items-center gap-2">
+              <div className="flex" aria-hidden="true">
+                {[...Array(5)].map((_, i) => (
+                  <HiStar key={i} className={`h-4 w-4 ${i < product.rating ? 'text-sc-ink-900' : 'text-sc-ink-200'}`} />
                 ))}
               </div>
+              <span className="text-sm text-sc-ink-500">({product.reviewCount} reviews)</span>
             </div>
           </div>
+
+          {product.description && <p className="m-0 mb-8 text-base leading-relaxed text-sc-ink-600">{product.description}</p>}
+
+          {/* Quantity Selector */}
+          <div className="mb-5">
+            <span className="mb-2 block text-sm font-semibold text-sc-ink-900">Quantity</span>
+            <div className="inline-flex items-center overflow-hidden rounded-lg border border-sc-ink-300">
+              <button
+                onClick={() => handleQuantityChange(-1)}
+                className="flex h-11 w-11 items-center justify-center text-sc-ink-900 transition-colors hover:bg-sc-ink-50"
+                aria-label="Decrease quantity"
+              >
+                <HiMinus className="h-4 w-4" />
+              </button>
+              <div className="flex h-11 w-16 items-center justify-center border-x border-sc-ink-300 font-mono text-[15px] text-sc-ink-900">
+                {quantity}
+              </div>
+              <button
+                onClick={() => handleQuantityChange(1)}
+                className="flex h-11 w-11 items-center justify-center text-sc-ink-900 transition-colors hover:bg-sc-ink-50"
+                aria-label="Increase quantity"
+              >
+                <HiPlus className="h-4 w-4" />
+              </button>
+            </div>
+          </div>
+
+          {/* Add to Cart Dropdown with Variant Selection */}
+          <div className="mb-8">
+            <AddToCartDropdown
+              variants={product.variants || []}
+              productTitle={product.name}
+              quantity={quantity}
+              onVariantSelect={handleVariantSelect}
+            />
+          </div>
+
+          <ul className="m-0 flex list-none flex-wrap gap-x-6 gap-y-2 border-t border-sc-ink-200 p-0 pt-6 text-sm text-sc-ink-600">
+            {badges.map((badge, index) => (
+              <li key={index} className="flex items-center gap-2">
+                <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-sc-cyan-500" />
+                {badge.text}
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
     </section>

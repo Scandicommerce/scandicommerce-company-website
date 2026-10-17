@@ -102,7 +102,7 @@ export default function ServicesPackaged({ data, packages: packagesData, lang = 
 
   return (
     <section id="packages" className="relative bg-sc-ink-50 overflow-hidden">
-      <div className="section_container max-w-[1320px] mx-auto page-padding-x py-10 lg:py-24">
+      <div className="w-full max-w-[1320px] mx-auto px-5 lg:px-8 py-10 lg:py-24">
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.8fr] gap-8 lg:gap-16 items-start">
           <div>
             <div className="text-[11px] lg:text-xs font-semibold uppercase tracking-[0.12em] text-sc-cyan-500 mb-2.5">

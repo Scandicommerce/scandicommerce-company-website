@@ -24,7 +24,7 @@ export default function HowWeWork({ process }: HowWeWorkProps) {
 
   return (
     <section className="relative bg-white py-10 lg:py-24 overflow-hidden">
-      <div className="section_container max-w-[1320px] mx-auto page-padding-x">
+      <div className="w-full max-w-[1320px] mx-auto px-5 lg:px-8">
         <div className="mb-[18px] lg:mb-8">
           <div className="text-[11px] lg:text-xs font-semibold uppercase tracking-[0.12em] text-sc-cyan-500 mb-2 lg:mb-2.5">
             Prosess

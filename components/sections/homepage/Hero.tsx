@@ -92,7 +92,7 @@ export default function Hero({ hero }: HeroProps) {
 
   return (
     <section className="relative bg-white pt-8 lg:pt-[72px] overflow-hidden">
-      <div className="section_container max-w-[1320px] mx-auto page-padding-x">
+      <div className="w-full max-w-[1320px] mx-auto px-5 lg:px-8">
         {badge && (
           <div className="text-[11px] lg:text-xs font-semibold uppercase tracking-[0.12em] text-sc-cyan-500 mb-3.5 lg:mb-[18px]">
             {badge}

@@ -101,19 +101,19 @@ export default function AddToCartDropdown({
           <div ref={dropdownRef} className="relative flex-1">
             <button
               onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-              className={`w-full py-4 px-6 border text-left flex items-center justify-between transition-all ${
+              className={`flex min-h-[46px] w-full items-center justify-between rounded-lg border bg-white px-4 py-3 text-left text-sm transition-colors ${
                 error && !selectedVariant
                   ? 'border-red-500 bg-red-50'
                   : selectedVariant
-                  ? 'border-[#03C1CA] bg-[#03C1CA]/5'
-                  : 'border-[#E5E5E5] hover:border-[#03C1CA]'
+                  ? 'border-sc-ink-900'
+                  : 'border-sc-ink-300 hover:border-sc-ink-500'
               }`}
             >
-              <span className={selectedVariant ? 'text-[#222222] font-medium' : 'text-[#666666]'}>
+              <span className={selectedVariant ? 'font-semibold text-sc-ink-900' : 'text-sc-ink-500'}>
                 {selectedVariant ? selectedVariant.title : 'Select Option'}
               </span>
               <HiChevronDown
-                className={`w-5 h-5 text-[#666666] transition-transform ${
+                className={`h-4 w-4 text-sc-ink-500 transition-transform ${
                   isDropdownOpen ? 'rotate-180' : ''
                 }`}
               />
@@ -126,19 +126,19 @@ export default function AddToCartDropdown({
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
                   transition={{ duration: 0.2 }}
-                  className="absolute top-full left-0 right-0 mt-1 bg-white border border-[#E5E5E5] shadow-lg z-50 max-h-60 overflow-y-auto"
+                  className="absolute left-0 right-0 top-full z-50 mt-1 max-h-60 overflow-y-auto rounded-lg border border-sc-ink-200 bg-white shadow-lg"
                 >
                   {variants.map((variant) => (
                     <button
                       key={variant.id}
                       onClick={() => handleVariantSelect(variant)}
                       disabled={!variant.availableForSale}
-                      className={`w-full px-6 py-3 text-left flex items-center justify-between transition-colors ${
+                      className={`flex w-full items-center justify-between px-4 py-2.5 text-left text-sm transition-colors ${
                         !variant.availableForSale
-                          ? 'bg-gray-50 text-gray-400 cursor-not-allowed'
+                          ? 'cursor-not-allowed bg-sc-ink-50 text-sc-ink-400'
                           : selectedVariant?.id === variant.id
-                          ? 'bg-[#03C1CA]/10 text-[#03C1CA]'
-                          : 'hover:bg-[#F8F8F8] text-[#222222]'
+                          ? 'bg-sc-ink-900 text-white'
+                          : 'text-sc-ink-900 hover:bg-sc-ink-50'
                       }`}
                     >
                       <div className="flex flex-col">
@@ -148,11 +148,11 @@ export default function AddToCartDropdown({
                         )}
                       </div>
                       <div className="flex items-center gap-2">
-                        <span className="text-sm font-mono">
+                        <span className="font-mono text-[13px]">
                           {variant.price} {variant.currencyCode}
                         </span>
                         {selectedVariant?.id === variant.id && (
-                          <HiCheck className="w-5 h-5 text-[#03C1CA]" />
+                          <HiCheck className="h-4 w-4" />
                         )}
                       </div>
                     </button>
@@ -167,12 +167,12 @@ export default function AddToCartDropdown({
         <button
           onClick={handleAddToCart}
           disabled={isAddingToCart || !hasAvailableVariants}
-          className={`flex-1 py-4 px-6 font-medium transition-all flex items-center justify-center gap-2 ${
+          className={`inline-flex min-h-[46px] flex-1 items-center justify-center gap-2 rounded-lg px-[22px] py-3 text-sm font-semibold tracking-[0.02em] transition-colors ${
             isAddingToCart || !hasAvailableVariants
-              ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+              ? 'cursor-not-allowed bg-sc-ink-200 text-sc-ink-500'
               : showSuccessMessage
               ? 'bg-green-500 text-white'
-              : 'bg-[#03C1CA] text-white hover:bg-[#02A8B0]'
+              : 'bg-sc-ink-900 text-white hover:bg-sc-ink-700'
           }`}
         >
           {isAddingToCart ? (

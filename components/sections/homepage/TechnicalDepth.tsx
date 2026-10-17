@@ -22,7 +22,7 @@ export default function TechnicalDepth({ data }: TechnicalDepthProps) {
 
   return (
     <section className="relative bg-white py-16 lg:py-24" ref={ref}>
-      <div className="section_container mx-auto page-padding-x max-w-3xl">
+      <div className="mx-auto max-w-3xl px-5 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}

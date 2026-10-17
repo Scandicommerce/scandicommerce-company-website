@@ -1,5 +1,5 @@
 import { Fragment } from 'react'
-import Hero from '@/components/layout/Hero'
+import ServiceHero from '@/components/sections/services/ServiceHero'
 import ProductGrid from '@/components/sections/merch/ProductGrid'
 import QualityShowcase from '@/components/sections/merch/QualityShowcase'
 import Newsletter from '@/components/sections/merch/Newsletter'
@@ -18,13 +18,18 @@ export function MerchPageSectionRenderer({
       {sections.map((section) => {
         const { _type, _key, ...rest } = section
         switch (_type) {
-          case 'merchPageHeroSection':
+          case 'merchPageHeroSection': {
+            const hero = rest as {
+              heroTitle?: { text?: string; highlight?: string }
+              heroDescription?: string
+            }
             return (
               <Fragment key={_key}>
-                <Hero hero={rest as Parameters<typeof Hero>[0]['hero']} />
+                <ServiceHero eyebrow="Merch" title={hero.heroTitle?.text ?? ''} highlight={hero.heroTitle?.highlight} description={hero.heroDescription} />
                 <ProductGrid initialProducts={shopifyProducts} />
               </Fragment>
             )
+          }
           case 'merchPageQualityShowcaseSection':
             return (
               <QualityShowcase
