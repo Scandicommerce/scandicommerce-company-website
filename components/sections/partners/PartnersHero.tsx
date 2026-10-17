@@ -1,6 +1,6 @@
 import { ui } from '@/components/integrations/labels'
 import DataFlowAnimation from '@/components/integrations/DataFlowAnimation'
-import type { PartnerEntry } from '@/lib/partnersCatalog'
+import { partnerLang, type PartnerEntry } from '@/lib/partnersCatalog'
 import PartnerLogo from './PartnerLogo'
 
 interface PartnersHeroProps {
@@ -12,9 +12,13 @@ interface PartnersHeroProps {
   lang: string
 }
 
+/** `payloads` label the pulses in the mesh: orders, vouchers, payment, inventory, customers. */
 const T = {
-  no: { eyebrow: 'Partnere', explore: 'Utforsk partnerne', how: 'Slik velger vi partnere', s1: 'partnere og integrasjoner', s2: 'fagområder', s3: 'kontaktpunkt' },
-  en: { eyebrow: 'Partners', explore: 'Explore the partners', how: 'How we choose partners', s1: 'partners and integrations', s2: 'disciplines', s3: 'point of contact' },
+  no: { eyebrow: 'Partnere', explore: 'Utforsk partnerne', how: 'Slik velger vi partnere', s1: 'partnere og integrasjoner', s2: 'fagområder', s3: 'kontaktpunkt', payloads: ['ordre', 'bilag', 'betaling', 'lager', 'kunder'] },
+  en: { eyebrow: 'Partners', explore: 'Explore the partners', how: 'How we choose partners', s1: 'partners and integrations', s2: 'disciplines', s3: 'point of contact', payloads: ['orders', 'vouchers', 'payment', 'inventory', 'customers'] },
+  sv: { eyebrow: 'Partner', explore: 'Utforska partnerna', how: 'Så väljer vi partner', s1: 'partner och integrationer', s2: 'fackområden', s3: 'kontaktpunkt', payloads: ['order', 'verifikat', 'betalning', 'lager', 'kunder'] },
+  da: { eyebrow: 'Partnere', explore: 'Udforsk partnerne', how: 'Sådan vælger vi partnere', s1: 'partnere og integrationer', s2: 'fagområder', s3: 'kontaktpunkt', payloads: ['ordrer', 'bilag', 'betaling', 'lager', 'kunder'] },
+  de: { eyebrow: 'Partner', explore: 'Partner entdecken', how: 'So wählen wir Partner aus', s1: 'Partner und Integrationen', s2: 'Fachbereiche', s3: 'Ansprechpartner', payloads: ['Bestellungen', 'Belege', 'Zahlung', 'Lager', 'Kunden'] },
 }
 
 function renderTitle(title: string, highlight?: string) {
@@ -66,17 +70,18 @@ function LogoWall({ partners }: { partners: PartnerEntry[] }) {
  * between partners), phones get the floating logo wall.
  */
 export default function PartnersHero({ title, highlight, description, partners, categoryCount, lang }: PartnersHeroProps) {
-  const t = lang === 'no' ? T.no : T.en
+  const t = T[partnerLang(lang)]
   const core = partners.filter((p) => p.core)
   const web = [...core, ...partners.filter((p) => !p.core && p.logo)].slice(0, 10)
   const wall = [...core, ...partners.filter((p) => !p.core && p.logo)].slice(0, 24)
   const nodes = web.map((p) => ({ label: p.name, logos: p.logo ? [p.logo] : [] }))
+  const [orders, vouchers, payment, inventory, customers] = t.payloads
   const steps = [
-    { from: 'Shopify', to: 'Make', payload: lang === 'no' ? 'ordre' : 'orders' },
-    { from: 'Make', to: 'Tripletex', payload: lang === 'no' ? 'bilag' : 'vouchers' },
-    { from: 'Vipps', to: 'Shopify', payload: lang === 'no' ? 'betaling' : 'payment' },
-    { from: 'Omnium', to: 'Shopify', payload: lang === 'no' ? 'lager' : 'inventory' },
-    { from: 'Klaviyo', to: 'Shopify', payload: lang === 'no' ? 'kunder' : 'customers' },
+    { from: 'Shopify', to: 'Make', payload: orders },
+    { from: 'Make', to: 'Tripletex', payload: vouchers },
+    { from: 'Vipps', to: 'Shopify', payload: payment },
+    { from: 'Omnium', to: 'Shopify', payload: inventory },
+    { from: 'Klaviyo', to: 'Shopify', payload: customers },
     { from: 'Nets', to: 'Shopify', payload: 'POS' },
   ]
   return (

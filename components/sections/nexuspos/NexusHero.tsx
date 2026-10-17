@@ -24,6 +24,36 @@ const T = {
     book: 'Book a no-obligation call',
     terms: 'Fixed prices · No lock-in · 30 days notice',
   },
+  sv: {
+    news: 'Nyhet',
+    pill: 'Unified commerce är äntligen tillgängligt i Norge',
+    h1: 'Kassa, webbutik, lager och bokföring.',
+    h1Accent: 'Äntligen i ett system.',
+    lead: 'Nexus POS gör Shopify POS redo för den norska kassalagen, med Nets-terminal, kvitto, journal, X/Z-rapporter och SAF-T. Därmed blir Shopify det enda stället där butiken och webbutiken möts. Samma varor, samma lager, samma kunder och en siffra för hur företaget faktiskt går.',
+    prices: 'Se vad det kostar',
+    book: 'Boka ett förutsättningslöst samtal',
+    terms: 'Fasta priser · Ingen bindningstid · 30 dagars uppsägningstid',
+  },
+  da: {
+    news: 'Nyhed',
+    pill: 'Unified commerce er endelig tilgængelig i Norge',
+    h1: 'Kasse, webshop, lager og regnskab.',
+    h1Accent: 'Endelig i ét system.',
+    lead: 'Nexus POS gør Shopify POS klar til den norske kasselov, med Nets-terminal, kvittering, journal, X/Z-rapporter og SAF-T. Dermed bliver Shopify det ene sted, hvor butikken og webshoppen mødes. Samme varer, samme lager, samme kunder og ét tal for, hvordan virksomheden faktisk går.',
+    prices: 'Se hvad det koster',
+    book: 'Book en uforpligtende samtale',
+    terms: 'Faste priser · Ingen binding · 30 dages opsigelse',
+  },
+  de: {
+    news: 'Neu',
+    pill: 'Unified Commerce ist endlich in Norwegen verfügbar',
+    h1: 'Kasse, Onlineshop, Lager und Buchhaltung.',
+    h1Accent: 'Endlich in einem System.',
+    lead: 'Nexus POS macht Shopify POS fit für das norwegische Kassengesetz, mit Nets-Terminal, Beleg, Journal, X/Z-Berichten und SAF-T. Damit wird Shopify zum einen Ort, an dem Geschäft und Onlineshop zusammenkommen. Gleiche Artikel, gleiches Lager, gleiche Kunden und eine Zahl dafür, wie das Unternehmen wirklich läuft.',
+    prices: 'Preise ansehen',
+    book: 'Unverbindliches Gespräch vereinbaren',
+    terms: 'Festpreise · Keine Mindestlaufzeit · 30 Tage Kündigungsfrist',
+  },
 }
 
 export default function NexusHero({ contactHref, lang = 'no' }: { contactHref: string; lang?: NexusLang }) {

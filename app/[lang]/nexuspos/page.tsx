@@ -27,11 +27,26 @@ const META = {
     title: 'Nexus POS: till, online store, inventory and accounting in one system',
     description: 'Nexus POS makes Shopify POS compliant with the Norwegian Cash Register Act, with a Nets terminal, receipts, journal, X/Z reports and SAF-T. Fixed prices, no lock-in.',
   },
+  sv: {
+    title: 'Nexus POS: kassa, webbutik, lager och bokföring i ett system',
+    description: 'Nexus POS gör Shopify POS redo för den norska kassalagen med Nets-terminal, kvitto, journal, X/Z-rapporter och SAF-T. Fasta priser, ingen bindningstid.',
+  },
+  da: {
+    title: 'Nexus POS: kasse, webshop, lager og regnskab i ét system',
+    description: 'Nexus POS gør Shopify POS klar til den norske kasselov med Nets-terminal, kvittering, journal, X/Z-rapporter og SAF-T. Faste priser, ingen binding.',
+  },
+  de: {
+    title: 'Nexus POS: Kasse, Onlineshop, Lager und Buchhaltung in einem System',
+    description: 'Nexus POS macht Shopify POS fit für das norwegische Kassengesetz, mit Nets-Terminal, Beleg, Journal, X/Z-Berichten und SAF-T. Festpreise, keine Mindestlaufzeit.',
+  },
 }
 
 const PAGE = {
   no: { faq: 'Spørsmål vi får hver uke', ctaHeading: 'Én Shopify for butikk og nett. Start i dag.', ctaText: '15 minutter på telefon, så vet du hva du trenger og hva det koster.', ctaButton: 'Bestill en uforpliktende samtale' },
   en: { faq: 'Questions we get every week', ctaHeading: 'One Shopify for store and web. Start today.', ctaText: '15 minutes on the phone and you will know what you need and what it costs.', ctaButton: 'Book a no-obligation call' },
+  sv: { faq: 'Frågor vi får varje vecka', ctaHeading: 'En Shopify för butik och webb. Börja i dag.', ctaText: '15 minuter på telefon, så vet du vad du behöver och vad det kostar.', ctaButton: 'Boka ett förutsättningslöst samtal' },
+  da: { faq: 'Spørgsmål vi får hver uge', ctaHeading: 'Én Shopify til butik og web. Start i dag.', ctaText: '15 minutter på telefonen, så ved du, hvad du skal bruge, og hvad det koster.', ctaButton: 'Book en uforpligtende samtale' },
+  de: { faq: 'Fragen, die wir jede Woche bekommen', ctaHeading: 'Ein Shopify für Geschäft und Web. Starten Sie heute.', ctaText: '15 Minuten am Telefon, und Sie wissen, was Sie brauchen und was es kostet.', ctaButton: 'Unverbindliches Gespräch vereinbaren' },
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ lang: string }> }): Promise<Metadata> {
@@ -48,8 +63,8 @@ export async function generateMetadata({ params }: { params: Promise<{ lang: str
 }
 
 /**
- * Nexus POS landing page (/nexuspos). Norwegian copy on scandicommerce.no,
- * English for every other locale (sv/da/de fall back to English for now).
+ * Nexus POS landing page (/nexuspos). Norwegian copy on scandicommerce.no;
+ * English, Swedish, Danish and German on the .com locales (unknown → English).
  * Prices, images and cart buttons for the equipment come from the "nexus-pos"
  * collection in the Shopify store when the products exist there; the catalog
  * in lib/nexuspos.ts is the fallback and the source of the copy.

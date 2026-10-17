@@ -34,6 +34,24 @@ const CARDS = {
     { x: 20, y: 296, title: 'Inventory', sub: 'One stock, every channel', icon: 'lager' },
     { x: 320, y: 296, title: 'Accounting', sub: 'Z report · SAF-T', icon: 'bars' },
   ],
+  sv: [
+    { x: 20, y: 36, title: 'Kassa', sub: 'N950 · iPad', icon: 'kasse' },
+    { x: 320, y: 36, title: 'Webbutik', sub: 'Shopify', icon: 'shop' },
+    { x: 20, y: 296, title: 'Lager', sub: 'Ett lager, alla kanaler', icon: 'lager' },
+    { x: 320, y: 296, title: 'Bokföring', sub: 'Z-rapport · SAF-T', icon: 'bars' },
+  ],
+  da: [
+    { x: 20, y: 36, title: 'Kasse', sub: 'N950 · iPad', icon: 'kasse' },
+    { x: 320, y: 36, title: 'Webshop', sub: 'Shopify', icon: 'shop' },
+    { x: 20, y: 296, title: 'Lager', sub: 'Ét lager, alle kanaler', icon: 'lager' },
+    { x: 320, y: 296, title: 'Regnskab', sub: 'Z-rapport · SAF-T', icon: 'bars' },
+  ],
+  de: [
+    { x: 20, y: 36, title: 'Kasse', sub: 'N950 · iPad', icon: 'kasse' },
+    { x: 320, y: 36, title: 'Onlineshop', sub: 'Shopify', icon: 'shop' },
+    { x: 20, y: 296, title: 'Lager', sub: 'Ein Lager, alle Kanäle', icon: 'lager' },
+    { x: 320, y: 296, title: 'Buchhaltung', sub: 'Z-Bericht · SAF-T', icon: 'bars' },
+  ],
 }
 
 const FEED = {
@@ -49,11 +67,32 @@ const FEED = {
     { b: 'Click and collect', t: 'web order ready in store', when: 'now' },
     { b: 'Z report', t: 'daily settlement ready for accounting', when: '18:00' },
   ],
+  sv: [
+    { b: 'Försäljning i butik', t: '1 249 kr på N950', when: 'nu' },
+    { b: 'Lager uppdaterat', t: 'även i webbutiken', when: 'nu' },
+    { b: 'Klicka och hämta', t: 'webborder redo i butik', when: 'nu' },
+    { b: 'Z-rapport', t: 'dagsavslut klart för bokföring', when: 'kl. 18.00' },
+  ],
+  da: [
+    { b: 'Salg i butik', t: '1 249 kr på N950', when: 'nu' },
+    { b: 'Lager opdateret', t: 'også i webshoppen', when: 'nu' },
+    { b: 'Klik og hent', t: 'webordre klar i butikken', when: 'nu' },
+    { b: 'Z-rapport', t: 'dagsopgørelse klar til regnskab', when: 'kl. 18.00' },
+  ],
+  de: [
+    { b: 'Verkauf im Geschäft', t: '1 249 kr am N950', when: 'jetzt' },
+    { b: 'Lager aktualisiert', t: 'auch im Onlineshop', when: 'jetzt' },
+    { b: 'Click & Collect', t: 'Onlinebestellung abholbereit im Geschäft', when: 'jetzt' },
+    { b: 'Z-Bericht', t: 'Tagesabschluss bereit für die Buchhaltung', when: '18:00 Uhr' },
+  ],
 }
 
 const ARIA = {
   no: 'Kasse, nettbutikk, lager og regnskap koblet sammen i Shopify',
   en: 'Till, online store, inventory and accounting connected in Shopify',
+  sv: 'Kassa, webbutik, lager och bokföring sammankopplade i Shopify',
+  da: 'Kasse, webshop, lager og regnskab koblet sammen i Shopify',
+  de: 'Kasse, Onlineshop, Lager und Buchhaltung verbunden in Shopify',
 }
 
 function Icon({ kind, x, y }: { kind: string; x: number; y: number }) {

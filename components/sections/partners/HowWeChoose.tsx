@@ -1,5 +1,6 @@
 import LocalizedLink from '@/components/ui/LocalizedLink'
 import { ui } from '@/components/integrations/labels'
+import { partnerLang } from '@/lib/partnersCatalog'
 
 const T = {
   no: {
@@ -30,11 +31,53 @@ const T = {
     bandText: 'If Shopify Payments is the best choice, we say so. If an app is overkill for your store, we say that too. A partner only comes in when it makes your solution better.',
     bandCta: 'Get an honest recommendation',
   },
+  sv: {
+    eyebrow: 'Så väljer vi partner',
+    fallback: 'Färre partner. Bättre lösningar.',
+    lead: 'Många byråer visar en lång logovägg. Vi visar hellre varför varje partner finns här – och vad du får ut av att vi jobbar tillsammans.',
+    cards: [
+      { n: '01', title: 'Samma värderingar', text: 'Öppna priser, tydliga leveranser och inget byrådrama. Partner som jobbar på samma sätt som vi gör fast pris möjligt.' },
+      { n: '02', title: 'Tydligt ansvar', text: 'Vi avtalar vem som äger vad innan projektet startar: data, ordrar, lager, kundklubb. Du vet alltid vem som gör vad.' },
+      { n: '03', title: 'Testat i drift', text: 'Vi rekommenderar lösningar vi har satt i drift hos riktiga butiker – inte det som ser bäst ut i en säljpresentation.' },
+      { n: '04', title: 'Nordiskt där det räknas', text: 'Kassalag, bokföring, Vipps och nordiska transportörer. Vi väljer partner som kan det lokala – så att du slipper förklara det.' },
+    ],
+    bandTitle: 'Vi rekommenderar det som passar dig – även när det är enklast',
+    bandText: 'Är Shopify Payments det bästa valet säger vi det. Är en app overkill för din butik säger vi det också. En partner kommer bara in när den gör din lösning bättre.',
+    bandCta: 'Få en ärlig rekommendation',
+  },
+  da: {
+    eyebrow: 'Sådan vælger vi partnere',
+    fallback: 'Færre partnere. Bedre løsninger.',
+    lead: 'Mange bureauer viser en lang logovæg. Vi viser hellere, hvorfor hver partner er her – og hvad du får ud af, at vi arbejder sammen.',
+    cards: [
+      { n: '01', title: 'Samme værdier', text: 'Åbne priser, tydelige leverancer og intet bureaudrama. Partnere, der arbejder på samme måde som os, gør fast pris muligt.' },
+      { n: '02', title: 'Tydeligt ansvar', text: 'Vi aftaler, hvem der ejer hvad, før projektet starter: data, ordrer, lager, kundeklub. Du ved altid, hvem der gør hvad.' },
+      { n: '03', title: 'Testet i drift', text: 'Vi anbefaler løsninger, vi har sat i drift hos rigtige butikker – ikke det, der ser bedst ud i en salgspræsentation.' },
+      { n: '04', title: 'Nordisk hvor det tæller', text: 'Kasselov, regnskab, Vipps og nordiske transportører. Vi vælger partnere, der kan det lokale – så du slipper for at forklare det.' },
+    ],
+    bandTitle: 'Vi anbefaler det, der passer til dig – også når det er enklest',
+    bandText: 'Er Shopify Payments det bedste valg, siger vi det. Er en app overkill for din butik, siger vi også det. En partner kommer kun ind, når den gør din løsning bedre.',
+    bandCta: 'Få en ærlig anbefaling',
+  },
+  de: {
+    eyebrow: 'So wählen wir Partner aus',
+    fallback: 'Weniger Partner. Bessere Lösungen.',
+    lead: 'Viele Agenturen zeigen eine lange Logowand. Wir zeigen lieber, warum jeder Partner hier ist – und was Sie davon haben, dass wir zusammenarbeiten.',
+    cards: [
+      { n: '01', title: 'Gleiche Werte', text: 'Offene Preise, klare Leistungen und kein Agenturdrama. Partner, die so arbeiten wie wir, machen Festpreise möglich.' },
+      { n: '02', title: 'Klare Verantwortung', text: 'Wir klären vor Projektstart, wer was verantwortet: Daten, Bestellungen, Lager, Kundenprogramm. Sie wissen immer, wer was macht.' },
+      { n: '03', title: 'Im Betrieb bewährt', text: 'Wir empfehlen Lösungen, die wir bei echten Geschäften in Betrieb genommen haben – nicht das, was in einer Verkaufspräsentation am besten aussieht.' },
+      { n: '04', title: 'Nordisch, wo es zählt', text: 'Kassengesetz, Buchhaltung, Vipps und nordische Carrier. Wir wählen Partner, die die lokalen Regeln kennen – damit Sie sie nicht erklären müssen.' },
+    ],
+    bandTitle: 'Wir empfehlen, was zu Ihnen passt – auch wenn es die einfachste Option ist',
+    bandText: 'Ist Shopify Payments die beste Wahl, sagen wir das. Ist eine App für Ihren Shop überdimensioniert, sagen wir auch das. Ein Partner kommt nur ins Spiel, wenn er Ihre Lösung besser macht.',
+    bandCta: 'Ehrliche Empfehlung erhalten',
+  },
 }
 
 /** Why the list is short, from the Sanity "why our partnership" section title. */
 export default function HowWeChoose({ title, contactHref, lang = 'no' }: { title?: string; contactHref: string; lang?: string }) {
-  const t = lang === 'no' ? T.no : T.en
+  const t = T[partnerLang(lang)]
   const CARDS = t.cards
   return (
     <section id="slik-velger-vi" className="scroll-mt-24 bg-sc-ink-50 py-16 lg:py-20">

@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import LocalizedLink from '@/components/ui/LocalizedLink'
 import { ui } from '@/components/integrations/labels'
-import { formatNok, type NexusItem, type NexusLang } from '@/lib/nexuspos'
+import { formatNok, swatchLabel, type NexusItem, type NexusLang } from '@/lib/nexuspos'
 import PackageAddToCart from '@/components/sections/services/all_packages/PackageAddToCart'
 import { SectionHead, exVat } from './NexusSections'
 
@@ -33,6 +33,48 @@ const T = {
     rentButton: 'Ask us',
     footnote: 'All prices excl. VAT. White versions of the stand and drawer are available on request.',
     fromShopify: ' Prices and stock status come from our online store.',
+  },
+  sv: {
+    eyebrow: 'Utrustning',
+    heading: 'Bygg din egen kassa',
+    lead: 'Testat med Shopify POS och Nexus POS. Det mesta har vi i lager, och vi sätter upp det åt dig.',
+    order: 'Beställ →',
+    standIn: 'i',
+    standFeatures: ['350° rotation och 90° lutning', 'Gjuten aluminium, klar för Kensington-lås', 'Passar surfplattor från 7 till 13", även iPad 11"', 'Kabeldragning genom foten för en städad uppsättning'],
+    rentEyebrow: 'Pop-up och mässa',
+    rentHeading: 'Behöver du en kassa för en helg?',
+    rentText: 'Vi hyr ut kompletta kassapaket. Pris på begäran.',
+    rentButton: 'Fråga oss',
+    footnote: 'Alla priser exkl. moms. Vita varianter av stativ och låda levereras på begäran.',
+    fromShopify: ' Priser och lagerstatus hämtas från vår webbutik.',
+  },
+  da: {
+    eyebrow: 'Udstyr',
+    heading: 'Byg din egen kasse',
+    lead: 'Testet med Shopify POS og Nexus POS. Det meste har vi på lager, og vi sætter det op for dig.',
+    order: 'Bestil →',
+    standIn: 'i',
+    standFeatures: ['350° rotation og 90° vipning', 'Støbt aluminium, klar til Kensington-lås', 'Passer til tablets fra 7 til 13", også iPad 11"', 'Kabelføring gennem foden for en ryddelig opsætning'],
+    rentEyebrow: 'Pop-up og messe',
+    rentHeading: 'Har du brug for en kasse til en weekend?',
+    rentText: 'Vi udlejer komplette kassepakker. Pris på forespørgsel.',
+    rentButton: 'Spørg os',
+    footnote: 'Alle priser ekskl. moms. Hvide varianter af stativ og skuffe leveres på forespørgsel.',
+    fromShopify: ' Priser og lagerstatus hentes fra vores webshop.',
+  },
+  de: {
+    eyebrow: 'Ausstattung',
+    heading: 'Stellen Sie Ihre eigene Kasse zusammen',
+    lead: 'Getestet mit Shopify POS und Nexus POS. Das meiste haben wir auf Lager, und wir richten es für Sie ein.',
+    order: 'Bestellen →',
+    standIn: 'in',
+    standFeatures: ['350° Drehung und 90° Neigung', 'Aluminiumguss, vorbereitet für Kensington-Schloss', 'Passend für Tablets von 7 bis 13", auch iPad 11"', 'Kabelführung durch den Fuß für eine aufgeräumte Theke'],
+    rentEyebrow: 'Pop-up und Messe',
+    rentHeading: 'Brauchen Sie eine Kasse für ein Wochenende?',
+    rentText: 'Wir vermieten komplette Kassenpakete. Preis auf Anfrage.',
+    rentButton: 'Fragen Sie uns',
+    footnote: 'Alle Preise zzgl. MwSt. Weiße Varianten von Ständer und Schublade auf Anfrage.',
+    fromShopify: ' Preise und Lagerbestand stammen aus unserem Onlineshop.',
   },
 }
 
@@ -77,7 +119,7 @@ export default function Equipment({ items, contactHref, fromShopify, lang = 'no'
             <article className="grid gap-6 rounded-lg border border-sc-ink-100 bg-white p-6 sm:grid-cols-2 sm:items-center lg:p-8">
               <div className="grid grid-cols-2 gap-3">
                 {(stand.variants ?? []).map((v) => {
-                  const label = lang === 'no' ? v.label : v.labelEn ?? v.label
+                  const label = swatchLabel(v, lang)
                   return (
                   <figure key={v.label} className="m-0 flex flex-col gap-2">
                     <Image src={v.image ?? stand.image!} alt={`${stand.name} ${t.standIn} ${label.toLowerCase()}`} width={300} height={300} className="h-auto w-full rounded-lg object-cover" />

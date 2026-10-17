@@ -1,10 +1,18 @@
 import { ui } from '@/components/integrations/labels'
-import { categoryTitle, type PartnerEntry } from '@/lib/partnersCatalog'
+import { categoryTitle, partnerLang, type PartnerEntry } from '@/lib/partnersCatalog'
 import PartnerLogo from './PartnerLogo'
+
+const T = {
+  no: { eyebrow: 'Kjernepartnere', heading: 'De vi bygger nesten alt sammen med', lead: 'Dypere samarbeid enn en partnerstatus: delt produktutvikling, direkte linjer og felles prosjekter.' },
+  en: { eyebrow: 'Core partners', heading: 'The partners we build almost everything with', lead: 'Deeper than a partner badge: shared product development, direct lines and joint projects.' },
+  sv: { eyebrow: 'Kärnpartner', heading: 'De vi bygger nästan allt tillsammans med', lead: 'Djupare samarbete än en partnerstatus: delad produktutveckling, direkta linjer och gemensamma projekt.' },
+  da: { eyebrow: 'Kernepartnere', heading: 'Dem vi bygger næsten alt sammen med', lead: 'Dybere samarbejde end en partnerstatus: delt produktudvikling, direkte linjer og fælles projekter.' },
+  de: { eyebrow: 'Kernpartner', heading: 'Die Partner, mit denen wir fast alles bauen', lead: 'Tiefer als ein Partnerstatus: gemeinsame Produktentwicklung, direkte Drähte und gemeinsame Projekte.' },
+}
 
 /** The partners we build nearly everything with: dark cards, horizontal scroll on phones. */
 export default function CorePartners({ partners, lang = 'no' }: { partners: PartnerEntry[]; lang?: string }) {
-  const isNo = lang === 'no'
+  const t = T[partnerLang(lang)]
   const core = partners.filter((p) => p.core)
   if (core.length === 0) return null
   return (
@@ -12,10 +20,10 @@ export default function CorePartners({ partners, lang = 'no' }: { partners: Part
       <div className={ui.container}>
         <div className="mb-8 flex flex-col gap-4 lg:mb-10 lg:flex-row lg:items-end lg:justify-between lg:gap-8">
           <div className="flex flex-col gap-2.5">
-            <div className={ui.eyebrow}>{isNo ? 'Kjernepartnere' : 'Core partners'}</div>
-            <h2 className={ui.h2}>{isNo ? 'De vi bygger nesten alt sammen med' : 'The partners we build almost everything with'}</h2>
+            <div className={ui.eyebrow}>{t.eyebrow}</div>
+            <h2 className={ui.h2}>{t.heading}</h2>
           </div>
-          <p className="m-0 max-w-[520px] text-base leading-relaxed text-sc-ink-600 lg:text-lg">{isNo ? 'Dypere samarbeid enn en partnerstatus: delt produktutvikling, direkte linjer og felles prosjekter.' : 'Deeper than a partner badge: shared product development, direct lines and joint projects.'}</p>
+          <p className="m-0 max-w-[520px] text-base leading-relaxed text-sc-ink-600 lg:text-lg">{t.lead}</p>
         </div>
       </div>
       <div className="mx-auto max-w-[1100px] lg:px-8">

@@ -35,7 +35,8 @@ export function SectionHead({ eyebrow, heading, lead, id }: { eyebrow: string; h
 }
 
 /** "eks. mva" / "excl. VAT" suffix after a price. */
-export const exVat = (lang: NexusLang) => (lang === 'no' ? 'eks. mva' : 'excl. VAT')
+const EX_VAT: Record<NexusLang, string> = { no: 'eks. mva', en: 'excl. VAT', sv: 'exkl. moms', da: 'ekskl. moms', de: 'zzgl. MwSt.' }
+export const exVat = (lang: NexusLang) => EX_VAT[lang]
 
 const Mva = ({ lang }: { lang: NexusLang }) => <span className="text-xs font-medium text-sc-ink-500">{exVat(lang)}</span>
 
@@ -89,6 +90,75 @@ const BEFORE_AFTER = {
       ['Accounting', 'Z report and SAF-T'],
     ],
     bullets: ['Click and collect, cross-channel returns and one shared loyalty club', 'One dashboard for revenue in store and online'],
+  },
+  sv: {
+    eyebrow: 'Unified commerce',
+    heading: 'Slut på kassa här och webbutik där',
+    lead: 'Unified commerce betyder att butik och webb delar samma motor. Ingen synkronisering om natten, ingen dubbel registrering, ingen gissning om vad som faktiskt finns i lager.',
+    beforeTag: 'Före',
+    beforeHeading: 'Fyra system som inte pratar med varandra',
+    before: [
+      ['Kassa', 'Eget kassasystem'],
+      ['Webbutik', 'Egna priser och varor'],
+      ['Lager', 'Hänger på webbutiken'],
+      ['Bokföring', 'Tittar på det i efterhand'],
+    ],
+    beforeText: 'Varan säljs i butiken men ligger fortfarande till salu på webben. Rapporterna stämmer aldrig helt.',
+    afterTag: 'Med Nexus POS',
+    afterHeading: 'En Shopify för hela företaget',
+    after: [
+      ['Kassa', 'Shopify POS + N950'],
+      ['Webbutik', 'Samma varor och priser'],
+      ['Lager', 'Uppdateras vid varje försäljning'],
+      ['Bokföring', 'Z-rapport och SAF-T'],
+    ],
+    bullets: ['Klicka och hämta, returer över kanaler och gemensam kundklubb', 'En dashboard för omsättning i butik och på webben'],
+  },
+  da: {
+    eyebrow: 'Unified commerce',
+    heading: 'Slut med kasse her og webshop der',
+    lead: 'Unified commerce betyder, at butik og web deler samme motor. Ingen synkronisering om natten, ingen dobbeltregistrering, ingen gætten på, hvad der faktisk er på lager.',
+    beforeTag: 'Før',
+    beforeHeading: 'Fire systemer, der ikke taler sammen',
+    before: [
+      ['Kasse', 'Eget kassesystem'],
+      ['Webshop', 'Egne priser og varer'],
+      ['Lager', 'Hænger på webshoppen'],
+      ['Regnskab', 'Ser på det bagefter'],
+    ],
+    beforeText: 'Varen sælges i butikken, men står stadig til salg på nettet. Rapporterne stemmer aldrig helt.',
+    afterTag: 'Med Nexus POS',
+    afterHeading: 'Én Shopify til hele virksomheden',
+    after: [
+      ['Kasse', 'Shopify POS + N950'],
+      ['Webshop', 'Samme varer og priser'],
+      ['Lager', 'Opdateres ved hvert salg'],
+      ['Regnskab', 'Z-rapport og SAF-T'],
+    ],
+    bullets: ['Klik og hent, returer på tværs af kanaler og fælles kundeklub', 'Ét dashboard for omsætning i butik og på nettet'],
+  },
+  de: {
+    eyebrow: 'Unified Commerce',
+    heading: 'Schluss mit Kasse hier und Onlineshop dort',
+    lead: 'Unified Commerce bedeutet, dass Geschäft und Web denselben Motor teilen. Keine nächtliche Synchronisation, keine doppelte Erfassung, kein Raten, was wirklich auf Lager ist.',
+    beforeTag: 'Vorher',
+    beforeHeading: 'Vier Systeme, die nicht miteinander sprechen',
+    before: [
+      ['Kasse', 'Eigenes Kassensystem'],
+      ['Onlineshop', 'Eigene Preise und Artikel'],
+      ['Lager', 'Hängt am Onlineshop'],
+      ['Buchhaltung', 'Wird im Nachhinein geprüft'],
+    ],
+    beforeText: 'Der Artikel wird im Geschäft verkauft, steht aber online weiter zum Verkauf. Die Berichte stimmen nie ganz.',
+    afterTag: 'Mit Nexus POS',
+    afterHeading: 'Ein Shopify für das ganze Unternehmen',
+    after: [
+      ['Kasse', 'Shopify POS + N950'],
+      ['Onlineshop', 'Gleiche Artikel und Preise'],
+      ['Lager', 'Bei jedem Verkauf aktualisiert'],
+      ['Buchhaltung', 'Z-Bericht und SAF-T'],
+    ],
+    bullets: ['Click & Collect, Retouren über alle Kanäle und ein gemeinsames Kundenprogramm', 'Ein Dashboard für den Umsatz im Geschäft und online'],
   },
 }
 
@@ -171,6 +241,45 @@ const CASE = {
     ],
     more: 'See more customer cases',
   },
+  sv: {
+    eyebrow: 'Kundcase · vår första Nexus POS-kund',
+    quote: '”Förut levde kassan och webbutiken var för sig, lagret hängde på webbutiken och bokföringen var något vi tittade på i efterhand. Nu hänger allt ihop, och jag har ett ställe att gå till för att se hur företaget faktiskt går. Det är avgörande framöver, både för tillväxt och för kontroll.”',
+    role: 'VD, FLEWÉ',
+    asideLabel: 'FLEWÉ i siffror',
+    about: 'Norskt varumärke inom tränings- och sportkläder. Butik och webbutik på Shopify, med Nexus POS i kassan.',
+    stats: [
+      ['3', 'kassaplatser på Nexus POS'],
+      ['1', 'system för kassa, webbutik, lager och bokföring'],
+      ['Först ut', 'den första butiken i Norge på Nexus POS'],
+    ],
+    more: 'Se fler kundcase',
+  },
+  da: {
+    eyebrow: 'Kundecase · vores første Nexus POS-kunde',
+    quote: '»Før levede kassen og webshoppen hver for sig, lageret hang på webshoppen, og regnskabet var noget, vi kiggede på bagefter. Nu hænger alt sammen, og jeg har ét sted at gå hen for at se, hvordan virksomheden faktisk går. Det er afgørende fremover, både for vækst og for kontrol.«',
+    role: 'Direktør, FLEWÉ',
+    asideLabel: 'FLEWÉ i tal',
+    about: 'Norsk brand inden for trænings- og sportstøj. Butik og webshop på Shopify, med Nexus POS i kassen.',
+    stats: [
+      ['3', 'kassepunkter på Nexus POS'],
+      ['1', 'system til kasse, webshop, lager og regnskab'],
+      ['Først ude', 'den første butik i Norge på Nexus POS'],
+    ],
+    more: 'Se flere kundecases',
+  },
+  de: {
+    eyebrow: 'Kundenreferenz · unser erster Nexus POS-Kunde',
+    quote: '„Früher lebten Kasse und Onlineshop getrennt voneinander, das Lager hing am Onlineshop, und die Buchhaltung war etwas, das wir im Nachhinein angeschaut haben. Jetzt hängt alles zusammen, und ich habe einen Ort, an dem ich sehe, wie das Unternehmen wirklich läuft. Das ist entscheidend für die Zukunft, für Wachstum wie für Kontrolle.“',
+    role: 'Geschäftsführerin, FLEWÉ',
+    asideLabel: 'FLEWÉ in Zahlen',
+    about: 'Norwegische Marke für Trainings- und Sportbekleidung. Geschäft und Onlineshop auf Shopify, mit Nexus POS an der Kasse.',
+    stats: [
+      ['3', 'Kassen auf Nexus POS'],
+      ['1', 'System für Kasse, Onlineshop, Lager und Buchhaltung'],
+      ['Erste', 'das erste Geschäft in Norwegen auf Nexus POS'],
+    ],
+    more: 'Weitere Kundenreferenzen',
+  },
 }
 
 export function CaseFlewe({ casesHref, lang = 'no' }: { casesHref: string } & Lang) {
@@ -217,6 +326,9 @@ export function CaseFlewe({ casesHref, lang = 'no' }: { casesHref: string } & La
 const STEPS = {
   no: { eyebrow: 'Slik fungerer det', heading: 'Fra iPad til kvittering på fire steg', lead: 'Kunden betaler som vanlig. Alt det kjedelige skjer automatisk i bakgrunnen.' },
   en: { eyebrow: 'How it works', heading: 'From iPad to receipt in four steps', lead: 'The customer pays as usual. All the boring parts happen automatically in the background.' },
+  sv: { eyebrow: 'Så fungerar det', heading: 'Från iPad till kvitto i fyra steg', lead: 'Kunden betalar som vanligt. Allt det tråkiga sker automatiskt i bakgrunden.' },
+  da: { eyebrow: 'Sådan fungerer det', heading: 'Fra iPad til kvittering i fire trin', lead: 'Kunden betaler som sædvanligt. Alt det kedelige sker automatisk i baggrunden.' },
+  de: { eyebrow: 'So funktioniert es', heading: 'Vom iPad zum Beleg in vier Schritten', lead: 'Der Kunde zahlt wie gewohnt. Alles Lästige passiert automatisch im Hintergrund.' },
 }
 
 export function Steps({ lang = 'no' }: Lang) {
@@ -270,6 +382,48 @@ const PRICING = {
     perMonth: '/ month',
     askSla: 'Ask about the SLA',
     terms: 'No lock-in · 30 days notice · 14-day payment terms · Annual CPI adjustment · Changes outside the agreed scope: 1 250 kr/h excl. VAT, fixed price where possible.',
+  },
+  sv: {
+    eyebrow: 'Priser',
+    heading: 'Vet vad du betalar innan du börjar',
+    lead: 'Tre siffror. Uppstart en gång, licens per kassaplats och terminal till fast pris. Alla priser exkl. moms.',
+    order: 'Beställ',
+    onboarding: ['Genomgång av dagens kassa och migrering', 'Uppsättning av Nexus POS, Shopify POS och terminal', 'Utbildning av dig och personalen'],
+    licence: ['Kvitto, journal, X/Z-rapporter och SAF-T', 'Upp till 2 timmars support per månad, svar nästa arbetsdag', 'Löpande uppdateringar och vidareutveckling'],
+    terminal: { type: 'Engångs', name: 'Nets N950-terminal', unit: 'per terminal' },
+    terminalLines: ['Mobil terminal med inbyggd skrivare', 'Kort, kontaktlöst och Vipps', 'Har du redan en N950? Den kan ofta återanvändas'],
+    addon: 'Tillägg',
+    perMonth: '/ mån',
+    askSla: 'Fråga om SLA',
+    terms: 'Ingen bindningstid · 30 dagars uppsägningstid · 14 dagars betalningsvillkor · Årlig KPI-justering · Ändringar utanför avtalad omfattning: 1 250 kr/h exkl. moms, fast pris där det är möjligt.',
+  },
+  da: {
+    eyebrow: 'Priser',
+    heading: 'Vid, hvad du betaler, før du starter',
+    lead: 'Tre tal. Opstart én gang, licens per kassepunkt og terminal til fast pris. Alle priser ekskl. moms.',
+    order: 'Bestil',
+    onboarding: ['Gennemgang af den nuværende kasse og migrering', 'Opsætning af Nexus POS, Shopify POS og terminal', 'Oplæring af dig og dine medarbejdere'],
+    licence: ['Kvittering, journal, X/Z-rapporter og SAF-T', 'Op til 2 timers support om måneden, svar næste hverdag', 'Løbende opdateringer og videreudvikling'],
+    terminal: { type: 'Engangs', name: 'Nets N950-terminal', unit: 'per terminal' },
+    terminalLines: ['Mobil terminal med indbygget printer', 'Kort, kontaktløs og Vipps', 'Har du en N950 i forvejen? Den kan ofte genbruges'],
+    addon: 'Tillæg',
+    perMonth: '/ md.',
+    askSla: 'Spørg om SLA',
+    terms: 'Ingen binding · 30 dages opsigelse · 14 dages betalingsfrist · Årlig regulering efter forbrugerprisindekset · Ændringer uden for aftalt omfang: 1 250 kr/t ekskl. moms, fast pris hvor det er muligt.',
+  },
+  de: {
+    eyebrow: 'Preise',
+    heading: 'Wissen Sie vor dem Start, was Sie zahlen',
+    lead: 'Drei Zahlen. Onboarding einmalig, Lizenz pro Kasse und Terminal zum Festpreis. Alle Preise zzgl. MwSt.',
+    order: 'Bestellen',
+    onboarding: ['Prüfung Ihrer bisherigen Kasse und Migration', 'Einrichtung von Nexus POS, Shopify POS und Terminal', 'Schulung für Sie und Ihr Team'],
+    licence: ['Beleg, Journal, X/Z-Berichte und SAF-T', 'Bis zu 2 Stunden Support pro Monat, Antwort am nächsten Werktag', 'Laufende Updates und Weiterentwicklung'],
+    terminal: { type: 'Einmalig', name: 'Nets N950-Terminal', unit: 'pro Terminal' },
+    terminalLines: ['Mobiles Terminal mit integriertem Drucker', 'Karte, kontaktlos und Vipps', 'Sie haben bereits ein N950? Es lässt sich oft weiterverwenden'],
+    addon: 'Zusatz',
+    perMonth: '/ Monat',
+    askSla: 'Nach dem SLA fragen',
+    terms: 'Keine Mindestlaufzeit · 30 Tage Kündigungsfrist · 14 Tage Zahlungsziel · Jährliche Anpassung an den Verbraucherpreisindex · Änderungen außerhalb des vereinbarten Umfangs: 1 250 kr/h zzgl. MwSt., Festpreis wo möglich.',
   },
 }
 
@@ -335,6 +489,9 @@ export function Pricing({ items, contactHref, lang = 'no' }: { items: NexusItem[
 const KITS = {
   no: { eyebrow: 'Ferdige kassepakker', heading: 'Alt du trenger på disken, i én pris', lead: 'Velg en pakke per kassepunkt. Har du utstyr som fungerer, gjenbruker vi det.', order: 'Bestill' },
   en: { eyebrow: 'Ready-made till kits', heading: 'Everything you need on the counter, in one price', lead: 'Choose one kit per till. If you have equipment that works, we reuse it.', order: 'Order' },
+  sv: { eyebrow: 'Färdiga kassapaket', heading: 'Allt du behöver på disken, till ett pris', lead: 'Välj ett paket per kassaplats. Har du utrustning som fungerar återanvänder vi den.', order: 'Beställ' },
+  da: { eyebrow: 'Færdige kassepakker', heading: 'Alt du skal bruge på disken, til én pris', lead: 'Vælg en pakke per kassepunkt. Har du udstyr, der virker, genbruger vi det.', order: 'Bestil' },
+  de: { eyebrow: 'Fertige Kassenpakete', heading: 'Alles für die Theke, zu einem Preis', lead: 'Wählen Sie ein Paket pro Kasse. Funktionierende Ausstattung verwenden wir weiter.', order: 'Bestellen' },
 }
 
 export function Kits({ items, contactHref, lang = 'no' }: { items: NexusItem[]; contactHref: string } & Lang) {
@@ -418,6 +575,45 @@ const FIRST_YEAR = {
     fromYearTwo: 'From year two: licence only',
     perYear: '/ year',
   },
+  sv: {
+    eyebrow: 'Räkneexemplet',
+    heading: 'Vad kostar första året?',
+    lead: 'Exempel: en butik med en kassaplats och Paket A. Inga dolda avgifter från oss. Det som faktureras av andra står nedan.',
+    note: 'Fler kassaplatser? Uppstarten betalas en gång per butik. Licens och utrustning multipliceras med antalet kassaplatser. Kedjor med flera butiker får en egen offert.',
+    tableLabel: 'Kostnad första året, en kassaplats',
+    onboarding: 'Uppstart',
+    kitA: 'Paket A – komplett kassadisk inkl. N950',
+    licence: 'Licens, 12 mån × ',
+    total: 'Totalt första året',
+    fromYearTwo: 'Från år två: endast licens',
+    perYear: '/ år',
+  },
+  da: {
+    eyebrow: 'Regnestykket',
+    heading: 'Hvad koster det første år?',
+    lead: 'Eksempel: én butik med ét kassepunkt og Pakke A. Ingen skjulte gebyrer fra os. Det, der faktureres af andre, står nedenfor.',
+    note: 'Flere kassepunkter? Opstarten betales én gang per butik. Licens og udstyr ganges med antallet af kassepunkter. Kæder med flere butikker får et eget tilbud.',
+    tableLabel: 'Omkostning første år, ét kassepunkt',
+    onboarding: 'Opstart',
+    kitA: 'Pakke A – fuld kassedisk inkl. N950',
+    licence: 'Licens, 12 md. × ',
+    total: 'I alt første år',
+    fromYearTwo: 'Fra år to: kun licens',
+    perYear: '/ år',
+  },
+  de: {
+    eyebrow: 'Die Rechnung',
+    heading: 'Was kostet das erste Jahr?',
+    lead: 'Beispiel: ein Geschäft mit einer Kasse und Paket A. Keine versteckten Gebühren von uns. Was andere abrechnen, steht unten.',
+    note: 'Mehrere Kassen? Das Onboarding wird einmalig pro Geschäft berechnet. Lizenz und Ausstattung multiplizieren sich mit der Anzahl der Kassen. Ketten mit mehreren Geschäften erhalten ein individuelles Angebot.',
+    tableLabel: 'Kosten im ersten Jahr, eine Kasse',
+    onboarding: 'Onboarding',
+    kitA: 'Paket A – komplette Kassentheke inkl. N950',
+    licence: 'Lizenz, 12 Monate × ',
+    total: 'Gesamt im ersten Jahr',
+    fromYearTwo: 'Ab dem zweiten Jahr: nur Lizenz',
+    perYear: '/ Jahr',
+  },
 }
 
 export function FirstYear({ items, lang = 'no' }: { items: NexusItem[] } & Lang) {
@@ -466,6 +662,9 @@ export function FirstYear({ items, lang = 'no' }: { items: NexusItem[] } & Lang)
 const REQUIREMENTS = {
   no: { eyebrow: 'Greit å vite', heading: 'Hva du trenger, og hva andre fakturerer', needed: 'Dette må være på plass', billed: 'Faktureres av andre' },
   en: { eyebrow: 'Good to know', heading: 'What you need, and what others invoice', needed: 'This needs to be in place', billed: 'Invoiced by others' },
+  sv: { eyebrow: 'Bra att veta', heading: 'Vad du behöver, och vad andra fakturerar', needed: 'Det här måste finnas på plats', billed: 'Faktureras av andra' },
+  da: { eyebrow: 'Godt at vide', heading: 'Hvad du skal bruge, og hvad andre fakturerer', needed: 'Det skal være på plads', billed: 'Faktureres af andre' },
+  de: { eyebrow: 'Gut zu wissen', heading: 'Was Sie brauchen, und was andere abrechnen', needed: 'Das muss vorhanden sein', billed: 'Wird von anderen abgerechnet' },
 }
 
 export function Requirements({ lang = 'no' }: Lang) {

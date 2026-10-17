@@ -2,12 +2,15 @@
 
 import { useMemo, useState } from 'react'
 import { ui } from '@/components/integrations/labels'
-import { categoryTitle, partnerCategories, type PartnerEntry } from '@/lib/partnersCatalog'
+import { categoryTitle, partnerCategories, partnerLang, type PartnerEntry } from '@/lib/partnersCatalog'
 import PartnerLogo from './PartnerLogo'
 
 const T = {
   no: { eyebrow: 'Alle partnere', heading: 'Finn riktig partner for butikken din', lead: 'Filtrer på fagområde eller søk etter navn. Hver partner har en grunn til å være her.', all: 'Alle', search: 'Søk etter partner', showing: (a: number, b: number) => `Viser ${a} av ${b} partnere`, why: 'Hvorfor vi valgte dem', get: 'Det du får', none: 'Ingen treff. Prøv et annet søk, eller', ask: 'spør oss', nonePost: '– vi kjenner som regel noen.' },
   en: { eyebrow: 'All partners', heading: 'Find the right partner for your store', lead: 'Filter by discipline or search by name. Every partner has a reason to be here.', all: 'All', search: 'Search partners', showing: (a: number, b: number) => `Showing ${a} of ${b} partners`, why: 'Why we chose them', get: 'What you get', none: 'No matches. Try another search, or', ask: 'ask us', nonePost: '– we usually know someone.' },
+  sv: { eyebrow: 'Alla partner', heading: 'Hitta rätt partner för din butik', lead: 'Filtrera på fackområde eller sök på namn. Varje partner har en anledning att vara här.', all: 'Alla', search: 'Sök efter partner', showing: (a: number, b: number) => `Visar ${a} av ${b} partner`, why: 'Varför vi valde dem', get: 'Det du får', none: 'Inga träffar. Prova en annan sökning, eller', ask: 'fråga oss', nonePost: '– vi känner som regel någon.' },
+  da: { eyebrow: 'Alle partnere', heading: 'Find den rigtige partner til din butik', lead: 'Filtrer på fagområde eller søg efter navn. Hver partner har en grund til at være her.', all: 'Alle', search: 'Søg efter partner', showing: (a: number, b: number) => `Viser ${a} af ${b} partnere`, why: 'Hvorfor vi valgte dem', get: 'Det du får', none: 'Ingen resultater. Prøv en anden søgning, eller', ask: 'spørg os', nonePost: '– vi kender som regel nogen.' },
+  de: { eyebrow: 'Alle Partner', heading: 'Finden Sie den richtigen Partner für Ihren Shop', lead: 'Nach Fachbereich filtern oder nach Namen suchen. Jeder Partner hat einen Grund, hier zu sein.', all: 'Alle', search: 'Partner suchen', showing: (a: number, b: number) => `${a} von ${b} Partnern`, why: 'Warum wir sie gewählt haben', get: 'Was Sie bekommen', none: 'Keine Treffer. Versuchen Sie eine andere Suche, oder', ask: 'fragen Sie uns', nonePost: '– wir kennen meistens jemanden.' },
 }
 
 const norm = (s: string) => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '')
@@ -17,7 +20,7 @@ const norm = (s: string) => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,
  * on desktop; the search box matches name, reason and outcome.
  */
 export default function PartnerCatalog({ partners, lang, contactHref }: { partners: PartnerEntry[]; lang: string; contactHref: string }) {
-  const t = lang === 'no' ? T.no : T.en
+  const t = T[partnerLang(lang)]
   const [cat, setCat] = useState<string>('alle')
   const [q, setQ] = useState('')
   const counts = useMemo(() => {

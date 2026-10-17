@@ -6,11 +6,17 @@
  * without touching code; this file is the seed and the fallback.
  *
  * The main text fields are Norwegian; `badgeEn`, `whyEn` and `togetherEn`
- * carry the English. `localizePartners` swaps them in for non-Norwegian
- * pages, after `mergePartners` has laid Sanity data on the Norwegian fields.
+ * carry the English, and `partnerTranslations` holds Swedish, Danish and
+ * German per slug. `localizePartners` swaps them in for non-Norwegian pages,
+ * after `mergePartners` has laid Sanity data on the Norwegian fields.
  */
 
 export type PartnerCategoryKey = 'plattform' | 'betaling' | 'erp' | 'logistikk' | 'crm' | 'kundeservice' | 'reviews' | 'vekst'
+
+/** The copy languages the partner pages are written in. Unknown locales fall back to English. */
+export type PartnerLang = 'no' | 'en' | 'sv' | 'da' | 'de'
+export const PARTNER_LANGS: PartnerLang[] = ['no', 'en', 'sv', 'da', 'de']
+export const partnerLang = (language: string): PartnerLang => (PARTNER_LANGS.includes(language as PartnerLang) ? (language as PartnerLang) : 'en')
 
 export interface PartnerEntry {
   slug: string
@@ -34,15 +40,15 @@ export interface PartnerEntry {
   monoFg?: string
 }
 
-export const partnerCategories: { key: PartnerCategoryKey; title: string; titleEn: string }[] = [
-  { key: "plattform", title: "Plattform og integrasjon", titleEn: "Platform and integration" },
-  { key: "betaling", title: "Betaling og BNPL", titleEn: "Payments and BNPL" },
-  { key: "erp", title: "ERP og regnskap", titleEn: "ERP and accounting" },
-  { key: "logistikk", title: "OMS, logistikk og lager", titleEn: "OMS, logistics and warehousing" },
-  { key: "crm", title: "Lojalitet, CRM og e-post", titleEn: "Loyalty, CRM and email" },
-  { key: "kundeservice", title: "Kundeservice", titleEn: "Customer service" },
-  { key: "reviews", title: "Anmeldelser, søk og merchandising", titleEn: "Reviews, search and merchandising" },
-  { key: "vekst", title: "Markedsføring og vekst", titleEn: "Marketing and growth" },
+export const partnerCategories: { key: PartnerCategoryKey; title: string; titleEn: string; titleSv: string; titleDa: string; titleDe: string }[] = [
+  { key: "plattform", title: "Plattform og integrasjon", titleEn: "Platform and integration", titleSv: "Plattform och integration", titleDa: "Platform og integration", titleDe: "Plattform und Integration" },
+  { key: "betaling", title: "Betaling og BNPL", titleEn: "Payments and BNPL", titleSv: "Betalning och BNPL", titleDa: "Betaling og BNPL", titleDe: "Zahlung und BNPL" },
+  { key: "erp", title: "ERP og regnskap", titleEn: "ERP and accounting", titleSv: "ERP och bokföring", titleDa: "ERP og regnskab", titleDe: "ERP und Buchhaltung" },
+  { key: "logistikk", title: "OMS, logistikk og lager", titleEn: "OMS, logistics and warehousing", titleSv: "OMS, logistik och lager", titleDa: "OMS, logistik og lager", titleDe: "OMS, Logistik und Lager" },
+  { key: "crm", title: "Lojalitet, CRM og e-post", titleEn: "Loyalty, CRM and email", titleSv: "Lojalitet, CRM och e-post", titleDa: "Loyalitet, CRM og e-mail", titleDe: "Loyalität, CRM und E-Mail" },
+  { key: "kundeservice", title: "Kundeservice", titleEn: "Customer service", titleSv: "Kundservice", titleDa: "Kundeservice", titleDe: "Kundenservice" },
+  { key: "reviews", title: "Anmeldelser, søk og merchandising", titleEn: "Reviews, search and merchandising", titleSv: "Omdömen, sök och merchandising", titleDa: "Anmeldelser, søgning og merchandising", titleDe: "Bewertungen, Suche und Merchandising" },
+  { key: "vekst", title: "Markedsføring og vekst", titleEn: "Marketing and growth", titleSv: "Marknadsföring och tillväxt", titleDa: "Markedsføring og vækst", titleDe: "Marketing und Wachstum" },
 ]
 
 export const partnerCatalog: PartnerEntry[] = [
@@ -94,21 +100,191 @@ export const partnerCatalog: PartnerEntry[] = [
   { slug: "profitmetrics-reprice-og-circklewise", name: "ProfitMetrics, Reprice og Circklewise", category: "vekst", badge: "Ved behov", badgeEn: "When needed", core: false, why: "Analyse, prisintelligens og affiliate.", whyEn: "Analytics, pricing intelligence and affiliate.", together: "Spesialister vi henter inn når butikken din trenger det.", togetherEn: "Specialists we bring in when your store needs them.", logo: "/images/partners/profitmetrics-reprice-og-circklewise.png" },
 ]
 
-/** Category title in the page language; Norwegian on .no, English everywhere else. */
-export const categoryTitle = (key: string, language = 'no') => {
-  const c = partnerCategories.find((c) => c.key === key)
-  if (!c) return key
-  return language === 'no' ? c.title : c.titleEn
+/** Translated badge/why/together for one partner. */
+export interface PartnerCopy {
+  badge: string
+  why: string
+  together: string
 }
 
 /**
- * Swap the Norwegian badge/why/together for English on non-Norwegian pages.
- * Run it after `mergePartners`, which fills gaps on the Norwegian fields.
- * Norwegian returns the same array.
+ * Swedish, Danish and German copy per partner slug. English lives on the
+ * entries themselves (`badgeEn` …). A slug missing here falls back to English.
+ */
+export const partnerTranslations: Record<Exclude<PartnerLang, 'no' | 'en'>, Record<string, PartnerCopy>> = {
+  sv: {
+    "shopify": { badge: "Shopify Plus Partner", why: "Hela företaget är byggt runt plattformen. Plus Partner sedan 2024, med direkta partnerkontakter och prioriterad support.", together: "Vi lägger till det Shopify inte täcker själva i Norge: ERP-integrationer och kassalagsefterlevnad med Nexus POS." },
+    "make": { badge: "Certifierad partner", why: "Integrationslagret mellan Shopify och Tripletex, PowerOffice och Business Central.", together: "Integrationer till fast pris, levererade snabbt – utan skräddarsydd kod du måste underhålla själv." },
+    "anthropic": { badge: "Partner · Startup-programmet", why: "Anthropic-partner och med i deras startup-program.", together: "Vi använder Claude i hela leveransen och bygger in AI i våra kunders lösningar – för snabbare leverans och smartare drift." },
+    "sanity": { badge: "Teknikpartner", why: "Headless CMS i Hydrogen-projekt, med ett innehållslager redaktörerna faktiskt klarar av att använda.", together: "Vi rekommenderar headless bara när det är vettigt för din butik." },
+    "consentmo": { badge: "Listad partner", why: "Samtyckes- och compliance-app byggd för Shopify.", together: "GDPR och Google Consent Mode korrekt uppsatt i varenda lansering." },
+    "norce": { badge: "Plattformspartner", why: "Composable-plattform vi känner från insidan.", together: "Vi levererar på Norce när caset passar: komplexa lösningar och tung B2B, där plattformen verkligen kommer till sin rätt." },
+    "vipps-mobilepay": { badge: "Formellt avtal", why: "Direkt dialog med produktteamet, inte bara en supportkö.", together: "Vi utvecklar lösningar tillsammans – som Vipps Hurtigkasse och Nexus POS – och testar dem tidigt hos riktiga butiker." },
+    "nets-nexi": { badge: "PSP-partner och POS-återförsäljare", why: "Terminaler och avräkning för Nexus POS.", together: "Kortbetalning i butiken som pratar med Shopify – med en leverantör att förhålla sig till." },
+    "shopify-payments": { badge: "Standardvalet", why: "Noll extra transaktionsavgift, Shop Pay och enklast möjliga drift.", together: "Vi rekommenderar det ärligt när det passar – inte en tredjepart för tredjepartens skull." },
+    "dintero": { badge: "Implementeringspartner", why: "Norsk samlad checkout: Vipps, kort, faktura och finansiering i en integration.", together: "Vi är öppna för att leverera rena B2B-projekt tillsammans." },
+    "qliro": { badge: "Premium Partner", why: "En verklig Klarna-utmanare – nordisk BNPL som vågar tänka nytt.", together: "Qliro kommer med moderna lösningar för ökad konvertering och kundlojalitet, och vi sätter upp dem rätt i checkouten från start." },
+    "avarda": { badge: "Preferred Shopify Partner", why: "White label-checkout och betalning där det är ditt varumärke kunden ser – inte betalleverantörens.", together: "Perfekt för varumärkesbyggande: faktura, delbetalning och kundrelationen i ditt namn, med snabb avräkning och lokal support." },
+    "klarna": { badge: "Betalpartner", why: "Global BNPL som kunderna känner igen.", together: "När varumärke och räckvidd väger tyngst sätter vi upp Klarna rätt i Shopify-checkouten." },
+    "svea": { badge: "Fintechpartner", why: "Nordiskt fintechbolag för både B2B och B2C.", together: "När B2B-faktura och delbetalning för konsumenter ska samlas hos en aktör." },
+    "confect": { badge: "Officiellt samarbete", why: "Visma.net-experter med samma fastprismodell som vi. Vi delar till och med kontor.", together: "Confect byggde Visma.net-kopplingen till Nexus POS. Visma.net och Shopify levererat i samma tempo och till fast pris." },
+    "totall-digitall": { badge: "Föredragen Finago-partner", why: "När kassa, butiksdata och bokföring ska samlas.", together: "toTALL tar ekonomin, vi tar e-handeln. Ingen av oss låtsas kunna det andra." },
+    "digitall": { badge: "Officiellt samarbete", why: "Officiellt samarbete kring Finago, Omnium och Shopify.", together: "Vi levererar tillsammans när projektet spänner över ekonomi, OMS och webbutik." },
+    "microsoft-business-central": { badge: "Nativ koppling", why: "Shopify-koppling som underhålls av Microsoft.", together: "Vi jobbar med certifierade BC-experter och konfigurerar kopplingen rätt." },
+    "sage": { badge: "Brightpearl · Inventory Planner", why: "Prognoser och lagerplanering för varumärken i tillväxt.", together: "Vi tar integrationen, Sage tar driftsystemet." },
+    "tripletex": { badge: "Egen standardintegration", why: "Dokumenterad standardintegration vi har byggt och underhåller själva.", together: "Ordrar, betalningar och verifikat rakt in i bokföringen. Norsk ERP-integration är kärnan i det vi gör." },
+    "poweroffice-go": { badge: "Egen standardintegration", why: "Dokumenterad standardintegration vi har byggt och underhåller själva.", together: "Bokföringen uppdaterad utan manuella verifikat – något utländska byråer sällan kan leverera." },
+    "24sevenoffice-finago": { badge: "Egen standardintegration", why: "Dokumenterad standardintegration vi har byggt och underhåller själva.", together: "Shopify och ekonomisystemet pratar med varandra från dag ett." },
+    "omnium": { badge: "Certifierad OMS-partner", why: "Motorn för omnikanal, click and collect och ship from store.", together: "En av få byråer som levererar Omnium och Shopify i samma team." },
+    "isys": { badge: "PIM- och WMS-partner", why: "Feed PIM och InStock WMS för stora kataloger.", together: "iSYS äger produktdata och lager, vi äger säljytan." },
+    "holio": { badge: "Officiell partner", why: "En integration mot hela transportörsnätverket – och nu även plock och WMS.", together: "Logistik löst av folk som kan logistik, i stället för något vi måste bygga själva." },
+    "quickship": { badge: "Formellt avtal", why: "Fraktlösning för små och medelstora butiker.", together: "Etiketter och spårning snabbt igång." },
+    "helthjem": { badge: "Leveranspartner", why: "Hemleverans som många av våra kunder använder.", together: "Rätt uppsatt i checkouten från första dagen." },
+    "bring": { badge: "Partner", why: "Paket- och hemleverans med Shopify-integration.", together: "Standardtransportören i de flesta norska uppsättningar." },
+    "postnord": { badge: "Partner", why: "Nordisk transportör med utlämningsställen och paketboxar.", together: "Viktigt när du säljer till Sverige och Danmark." },
+    "klaviyo": { badge: "Partner", why: "Den djupaste Shopify-integrationen på marknaden för e-post och SMS.", together: "Flöden och kampanjer som ger mätbar omsättning – inte bara nyhetsbrev." },
+    "voyado": { badge: "Certifierad partner", why: "CRM och lojalitet för större varumärken.", together: "Voyado tar kunddata och segmentering, vi tar e-handel och integration." },
+    "diller": { badge: "Lojalitetspartner", why: "Norsk kundklubb.", together: "En ansvarsfördelning vi har definierat tillsammans: Diller äger medlemskap och poäng, Shopify webbkontot, OMS ordern." },
+    "modish": { badge: "Lojalitetspartner", why: "Tar strategi och drift av lojalitetsprogrammet.", together: "Vi tar den tekniska implementeringen. Tillsammans levererar vi hela programmet, inte bara appen." },
+    "brevo": { badge: "E-postpartner", why: "E-post och CRM för mindre butiker.", together: "Ett bra alternativ när Klaviyo är mer än butiken behöver." },
+    "mimir": { badge: "Partner", why: "Norsk AI-kundservice för e-handel.", together: "Avlastar butiker som drunknar i ärenden – så att du får tid att driva butik." },
+    "supportify": { badge: "Partner", why: "Outsourcad kundservice med riktiga människor.", together: "När dina kunder vill prata med människor, inte bara en bot." },
+    "trustpilot": { badge: "Partner", why: "Välkänt för norska konsumenter, och räknas i SEO och AI-sök.", together: "Stjärnorna placerade där de konverterar – inte bara i sidfoten." },
+    "lipscore": { badge: "Partner", why: "Nordiska, verifierade omdömen.", together: "Omdömen från riktiga köp, anpassade för nordiska butiker." },
+    "judge-me": { badge: "Partner", why: "Prisvärt och bra för mindre butiker.", together: "Omdömen på plats utan en stor månadskostnad." },
+    "boost": { badge: "Implementeringspartner", why: "Sök och merchandising för Shopify.", together: "Vi väljer söklösning efter katalogstorlek och behov – inte av vana." },
+    "depict": { badge: "Implementeringspartner", why: "Sök och merchandising för Shopify.", together: "Vi väljer söklösning efter katalogstorlek och behov – inte av vana." },
+    "tracklution": { badge: "Ingår i alla lanseringar", why: "Server-side tracking som faktiskt fångar upp försäljningen.", together: "Korrekta data till Meta och Google – alltid inkluderat i vårt standardpris." },
+    "inevo": { badge: "Marknadsföringspartner", why: "Performance och tillväxt.", together: "Vi har ett eget marknadsföringsteam – Inevo är partnern vi tar in på case vi inte tar själva. De tar marknadsföringen, vi tar plattform och konvertering." },
+    "marketer-com": { badge: "Byråpartner", why: "Betald marknadsföring och Manta-plattformen.", together: "Vi testar Marketer.coms Manta-plattform hos utvalda kunder. De kör annonserna, vi bygger och optimerar butiken." },
+    "moen-co": { badge: "Partner", why: "Community och varumärke.", together: "Vi är stora fans av det Moen & Co gör och ser många synergier – vi bidrar till varandras tillväxt." },
+    "profitmetrics-reprice-og-circklewise": { badge: "Vid behov", why: "Analys, prisintelligens och affiliate.", together: "Specialister vi tar in när din butik behöver det." },
+  },
+  da: {
+    "shopify": { badge: "Shopify Plus Partner", why: "Hele virksomheden er bygget op omkring platformen. Plus Partner siden 2024, med direkte partnerkontakter og prioriteret support.", together: "Vi tilføjer det, Shopify ikke selv dækker i Norge: ERP-integrationer og kasselov-compliance med Nexus POS." },
+    "make": { badge: "Certificeret partner", why: "Integrationslaget mellem Shopify og Tripletex, PowerOffice og Business Central.", together: "Integrationer til fast pris, leveret hurtigt – uden skræddersyet kode, du selv skal vedligeholde." },
+    "anthropic": { badge: "Partner · Startup-programmet", why: "Anthropic-partner og med i deres startup-program.", together: "Vi bruger Claude i hele leverancen og bygger AI ind i vores kunders løsninger – for hurtigere levering og smartere drift." },
+    "sanity": { badge: "Teknologipartner", why: "Headless CMS i Hydrogen-projekter, med et indholdslag redaktørerne faktisk kan finde ud af at bruge.", together: "Vi anbefaler kun headless, når det giver mening for din butik." },
+    "consentmo": { badge: "Listet partner", why: "Samtykke- og compliance-app bygget til Shopify.", together: "GDPR og Google Consent Mode sat korrekt op i hver eneste lancering." },
+    "norce": { badge: "Platformpartner", why: "Composable-platform vi kender indefra.", together: "Vi leverer på Norce, når casen passer: komplekse løsninger og tung B2B, hvor platformen virkelig kommer til sin ret." },
+    "vipps-mobilepay": { badge: "Formel aftale", why: "Direkte dialog med produktteamet, ikke bare en supportkø.", together: "Vi udvikler løsninger sammen – som Vipps Hurtigkasse og Nexus POS – og tester dem tidligt hos rigtige butikker." },
+    "nets-nexi": { badge: "PSP-partner og POS-forhandler", why: "Terminaler og afregning til Nexus POS.", together: "Kortbetaling i butikken, der taler med Shopify – med én leverandør at forholde sig til." },
+    "shopify-payments": { badge: "Standardvalget", why: "Nul ekstra transaktionsgebyr, Shop Pay og enklest mulig drift.", together: "Vi anbefaler det ærligt, når det passer – ikke en tredjepart for tredjepartens skyld." },
+    "dintero": { badge: "Implementeringspartner", why: "Norsk samlet checkout: Vipps, kort, faktura og finansiering i én integration.", together: "Vi er åbne for at levere rene B2B-projekter sammen." },
+    "qliro": { badge: "Premium Partner", why: "En reel Klarna-udfordrer – nordisk BNPL, der tør tænke nyt.", together: "Qliro kommer med moderne løsninger til øget konvertering og kundeloyalitet, og vi sætter dem rigtigt op i checkouten fra start." },
+    "avarda": { badge: "Preferred Shopify Partner", why: "White label-checkout og betaling, hvor det er dit brand, kunden ser – ikke betalingsudbyderens.", together: "Perfekt til brandbuilding: faktura, delbetaling og kunderelationen i dit navn, med hurtig afregning og lokal support." },
+    "klarna": { badge: "Betalingspartner", why: "Global BNPL, som kunderne genkender.", together: "Når brand og rækkevidde vejer tungest, sætter vi Klarna rigtigt op i Shopify-checkouten." },
+    "svea": { badge: "Fintechpartner", why: "Nordisk fintech til både B2B og B2C.", together: "Når B2B-faktura og delbetaling til forbrugere skal samles hos én aktør." },
+    "confect": { badge: "Officielt samarbejde", why: "Visma.net-eksperter med samme fastprismodel som os. Vi deler endda kontor.", together: "Confect byggede Visma.net-koblingen til Nexus POS. Visma.net og Shopify leveret i samme tempo og til fast pris." },
+    "totall-digitall": { badge: "Foretrukken Finago-partner", why: "Når kasse, butiksdata og regnskab skal samles.", together: "toTALL tager økonomien, vi tager e-handlen. Ingen af os lader, som om vi kan det andet." },
+    "digitall": { badge: "Officielt samarbejde", why: "Officielt samarbejde om Finago, Omnium og Shopify.", together: "Vi leverer sammen, når projektet spænder over økonomi, OMS og webshop." },
+    "microsoft-business-central": { badge: "Nativ kobling", why: "Shopify-kobling, der vedligeholdes af Microsoft.", together: "Vi arbejder med certificerede BC-eksperter og konfigurerer koblingen korrekt." },
+    "sage": { badge: "Brightpearl · Inventory Planner", why: "Prognoser og lagerplanlægning for brands i vækst.", together: "Vi tager integrationen, Sage tager driftssystemet." },
+    "tripletex": { badge: "Egen standardintegration", why: "Dokumenteret standardintegration, vi selv har bygget og vedligeholder.", together: "Ordrer, betalinger og bilag direkte ind i regnskabet. Norsk ERP-integration er kernen i det, vi laver." },
+    "poweroffice-go": { badge: "Egen standardintegration", why: "Dokumenteret standardintegration, vi selv har bygget og vedligeholder.", together: "Regnskabet opdateret uden manuelle bilag – noget udenlandske bureauer sjældent kan levere." },
+    "24sevenoffice-finago": { badge: "Egen standardintegration", why: "Dokumenteret standardintegration, vi selv har bygget og vedligeholder.", together: "Shopify og økonomisystemet taler sammen fra dag ét." },
+    "omnium": { badge: "Certificeret OMS-partner", why: "Motoren for omnichannel, klik og hent og ship from store.", together: "Et af få bureauer, der leverer Omnium og Shopify i samme team." },
+    "isys": { badge: "PIM- og WMS-partner", why: "Feed PIM og InStock WMS til store kataloger.", together: "iSYS ejer produktdata og lager, vi ejer salgsfladen." },
+    "holio": { badge: "Officiel partner", why: "Én integration mod hele transportørnetværket – og nu også pluk og WMS.", together: "Logistik løst af folk, der kan logistik, i stedet for noget vi selv skal bygge." },
+    "quickship": { badge: "Formel aftale", why: "Fragtløsning til små og mellemstore butikker.", together: "Labels og sporing hurtigt i gang." },
+    "helthjem": { badge: "Leveringspartner", why: "Hjemmelevering, som mange af vores kunder bruger.", together: "Korrekt sat op i checkouten fra første dag." },
+    "bring": { badge: "Partner", why: "Pakke- og hjemmelevering med Shopify-integration.", together: "Standardtransportøren i de fleste norske opsætninger." },
+    "postnord": { badge: "Partner", why: "Nordisk transportør med afhentningssteder og pakkebokse.", together: "Vigtigt, når du sælger til Sverige og Danmark." },
+    "klaviyo": { badge: "Partner", why: "Den dybeste Shopify-integration på markedet til e-mail og SMS.", together: "Flows og kampagner, der giver målbar omsætning – ikke bare nyhedsbreve." },
+    "voyado": { badge: "Certificeret partner", why: "CRM og loyalitet til større brands.", together: "Voyado tager kundedata og segmentering, vi tager e-handel og integration." },
+    "diller": { badge: "Loyalitetspartner", why: "Norsk kundeklub.", together: "En ansvarsfordeling, vi har defineret sammen: Diller ejer medlemskab og point, Shopify webkontoen, OMS ordren." },
+    "modish": { badge: "Loyalitetspartner", why: "Tager strategi og drift af loyalitetsprogrammet.", together: "Vi tager den tekniske implementering. Sammen leverer vi hele programmet, ikke bare appen." },
+    "brevo": { badge: "E-mailpartner", why: "E-mail og CRM til mindre butikker.", together: "Et godt alternativ, når Klaviyo er mere, end butikken har brug for." },
+    "mimir": { badge: "Partner", why: "Norsk AI-kundeservice til e-handel.", together: "Aflaster butikker, der drukner i henvendelser – så du får tid til at drive butik." },
+    "supportify": { badge: "Partner", why: "Outsourcet kundeservice med rigtige mennesker.", together: "Når dine kunder vil tale med mennesker, ikke bare en bot." },
+    "trustpilot": { badge: "Partner", why: "Kendt af norske forbrugere, og tæller i SEO og AI-søgning.", together: "Stjernerne placeret dér, hvor de konverterer – ikke bare i footeren." },
+    "lipscore": { badge: "Partner", why: "Nordiske, verificerede anmeldelser.", together: "Anmeldelser fra rigtige køb, tilpasset nordiske butikker." },
+    "judge-me": { badge: "Partner", why: "Billigt og godt til mindre butikker.", together: "Anmeldelser på plads uden en stor månedlig omkostning." },
+    "boost": { badge: "Implementeringspartner", why: "Søgning og merchandising til Shopify.", together: "Vi vælger søgeløsning efter katalogstørrelse og behov – ikke af vane." },
+    "depict": { badge: "Implementeringspartner", why: "Søgning og merchandising til Shopify.", together: "Vi vælger søgeløsning efter katalogstørrelse og behov – ikke af vane." },
+    "tracklution": { badge: "Inkluderet i alle lanceringer", why: "Server-side tracking, der faktisk fanger salgene.", together: "Korrekte data til Meta og Google – altid inkluderet i vores standardpris." },
+    "inevo": { badge: "Markedsføringspartner", why: "Performance og vækst.", together: "Vi har vores eget marketingteam – Inevo er partneren, vi henter ind på cases, vi ikke selv tager. De tager markedsføringen, vi tager platform og konvertering." },
+    "marketer-com": { badge: "Bureaupartner", why: "Betalt markedsføring og Manta-platformen.", together: "Vi tester Marketer.coms Manta-platform hos udvalgte kunder. De kører annoncerne, vi bygger og optimerer butikken." },
+    "moen-co": { badge: "Partner", why: "Community og brand.", together: "Vi er store fans af det, Moen & Co laver, og ser mange synergier – vi bidrager til hinandens vækst." },
+    "profitmetrics-reprice-og-circklewise": { badge: "Efter behov", why: "Analyse, prisintelligens og affiliate.", together: "Specialister, vi henter ind, når din butik har brug for det." },
+  },
+  de: {
+    "shopify": { badge: "Shopify Plus Partner", why: "Das ganze Unternehmen ist um die Plattform herum aufgebaut. Plus Partner seit 2024, mit direkten Partnerkontakten und priorisiertem Support.", together: "Wir ergänzen, was Shopify in Norwegen selbst nicht abdeckt: ERP-Integrationen und Kassengesetz-Compliance mit Nexus POS." },
+    "make": { badge: "Zertifizierter Partner", why: "Die Integrationsschicht zwischen Shopify und Tripletex, PowerOffice und Business Central.", together: "Integrationen zum Festpreis, schnell geliefert – ohne maßgeschneiderten Code, den Sie selbst pflegen müssen." },
+    "anthropic": { badge: "Partner · Startup-Programm", why: "Anthropic-Partner und Mitglied im Startup-Programm.", together: "Wir nutzen Claude in der gesamten Lieferung und bauen KI in die Lösungen unserer Kunden ein – für schnellere Lieferung und smarteren Betrieb." },
+    "sanity": { badge: "Technologiepartner", why: "Headless CMS in Hydrogen-Projekten, mit einer Inhaltsebene, die Redakteure tatsächlich bedienen können.", together: "Wir empfehlen Headless nur, wenn es für Ihren Shop sinnvoll ist." },
+    "consentmo": { badge: "Gelisteter Partner", why: "Consent- und Compliance-App, gebaut für Shopify.", together: "DSGVO und Google Consent Mode bei jedem einzelnen Launch korrekt eingerichtet." },
+    "norce": { badge: "Plattformpartner", why: "Eine Composable-Plattform, die wir von innen kennen.", together: "Wir liefern auf Norce, wenn der Fall passt: komplexe Lösungen und anspruchsvolles B2B, wo die Plattform ihre Stärken ausspielt." },
+    "vipps-mobilepay": { badge: "Formelle Vereinbarung", why: "Direkter Dialog mit dem Produktteam, nicht nur eine Support-Warteschlange.", together: "Wir entwickeln Lösungen gemeinsam – wie Vipps Hurtigkasse und Nexus POS – und testen sie früh in echten Geschäften." },
+    "nets-nexi": { badge: "PSP-Partner und POS-Händler", why: "Terminals und Abrechnung für Nexus POS.", together: "Kartenzahlung im Geschäft, die mit Shopify spricht – mit einem einzigen Ansprechpartner." },
+    "shopify-payments": { badge: "Die Standardwahl", why: "Keine zusätzlichen Transaktionsgebühren, Shop Pay und der einfachste Betrieb.", together: "Wir empfehlen es ehrlich, wenn es passt – keinen Drittanbieter um des Drittanbieters willen." },
+    "dintero": { badge: "Implementierungspartner", why: "Norwegischer All-in-one-Checkout: Vipps, Karte, Rechnung und Finanzierung in einer Integration.", together: "Wir sind offen dafür, reine B2B-Projekte gemeinsam umzusetzen." },
+    "qliro": { badge: "Premium Partner", why: "Ein echter Klarna-Herausforderer – nordisches BNPL, das neu denkt.", together: "Qliro bringt moderne Lösungen für mehr Conversion und Kundentreue, und wir richten sie von Anfang an korrekt im Checkout ein." },
+    "avarda": { badge: "Preferred Shopify Partner", why: "White-Label-Checkout und Zahlung, bei denen der Kunde Ihre Marke sieht – nicht die des Zahlungsanbieters.", together: "Perfekt für den Markenaufbau: Rechnung, Ratenzahlung und die Kundenbeziehung in Ihrem Namen, mit schneller Abrechnung und lokalem Support." },
+    "klarna": { badge: "Zahlungspartner", why: "Globales BNPL, das Kunden wiedererkennen.", together: "Wenn Marke und Reichweite am meisten zählen, richten wir Klarna korrekt im Shopify-Checkout ein." },
+    "svea": { badge: "Fintech-Partner", why: "Nordisches Fintech für B2B und B2C.", together: "Wenn B2B-Rechnung und Ratenzahlung für Verbraucher bei einem Anbieter liegen sollen." },
+    "confect": { badge: "Offizielle Zusammenarbeit", why: "Visma.net-Experten mit demselben Festpreismodell wie wir. Wir teilen uns sogar das Büro.", together: "Confect hat die Visma.net-Anbindung für Nexus POS gebaut. Visma.net und Shopify im gleichen Tempo und zum Festpreis geliefert." },
+    "totall-digitall": { badge: "Bevorzugter Finago-Partner", why: "Wenn Kasse, Filialdaten und Buchhaltung zusammenkommen sollen.", together: "toTALL übernimmt die Finanzen, wir den E-Commerce. Keiner von uns tut so, als könnte er das andere." },
+    "digitall": { badge: "Offizielle Zusammenarbeit", why: "Offizielle Zusammenarbeit bei Finago, Omnium und Shopify.", together: "Wir liefern gemeinsam, wenn das Projekt Finanzen, OMS und Onlineshop umfasst." },
+    "microsoft-business-central": { badge: "Native Anbindung", why: "Eine Shopify-Anbindung, die von Microsoft gepflegt wird.", together: "Wir arbeiten mit zertifizierten BC-Experten und konfigurieren die Anbindung korrekt." },
+    "sage": { badge: "Brightpearl · Inventory Planner", why: "Prognosen und Bestandsplanung für wachsende Marken.", together: "Wir übernehmen die Integration, Sage das Betriebssystem." },
+    "tripletex": { badge: "Eigene Standardintegration", why: "Eine dokumentierte Standardintegration, die wir selbst gebaut haben und pflegen.", together: "Bestellungen, Zahlungen und Belege direkt in die Buchhaltung. Norwegische ERP-Integration ist der Kern unserer Arbeit." },
+    "poweroffice-go": { badge: "Eigene Standardintegration", why: "Eine dokumentierte Standardintegration, die wir selbst gebaut haben und pflegen.", together: "Die Buchhaltung bleibt ohne manuelle Belege aktuell – etwas, das ausländische Agenturen selten liefern." },
+    "24sevenoffice-finago": { badge: "Eigene Standardintegration", why: "Eine dokumentierte Standardintegration, die wir selbst gebaut haben und pflegen.", together: "Shopify und das Finanzsystem sprechen vom ersten Tag an miteinander." },
+    "omnium": { badge: "Zertifizierter OMS-Partner", why: "Der Motor für Omnichannel, Click & Collect und Ship from Store.", together: "Eine der wenigen Agenturen, die Omnium und Shopify im selben Team liefern." },
+    "isys": { badge: "PIM- und WMS-Partner", why: "Feed PIM und InStock WMS für große Kataloge.", together: "iSYS verantwortet Produktdaten und Lager, wir die Verkaufsfläche." },
+    "holio": { badge: "Offizieller Partner", why: "Eine Integration zum gesamten Carrier-Netzwerk – und jetzt auch Kommissionierung und WMS.", together: "Logistik, gelöst von Leuten, die Logistik können, statt etwas, das wir selbst bauen müssten." },
+    "quickship": { badge: "Formelle Vereinbarung", why: "Versandlösung für kleine und mittlere Shops.", together: "Etiketten und Sendungsverfolgung schnell einsatzbereit." },
+    "helthjem": { badge: "Lieferpartner", why: "Heimlieferung, die viele unserer Kunden nutzen.", together: "Vom ersten Tag an korrekt im Checkout eingerichtet." },
+    "bring": { badge: "Partner", why: "Paket- und Heimlieferung mit Shopify-Integration.", together: "Der Standard-Carrier in den meisten norwegischen Setups." },
+    "postnord": { badge: "Partner", why: "Nordischer Carrier mit Abholstellen und Paketboxen.", together: "Wichtig, wenn Sie nach Schweden und Dänemark verkaufen." },
+    "klaviyo": { badge: "Partner", why: "Die tiefste Shopify-Integration am Markt für E-Mail und SMS.", together: "Flows und Kampagnen, die messbaren Umsatz bringen – nicht nur Newsletter." },
+    "voyado": { badge: "Zertifizierter Partner", why: "CRM und Loyalität für größere Marken.", together: "Voyado übernimmt Kundendaten und Segmentierung, wir E-Commerce und Integration." },
+    "diller": { badge: "Loyalitätspartner", why: "Norwegisches Kundenprogramm.", together: "Eine Aufgabenteilung, die wir gemeinsam definiert haben: Diller verantwortet Mitgliedschaft und Punkte, Shopify das Onlinekonto, das OMS die Bestellung." },
+    "modish": { badge: "Loyalitätspartner", why: "Übernimmt Strategie und Betrieb des Treueprogramms.", together: "Wir übernehmen die technische Umsetzung. Gemeinsam liefern wir das ganze Programm, nicht nur die App." },
+    "brevo": { badge: "E-Mail-Partner", why: "E-Mail und CRM für kleinere Shops.", together: "Eine gute Alternative, wenn Klaviyo mehr ist, als der Shop braucht." },
+    "mimir": { badge: "Partner", why: "Norwegischer KI-Kundenservice für den E-Commerce.", together: "Entlastet Shops, die in Anfragen ertrinken – damit Sie Zeit haben, Ihr Geschäft zu führen." },
+    "supportify": { badge: "Partner", why: "Ausgelagerter Kundenservice mit echten Menschen.", together: "Wenn Ihre Kunden mit Menschen sprechen wollen, nicht nur mit einem Bot." },
+    "trustpilot": { badge: "Partner", why: "Norwegischen Verbrauchern vertraut, und zählt in SEO und KI-Suche.", together: "Die Sterne dort platziert, wo sie konvertieren – nicht nur im Footer." },
+    "lipscore": { badge: "Partner", why: "Nordische, verifizierte Bewertungen.", together: "Bewertungen aus echten Käufen, zugeschnitten auf nordische Shops." },
+    "judge-me": { badge: "Partner", why: "Günstig und solide für kleinere Shops.", together: "Bewertungen im Einsatz ohne hohe Monatskosten." },
+    "boost": { badge: "Implementierungspartner", why: "Suche und Merchandising für Shopify.", together: "Wir wählen die Suchlösung nach Kataloggröße und Bedarf – nicht aus Gewohnheit." },
+    "depict": { badge: "Implementierungspartner", why: "Suche und Merchandising für Shopify.", together: "Wir wählen die Suchlösung nach Kataloggröße und Bedarf – nicht aus Gewohnheit." },
+    "tracklution": { badge: "In jedem Launch enthalten", why: "Server-side Tracking, das die Verkäufe tatsächlich erfasst.", together: "Korrekte Daten für Meta und Google – immer in unserem Standardpreis enthalten." },
+    "inevo": { badge: "Marketingpartner", why: "Performance und Wachstum.", together: "Wir haben ein eigenes Marketingteam – Inevo ist der Partner, den wir für Fälle hinzuziehen, die wir nicht selbst übernehmen. Sie machen das Marketing, wir Plattform und Conversion." },
+    "marketer-com": { badge: "Agenturpartner", why: "Bezahltes Marketing und die Manta-Plattform.", together: "Wir testen die Manta-Plattform von Marketer.com bei ausgewählten Kunden. Sie schalten die Anzeigen, wir bauen und optimieren den Shop." },
+    "moen-co": { badge: "Partner", why: "Community und Marke.", together: "Wir sind große Fans dessen, was Moen & Co machen, und sehen viele Synergien – wir tragen zum Wachstum des anderen bei." },
+    "profitmetrics-reprice-og-circklewise": { badge: "Bei Bedarf", why: "Analyse, Preisintelligenz und Affiliate.", together: "Spezialisten, die wir hinzuziehen, wenn Ihr Shop sie braucht." },
+  },
+}
+
+/** Category title in the page language; Norwegian on .no, English for unknown locales. */
+export const categoryTitle = (key: string, language = 'no') => {
+  const c = partnerCategories.find((c) => c.key === key)
+  if (!c) return key
+  switch (partnerLang(language)) {
+    case 'no': return c.title
+    case 'sv': return c.titleSv
+    case 'da': return c.titleDa
+    case 'de': return c.titleDe
+    default: return c.titleEn
+  }
+}
+
+/**
+ * Swap the Norwegian badge/why/together for the page language on
+ * non-Norwegian pages. Run it after `mergePartners`, which fills gaps on the
+ * Norwegian fields. Norwegian returns the same array; a slug without a
+ * translation falls back to English.
  */
 export function localizePartners(entries: PartnerEntry[], language: string): PartnerEntry[] {
-  if (language === 'no') return entries
-  return entries.map((p) => ({ ...p, badge: p.badgeEn || p.badge, why: p.whyEn || p.why, together: p.togetherEn || p.together }))
+  const lang = partnerLang(language)
+  if (lang === 'no') return entries
+  const table = lang === 'en' ? undefined : partnerTranslations[lang]
+  return entries.map((p) => {
+    const t = table?.[p.slug]
+    return { ...p, badge: t?.badge || p.badgeEn || p.badge, why: t?.why || p.whyEn || p.why, together: t?.together || p.togetherEn || p.together }
+  })
 }
 
 /** Shape of a partner entry in the Sanity partnersPage document. */

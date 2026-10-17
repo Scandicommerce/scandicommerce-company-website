@@ -4,18 +4,27 @@ import CorePartners from '@/components/sections/partners/CorePartners'
 import PartnerCatalog from '@/components/sections/partners/PartnerCatalog'
 import PartnersCtas from '@/components/sections/partners/PartnersCtas'
 import type { SanitySectionItem } from '@/lib/sanity/normalizeDocumentSections'
-import { localizePartners, mergePartners, partnerCatalog, partnerCategories, type SanityPartner } from '@/lib/partnersCatalog'
+import { localizePartners, mergePartners, partnerCatalog, partnerCategories, partnerLang, type SanityPartner } from '@/lib/partnersCatalog'
 import { urlFor } from '@/sanity/lib/image'
 import { CONTACT_SLUG } from '@/lib/routes'
 
 type SanityImage = { asset?: { _id?: string; url?: string }; crop?: unknown; hotspot?: unknown }
 type GridPartner = { name?: string; category?: string; description?: string; benefits?: string[]; url?: string; logo?: SanityImage }
 
+/** Hero title when the Sanity document has none. */
+const HERO_FALLBACK = {
+  no: 'Partnere vi faktisk bruker',
+  en: 'Partners we actually use',
+  sv: 'Partner vi faktiskt använder',
+  da: 'Partnere vi faktisk bruger',
+  de: 'Partner, die wir wirklich nutzen',
+}
+
 /**
  * Sanity sections → the partner pages. The hero, "why" title and CTA copy
  * come from the document; the partner list is the code catalog with any
  * Sanity description or logo laid on top (see mergePartners), then swapped
- * to English copy for non-Norwegian pages (see localizePartners).
+ * to the page language for non-Norwegian pages (see localizePartners).
  */
 export function PartnersPageSectionRenderer({ sections, lang = 'no' }: { sections: SanitySectionItem[]; lang?: string }) {
   const contactHref = `/${(CONTACT_SLUG as Record<string, string>)[lang] ?? 'kontakt'}`
@@ -41,7 +50,7 @@ export function PartnersPageSectionRenderer({ sections, lang = 'no' }: { section
             return (
               <PartnersHero
                 key={_key}
-                title={hero.heroTitle?.text || (lang === 'no' ? 'Partnere vi faktisk bruker' : 'Partners we actually use')}
+                title={hero.heroTitle?.text || HERO_FALLBACK[partnerLang(lang)]}
                 highlight={hero.heroTitle?.highlight}
                 description={hero.heroDescription}
                 partners={partners}
