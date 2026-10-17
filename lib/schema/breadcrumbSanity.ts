@@ -3,7 +3,7 @@ import { breadcrumbTitlesQuery, RESOLVE_PAGE_TYPES } from '@/sanity/lib/queries'
 import { getQueryParams } from '@/sanity/lib/queryHelpers'
 import { defaultLanguage, LOCALE_IDS } from '@/sanity/lib/languages'
 
-const BREADCRUMB_TYPES = [...RESOLVE_PAGE_TYPES, 'blogPost', 'post']
+const BREADCRUMB_TYPES = [...RESOLVE_PAGE_TYPES, 'post']
 
 /** Map header locale / BCP47 to Sanity `language` field on documents. */
 export function sanityLanguageForBreadcrumb(locale: string): string {

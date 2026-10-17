@@ -1,9 +1,6 @@
 import { defineField, defineType, defineArrayMember } from "sanity";
 import { languageField } from "../objects/language";
-import {
-  seoExtendedField,
-  legacySeoFieldMinimal,
-} from "../_shared/seoFields";
+import { seoExtendedField } from "../_shared/seoFields";
 import { isUniquePerLanguage } from "@/sanity/lib/slugUtils";
 import { relatedPagesField } from "../_shared/relatedPagesField";
 import {
@@ -157,7 +154,6 @@ export const post = defineType({
     }),
     relatedPagesField({ group: "content" }),
     { ...seoExtendedField, group: "settings" },
-    { ...legacySeoFieldMinimal, group: "settings" },
   ],
   preview: {
     select: {

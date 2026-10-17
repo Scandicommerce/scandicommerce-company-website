@@ -53,7 +53,7 @@ export default function PackageDetailHero({ pkg, tier, shopifyProduct, lang = 'e
             <div className="mb-4 text-xs font-semibold uppercase tracking-[0.12em] text-sc-cyan-500">
               {t.eyebrow}
             </div>
-            <h1 className="text-[40px] font-bold leading-[1.02] tracking-[-0.028em] text-sc-ink-900 lg:text-[56px]">
+            <h1 className="break-words text-[36px] font-bold leading-[1.02] tracking-[-0.028em] text-sc-ink-900 [hyphens:auto] sm:text-[40px] lg:text-[56px]">
               {pkg.title}
             </h1>
             {(card?.tagline || pkg.subtitle) && (

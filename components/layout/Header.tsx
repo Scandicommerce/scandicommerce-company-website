@@ -204,7 +204,7 @@ export default function Header({ settings, language }: HeaderProps) {
             </div>
 
             {/* Right: language toggle, cart, CTA, hamburger */}
-            <div className="ml-auto flex items-center gap-2 sm:gap-3 lg:gap-[18px] flex-shrink-0 min-w-0">
+            <div className="ml-auto flex items-center gap-1.5 sm:gap-3 lg:gap-[18px] flex-shrink-0 min-w-0">
               <span className="text-[12px] font-semibold text-sc-ink-500 flex items-center">
                 <LanguageSwitcher />
               </span>
@@ -222,7 +222,7 @@ export default function Header({ settings, language }: HeaderProps) {
               </button>
               <LocalizedLink
                 href={getNavHref(ctaButton)}
-                className="inline-block bg-sc-ink-900 text-white rounded-lg px-3.5 py-2 lg:px-5 lg:py-2.5 text-[12px] lg:text-[13px] font-semibold hover:bg-sc-ink-700 transition-colors flex-shrink-0 whitespace-nowrap text-center"
+                className="inline-block bg-sc-ink-900 text-white rounded-lg px-2.5 py-2 sm:px-3.5 lg:px-5 lg:py-2.5 text-[11px] sm:text-[12px] lg:text-[13px] font-semibold hover:bg-sc-ink-700 transition-colors flex-shrink-0 whitespace-nowrap text-center"
               >
                 {ctaButton.label}
               </LocalizedLink>

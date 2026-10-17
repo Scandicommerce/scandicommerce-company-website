@@ -1,3 +1,6 @@
+import NewsletterForm from '@/components/ui/NewsletterForm'
+import { ui } from '@/components/integrations/labels'
+
 interface NewsletterCtaData {
   title?: string
   description?: string
@@ -5,42 +8,37 @@ interface NewsletterCtaData {
   buttonText?: string
 }
 
-import NewsletterForm from '@/components/ui/NewsletterForm'
-
 interface GetShopifyInsitesDeliveredProps {
   newsletterCta?: NewsletterCtaData
+  lang?: string
 }
 
-export default function GetShopifyInsitesDelivered({ newsletterCta }: GetShopifyInsitesDeliveredProps) {
-  const title = newsletterCta?.title || 'One email a month. No tracking, no fluff — just what we shipped and what we learned.'
+/** Newsletter band under the blog archive: copy left, hairline form right. */
+export default function GetShopifyInsitesDelivered({ newsletterCta, lang }: GetShopifyInsitesDeliveredProps) {
+  const isNorwegian = lang === 'no'
+  const title = newsletterCta?.title || (isNorwegian ? 'Én e-post i måneden. Det vi sendte og det vi lærte.' : 'One email a month. What we shipped and what we learned.')
   const description = newsletterCta?.description
   const emailPlaceholder = newsletterCta?.emailPlaceholder || 'din@epost.no'
-  const buttonText = newsletterCta?.buttonText || 'SUBSCRIBE'
+  const buttonText = newsletterCta?.buttonText || (isNorwegian ? 'Meld meg på' : 'Subscribe')
+  const eyebrow = isNorwegian ? 'Nyhetsbrev' : 'Newsletter'
 
   return (
-    <section className="border-t border-neutral-200 bg-neutral-50 py-14">
-      <div className="section_container mx-auto page-padding-x">
-        <div className="flex flex-col md:flex-row items-start justify-between gap-8">
-          {/* Left: copy */}
-          <div className="max-w-xl">
-            <div className="text-[11px] font-bold uppercase tracking-[0.12em] text-[#11848C] mb-3">
-              Notes from the studio
-            </div>
-            <h3 className="text-xl md:text-2xl font-bold text-[#1F1D1D] leading-snug" style={{ letterSpacing: '-0.01em' }}>
-              {title}
-            </h3>
-            {description && (
-              <p className="mt-3 text-sm md:text-base text-[#4A4A4A] leading-relaxed">{description}</p>
-            )}
-          </div>
-
-          {/* Right: form */}
-          <NewsletterForm
-            source="blog"
-            emailPlaceholder={emailPlaceholder}
-            buttonText={buttonText}
-          />
+    <section className="border-t border-sc-ink-100 bg-sc-ink-50 py-16 lg:py-20">
+      <div className={`${ui.container} flex flex-col items-start justify-between gap-8 lg:flex-row lg:items-center`}>
+        <div className="flex max-w-[560px] flex-col gap-3">
+          <div className={ui.eyebrow}>{eyebrow}</div>
+          <h2 className="m-0 text-[24px] font-bold leading-[1.25] tracking-[-0.02em] text-sc-ink-900 lg:text-[28px]">{title}</h2>
+          {description && <p className="m-0 text-base leading-relaxed text-sc-ink-600">{description}</p>}
         </div>
+        <NewsletterForm
+          source="blog"
+          emailPlaceholder={emailPlaceholder}
+          buttonText={buttonText}
+          successText={isNorwegian ? 'Takk! Du er meldt på.' : 'Thanks! You are signed up.'}
+          className="flex w-full flex-col gap-3 sm:flex-row lg:w-auto"
+          inputClassName="min-h-[46px] flex-1 rounded-lg border border-sc-ink-200 bg-white px-4 py-3 text-sm text-sc-ink-900 placeholder:text-sc-ink-400 focus:border-sc-ink-900 focus:outline-none sm:w-72"
+          buttonClassName={`${ui.btnPrimary} whitespace-nowrap`}
+        />
       </div>
     </section>
   )

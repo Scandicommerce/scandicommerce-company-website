@@ -32,7 +32,7 @@ const COUNTRY_SEGMENT_TO_LANGUAGE: Record<string, Language> = {
   de: 'de',
 }
 
-export const ARTICLE_TYPES = ['post', 'blogPost'] as const
+export const ARTICLE_TYPES = ['post'] as const
 export const CASE_STUDY_TYPES = ['caseStudy'] as const
 
 /** Localized index slug for articles (first segment of an article URL). */

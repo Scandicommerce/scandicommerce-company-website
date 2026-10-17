@@ -11,7 +11,6 @@ export const RELATED_PAGE_TYPES = [
   "integrationCategory",
   "migrationPage",
   "post",
-  "blogPost",
   "caseStudy",
   "allPackagesPage",
   "packageDetailPage",

@@ -25,7 +25,7 @@ const LANGS = ['en', 'no', 'sv', 'da', 'de']
 const COUNTRY = { se: 'sv', dk: 'da', de: 'de' }
 const BLOG = { no: 'blogg', en: 'blog', sv: 'blog', da: 'blog', de: 'blog' }
 const WORK = { no: 'kundecaser', en: 'work', sv: 'work', da: 'work', de: 'work' }
-const TYPES = ['landingPage','aboutPage','contactPage','workPage','partnersPage','blogPage','allPackagesPage','packageDetailPage','migratePage','shopifyPosPage','shopifyPosInfoPage','shopifyXAiPage','shopifyXPimPage','whyShopifyPage','shopifyPlatformPage','vippsHurtigkassePage','shopifyTcoCalculatorPage','shopifyDevelopmentPage','post','blogPost','caseStudy','author','legalPage','pillarPage','integrationPage','migrationPage','merchPage']
+const TYPES = ['landingPage','aboutPage','contactPage','workPage','partnersPage','blogPage','allPackagesPage','packageDetailPage','migratePage','shopifyPosPage','shopifyPosInfoPage','shopifyXAiPage','shopifyXPimPage','whyShopifyPage','shopifyPlatformPage','vippsHurtigkassePage','shopifyTcoCalculatorPage','shopifyDevelopmentPage','post','caseStudy','author','legalPage','pillarPage','integrationPage','migrationPage','merchPage']
 
 const strip = (slug) => { const s = (slug ?? '').replace(/^\/+|\/+$/g, '').split('/').filter(Boolean); while (s.length && (LANGS.includes(s[0]) || s[0] in COUNTRY)) s.shift(); return s.join('/') }
 function docPath(d) {
@@ -33,7 +33,7 @@ function docPath(d) {
   const s = strip(d.slug)
   const last = s.split('/').pop() ?? s
   if (d._type === 'landingPage' || d.isHomepage || s === '' || s === 'home') return ''
-  if (d._type === 'post' || d._type === 'blogPost') return `${BLOG[lang]}/${last}`
+  if (d._type === 'post') return `${BLOG[lang]}/${last}`
   if (d._type === 'caseStudy') return `${WORK[lang]}/${last}`
   if (d._type === 'author') return `team/${s}`
   if (d._type === 'legalPage') return `legal/${s}`

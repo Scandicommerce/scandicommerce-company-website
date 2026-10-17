@@ -1,75 +1,104 @@
-'use client'
-
-import LiquidBlob from '@/components/ui/LiquidBlob'
+import Image from 'next/image'
+import Link from 'next/link'
 import { Article } from '@/lib/articles'
-import { FiUser, FiCalendar, FiClock } from 'react-icons/fi'
+import { authorHref, blogIndexHref } from '@/lib/routes'
+import { ui } from '@/components/integrations/labels'
 
 interface ArticleHeroProps {
   article: Article
+  /** Free-form tags from Sanity (the article type itself carries only the category). */
+  tags?: string[]
+  lang?: string
 }
 
-export default function ArticleHero({ article }: ArticleHeroProps) {
-  // Split title to highlight specific part
-  const highlightTitle = () => {
-    const parts = article.title.split(article.titleHighlight)
-    if (parts.length === 2) {
-      return (
-        <>
-          <span className="text-[#1DEFFA]">{article.titleHighlight}</span>
-          <span className="lg:text-[#565454] text-[#222]">{parts[1]}</span>
-        </>
-      )
-    }
-    return <span className="lg:text-[#565454] text-[#222222]">{article.title}</span>
-  }
+const T: Record<string, { index: string; read: string; by: string }> = {
+  no: { index: 'Blogg', read: 'lesing', by: 'Av' },
+  en: { index: 'Blog', read: 'read', by: 'By' },
+}
+
+function renderTitle(title: string, highlight?: string) {
+  if (!highlight || !title.includes(highlight)) return title
+  const [before, ...rest] = title.split(highlight)
+  return (
+    <>
+      {before}
+      <span className="text-sc-cyan-500">{highlight}</span>
+      {rest.join(highlight)}
+    </>
+  )
+}
+
+/**
+ * Article header on the case-study hero: breadcrumb, category and tags,
+ * title with the highlighted phrase in cyan, lead, then author, date and
+ * reading time in one row.
+ */
+export default function ArticleHero({ article, tags = [], lang = 'no' }: ArticleHeroProps) {
+  const t = T[lang] ?? T.en
+  const extraTags = tags.filter((tag) => tag && tag !== article.category)
+  const readTime = article.readTime ? (article.readTime.includes(t.read) ? article.readTime : `${article.readTime} ${t.read}`) : ''
+  const authorLink = article.author.slug ? authorHref(article.author.slug, lang) : undefined
 
   return (
-    <section className="relative bg-[#F8F8F8] py-16 lg:py-24 overflow-hidden min-h-[calc(90vh-90px)] md:min-h-[calc(100vh-80px)] flex items-center justify-center lg:justify-start">
-      {/* Mobile Blob - Centered animation like layout/Hero.tsx (< 1024px) */}
-      <LiquidBlob
-        page="homepage"
-        rotation={0}
-        className="top-[25%] xs:top-[33%] sm:top-[35%] md:top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[75%] h-[75%] md:w-[80%] md:h-[80%] block lg:hidden"
-        enableMouseFollow={true}
-      />
+    <section className="bg-white">
+      <div className={`${ui.container} pt-8`}>
+        <nav aria-label="Breadcrumb" className="flex flex-wrap items-center gap-2 text-[13px] text-sc-ink-400">
+          <Link href={blogIndexHref(lang)} className="text-sc-ink-600 transition-colors hover:text-sc-ink-900">
+            {t.index}
+          </Link>
+          {article.category && (
+            <>
+              <span aria-hidden="true">/</span>
+              <span className="font-semibold text-sc-ink-900">{article.category}</span>
+            </>
+          )}
+        </nav>
+      </div>
 
-      {/* Desktop Blob - Original position (>= 1024px) */}
-      <LiquidBlob
-        page="homepage"
-        rotation={10}
-        className="top-[-5%] right-[-10%] w-[75%] h-[110%] hidden lg:block"
-      />
-
-      {/* Decorative circles for mobile (like layout/Hero.tsx) */}
-      <div className="absolute top-[35%] left-[25%] lg:hidden w-24 h-24 sm:w-32 sm:h-32 rounded-full bg-[#1DEFFA33]"></div>
-      <div className="absolute bottom-[44%] right-[32%] lg:hidden w-[40px] h-[40px] sm:w-[50px] sm:h-[50px] rounded-full bg-[#1DEFFA33]"></div>
-
-      <div className="md:static absolute top-[20%] xs:top-[27%] sm:top-[23%] xs:w-full sm:container mx-auto page-padding-x z-10 flex justify-center items-center lg:justify-start">
-        <div className="w-[90%] xs:w-[90%] sm:w-4/5 lg:w-3/5 xl:w-2/5 flex flex-col items-center lg:items-start">
-          {/* Title */}
-          <h1 className="text-[5.8vw] xs:text-[4.5vw] sm:text-[32px] md:text-[4vw] lg:text-[40px] xl:text-[48px] !leading-[130%] font-bold mb-[26vw] xs:mb-6 sm:mb-8 lg:mb-12 text-center lg:text-left">
-            {highlightTitle()}
-          </h1>
-
-          {/* Meta Information - horizontal row like design */}
-          <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 sm:gap-6 md:gap-10 lg:text-[#565454] text-[#222222]">
-            {/* Author */}
-            <div className="flex items-center gap-2">
-              <FiUser className="w-4 h-4 sm:w-5 sm:h-5" />
-              <span className="text-xs sm:text-sm md:text-base">{article.author.name}</span>
+      <div className={`${ui.container} pb-10 pt-8 lg:pb-12 lg:pt-10`}>
+        <div className="flex max-w-[820px] flex-col gap-5">
+          {(article.category || extraTags.length > 0) && (
+            <div className="flex flex-wrap gap-1.5">
+              {article.category && <span className={ui.tag}>{article.category}</span>}
+              {extraTags.map((tag) => (
+                <span key={tag} className={ui.tagOutline}>
+                  {tag}
+                </span>
+              ))}
             </div>
+          )}
 
-            {/* Date */}
-            <div className="flex items-center gap-2">
-              <FiCalendar className="w-4 h-4 sm:w-5 sm:h-5" />
-              <span className="text-xs sm:text-sm md:text-base">{article.date}</span>
-            </div>
+          <h1 className="m-0 text-balance text-[32px] font-bold leading-[1.06] tracking-[-0.025em] text-sc-ink-900 md:text-[52px]">{renderTitle(article.title, article.titleHighlight)}</h1>
 
-            {/* Read Time */}
-            <div className="flex items-center gap-2">
-              <FiClock className="w-4 h-4 sm:w-5 sm:h-5" />
-              <span className="text-xs sm:text-sm md:text-base">{article.readTime}</span>
-            </div>
+          {article.description && <p className="m-0 max-w-[640px] text-base leading-relaxed text-sc-ink-600 lg:text-lg">{article.description}</p>}
+
+          <div className="flex flex-wrap items-center gap-x-5 gap-y-3 border-t border-sc-ink-100 pt-5">
+            {article.author.name && (
+              <div className="flex items-center gap-3">
+                {article.author.image ? (
+                  <Image src={article.author.image} alt={article.author.name} width={40} height={40} className="h-10 w-10 flex-shrink-0 rounded-full border border-sc-ink-100 object-cover" />
+                ) : (
+                  <span aria-hidden="true" className="h-10 w-10 flex-shrink-0 rounded-full border border-sc-ink-100 bg-sc-ink-50" />
+                )}
+                <div className="flex flex-col gap-0.5">
+                  {authorLink ? (
+                    <Link href={authorLink} className="text-sm font-semibold text-sc-ink-900 no-underline transition-colors hover:text-sc-cyan-600">
+                      {article.author.name}
+                    </Link>
+                  ) : (
+                    <span className="text-sm font-semibold text-sc-ink-900">{article.author.name}</span>
+                  )}
+                  {article.author.role && <span className="text-[13px] text-sc-ink-500">{article.author.role}</span>}
+                </div>
+              </div>
+            )}
+            {(article.date || readTime) && (
+              <div className={`${ui.mono} flex flex-wrap gap-x-2`}>
+                {article.date && <span>{article.date}</span>}
+                {article.date && readTime && <span aria-hidden="true">·</span>}
+                {readTime && <span>{readTime}</span>}
+              </div>
+            )}
           </div>
         </div>
       </div>

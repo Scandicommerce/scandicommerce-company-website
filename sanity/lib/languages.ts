@@ -39,12 +39,10 @@ export function getPathWithoutLang(pathname: string): string {
 /** Document type names that support translation (document-level i18n) */
 export const TRANSLATABLE_SCHEMA_TYPES = [
   "landingPage",
-  "servicesPage",
   "aboutPage",
   "contactPage",
   "workPage",
   "blogPage",
-  "blogPost",
   "post",
   "shopifyDevelopmentPage",
   "migratePage",

@@ -1,68 +1,57 @@
-'use client'
-
 import Image from 'next/image'
 import Link from 'next/link'
 import { articleHref } from '@/lib/routes'
 import { RelatedArticle } from '@/lib/articles'
-import { FiClock } from 'react-icons/fi'
+import { ui } from '@/components/integrations/labels'
 
 interface RelatedArticlesProps {
   articles: RelatedArticle[]
-  /** Current locale (e.g. "en", "no") so links work on /no/resources/... etc. */
+  /** Current locale (e.g. "en", "no") so links work on /blogg/... and /en/blog/... */
   lang?: string
 }
 
-export default function RelatedArticles({ articles, lang }: RelatedArticlesProps) {
+const T: Record<string, { eyebrow: string; heading: string; read: string }> = {
+  no: { eyebrow: 'Les videre', heading: 'Relaterte artikler', read: 'lesing' },
+  en: { eyebrow: 'Read next', heading: 'Related articles', read: 'read' },
+}
+
+/** Related posts on the ink-50 band, the same cards as the blog deck. */
+export default function RelatedArticles({ articles, lang = 'no' }: RelatedArticlesProps) {
+  const items = (articles ?? []).filter((a) => a.slug && a.title)
+  if (items.length === 0) return null
+  const t = T[lang] ?? T.en
+
   return (
-    <section className="bg-[#EFEFEF] py-12 lg:py-16">
-      <div className="section_container mx-auto page-padding-x">
-        <h2 className="text-2xl md:text-3xl font-bold text-[#1F1D1D] text-center mb-10">
-          Related Articles
-        </h2>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-0">
-          {articles.map((article, index) => (
-            <Link
-              key={index}
-              href={articleHref(article.slug, lang ?? 'en')}
-              className="group relative overflow-hidden"
-            >
-              {/* Article Image */}
-              <div className="relative w-full h-[280px] md:h-[320px] lg:h-[380px]">
-                <Image
-                  src={article.image}
-                  alt={article.title}
-                  fill
-                  className="object-cover group-hover:scale-105 transition-transform duration-300"
-                  sizes="(max-width: 768px) 100vw, 33vw"
-                />
-                {/* Gradient Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-              </div>
-
-              {/* Article Info - Overlay at bottom */}
-              <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
-                {/* Category Badge */}
-                <span className="inline-block px-3 py-1 bg-[#03C1CA] text-white text-xs font-medium rounded mb-3">
-                  {article.category}
-                </span>
-
-                {/* Title */}
-                <h3 className="text-lg md:text-xl font-bold mb-2 group-hover:text-[#03C1CA] transition-colors">
-                  {article.title}
-                </h3>
-
-                {/* Read Time */}
-                <div className="flex items-center gap-2 text-white/80 text-sm">
-                  <FiClock className="w-4 h-4" />
-                  <span>{article.readTime}</span>
+    <section className="border-t border-sc-ink-100 bg-sc-ink-50 py-16 lg:py-20">
+      <div className={ui.container}>
+        <div className="mb-8 flex flex-col gap-2.5">
+          <div className={ui.eyebrow}>{t.eyebrow}</div>
+          <h2 className="m-0 text-[28px] font-bold leading-tight tracking-[-0.02em] text-sc-ink-900 md:text-[32px]">{t.heading}</h2>
+        </div>
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {items.map((article) => {
+            const readTime = article.readTime ? (article.readTime.includes(t.read) ? article.readTime : `${article.readTime} ${t.read}`) : ''
+            return (
+              <Link key={article.slug} href={articleHref(article.slug, lang)} className="group flex flex-col overflow-hidden rounded-lg border border-sc-ink-100 bg-white no-underline transition-transform hover:-translate-y-1">
+                <div className="relative aspect-[4/3] w-full bg-sc-ink-100">
+                  {article.image && (
+                    <Image src={article.image} alt={article.title} fill className="object-cover transition-transform duration-500 group-hover:scale-[1.03]" sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 340px" />
+                  )}
                 </div>
-              </div>
-            </Link>
-          ))}
+                <div className="flex flex-1 flex-col gap-3 p-5">
+                  {article.category && (
+                    <div>
+                      <span className={ui.tag}>{article.category}</span>
+                    </div>
+                  )}
+                  <h3 className="m-0 text-[18px] font-bold leading-[1.3] tracking-[-0.01em] text-sc-ink-900 transition-colors group-hover:text-sc-cyan-600">{article.title}</h3>
+                  {readTime && <div className={`${ui.mono} mt-auto`}>{readTime}</div>}
+                </div>
+              </Link>
+            )
+          })}
         </div>
       </div>
     </section>
   )
 }
-

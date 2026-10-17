@@ -2,7 +2,6 @@ import { sanityPageFetch } from '@/sanity/lib/fetch'
 import {
   resolvePageByPathQuery,
   resolvePostBySlugQuery,
-  resolveBlogPostBySlugQuery,
   resolvePackageDetailBySlugQuery,
   resolveCaseStudyBySlugQuery,
   resolveAuthorBySlugQuery,
@@ -30,8 +29,6 @@ async function findArticle(slug: string, language: string): Promise<Hit> {
   const params = getQueryParams({ slug }, language)
   const post = await sanityPageFetch<Hit>(resolvePostBySlugQuery, params, NO_STORE)
   if (post?._type) return { ...post, slug: post.slug ?? slug }
-  const blogPost = await sanityPageFetch<Hit>(resolveBlogPostBySlugQuery, params, NO_STORE)
-  if (blogPost?._type) return { ...blogPost, slug: blogPost.slug ?? slug }
   return null
 }
 
@@ -44,9 +41,9 @@ async function findCaseStudy(slug: string, language: string): Promise<Hit> {
  * Resolve a URL path (without locale prefix) + language to a Sanity document.
  *
  * Path shapes (lib/routes.ts):
- *   blogg|blog/<slug>        → post | blogPost
+ *   blogg|blog/<slug>        → post
  *   kundecaser|work/<slug>   → caseStudy
- *   resources/<slug>         → legacy: post | blogPost | caseStudy (caller redirects)
+ *   resources/<slug>         → legacy: post | caseStudy (caller redirects)
  *   team/<slug>              → author
  *   <full slug>              → any page type (slug.current == path)
  *   …/<leaf>                 → packageDetailPage (3+ segments, legacy fallback)
@@ -74,7 +71,7 @@ async function resolveInLanguage(path: string, language: string): Promise<Resolv
     }
     // Transitional: the URL plan renamed this slug but Sanity still carries the old one.
     const planned = findDocByCurrentPath(language, clean) ?? findArticleByOldLeaf(language, last)
-    if (planned && planned.oldSlug !== planned.newSlug && ['post', 'blogPost', 'caseStudy'].includes(planned.type)) {
+    if (planned && planned.oldSlug !== planned.newSlug && ['post', 'caseStudy'].includes(planned.type)) {
       const oldLeaf = planned.oldSlug.split('/').pop() ?? planned.oldSlug
       const hit = planned.type === 'caseStudy' ? await findCaseStudy(oldLeaf, language) : await findArticle(oldLeaf, language)
       if (hit?._type) return { type: hit._type, slug: hit.slug ?? oldLeaf, canonicalPath: planned.newPath.toLowerCase() }
@@ -106,7 +103,7 @@ async function resolveInLanguage(path: string, language: string): Promise<Resolv
   // if Sanity still carries the OLD slug (migration drafts not yet published),
   // resolve through it so nothing 404s between deploy and publish.
   const planned = findDocByCurrentPath(language, clean)
-  if (planned && planned.oldSlug !== planned.newSlug && !(planned.type === 'post' || planned.type === 'blogPost' || planned.type === 'caseStudy' || planned.type === 'author')) {
+  if (planned && planned.oldSlug !== planned.newSlug && !(planned.type === 'post' || planned.type === 'caseStudy' || planned.type === 'author')) {
     const legacyMatch = await sanityPageFetch<Hit>(
       resolvePageByPathQuery,
       { ...getQueryParams({ path: planned.oldSlug, pathWithLocale: planned.oldSlug }, language), pageTypes: RESOLVE_PAGE_TYPES },

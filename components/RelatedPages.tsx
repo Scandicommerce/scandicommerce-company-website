@@ -38,7 +38,7 @@ const relatedQuery = groq`
   }
 `
 const fallbackQuery = groq`
-  *[_type in ["post", "blogPost"] && language == $language && defined(slug.current) && !(_id in $exclude)]
+  *[_type == "post" && language == $language && defined(slug.current) && !(_id in $exclude)]
     | order(coalesce(publishedAt, _createdAt) desc)[0...4]{ _id, _type, language, "slug": slug.current, "title": title, "excerpt": coalesce(seoExtended.metaDescription, excerpt, description) }
 `
 const packagesQuery = groq`
@@ -94,7 +94,7 @@ export default async function RelatedPages() {
   }
   if (!items.length) return null
 
-  const isArticle = (t: string) => t === 'post' || t === 'blogPost'
+  const isArticle = (t: string) => t === 'post'
   const sectionLabel = (t: string) =>
     isArticle(t) ? (BLOG_INDEX_SLUG[language] === 'blogg' ? 'Artikkel' : 'Article') : t === 'caseStudy' ? (WORK_INDEX_SLUG[language] === 'kundecaser' ? 'Kundecase' : 'Case study') : null
 
@@ -113,7 +113,7 @@ export default async function RelatedPages() {
                   <span className="block text-[11px] font-semibold uppercase tracking-[0.12em] text-sc-cyan-500 mb-2">{sectionLabel(item._type)}</span>
                 )}
                 <span className="block font-semibold text-sc-ink-900 leading-snug">{item.title}</span>
-                {item.excerpt && <span className="block mt-2 text-sm text-sc-ink-600 line-clamp-3">{item.excerpt}</span>}
+                {item.excerpt && <span className="mt-2 line-clamp-3 text-sm text-sc-ink-600">{item.excerpt.slice(0, 240)}</span>}
               </Link>
             </li>
           ))}

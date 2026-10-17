@@ -182,12 +182,10 @@ import {
 } from "./pages/whyShopifyPage";
 import {
   landingPage,
-  servicesPage,
   aboutPage,
   contactPage,
   workPage,
   blogPage,
-  blogPost,
   shopifyDevelopmentPage,
   migratePage,
   shopifyPosPage,
@@ -375,12 +373,10 @@ export const schemaTypes = [
 
   // Page types
   landingPage,
-  servicesPage,
   aboutPage,
   contactPage,
   workPage,
   blogPage,
-  blogPost,
   shopifyDevelopmentPage,
   migratePage,
   shopifyPosPage,

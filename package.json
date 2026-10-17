@@ -12,7 +12,9 @@
     "migrate:all-page-sections": "node scripts/migrate-all-page-sections.mjs",
     "seo:verify": "node scripts/seo-verify.mjs",
     "seo:health": "node scripts/seo-health-check.mjs",
-    "seo:plan": "python3 scripts/seo/generate-url-plan.py"
+    "seo:plan": "python3 scripts/seo/generate-url-plan.py",
+    "video:studio": "remotion studio remotion/index.ts",
+    "video:render": "remotion render remotion/index.ts MerchantShowcaseDesktop out/hero-desktop.mp4 --codec h264 --crf 26 && remotion render remotion/index.ts MerchantShowcaseMobile out/hero-mobile.mp4 --codec h264 --crf 26"
   },
   "dependencies": {
     "@portabletext/react": "^6.0.2",
@@ -26,7 +28,6 @@
     "@sanity/locale-sv-se": "^1.2.28",
     "@sanity/structure": "^2.36.2",
     "@sanity/vision": "^3.99.0",
-    "@types/three": "^0.182.0",
     "dayjs": "^1.11.10",
     "express": "^5.2.1",
     "framer-motion": "^12.26.1",
@@ -45,21 +46,19 @@
     "sanity": "^3.99.0",
     "schema-dts": "^2.0.0",
     "styled-components": "^6.3.5",
-    "three": "^0.182.0",
     "use-sync-external-store": "^1.6.0"
   },
   "devDependencies": {
+    "@remotion/cli": "^4.0.258",
     "@types/node": "^20.11.0",
     "@types/nodemailer": "^6.4.22",
     "@types/react": "^18.2.48",
     "@types/react-dom": "^18.2.18",
     "autoprefixer": "^10.4.17",
-    "clsx": "^2.1.0",
     "eslint": "^8.56.0",
     "eslint-config-next": "^14.1.0",
     "ffmpeg-static": "^5.3.0",
     "postcss": "^8.4.33",
-    "tailwind-merge": "^2.2.0",
     "tailwindcss": "^3.4.1",
     "typescript": "^5.3.3"
   }

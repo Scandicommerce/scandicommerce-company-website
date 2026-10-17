@@ -1,9 +1,7 @@
-'use client'
-
 import Image from 'next/image'
 import Link from 'next/link'
-import { ArrowRight } from 'lucide-react'
 import { hrefFor } from '@/lib/routes'
+import { ui } from '@/components/integrations/labels'
 
 interface AuthorData {
   name?: string
@@ -37,145 +35,130 @@ interface FeaturedArticleProps {
   lang?: string
 }
 
-function formatDate(d: string | undefined): string {
+function isNorwegianLocale(locale: string): boolean {
+  return locale === 'no' || locale === 'nb-NO' || locale.startsWith('nb')
+}
+
+export function formatArticleDate(d: string | undefined, locale: string, withYear = true): string {
   if (!d) return ''
   try {
     const parsed = new Date(d)
     if (isNaN(parsed.getTime())) return d
-    return parsed.toLocaleDateString('nb-NO', { day: 'numeric', month: 'short', year: 'numeric' })
+    return parsed.toLocaleDateString(isNorwegianLocale(locale) ? 'nb-NO' : 'en-GB', {
+      day: 'numeric',
+      month: 'short',
+      ...(withYear ? { year: 'numeric' } : {}),
+    })
   } catch {
     return d
   }
 }
 
+/**
+ * Blog index header and the featured article, the same shape as the featured
+ * case on the work page: copy left (eyebrow, title, lead, author, button),
+ * tall image right in a hairline frame.
+ */
 export default function FeaturedArticle({ featuredArticle, lang }: FeaturedArticleProps) {
   const imageUrl = featuredArticle?.imageUrl || '/images/resources/featured_article/banner.png'
   const title = featuredArticle?.title || ''
-  const date = formatDate(featuredArticle?.date)
+  const locale = lang || 'en'
+  const isNorwegian = isNorwegianLocale(locale)
+  const date = formatArticleDate(featuredArticle?.date, locale)
   const readTime = featuredArticle?.readTime || ''
-  const tags = featuredArticle?.tags || []
+  const tags = (featuredArticle?.tags || []).filter((t) => t.label)
   const primaryTag = tags.find((t) => t.isPrimary) ?? tags[0]
-  const category = primaryTag?.label?.toUpperCase() || ''
   const description = featuredArticle?.description || ''
   const author = featuredArticle?.author
-  const locale = lang || 'en'
-  const isNorwegian = locale === 'no' || locale === 'nb-NO' || locale.startsWith('nb')
 
-  const buttonText = featuredArticle?.buttonText || (isNorwegian ? 'LES ARTIKKELEN' : 'READ THE POST')
+  const buttonText = featuredArticle?.buttonText || (isNorwegian ? 'Les artikkelen' : 'Read the post')
   const eyebrow = featuredArticle?.pageHeaderEyebrow || (isNorwegian ? 'Notater fra studioet' : 'Notes from the studio')
   const pageTitle = featuredArticle?.pageHeaderTitle || (isNorwegian ? 'Hva vi sendte\nog lærte.' : 'What we\nshipped & learned.')
+  const featuredLabel = isNorwegian ? 'Utvalgt' : 'Featured'
   const articleSlug = featuredArticle?.articleSlug?.trim()
   const link =
     featuredArticle?.link ||
     (articleSlug
       ? hrefFor({ _type: featuredArticle?.articleType ?? 'post', slug: articleSlug, language: featuredArticle?.articleLanguage ?? locale }, locale)
       : '#')
+  const meta = [date, readTime ? `${readTime} ${isNorwegian ? 'lesing' : 'read'}` : ''].filter(Boolean).join(' · ')
 
   return (
     <>
-    {/* Page header — Variant A */}
-    <section className="border-b border-neutral-200">
-      <div className="section_container mx-auto page-padding-x pt-20 pb-14 flex flex-col md:flex-row md:items-end justify-between gap-8">
-        <div>
-          <div className="text-[11px] font-bold uppercase tracking-[0.12em] text-[#11848C] mb-5">
-            {eyebrow}
+      {/* Page header */}
+      <section className="border-b border-sc-ink-100 bg-white">
+        <div className={`${ui.container} pb-12 pt-14 lg:pb-16 lg:pt-20`}>
+          <div className="flex max-w-[820px] flex-col gap-4">
+            <div className={ui.eyebrow}>{eyebrow}</div>
+            <h1 className="m-0 whitespace-pre-line text-[36px] font-bold leading-[1.02] tracking-[-0.028em] text-sc-ink-900 sm:text-[44px] lg:text-[60px]">{pageTitle}</h1>
           </div>
-          <h1
-            className="font-bold text-[#1F1D1D] whitespace-pre-line"
-            style={{ fontSize: 'clamp(40px, 5.5vw, 72px)', lineHeight: 1.04, letterSpacing: '-0.025em' }}
-          >
-            {pageTitle}
-          </h1>
         </div>
-        <div className="flex items-center gap-5 text-sm text-neutral-500 font-mono pb-1 flex-shrink-0">
-          <span>updated weekly</span>
-          <span className="w-px h-4 bg-neutral-300" />
-          <a href="#" className="text-teal font-semibold inline-flex items-center gap-1.5 font-sans text-sm">
-            RSS
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M4 11a9 9 0 0 1 9 9" /><path d="M4 4a16 16 0 0 1 16 16" /><circle cx="5" cy="19" r="1" />
-            </svg>
-          </a>
-        </div>
-      </div>
-    </section>
+      </section>
 
-    <section className="border-b border-neutral-200">
-      <div className="section_container mx-auto page-padding-x py-16 lg:py-20">
-        <div className="grid grid-cols-1 md:grid-cols-12 md:gap-12 items-start">
-
-          {/* Left: text content */}
-          <div className="md:col-span-7 pt-2 order-2 md:order-1 mt-8 md:mt-0">
-            <div className="text-[11px] font-bold uppercase tracking-[0.12em] text-teal mb-6">
-              <span className="inline-flex items-center gap-2">
-                <span className="w-6 h-px bg-teal inline-block" />
-                FEATURED{category ? ` · ${category}` : ''}
-              </span>
+      {/* Featured article */}
+      <article className="border-b border-sc-ink-100 bg-white">
+        <div className={`${ui.container} grid grid-cols-1 items-start gap-10 py-16 md:grid-cols-12 md:gap-12 lg:py-20`}>
+          <div className="order-2 flex flex-col gap-6 md:order-1 md:col-span-7">
+            <div className={`${ui.eyebrow} inline-flex items-center gap-2`}>
+              <span aria-hidden="true" className="inline-block h-px w-6 bg-sc-cyan-500" />
+              {featuredLabel}
+              {primaryTag?.label ? ` · ${primaryTag.label}` : ''}
             </div>
-            <h2
-              className="font-bold tracking-tight mb-7 text-[#1F1D1D]"
-              style={{ fontSize: 'clamp(28px, 3.5vw, 48px)', lineHeight: 1.08, letterSpacing: '-0.02em' }}
-            >
-              {title}
+            <h2 className="m-0 text-[30px] font-bold leading-[1.08] tracking-[-0.02em] text-sc-ink-900 md:text-[40px] lg:text-[48px]">
+              <Link href={link} className="no-underline transition-colors hover:text-sc-cyan-600">
+                {title}
+              </Link>
             </h2>
-            {description && (
-              <p className="text-neutral-600 leading-relaxed max-w-xl mb-10" style={{ fontSize: 18, lineHeight: 1.6 }}>
-                {description}
-              </p>
-            )}
-            <div className="flex items-center gap-4 mb-9">
-              {author?.imageUrl ? (
-                <Image
-                  src={author.imageUrl}
-                  alt={author.name || ''}
-                  width={36}
-                  height={36}
-                  className="rounded-full object-cover flex-shrink-0"
-                />
-              ) : (
-                <div
-                  className="w-9 h-9 rounded-full flex-shrink-0"
-                  style={{ background: 'linear-gradient(135deg, #03C1CA, #11848C)' }}
-                />
-              )}
-              <div>
-                {author?.name && (
-                  <div className="text-sm font-semibold text-[#1F1D1D]">{author.name}</div>
+            {description && <p className="m-0 max-w-[560px] text-base leading-relaxed text-sc-ink-600 lg:text-lg">{description}</p>}
+
+            {(author?.name || meta) && (
+              <div className="flex items-center gap-3">
+                {author?.imageUrl ? (
+                  <Image src={author.imageUrl} alt={author.name || ''} width={40} height={40} className="h-10 w-10 flex-shrink-0 rounded-full border border-sc-ink-100 object-cover" />
+                ) : (
+                  <span aria-hidden="true" className="h-10 w-10 flex-shrink-0 rounded-full border border-sc-ink-100 bg-sc-ink-50" />
                 )}
-                <div className="text-xs text-neutral-500 font-mono">
-                  {[date, readTime ? `${readTime} read` : ''].filter(Boolean).join(' · ')}
+                <div className="flex flex-col gap-0.5">
+                  {author?.name && <div className="text-sm font-semibold text-sc-ink-900">{author.name}</div>}
+                  {meta && <div className={ui.mono}>{meta}</div>}
                 </div>
               </div>
+            )}
+
+            {tags.length > 1 && (
+              <div className="flex flex-wrap gap-1.5">
+                {tags.map((t, i) => (
+                  <span key={`${t.label}-${i}`} className={t.isPrimary ? ui.tag : ui.tagOutline}>
+                    {t.label}
+                  </span>
+                ))}
+              </div>
+            )}
+
+            <div className="pt-2">
+              <Link href={link} className={`${ui.btnPrimary} w-full no-underline sm:w-auto`}>
+                {buttonText}
+              </Link>
             </div>
-            <Link
-              href={link}
-              className="inline-flex items-center gap-2.5 px-7 py-3.5 font-bold uppercase tracking-[0.10em] text-[13px] text-[#1F1D1D] bg-[#1EEFFA] shadow-button hover:bg-teal transition-colors duration-200"
-            >
-              {buttonText}
-              <ArrowRight className="w-3.5 h-3.5" strokeWidth={2.5} />
-            </Link>
           </div>
 
-          {/* Right: image */}
-          <div className="md:col-span-5 order-1 md:order-2">
-            <Link href={link} className="block relative overflow-hidden group" style={{ aspectRatio: '4 / 5' }}>
+          <div className="order-1 md:order-2 md:col-span-5">
+            <Link href={link} className="group relative block aspect-[4/3] overflow-hidden rounded-lg border border-sc-ink-100 bg-sc-ink-50 md:aspect-[4/5]" aria-label={title}>
               <Image
                 src={imageUrl}
                 alt={title}
                 fill
+                priority
                 className="object-cover transition-transform duration-500 group-hover:scale-[1.02]"
                 sizes="(max-width: 768px) 100vw, 42vw"
-                priority
               />
-              <div className="absolute top-5 left-5 text-white/70 text-[11px] font-mono tracking-widest uppercase select-none">
+              <span aria-hidden="true" className="absolute left-4 top-4 select-none font-mono text-[11px] uppercase tracking-widest text-white/80">
                 01
-              </div>
+              </span>
             </Link>
           </div>
-
         </div>
-      </div>
-    </section>
+      </article>
     </>
   )
 }

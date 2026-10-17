@@ -1,46 +1,46 @@
-'use client'
-
 import Image from 'next/image'
+import Link from 'next/link'
 import { Author } from '@/lib/articles'
+import { authorHref } from '@/lib/routes'
+import { ui } from '@/components/integrations/labels'
 
 interface AuthorBioProps {
   author: Author
+  lang?: string
 }
 
-export default function AuthorBio({ author }: AuthorBioProps) {
-  return (
-    <section className="bg-[#EFEFEF] py-8">
-      <div className="section_container mx-auto page-padding-x">
-        <div className="max-w-6xl mx-auto">
-          <div className="bg-white shadow-sm p-8 lg:p-10">
-            <div className="flex flex-col md:flex-row items-center md:items-start gap-6">
-              {/* Author Image */}
-              <div className="relative w-28 h-28 md:w-32 md:h-32 flex-shrink-0">
-                <div className="w-full h-full rounded-full overflow-hidden border-4 border-[#03C1CA]/20">
-                  <Image
-                    src={author.image}
-                    alt={author.name}
-                    fill
-                    className="object-cover"
-                    sizes="128px"
-                  />
-                </div>
-              </div>
+const T: Record<string, { eyebrow: string; more: string }> = {
+  no: { eyebrow: 'Skrevet av', more: 'Flere artikler av' },
+  en: { eyebrow: 'Written by', more: 'More articles by' },
+}
 
-              {/* Author Info */}
-              <div className="flex-1 text-center md:text-left">
-                <h3 className="text-xl md:text-2xl font-bold text-[#1F1D1D] mb-2">
-                  {author.name}
-                </h3>
-                <p className="text-[#565454] text-sm md:text-base leading-relaxed mb-4">
-                  {author.role}
-                </p>
-              </div>
-            </div>
+/** Author card after the body: portrait, name (linked to /team/<slug>), role. */
+export default function AuthorBio({ author, lang = 'no' }: AuthorBioProps) {
+  if (!author.name) return null
+  const t = T[lang] ?? T.en
+  const link = author.slug ? authorHref(author.slug, lang) : undefined
+
+  return (
+    <section className="border-t border-sc-ink-100 bg-white py-12 lg:py-16">
+      <div className={ui.container}>
+        <div className="flex max-w-[720px] flex-col gap-5 rounded-lg border border-sc-ink-100 bg-white p-6 sm:flex-row sm:items-center sm:gap-6 lg:p-8">
+          {author.image ? (
+            <Image src={author.image} alt={author.name} width={96} height={96} className="h-20 w-20 flex-shrink-0 rounded-full border border-sc-ink-100 object-cover sm:h-24 sm:w-24" />
+          ) : (
+            <span aria-hidden="true" className="h-20 w-20 flex-shrink-0 rounded-full border border-sc-ink-100 bg-sc-ink-50 sm:h-24 sm:w-24" />
+          )}
+          <div className="flex flex-col gap-1.5">
+            <div className={ui.eyebrow}>{t.eyebrow}</div>
+            <h2 className="m-0 text-[20px] font-bold leading-tight text-sc-ink-900">{author.name}</h2>
+            {author.role && <p className="m-0 text-[15px] leading-relaxed text-sc-ink-600">{author.role}</p>}
+            {link && (
+              <Link href={link} className="mt-1 text-sm font-semibold text-sc-ink-900 no-underline transition-colors hover:text-sc-cyan-600">
+                {t.more} {author.name.split(' ')[0]} →
+              </Link>
+            )}
           </div>
         </div>
       </div>
     </section>
   )
 }
-

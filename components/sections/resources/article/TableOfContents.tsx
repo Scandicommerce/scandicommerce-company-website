@@ -1,66 +1,31 @@
-'use client'
-
 import { TableOfContentsItem } from '@/lib/articles'
+import { ui } from '@/components/integrations/labels'
 
 interface TableOfContentsProps {
   items: TableOfContentsItem[]
+  lang?: string
 }
 
-export default function TableOfContents({ items }: TableOfContentsProps) {
-  const handleClick = (id: string) => {
-    const element = document.getElementById(id)
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth', block: 'start' })
-    }
-  }
+const LABEL: Record<string, string> = { no: 'Innhold', en: 'Contents' }
 
-  // Split items into two columns
-  const midPoint = Math.ceil(items.length / 2)
-  const leftColumn = items.slice(0, midPoint)
-  const rightColumn = items.slice(midPoint)
+/** Numbered jump list in a hairline card; sticky beside the body on large screens. */
+export default function TableOfContents({ items, lang = 'no' }: TableOfContentsProps) {
+  const list = items.filter((item) => item.id && item.title)
+  if (list.length === 0) return null
 
   return (
-    <div className="bg-white shadow-sm p-8 lg:p-[8rem] lg:px-16">
-      <h2 className="text-2xl font-bold text-[#1F1D1D] mb-8">Table of Contents</h2>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* Left Column */}
-        <div className="space-y-6">
-          {leftColumn.map((item) => (
-            <div
-              key={item.id}
-              onClick={() => handleClick(item.id)}
-              className="flex items-center gap-5 cursor-pointer bg-[#F5F5F5] px-6 py-4 w-full hover:bg-[#EDEDED] transition-colors"
-            >
-              <span className="flex items-center justify-center w-10 h-10 rounded-full bg-[#03C1CA] text-white text-sm font-medium flex-shrink-0">
-                {item.number}.
-              </span>
-              <span className="text-[#565454] text-sm">
-                {item.title}
-              </span>
-            </div>
-          ))}
-        </div>
-
-        {/* Right Column */}
-        <div className="space-y-6">
-          {rightColumn.map((item) => (
-            <div
-              key={item.id}
-              onClick={() => handleClick(item.id)}
-              className="flex items-center gap-5 cursor-pointer bg-[#F5F5F5] px-6 py-4 w-full hover:bg-[#EDEDED] transition-colors"
-            >
-              <span className="flex items-center justify-center w-10 h-10 rounded-full bg-[#03C1CA] text-white text-sm font-medium flex-shrink-0">
-                {item.number}.
-              </span>
-              <span className="text-[#565454] text-sm">
-                {item.title}
-              </span>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
+    <nav aria-label={LABEL[lang] ?? LABEL.en} className="rounded-lg border border-sc-ink-100 bg-white p-5 lg:p-6">
+      <div className={`${ui.eyebrow} mb-4`}>{LABEL[lang] ?? LABEL.en}</div>
+      <ol className="m-0 flex list-none flex-col gap-3 p-0">
+        {list.map((item, i) => (
+          <li key={item.id}>
+            <a href={`#${item.id}`} className="group flex items-start gap-3 text-[14px] leading-snug text-sc-ink-600 no-underline transition-colors hover:text-sc-ink-900">
+              <span className="w-5 flex-shrink-0 font-mono text-[12px] text-sc-ink-400 group-hover:text-sc-cyan-500">{String(item.number || i + 1).padStart(2, '0')}</span>
+              <span>{item.title}</span>
+            </a>
+          </li>
+        ))}
+      </ol>
+    </nav>
   )
 }
-

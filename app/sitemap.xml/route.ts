@@ -47,7 +47,6 @@ const INDEXABLE_TYPES = [
   'shopifyTcoCalculatorPage',
   'shopifyDevelopmentPage',
   'post',
-  'blogPost',
   'caseStudy',
   'author',
   'legalPage',
@@ -62,7 +61,6 @@ const sitemapDocsQuery = groq`
     && defined(slug.current)
     && !(_id in path("drafts.**"))
     && seoExtended.noIndex != true
-    && seo.noIndex != true
     && !defined(seoExtended.canonical)
   ] {
     _id,

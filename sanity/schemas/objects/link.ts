@@ -29,12 +29,10 @@ export const link = defineType({
       type: "reference",
       to: [
         { type: "landingPage" },
-        { type: "servicesPage" },
         { type: "aboutPage" },
         { type: "contactPage" },
         { type: "workPage" },
         { type: "blogPage" },
-        { type: "blogPost" },
       ],
       hidden: ({ parent }) => parent?.linkType !== "internal",
     }),

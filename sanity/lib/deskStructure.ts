@@ -112,7 +112,6 @@ export const deskStructure = (S: StructureBuilder) =>
       S.divider(),
       folder(S, 'Articles', DocumentTextIcon, [
         byLanguage(S, 'post', 'Articles'),
-        byLanguage(S, 'blogPost', 'Articles (legacy format)'),
         plain(S, 'author', 'Authors'),
       ]),
       folder(S, 'Case studies', CaseIcon, [byLanguage(S, 'caseStudy', 'Case studies')]),

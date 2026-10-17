@@ -2,7 +2,6 @@ import { resolvePageByPath } from '@/lib/resolvePageByPath'
 import type { ResolvedPage } from '@/lib/resolvePageByPath'
 import {
   getAboutPageDocumentCached,
-  getBlogPostBySlugCached,
   getCaseStudyBySlugCached,
   getPostBySlugCached,
 } from '@/lib/sanity/cachedDocuments'
@@ -31,7 +30,6 @@ import {
   getSchemaSiteOrigin,
 } from '@/lib/schema/request'
 import {
-  buildBlogPostingJsonLdFromLegacyBlogPost,
   buildBlogPostingJsonLdFromPostBuilder,
 } from '@/lib/schema/routeBlogPostingJsonLd'
 import type { JsonLdObject } from '@/lib/schema/types'
@@ -102,8 +100,7 @@ function buildServiceNode(opts: {
   const { origin, pageUrl, type, pageDoc, leafSlug } = opts
   const name = pageDoc?.seoExtended?.metaTitle?.trim() || pageDoc?.pageTitle?.trim()
   if (!name) return null
-  const description =
-    pageDoc?.seoExtended?.metaDescription?.trim() || pageDoc?.seo?.metaDescription?.trim() || undefined
+  const description = pageDoc?.seoExtended?.metaDescription?.trim() || undefined
   const node: JsonLdObject = {
     '@type': 'Service',
     '@id': `${pageUrl}#service`,
@@ -309,14 +306,6 @@ export async function buildPageJsonLdNodes(): Promise<JsonLdObject[]> {
       nodes.push(
         ...buildAboutPagePersonJsonLd(pageData?.meetTheTeam, { origin, personListingPageUrl: pageUrl }).map(stripContext)
       )
-      break
-    }
-    case 'blogPost': {
-      if (resolved.slug && structured !== 'Article') {
-        const post = await getBlogPostBySlugCached(resolved.slug, language)
-        const node = buildBlogPostingJsonLdFromLegacyBlogPost(post, { origin, pageUrl, routeLang: language })
-        if (node) nodes.push(stripContext(node))
-      }
       break
     }
     case 'post': {

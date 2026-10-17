@@ -27,7 +27,6 @@ import ShopifyDevelopmentPage from '../_pages/shopifyDevelopmentPage'
 import AllPackagesPage from '../_pages/allPackagesPage'
 import PackageDetailPage from '../_pages/packageDetailPage'
 import BlogPage from '../_pages/blogPage'
-import BlogPostPage from '../_pages/blogPostPage'
 import PostPage from '../_pages/postPage'
 import MerchProductPage from '../_pages/merchProductPage'
 import CaseStudyPage from '../_pages/caseStudyPage'
@@ -61,7 +60,6 @@ const PAGE_COMPONENTS: Record<string, PageComponent> = {
   allPackagesPage: AllPackagesPage as PageComponent,
   packageDetailPage: PackageDetailPage as PageComponent,
   blogPage: BlogPage as PageComponent,
-  blogPost: BlogPostPage as PageComponent,
   post: PostPage as PageComponent,
   caseStudy: CaseStudyPage as PageComponent,
   merchProduct: MerchProductPage as PageComponent,

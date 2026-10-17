@@ -170,11 +170,6 @@ export const landingPageQuery = groq`
         linkHref,
         count
       }
-    },
-    seo {
-      metaTitle,
-      metaDescription,
-      ogImage { ${imageFragment} }
     }
   }
 `;
@@ -321,38 +316,7 @@ export const homepageQuery = groq`
         linkHref,
         count
       }
-    },
-    seo {
-      metaTitle,
-      metaDescription,
-      ogImage { ${imageFragment} }
     }
-  }
-`;
-
-export const allLandingPagesQuery = groq`
-  *[_type == "landingPage" && (language == $language || !defined(language))] | order(pageTitle asc) {
-    _id,
-    pageTitle,
-    "slug": slug.current,
-    isHomepage
-  }
-`;
-
-// ============================================
-// Services Page Query
-// ============================================
-
-export const servicesPageQuery = groq`
-  *[_type == "servicesPage" && slug.current == $slug && (language == $language || !defined(language))] | order(defined(language) desc) [0] {
-    _id,
-    title,
-    "slug": slug.current,
-    hero,
-    introduction,
-    services,
-    sections,
-    seo
   }
 `;
 
@@ -401,10 +365,6 @@ export const shopifyDevelopmentPageQuery = groq`
         ctaButtonText,
         ctaButtonLink
       }
-    },
-    seo {
-      metaTitle,
-      metaDescription
     }
   }
 `;
@@ -451,10 +411,6 @@ export const migratePageQuery = groq`
         ctaButtonText,
         ctaButtonLink
       }
-    },
-    seo {
-      metaTitle,
-      metaDescription
     }
   }
 `;
@@ -491,10 +447,6 @@ export const shopifyPosPageQuery = groq`
         ctaButtonText,
         ctaButtonLink
       }
-    },
-    seo {
-      metaTitle,
-      metaDescription
     }
   }
 `;
@@ -537,10 +489,6 @@ export const allPackagesPageQuery = groq`
         faqTitle,
         faqItems[] { question, answer }
       }
-    },
-    seo {
-      metaTitle,
-      metaDescription
     }
   }
 `;
@@ -598,10 +546,6 @@ export const shopifyPlatformPageQuery = groq`
           "imageUrl": image.asset->url
         }
       }
-    },
-    seo {
-      metaTitle,
-      metaDescription
     }
   }
 `;
@@ -649,10 +593,6 @@ export const shopifyPosInfoPageQuery = groq`
           submitButtonText
         }
       }
-    },
-    seo {
-      metaTitle,
-      metaDescription
     }
   }
 `;
@@ -679,10 +619,6 @@ export const shopifyTcoCalculatorPageQuery = groq`
         hubspotPortalId,
         hubspotFormId
       }
-    },
-    seo {
-      metaTitle,
-      metaDescription
     }
   }
 `;
@@ -777,10 +713,6 @@ export const shopifyXPimPageQuery = groq`
         "buttonSlug": buttonPage->slug.current,
         buttonLink
       }
-    },
-    seo {
-      metaTitle,
-      metaDescription
     }
   }
 `;
@@ -845,10 +777,6 @@ export const shopifyXAiPageQuery = groq`
         "buttonSlug": buttonPage->slug.current,
         buttonLink
       }
-    },
-    seo {
-      metaTitle,
-      metaDescription
     }
   }
 `;
@@ -897,10 +825,6 @@ export const whyShopifyPageQuery = groq`
         buttonText,
         buttonLink
       }
-    },
-    seo {
-      metaTitle,
-      metaDescription
     }
   }
 `;
@@ -979,18 +903,14 @@ export const workPageQuery = groq`
         secondaryButtonLink,
         hideSecondaryButton
       }
-    },
-    seo {
-      metaTitle,
-      metaDescription
     }
   }
 `;
 
-// Latest posts for the homepage blog teaser (2026 design). Includes both
-// article types, newest first, filtered to the page language.
+// Latest posts for the homepage blog teaser (2026 design). Newest first,
+// filtered to the page language.
 export const latestPostsTeaserQuery = groq`
-  *[_type in ["blogPost", "post"] && defined(slug.current) && (language == $language || !defined(language))]
+  *[_type == "post" && defined(slug.current) && (language == $language || !defined(language))]
     | order(coalesce(publishedAt, _createdAt) desc) [0...6] {
     _id,
     _type,
@@ -1029,7 +949,7 @@ export const caseStudyCardsQuery = groq`
 // Shown on the work page after the curated studies, and lend their image to a
 // curated study that links to them. Not language-filtered; the page dedupes.
 export const caseStudyPostsQuery = groq`
-  *[_type in ["blogPost", "post"] && defined(slug.current) && count(tags[@ match "case*" || @ match "kundecase*"]) > 0]
+  *[_type == "post" && defined(slug.current) && count(tags[label match "case*" || label match "kundecase*"]) > 0]
     | order(coalesce(publishedAt, _createdAt) desc) {
     _id,
     _type,
@@ -1124,20 +1044,7 @@ export const aboutPageQuery = groq`
         buttonText,
         buttonLink
       }
-    },
-    seo {
-      metaTitle,
-      metaDescription
     }
-  }
-`;
-
-// Partner Categories (dynamic filter list for partners page)
-export const partnerCategoriesQuery = groq`
-  *[_type == "partnerCategory"] {
-    _id,
-    title,
-    icon
   }
 `;
 
@@ -1192,10 +1099,6 @@ export const partnersPageQuery = groq`
         buttonText,
         buttonLink
       }
-    },
-    seo {
-      metaTitle,
-      metaDescription
     }
   }
 `;
@@ -1269,10 +1172,6 @@ export const contactPageQuery = groq`
           answer
         }
       }
-    },
-    seo {
-      metaTitle,
-      metaDescription
     }
   }
 `;
@@ -1350,15 +1249,11 @@ export const packageDetailPageQuery = groq`
         buttonText,
         buttonLink
       }
-    },
-    seo {
-      metaTitle,
-      metaDescription
     }
   }
 `;
 
-// Blog Page Query (resolves featured article and grid from blogPost references)
+// Blog Page Query (resolves featured article and grid from post / caseStudy references)
 export const blogPageQuery = groq`
   *[_type == "blogPage" && (language == $language || !defined(language))] | order(defined(language) desc) [0] {
     _id,
@@ -1391,7 +1286,7 @@ export const blogPageQuery = groq`
         "author": article->author->{ name, "imageUrl": image.asset->url }
       },
       _type == "blogPageArticlesGridSection" => {
-        "articles": *[_type in ["blogPost", "post", "caseStudy"] && (language == $language || !defined(language))] | order(coalesce(publishedAt, date) desc) {
+        "articles": *[_type in ["post", "caseStudy"] && (language == $language || !defined(language))] | order(coalesce(publishedAt, date) desc) {
           _type,
           title,
           "description": select(
@@ -1400,7 +1295,7 @@ export const blogPageQuery = groq`
             coalesce(description, introduction)
           ),
           "date": coalesce(publishedAt, date),
-          "readTime": select(_type == "blogPost" => readTime, null),
+          "readTime": null,
           "category": select(
             _type == "caseStudy" => coalesce(industry, "Case Study"),
             _type == "post" => coalesce(tags[isPrimary == true][0].label, tags[0].label),
@@ -1426,80 +1321,7 @@ export const blogPageQuery = groq`
         emailPlaceholder,
         buttonText
       }
-    },
-    seo {
-      metaTitle,
-      metaDescription
     }
-  }
-`;
-
-// Blog Post by slug (for detail page)
-export const blogPostBySlugQuery = groq`
-  *[_type == "blogPost" && slug.current == $slug && (language == $language || !defined(language))] | order(defined(language) desc) [0] {
-    _id,
-    _createdAt,
-    _updatedAt,
-    language,
-    title,
-    titleHighlight,
-    "slug": slug.current,
-    description,
-    "metaDescription": coalesce(seo.metaDescription, description),
-    category,
-    tags,
-    publishedAt,
-    date,
-    readTime,
-    "image": image.asset->url,
-    "featuredImage": coalesce(featuredImage.asset->url, image.asset->url),
-    author {
-      name,
-      role,
-      "image": image.asset->url,
-      slug
-    },
-    tableOfContents[] {
-      id,
-      title,
-      number
-    },
-    introduction,
-    sections[] {
-      id,
-      title,
-      content,
-      proTip {
-        title,
-        content
-      },
-      apps[] {
-        name,
-        category,
-        description,
-        features[]
-      }
-    },
-    "relatedArticles": relatedArticles[]-> {
-      "slug": slug.current,
-      title,
-      category,
-      readTime,
-      "image": image.asset->url
-    }
-  }
-`;
-
-// All blog post slugs (for generateStaticParams / 404)
-export const blogPostSlugsQuery = groq`
-  *[_type == "blogPost" && defined(slug.current)]{ "slug": slug.current }
-`;
-
-// Slug + language pairs so we only generate (lang, slug) that exist (avoids 404 for valid slugs)
-export const blogPostSlugLanguagePairsQuery = groq`
-  *[_type == "blogPost" && defined(slug.current)] {
-    "slug": slug.current,
-    "language": language
   }
 `;
 
@@ -1516,7 +1338,7 @@ export const postBySlugQuery = groq`
     title,
     "slug": slug.current,
     excerpt,
-    "metaDescription": coalesce(seo.metaDescription, excerpt),
+    "metaDescription": coalesce(seoExtended.metaDescription, excerpt),
     publishedAt,
     "image": image.asset->url,
     "author": author->{ name, role, "image": image.asset->url, "slug": slug.current },
@@ -1632,18 +1454,6 @@ export const resolvePostBySlugQuery = groq`
   *[_type == "post" && lower(slug.current) == lower($slug) && (language == $language || !defined(language))] | order(defined(language) desc) [0] { _type, _id, "slug": slug.current }
 `;
 
-// All post slugs (for sitemap / static params)
-export const postSlugsQuery = groq`
-  *[_type == "post" && defined(slug.current)]{ "slug": slug.current }
-`;
-
-export const postSlugLanguagePairsQuery = groq`
-  *[_type == "post" && defined(slug.current)] {
-    "slug": slug.current,
-    "language": language
-  }
-`;
-
 // Merch Page Query
 export const merchPageQuery = groq`
   *[_type == "merchPage" && (language == $language || !defined(language))] | order(defined(language) desc) [0] {
@@ -1669,10 +1479,6 @@ export const merchPageQuery = groq`
         buttonText,
         successMessage
       }
-    },
-    seo {
-      metaTitle,
-      metaDescription
     }
   }
 `;
@@ -1827,10 +1633,6 @@ export const vippsHurtigkassePageQuery = groq`
         buttonText,
         buttonLink
       }
-    },
-    seo {
-      metaTitle,
-      metaDescription
     }
   }
 `;
@@ -1871,74 +1673,12 @@ export const sitemapPagesQuery = groq`
   }
 `;
 
-// Articles and case studies. `post` is the current article type; `blogPost` is the
-// legacy one still holding a handful of documents, so the human sitemap lists both.
+// Articles and case studies for the human sitemap.
 export const sitemapBlogPostsQuery = groq`
-  *[_type in ["post", "blogPost", "caseStudy"] && defined(slug.current) && (language == $language || !defined(language))] | order(title asc) {
+  *[_type in ["post", "caseStudy"] && defined(slug.current) && (language == $language || !defined(language))] | order(title asc) {
     _type,
     title,
     "slug": slug.current
-  }
-`;
-
-// All locales: for XML sitemap with hreflang (no $language filter; returns _id, language, slug, _updatedAt)
-// Excludes documents marked noindex via the new seoExtended.noIndex or the legacy seo.noIndex.
-export const sitemapPagesAllLocalesQuery = groq`
-  *[_type in [
-    "landingPage",
-    "aboutPage",
-    "contactPage",
-    "workPage",
-    "partnersPage",
-    "blogPage",
-    "allPackagesPage",
-    "migratePage",
-    "shopifyPosPage",
-    "shopifyPosInfoPage",
-    "shopifyXAiPage",
-    "shopifyXPimPage",
-    "whyShopifyPage",
-    "shopifyPlatformPage",
-    "vippsHurtigkassePage",
-    "shopifyTcoCalculatorPage",
-    "shopifyDevelopmentPage",
-    "merchPage",
-    "packageDetailPage"
-  ] && defined(slug.current)
-    && seoExtended.noIndex != true
-    && seo.noIndex != true
-  ] | order(pageTitle asc) {
-    _id,
-    "language": select(defined(language) => language, "en"),
-    "slug": slug.current,
-    _type,
-    _updatedAt
-  }
-`;
-
-export const sitemapBlogPostsAllLocalesQuery = groq`
-  *[_type == "blogPost" && defined(slug.current)
-    && seoExtended.noIndex != true
-    && seo.noIndex != true
-  ] | order(title asc) {
-    _id,
-    "language": select(defined(language) => language, "en"),
-    "slug": slug.current,
-    _type,
-    _updatedAt
-  }
-`;
-
-export const sitemapPostsAllLocalesQuery = groq`
-  *[_type == "post" && defined(slug.current)
-    && seoExtended.noIndex != true
-    && seo.noIndex != true
-  ] | order(title asc) {
-    _id,
-    "language": select(defined(language) => language, "en"),
-    "slug": slug.current,
-    _type,
-    _updatedAt
   }
 `;
 
@@ -1998,20 +1738,8 @@ export const breadcrumbTitlesQuery = groq`
   }
 `;
 
-// Resolve detail pages by last segment (e.g. blogPost by "article-slug", packageDetailPage by "package-slug")
-export const resolveBlogPostBySlugQuery = groq`
-  *[_type == "blogPost" && lower(slug.current) == lower($slug) && (language == $language || !defined(language))] | order(defined(language) desc) [0] { _type, _id, "slug": slug.current }
-`;
-
 export const resolvePackageDetailBySlugQuery = groq`
   *[_type == "packageDetailPage" && lower(slug.current) == lower($slug) && (language == $language || !defined(language))] | order(defined(language) desc) [0] { _type, _id, "slug": slug.current }
-`;
-
-// Given a document _id, find its translated sibling slug (for language switching)
-export const resolveTranslatedSlugQuery = groq`
-  *[_type == "translation.metadata" && references($docId)][0]{
-    "slug": translations[_key == $targetLang][0].value->slug.current
-  }
 `;
 
 // ============================================
@@ -2026,7 +1754,7 @@ export const caseStudyBySlugQuery = groq`
     title,
     "slug": slug.current,
     excerpt,
-    "metaDescription": coalesce(seo.metaDescription, excerpt),
+    "metaDescription": coalesce(seoExtended.metaDescription, excerpt),
     publishedAt,
     "heroImage": heroImage {
       asset->{ _id, url, metadata { dimensions, lqip } },
@@ -2114,13 +1842,13 @@ export const authorBySlugQuery = groq`
     expertise,
     linkedin,
     "imageUrl": image.asset->url,
-    seo { metaTitle, metaDescription }
+    seoExtended { metaTitle, metaDescription }
   }
 `;
 
-// Everything the author has written, as cards (blog posts, page-builder posts, case studies)
+// Everything the author has written, as cards (posts, case studies)
 export const authorArticlesQuery = groq`
-  *[_type in ["blogPost", "post", "caseStudy"] && author._ref == $authorId && defined(slug.current)]
+  *[_type in ["post", "caseStudy"] && author._ref == $authorId && defined(slug.current)]
     | order(coalesce(publishedAt, _createdAt) desc) {
     _id,
     _type,
@@ -2131,18 +1859,6 @@ export const authorArticlesQuery = groq`
     "category": coalesce(category, industry),
     publishedAt,
     "imageUrl": coalesce(image.asset->url, featuredImage.asset->url, heroImage.asset->url)
-  }
-`;
-
-export const sitemapCaseStudiesAllLocalesQuery = groq`
-  *[_type == "caseStudy" && defined(slug.current)
-    && seo.noIndex != true
-  ] | order(title asc) {
-    _id,
-    "language": select(defined(language) => language, "en"),
-    "slug": slug.current,
-    _type,
-    _updatedAt
   }
 `;
 
@@ -2187,11 +1903,6 @@ export const pageSeoQuery = groq`
       noIndex,
       noFollow
     },
-    "seo": seo {
-      metaTitle,
-      metaDescription,
-      ogImage
-    },
     "faqItems": coalesce(select(
       _type == "allPackagesPage" => coalesce(sections[_type == "allPackagesPageFaqSection"][0].faqItems[]{ question, answer }, []),
       _type == "contactPage" => coalesce(sections[_type == "contactPageFaqSection"][0].faqs[]{ question, answer }, []),
@@ -2210,7 +1921,7 @@ export const pageSeoQuery = groq`
           "language": coalesce(language, _key),
           "slug": slug.current,
           "isHomepage": coalesce(isHomepage, false),
-          "noIndex": coalesce(seoExtended.noIndex, seo.noIndex, false)
+          "noIndex": coalesce(seoExtended.noIndex, false)
         }
       }
     }.translations
@@ -2245,11 +1956,6 @@ export const pageSeoBySlugQuery = groq`
       noIndex,
       noFollow
     },
-    "seo": seo {
-      metaTitle,
-      metaDescription,
-      ogImage
-    },
     "faqItems": coalesce(select(
       _type == "allPackagesPage" => coalesce(sections[_type == "allPackagesPageFaqSection"][0].faqItems[]{ question, answer }, []),
       _type == "contactPage" => coalesce(sections[_type == "contactPageFaqSection"][0].faqs[]{ question, answer }, []),
@@ -2268,7 +1974,7 @@ export const pageSeoBySlugQuery = groq`
           "language": coalesce(language, _key),
           "slug": slug.current,
           "isHomepage": coalesce(isHomepage, false),
-          "noIndex": coalesce(seoExtended.noIndex, seo.noIndex, false)
+          "noIndex": coalesce(seoExtended.noIndex, false)
         }
       }
     }.translations
@@ -2318,14 +2024,14 @@ export const legalPageBySlugQuery = groq`
       language,
       lastUpdated,
       content,
-      seo
+      seoExtended
     },
     *[_type == "legalPage" && slug.current == $slug && language == "en"][0] {
       pageTitle,
       language,
       lastUpdated,
       content,
-      seo
+      seoExtended
     }
   )
 `;

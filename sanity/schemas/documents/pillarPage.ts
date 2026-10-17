@@ -447,7 +447,7 @@ export const migrationPage = defineType({
       name: "namedCase",
       title: "Named case (client + SKU count)",
       type: "reference",
-      to: [{ type: "caseStudy" }, { type: "post" }, { type: "blogPost" }],
+      to: [{ type: "caseStudy" }, { type: "post" }],
       group: "proof",
       validation: (r) => r.required().error("Reference the real migration this page is built on (§7)."),
     }),
