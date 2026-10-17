@@ -104,6 +104,8 @@ const sectionMember = defineArrayMember({
         defineArrayMember({ type: "calloutBlock" }),
         defineArrayMember({ type: "comparisonCardsBlock" }),
         defineArrayMember({ type: "codeBlock" }),
+        defineArrayMember({ type: "stepsBlock" }),
+        defineArrayMember({ type: "animationBlock" }),
       ],
       validation: (r) => r.required(),
     }),
@@ -198,10 +200,18 @@ export const pillarPage = defineType({
   fields: [
     ...templateCoreFields("pillar"),
     defineField({
+      name: "eyebrow",
+      title: "Eyebrow",
+      type: "string",
+      group: "content",
+      description: "Short label above the H1 on Service pillars, e.g. 'Agentisk handel'.",
+    }),
+    defineField({
       name: "schemaType",
       title: "Primary schema.org type",
       type: "string",
       group: "settings",
+      description: "Service pillars render as a landing page (hero, bands, steps); Article pillars as a long read.",
       options: { list: [{ title: "Article", value: "Article" }, { title: "Service", value: "Service" }], layout: "radio" },
       initialValue: "Article",
     }),

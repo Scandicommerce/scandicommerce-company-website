@@ -29,6 +29,7 @@ export const templatePageBySlugQuery = groq`
     "heroImage": heroImage { "url": asset->url, alt, "lqip": asset->metadata.lqip },
     "author": author-> { name, role, "slug": slug.current, "imageUrl": image.asset->url },
     schemaType,
+    eyebrow,
     integrationName,
     vendorUrl,
     whatItIs,

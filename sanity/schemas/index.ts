@@ -28,6 +28,7 @@ import {
 // ============================================
 import { author, legalPage, post, siteSettings, redirect, pillarPage, integrationPage, migrationPage, integrationCategory } from "./documents";
 import { faqItems } from "./objects";
+import { stepsBlock, animationBlock } from "./objects/pillar/pillarBlocks";
 
 // ============================================
 // Page Types (document types for pages)
@@ -247,6 +248,8 @@ export const schemaTypes = [
   integrationCategory,
   migrationPage,
   faqItems,
+  stepsBlock,
+  animationBlock,
 
   // Landing page section blocks (reusable object types)
   heroSection,

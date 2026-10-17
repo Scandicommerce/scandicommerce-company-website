@@ -11,6 +11,7 @@ import { Faq } from '@/components/integrations/LinkBlocks'
 import { getLanguageFromParams } from '@/lib/language'
 import { hrefFor, docHref } from '@/lib/routes'
 import { sanityImg } from '@/lib/sanityImage'
+import ServicePillar from '@/components/pillars/ServicePillar'
 
 /**
  * Renderer for the three SEO templates (SITE-SEO-ARCHITECTURE §7):
@@ -39,6 +40,8 @@ interface TemplateDoc {
   language: string
   pageTitle: string
   slug: string
+  schemaType?: 'Article' | 'Service' | null
+  eyebrow?: string | null
   definition?: string
   intro?: unknown[]
   heroImage?: { url?: string; alt?: string } | null
@@ -163,6 +166,35 @@ export default async function TemplatePage({ params }: { params: Promise<{ lang:
   // Integrations hub: the pillar at /integrasjoner (/integrations) gets the category grid and filterable list.
   const isIntegrationsHub = doc._type === 'pillarPage' && /^integra(sjoner|tions)$/i.test(doc.slug)
   const hub = isIntegrationsHub ? await sanityPageFetch<HubData>(integrationHubQuery, { language }, { next: { revalidate: 0 } }) : null
+
+  // Service pillars (Agentisk handel, Bli partner) render as a landing page.
+  if (doc._type === 'pillarPage' && doc.schemaType === 'Service' && !isIntegrationsHub) {
+    return (
+      <div className="flex flex-col min-h-screen">
+        <HeaderWrapper />
+        <main className="flex-grow bg-white">
+          <ServicePillar
+            language={language}
+            eyebrow={doc.eyebrow}
+            pageTitle={doc.pageTitle}
+            definition={doc.definition}
+            author={doc.author}
+            updated={updated}
+            sections={sections as never}
+            faq={doc.faq}
+            cta={doc.cta}
+            links={[
+              { heading: t.cluster, items: doc.clusterLinks },
+              { heading: t.cases, items: doc.relatedCaseStudies as LinkDoc[] | undefined },
+              { heading: t.related, items: doc.relatedPages },
+            ]}
+            labels={{ faq: t.faq, by: t.by, updated: t.updated }}
+          />
+        </main>
+        <FooterWrapper />
+      </div>
+    )
+  }
 
   return (
     <div className="flex flex-col min-h-screen">
