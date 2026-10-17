@@ -11,12 +11,15 @@ import { AbsoluteFill, Easing, Img, interpolate, useCurrentFrame } from 'remotio
  *                          lands at the destination, which gets a receipt line.
  *   overview               hub hero: Shopify in the centre, four category
  *                          nodes with vendor logos, continuous pulses.
+ *   web                    partner mesh: no hub, up to ten nodes in a
+ *                          staggered lattice, each wired to its nearest
+ *                          neighbours, pulses wandering between them.
  *
  * Every edge carries a slow dash drift the whole time so the frame is never
  * still. 1600×900 (overview 1600×600), 30 fps. Tokens from the design system.
  */
 
-export type FlowVariant = 'make' | 'code' | 'direct' | 'overview' | 'tiers'
+export type FlowVariant = 'make' | 'code' | 'direct' | 'overview' | 'tiers' | 'web'
 export type FlowTheme = 'light' | 'dark'
 export type FlowNode = { name: string; logoUrl?: string | null }
 export type FlowStepProp = { payload: string; from: string; to: string; trigger?: 'webhook' | 'schedule' | 'manual' | null; frequency?: string | null }
@@ -44,10 +47,12 @@ export const SIZE: Record<FlowVariant, { width: number; height: number }> = {
   direct: { width: 1600, height: 900 },
   overview: { width: 1600, height: 600 },
   tiers: { width: 1600, height: 600 },
+  web: { width: 1000, height: 800 },
 }
 export function durationFor(props: FlowProps): number {
   if (props.variant === 'overview') return 330
   if (props.variant === 'tiers') return 330
+  if (props.variant === 'web') return 420
   const n = Math.max(1, Math.min(props.steps.length, 5))
   return INTRO + n * BEAT + HOLD + FADE
 }
@@ -417,9 +422,92 @@ function TiersFlow({ theme, nodes = [], steps, lang = 'no' }: FlowProps & { them
   )
 }
 
+/* ----------------------------------------------------------------- web */
+/**
+ * Partners: a mesh with no centre. nodes[i].label = partner name,
+ * nodes[i].logos[0] = logo. Each node is wired to its two nearest neighbours;
+ * pulses travel one edge at a time carrying steps[i].payload, and the node a
+ * pulse lands on lights up. Loops without a visible seam.
+ */
+function WebFlow({ theme, nodes = [], steps }: FlowProps & { theme: FlowTheme }) {
+  const f = useCurrentFrame()
+  const c = C[theme]
+  const W = 280
+  const H = 84
+  // Three columns, four rows, the middle row offset: a lattice, not a grid.
+  const P = [
+    { x: 40, y: 40 }, { x: 360, y: 60 }, { x: 680, y: 36 },
+    { x: 200, y: 250 }, { x: 520, y: 268 },
+    { x: 40, y: 470 }, { x: 360, y: 452 }, { x: 680, y: 480 },
+    { x: 200, y: 676 }, { x: 520, y: 690 },
+  ]
+  const items = nodes.slice(0, P.length)
+  const n = items.length
+  const centre = (i: number) => ({ x: P[i].x + W / 2, y: P[i].y + H / 2 })
+  const dist = (a: number, b: number) => Math.hypot(centre(a).x - centre(b).x, centre(a).y - centre(b).y)
+  const edgeSet = new Set<string>()
+  for (let i = 0; i < n; i++) {
+    const near = [...Array(n).keys()].filter((j) => j !== i).sort((a, b) => dist(i, a) - dist(i, b)).slice(0, 2)
+    for (const j of near) edgeSet.add(i < j ? `${i}-${j}` : `${j}-${i}`)
+  }
+  const edges = [...edgeSet].map((k) => k.split('-').map(Number) as [number, number])
+  const total = 420
+  const fade = f > total - FADE ? 1 - t01(f, total - FADE, total) : f < FADE ? t01(f, 0, FADE) : 1
+  const nodeIn = (i: number) => t01(f, 2 + i * 3, 16 + i * 3)
+  const edgeIn = t01(f, 14, 34)
+  // Pulses: one every 26 frames, 44 frames to cross an edge, order shuffled by stride 7.
+  const PER = 26
+  const TRAVEL = 44
+  const count = Math.max(1, edges.length)
+  const pulses = [...Array(Math.ceil(total / PER) + 2).keys()].map((k) => {
+    const start = 36 + k * PER
+    const local = (f - start) / TRAVEL
+    if (local < 0 || local > 1) return null
+    const e = edges[(k * 7) % count]
+    const fwd = k % 2 === 0
+    const [a, b] = fwd ? e : [e[1], e[0]]
+    const p = interpolate(local, [0, 1], [0, 1], { easing: ease })
+    const A = centre(a)
+    const B = centre(b)
+    return { x: A.x + (B.x - A.x) * p, y: A.y + (B.y - A.y) * p, label: p < 0.8 ? steps[k % Math.max(1, steps.length)]?.payload : undefined, a, b, p, edge: `${e[0]}-${e[1]}` }
+  }).filter(Boolean) as { x: number; y: number; label?: string; a: number; b: number; p: number; edge: string }[]
+  const landing = (i: number) => pulses.reduce((acc, p) => (p.b === i && p.p > 0.85 ? Math.max(acc, (p.p - 0.85) / 0.15) : acc), 0)
+  const activeEdge = new Set(pulses.map((p) => p.edge))
+  const drift = (f * 1.2) % 28
+  return (
+    <AbsoluteFill data-frame={f} style={{ background: c.bg, opacity: fade, fontFamily: SANS }}>
+      {edges.map(([a, b]) => {
+        const A = centre(a)
+        const B = centre(b)
+        const len = Math.hypot(B.x - A.x, B.y - A.y) * edgeIn
+        const ang = (Math.atan2(B.y - A.y, B.x - A.x) * 180) / Math.PI
+        const on = activeEdge.has(`${a}-${b}`)
+        return (
+          <div key={`${a}-${b}`} style={{ position: 'absolute', left: A.x, top: A.y - 1.5, width: len, height: 3, transformOrigin: '0 50%', transform: `rotate(${ang}deg)` }}>
+            <div style={{ position: 'absolute', inset: 0, borderRadius: 2, background: on ? c.pulse : c.edge, opacity: 0.9 }} />
+            <div style={{ position: 'absolute', inset: 0, borderRadius: 2, background: `linear-gradient(90deg, ${on ? c.pulse : theme === 'dark' ? '#5a6670' : '#b5bcc4'} 0 12px, transparent 12px 28px)`, backgroundSize: '28px 3px', backgroundPositionX: drift, opacity: on ? 0.9 : 0.5 }} />
+          </div>
+        )
+      })}
+      {items.map((node, i) => {
+        const ring = landing(i)
+        const logo = node.logos?.[0]
+        return (
+          <div key={node.label} style={{ position: 'absolute', left: P[i].x, top: P[i].y + (1 - nodeIn(i)) * 10, width: W, height: H, opacity: nodeIn(i), boxSizing: 'border-box', padding: '0 18px', borderRadius: 14, background: c.card, border: `2px solid ${ring > 0 ? c.pulse : c.cardBorder}`, boxShadow: ring > 0 ? `0 0 0 ${10 * ring}px ${c.halo}` : '0 2px 10px rgba(16,24,32,0.06)', display: 'flex', alignItems: 'center', gap: 14 }}>
+            {logo ? <Img src={logo} style={{ width: 52, height: 52, borderRadius: 12, objectFit: 'cover', flex: 'none' }} /> : <span style={{ width: 52, height: 52, borderRadius: 12, background: '#12181a', color: '#3fd4dc', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: MONO, fontSize: 24, fontWeight: 600, flex: 'none' }}>{node.label.slice(0, 1)}</span>}
+            <span style={{ fontSize: 24, fontWeight: 700, letterSpacing: '-0.01em', color: c.text, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{node.label}</span>
+          </div>
+        )
+      })}
+      {pulses.map((p, i) => <Pulse key={i} x={p.x} y={p.y} label={p.label} theme={theme} above={p.y > 400} />)}
+    </AbsoluteFill>
+  )
+}
+
 export default function FlowComposition(props: FlowProps) {
   const theme = props.theme ?? 'light'
   if (props.variant === 'overview') return <OverviewFlow {...props} theme={theme} />
   if (props.variant === 'tiers') return <TiersFlow {...props} theme={theme} />
+  if (props.variant === 'web') return <WebFlow {...props} theme={theme} />
   return <StepFlow {...props} theme={theme} />
 }

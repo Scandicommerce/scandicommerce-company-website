@@ -1,7 +1,7 @@
 'use client'
 
 import dynamic from 'next/dynamic'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, type ReactNode } from 'react'
 import { DataFlowPoster, type FlowStep, type FlowSystem } from './DataFlow'
 import type { FlowNode, FlowProps, FlowTheme, FlowVariant, OverviewNode } from './remotion/FlowComposition'
 
@@ -37,6 +37,7 @@ export default function DataFlowAnimation({
   twoWay,
   vendorName,
   vendorLogoUrl,
+  poster,
 }: {
   variant: FlowVariant
   systems: FlowSystem[]
@@ -47,6 +48,8 @@ export default function DataFlowAnimation({
   twoWay?: boolean
   vendorName?: string | null
   vendorLogoUrl?: string | null
+  /** Replaces the generic poster as the no-motion fallback. */
+  poster?: ReactNode
 }) {
   const [animate, setAnimate] = useState(false)
   useEffect(() => {
@@ -80,6 +83,6 @@ export default function DataFlowAnimation({
   }
   const label = steps.map((s) => `${s.from} → ${s.to}, ${s.payload}`).join('; ')
 
-  if (!animate) return <DataFlowPoster systems={systems} steps={steps} language={language} />
+  if (!animate) return poster ? <>{poster}</> : <DataFlowPoster systems={systems} steps={steps} language={language} />
   return <DataFlowPlayer props={props} ariaLabel={label} />
 }
