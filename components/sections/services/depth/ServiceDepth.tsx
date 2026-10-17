@@ -4,7 +4,52 @@ import { Faq } from '@/components/integrations/LinkBlocks'
 import { ui, type IntegrationCard as Card } from '@/components/integrations/labels'
 import { sanityPageFetch } from '@/sanity/lib/fetch'
 import { INTEGRATION_CARD_PROJECTION } from '@/sanity/lib/templateQueries'
-import type { ServiceDepth as Depth } from '@/lib/servicesDepth'
+import { serviceLang, type ServiceDepth as Depth, type ServiceLang } from '@/lib/servicesDepth'
+
+/** Fixed section labels. Norwegian is the original; every other language renders English. */
+const LABELS: Record<ServiceLang, {
+  deliverables: string
+  scope: string
+  prerequisites: string
+  prerequisitesLead: string
+  youBring: string
+  weHandle: string
+  integrations: string
+  allIntegrations: string
+  allIntegrationsHref: string
+  readMore: string
+}> = {
+  no: {
+    deliverables: 'Leveranser',
+    scope: 'Omfang:',
+    prerequisites: 'Forutsetninger',
+    prerequisitesLead: 'Jo mer som er klart, jo raskere går det. Mangler noe, hjelper vi med å få det på plass.',
+    youBring: 'Dere har klart',
+    weHandle: 'Vi tar oss av',
+    integrations: 'Integrasjoner',
+    allIntegrations: 'Se alle integrasjoner →',
+    allIntegrationsHref: '/integrasjoner',
+    readMore: 'Les mer',
+  },
+  en: {
+    deliverables: 'Deliverables',
+    scope: 'Scope:',
+    prerequisites: 'Prerequisites',
+    prerequisitesLead: 'The more that is ready, the faster it goes. If something is missing, we help you get it in place.',
+    youBring: 'You have ready',
+    weHandle: 'We take care of',
+    integrations: 'Integrations',
+    allIntegrations: 'See all partners →',
+    allIntegrationsHref: '/partners',
+    readMore: 'Read more',
+  },
+}
+
+interface DepthProps {
+  depth: Depth
+  /** Page language; decides the fixed labels. Defaults to Norwegian. */
+  language?: string
+}
 
 /** Sticky anchor bar, the same one the package detail page uses. */
 export function ServiceAnchors({ items }: { items: { id: string; label: string }[] }) {
@@ -44,13 +89,14 @@ export function ServiceFacts({ depth }: { depth: Depth }) {
 }
 
 /** What is delivered, with scope notes, on the integration capability rows. */
-export function ServiceDeliverables({ depth }: { depth: Depth }) {
+export function ServiceDeliverables({ depth, language = 'no' }: DepthProps) {
+  const t = LABELS[serviceLang(language)]
   return (
     <section id="leveranser" className="scroll-mt-28 bg-sc-ink-50 py-16 lg:py-20">
       <div className={ui.container}>
         <div className="mb-8 flex flex-col gap-4 lg:mb-10 lg:flex-row lg:items-end lg:justify-between lg:gap-8">
           <div className="flex flex-col gap-2.5">
-            <div className={ui.eyebrow}>Leveranser</div>
+            <div className={ui.eyebrow}>{t.deliverables}</div>
             <h2 className={ui.h2}>{depth.headings.deliverables}</h2>
           </div>
           <p className="m-0 max-w-[520px] text-base leading-relaxed text-sc-ink-600 lg:text-lg">{depth.headings.deliverablesLead}</p>
@@ -62,7 +108,7 @@ export function ServiceDeliverables({ depth }: { depth: Depth }) {
               <div className="min-w-0">
                 <h3 className="m-0 text-[17px] font-semibold leading-snug text-sc-ink-900">{d.name}</h3>
                 <p className="m-0 mt-1 text-[15px] leading-relaxed text-sc-ink-600">{d.text}</p>
-                {d.scope && <p className="m-0 mt-2 text-[13px] leading-snug text-sc-ink-400"><span className="font-medium">Omfang:</span> {d.scope}</p>}
+                {d.scope && <p className="m-0 mt-2 text-[13px] leading-snug text-sc-ink-400"><span className="font-medium">{t.scope}</span> {d.scope}</p>}
               </div>
             </li>
           ))}
@@ -77,17 +123,18 @@ const CHECK = (
 )
 
 /** Two lists: what the customer has ready, what we take care of. */
-export function ServicePrerequisites({ depth }: { depth: Depth }) {
+export function ServicePrerequisites({ depth, language = 'no' }: DepthProps) {
+  const t = LABELS[serviceLang(language)]
   return (
     <section id="forutsetninger" className="scroll-mt-28 bg-white py-16 lg:py-20">
       <div className={`${ui.container} grid gap-5 lg:grid-cols-[1fr_1fr_1fr] lg:gap-8`}>
         <div className="flex flex-col gap-2.5">
-          <div className={ui.eyebrow}>Forutsetninger</div>
+          <div className={ui.eyebrow}>{t.prerequisites}</div>
           <h2 className={ui.h2}>{depth.headings.prerequisites}</h2>
-          <p className="m-0 text-base leading-relaxed text-sc-ink-600">Jo mer som er klart, jo raskere går det. Mangler noe, hjelper vi med å få det på plass.</p>
+          <p className="m-0 text-base leading-relaxed text-sc-ink-600">{t.prerequisitesLead}</p>
         </div>
         <div className="rounded-lg border border-sc-ink-100 bg-sc-ink-50 p-6">
-          <h3 className="m-0 mb-4 text-[17px] font-bold text-sc-ink-900">Dere har klart</h3>
+          <h3 className="m-0 mb-4 text-[17px] font-bold text-sc-ink-900">{t.youBring}</h3>
           <ul className="m-0 flex list-none flex-col gap-2.5 p-0">
             {depth.youBring.map((s) => (
               <li key={s} className="flex items-start gap-2.5 text-[15px] leading-snug text-sc-ink-700">
@@ -98,7 +145,7 @@ export function ServicePrerequisites({ depth }: { depth: Depth }) {
           </ul>
         </div>
         <div className="rounded-lg bg-sc-ink-900 p-6 text-white">
-          <h3 className="m-0 mb-4 text-[17px] font-bold">Vi tar oss av</h3>
+          <h3 className="m-0 mb-4 text-[17px] font-bold">{t.weHandle}</h3>
           <ul className="m-0 flex list-none flex-col gap-2.5 p-0">
             {depth.weHandle.map((s) => (
               <li key={s} className="flex items-start gap-2.5 text-[15px] leading-snug text-sc-ink-100">
@@ -120,12 +167,13 @@ export async function ServiceIntegrations({ depth, language }: { depth: Depth; l
   const cards = await sanityPageFetch<Card[]>(cardsBySlugQuery, { language, slugs: depth.integrationSlugs }, { next: { revalidate: 0 } }).catch(() => [] as Card[])
   const ordered = depth.integrationSlugs.map((s) => (cards ?? []).find((c) => c.slug === s)).filter((c): c is Card => Boolean(c))
   if (ordered.length === 0) return null
+  const t = LABELS[serviceLang(language)]
   return (
     <section id="integrasjoner" className="scroll-mt-28 bg-sc-ink-50 py-16 lg:py-20">
       <div className={ui.container}>
         <div className="mb-8 flex flex-col gap-4 lg:mb-10 lg:flex-row lg:items-end lg:justify-between lg:gap-8">
           <div className="flex flex-col gap-2.5">
-            <div className={ui.eyebrow}>Integrasjoner</div>
+            <div className={ui.eyebrow}>{t.integrations}</div>
             <h2 className={ui.h2}>{depth.headings.integrations}</h2>
           </div>
           <p className="m-0 max-w-[520px] text-base leading-relaxed text-sc-ink-600 lg:text-lg">{depth.headings.integrationsLead}</p>
@@ -134,7 +182,7 @@ export async function ServiceIntegrations({ depth, language }: { depth: Depth; l
           {ordered.map((c) => <IntegrationCard key={c._id} item={c} language={language} />)}
         </div>
         <div className="mt-6">
-          <LocalizedLink href="/integrasjoner" className="text-sm font-semibold text-sc-ink-900 hover:text-sc-cyan-600">Se alle integrasjoner →</LocalizedLink>
+          <LocalizedLink href={t.allIntegrationsHref} className="text-sm font-semibold text-sc-ink-900 hover:text-sc-cyan-600">{t.allIntegrations}</LocalizedLink>
         </div>
       </div>
     </section>
@@ -146,7 +194,8 @@ export function ServiceFaq({ depth }: { depth: Depth }) {
 }
 
 /** Onward links: packages, cases, integrations. */
-export function ServiceLinks({ depth }: { depth: Depth }) {
+export function ServiceLinks({ depth, language = 'no' }: DepthProps) {
+  const t = LABELS[serviceLang(language)]
   return (
     <section id="les-videre" className="scroll-mt-28 bg-white py-16 lg:py-20">
       <div className={ui.container}>
@@ -158,7 +207,7 @@ export function ServiceLinks({ depth }: { depth: Depth }) {
                 <span className={ui.eyebrow}>{l.eyebrow}</span>
                 <span className="text-[20px] font-bold leading-snug tracking-[-0.01em] text-sc-ink-900">{l.title}</span>
                 <span className="flex-1 text-[15px] leading-relaxed text-sc-ink-600">{l.text}</span>
-                <span className="mt-auto text-sm font-semibold text-sc-ink-900 group-hover:text-sc-cyan-600">{l.linkText ?? 'Les mer'} →</span>
+                <span className="mt-auto text-sm font-semibold text-sc-ink-900 group-hover:text-sc-cyan-600">{l.linkText ?? t.readMore} →</span>
               </LocalizedLink>
             </li>
           ))}
@@ -174,11 +223,11 @@ export default async function ServiceDepthSections({ depth, language, anchors }:
     <>
       {anchors && <ServiceAnchors items={anchors} />}
       <ServiceFacts depth={depth} />
-      <ServiceDeliverables depth={depth} />
-      <ServicePrerequisites depth={depth} />
+      <ServiceDeliverables depth={depth} language={language} />
+      <ServicePrerequisites depth={depth} language={language} />
       <ServiceIntegrations depth={depth} language={language} />
       <ServiceFaq depth={depth} />
-      <ServiceLinks depth={depth} />
+      <ServiceLinks depth={depth} language={language} />
     </>
   )
 }

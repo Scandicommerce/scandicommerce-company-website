@@ -166,14 +166,20 @@ export async function GET() {
   }
 
   // Code-built pages have no Sanity document, so they are listed here.
-  // Norwegian-only until their English routes exist.
+  // The English routes serve sv/da/de too (English copy until translated).
+  const COM_LANGUAGES: Language[] = ['en', 'sv', 'da', 'de']
   const CODE_ROUTES: { path: string; languages: Language[] }[] = [
     { path: 'tjenester', languages: ['no'] },
     { path: 'tjenester/shopify', languages: ['no'] },
     { path: 'tjenester/migrering', languages: ['no'] },
     { path: 'tjenester/b2b', languages: ['no'] },
     { path: 'tjenester/utvikling', languages: ['no'] },
-    { path: 'nexuspos', languages: ['no'] },
+    { path: 'services', languages: COM_LANGUAGES },
+    { path: 'services/shopify', languages: COM_LANGUAGES },
+    { path: 'services/migrate', languages: COM_LANGUAGES },
+    { path: 'services/b2b', languages: COM_LANGUAGES },
+    { path: 'services/shopify-development', languages: COM_LANGUAGES },
+    { path: 'nexuspos', languages: ['no', 'en', 'sv', 'da', 'de'] },
   ]
   for (const route of CODE_ROUTES) {
     for (const lang of route.languages) {
