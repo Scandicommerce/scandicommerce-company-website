@@ -121,9 +121,12 @@ export default async function PackageDetailPage({ params }: { params: Promise<{ 
     if (!pkg.faq?.length) pkg.faq = staticPkg.faq
   }
 
+  // The slug is the full path (tjenester/alle-pakker/premium); the Shopify
+  // handle is its last segment.
+  const handle = slug.split('/').filter(Boolean).pop() ?? slug
   let shopifyProduct = null
   try {
-    shopifyProduct = await getShopifyProductByHandle(slug)
+    shopifyProduct = await getShopifyProductByHandle(handle)
   } catch {
     /* not a Shopify product */
   }
@@ -175,6 +178,7 @@ export default async function PackageDetailPage({ params }: { params: Promise<{ 
                   productTitle: shopifyProduct.title,
                   hasVariants: (shopifyProduct.variants?.length || 0) > 1,
                   variants: shopifyProduct.variants || [],
+                  price: shopifyProduct.variants?.[0] ? `${new Intl.NumberFormat('nb-NO', { maximumFractionDigits: 0 }).format(shopifyProduct.variants[0].price).replace(/\u00a0/g, ' ')} kr` : undefined,
                 }
               : undefined
           }

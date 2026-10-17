@@ -1,6 +1,9 @@
 import LocalizedLink from '@/components/ui/LocalizedLink'
-import DataFlowAnimation from '@/components/integrations/DataFlowAnimation'
+import { ui } from '@/components/integrations/labels'
+import type { ShopifyProduct } from '@/lib/shopify'
 import PackageAddToCart from './PackageAddToCart'
+import PackageMatrix from './PackageMatrix'
+import { PACKAGE_TIERS, type PackageTier } from '@/lib/packageMatrix'
 
 interface Package {
   title: string
@@ -32,10 +35,14 @@ interface PackagesData {
 interface PricingPackagesProps {
   packages?: PackagesData
   lang?: string
+  /** Products from the Shopify `packages` collection; matched by handle. */
+  products?: ShopifyProduct[]
 }
 
 /** Sanity entries often start with a check mark; the UI draws its own. */
 const clean = (s: string) => s.replace(/^[\s✓✔☑•-]+/, '').trim()
+const handleOf = (s: string) => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '')
+const nok = (n: number) => `${new Intl.NumberFormat('nb-NO', { maximumFractionDigits: 0 }).format(n).replace(/ /g, ' ')} kr`
 
 /** Resolves Book Call URL: page slug (preferred), then custom href, then /contact. */
 function resolveBookCallHref(pkg: Package): string {
@@ -44,136 +51,167 @@ function resolveBookCallHref(pkg: Package): string {
   return '/contact'
 }
 
+/** Match a Sanity package to its Shopify product: slug tail first, then title. */
+function productFor(pkg: Package, products: ShopifyProduct[]): ShopifyProduct | undefined {
+  const tail = (pkg.slug ?? '').split('/').filter(Boolean).pop()
+  const candidates = [tail, handleOf(pkg.title)].filter(Boolean) as string[]
+  return products.find((p) => candidates.includes(p.handle)) ?? products.find((p) => handleOf(p.title) === handleOf(pkg.title))
+}
+
 interface Labels {
   eyebrow: string
   heading: string
+  lead: string
   viewDetails: string
   bookCall: string
+  addToCart: string
   bestFor: string
   whatsIncluded: string
-  timeline: string
-  more: (n: number) => string
+  perMonth: string
+  recommended: string
+  compare: string
+  exVat: string
 }
 
-const BTN_PRIMARY = 'inline-flex min-h-[46px] items-center justify-center rounded-lg bg-sc-ink-900 px-[22px] py-3 text-sm font-semibold tracking-[0.02em] text-white transition-colors hover:bg-sc-ink-700'
-const BTN_SECONDARY = 'inline-flex min-h-[46px] items-center justify-center rounded-lg border border-sc-ink-300 bg-transparent px-[22px] py-3 text-sm font-semibold tracking-[0.02em] text-sc-ink-900 transition-colors hover:bg-sc-ink-50'
+const CHECK = (
+  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" /></svg>
+)
 
 /**
- * Package card on the integrations card pattern: hairline, radius 8, one
- * clear price line in mono, the audience as a short list and the contents as
- * chips. Everything else lives on the detail page.
+ * One tier column: name, one-line promise, mono price, the "everything in"
+ * pill, audience, deliverables as a check list and the actions. Shopify
+ * supplies the price and the cart button when the product exists.
  */
-function PackageCard({ pkg, labels, featured }: { pkg: Package; labels: Labels; featured: boolean }) {
-  const included = (pkg.included ?? []).map(clean)
-  const shown = included.slice(0, 6)
-  const rest = included.length - shown.length
+function PackageCard({ pkg, labels, featured, product, lang }: { pkg: Package; labels: Labels; featured: boolean; product?: ShopifyProduct; lang: string }) {
+  const included = (pkg.included ?? []).map(clean).filter(Boolean)
+  const inherits = included.find((s) => /^(alt i|everything in)\s/i.test(s))
+  const items = included.filter((s) => s !== inherits).slice(0, 7)
   const bookHref = resolveBookCallHref(pkg)
+  const detailHref = pkg.slug ? `/${pkg.slug}` : pkg.href || null
+  const variant = product?.variants?.[0]
+  const price = variant ? nok(variant.price) : pkg.price
+  const custom = /tilpass|custom|avtale/i.test(pkg.price)
+  const muted = featured ? 'text-sc-ink-300' : 'text-sc-ink-500'
+  const body = featured ? 'text-sc-ink-200' : 'text-sc-ink-600'
+
   return (
-    <div className={`flex flex-col gap-5 rounded-lg border p-7 ${featured ? 'border-sc-ink-900 bg-sc-ink-900 text-white' : 'border-sc-ink-100 bg-white text-sc-ink-900'}`}>
+    <div className={`relative flex min-w-0 flex-col gap-5 rounded-lg border p-6 lg:p-7 ${featured ? 'border-sc-ink-900 bg-sc-ink-900 text-white' : 'border-sc-ink-100 bg-white text-sc-ink-900'}`}>
+      {featured && <span className="absolute -top-3 left-6 inline-flex items-center rounded-md bg-sc-cyan-500 px-2.5 py-1 text-xs font-semibold text-sc-ink-900">{labels.recommended}</span>}
       <div className="flex flex-col gap-1.5">
-        <h3 className="text-[28px] font-bold leading-tight tracking-[-0.02em]">{pkg.title}</h3>
-        {pkg.subtitle && <p className={`text-base ${featured ? 'text-sc-ink-200' : 'text-sc-ink-600'}`}>{pkg.subtitle}</p>}
+        <h3 className="m-0 text-[26px] font-bold leading-tight tracking-[-0.02em]">{pkg.title}</h3>
+        {pkg.subtitle && <p className={`m-0 text-[15px] leading-snug ${body}`}>{pkg.subtitle}</p>}
       </div>
 
-      <div className="flex flex-wrap items-baseline gap-x-2">
-        {pkg.price && <span className="font-mono text-[30px] font-medium tracking-tight">{pkg.price}</span>}
-        {pkg.priceType && <span className={`text-sm ${featured ? 'text-sc-ink-300' : 'text-sc-ink-500'}`}>{pkg.priceType}</span>}
-        {pkg.timeline && (
-          <span className={`basis-full text-sm ${featured ? 'text-sc-ink-300' : 'text-sc-ink-500'}`}>
-            {labels.timeline}: {pkg.timeline}
-          </span>
-        )}
+      <div>
+        <div className="flex flex-wrap items-baseline gap-x-2">
+          <span className="font-mono text-[30px] font-medium tracking-tight">{price}</span>
+          <span className={`text-sm ${muted}`}>{labels.perMonth}</span>
+        </div>
+        <div className={`mt-1 text-[13px] ${muted}`}>{custom ? (lang === 'no' ? 'Tilpasses omfang. ' : 'Scoped to fit. ') : ''}{labels.exVat}</div>
       </div>
 
-      {pkg.description && <p className={`text-base leading-relaxed ${featured ? 'text-sc-ink-200' : 'text-sc-ink-600'}`}>{pkg.description}</p>}
+      {inherits && <span className={`inline-flex w-fit items-center rounded-md px-2.5 py-1 text-xs font-semibold ${featured ? 'bg-white/10 text-sc-cyan-200' : 'bg-sc-cyan-50 text-sc-cyan-700'}`}>{inherits}</span>}
 
       {pkg.bestFor?.length ? (
-        <div className="flex flex-col gap-2">
-          <div className={`text-xs font-semibold uppercase tracking-[0.12em] ${featured ? 'text-sc-ink-300' : 'text-sc-ink-500'}`}>{labels.bestFor}</div>
-          <ul className="flex flex-col gap-1.5 text-[15px] leading-relaxed">
-            {pkg.bestFor.slice(0, 3).map((item, index) => (
-              <li key={index} className="flex gap-3">
-                <span className="font-semibold text-sc-cyan-500">—</span>
-                <span>{item}</span>
+        <div>
+          <div className={`mb-1.5 text-xs font-semibold uppercase tracking-[0.12em] ${muted}`}>{labels.bestFor}</div>
+          <p className={`m-0 text-[14px] leading-relaxed ${body}`}>{pkg.bestFor.slice(0, 2).join(' · ')}</p>
+        </div>
+      ) : null}
+
+      {items.length > 0 && (
+        <div>
+          <div className={`mb-2 text-xs font-semibold uppercase tracking-[0.12em] ${muted}`}>{labels.whatsIncluded}</div>
+          <ul className="m-0 flex list-none flex-col gap-2 p-0">
+            {items.map((item) => (
+              <li key={item} className={`flex items-start gap-2.5 text-[14px] leading-snug ${featured ? 'text-white' : 'text-sc-ink-700'}`}>
+                <span className={`mt-[2px] inline-flex h-4 w-4 flex-none items-center justify-center rounded-full ${featured ? 'bg-sc-cyan-500 text-sc-ink-900' : 'bg-sc-cyan-50 text-sc-cyan-700'}`}>{CHECK}</span>
+                {item}
               </li>
             ))}
           </ul>
         </div>
-      ) : null}
-
-      {shown.length > 0 && (
-        <div className="flex flex-col gap-2">
-          <div className={`text-xs font-semibold uppercase tracking-[0.12em] ${featured ? 'text-sc-ink-300' : 'text-sc-ink-500'}`}>{labels.whatsIncluded}</div>
-          <div className="flex flex-wrap gap-1.5">
-            {shown.map((item, index) => (
-              <span key={index} className={`inline-flex items-center rounded-full border px-2.5 py-1 text-[13px] ${featured ? 'border-sc-ink-600 text-sc-ink-200' : 'border-sc-ink-200 text-sc-ink-600'}`}>
-                {item}
-              </span>
-            ))}
-            {rest > 0 && <span className={`inline-flex items-center px-1 py-1 text-[13px] ${featured ? 'text-sc-ink-300' : 'text-sc-ink-500'}`}>{labels.more(rest)}</span>}
-          </div>
-        </div>
       )}
 
-      <div className="mt-auto flex flex-col gap-3 pt-2 sm:flex-row">
-        {(pkg.slug || pkg.href) && (
-          <LocalizedLink href={pkg.slug ? `/${pkg.slug}` : pkg.href!} className={featured ? 'inline-flex min-h-[46px] items-center justify-center rounded-lg bg-sc-ink-900 px-[22px] py-3 text-sm font-semibold tracking-[0.02em] text-white transition-colors hover:bg-sc-ink-700' : BTN_PRIMARY}>
+      <div className="mt-auto flex flex-col gap-2.5 pt-2">
+        {variant && !custom ? (
+          <PackageAddToCart variantId={variant.id} productTitle={product!.title} label={labels.addToCart} onDark={featured} />
+        ) : (
+          <LocalizedLink href={bookHref} className={featured ? 'inline-flex min-h-[46px] items-center justify-center rounded-lg bg-white px-[22px] py-3 text-sm font-semibold tracking-[0.02em] text-sc-ink-900 hover:bg-sc-ink-50' : ui.btnPrimary}>
+            {labels.bookCall}
+          </LocalizedLink>
+        )}
+        {detailHref && (
+          <LocalizedLink href={detailHref} className={featured ? 'inline-flex min-h-[46px] items-center justify-center rounded-lg border border-sc-ink-600 px-[22px] py-3 text-sm font-semibold tracking-[0.02em] text-white hover:bg-sc-ink-800' : ui.btnSecondary}>
             {labels.viewDetails}
           </LocalizedLink>
         )}
-        {bookHref.startsWith('http') ? (
-          <a href={bookHref} target="_blank" rel="noopener noreferrer" className={featured ? 'inline-flex min-h-[46px] items-center justify-center rounded-lg border border-sc-ink-600 px-[22px] py-3 text-sm font-semibold tracking-[0.02em] text-white hover:bg-sc-ink-800' : BTN_SECONDARY}>
-            {labels.bookCall}
-          </a>
-        ) : (
-          <LocalizedLink href={bookHref} className={featured ? 'inline-flex min-h-[46px] items-center justify-center rounded-lg border border-sc-ink-600 px-[22px] py-3 text-sm font-semibold tracking-[0.02em] text-white hover:bg-sc-ink-800' : BTN_SECONDARY}>
+        {variant && !custom && (
+          <LocalizedLink href={bookHref} className={`text-center text-[13px] font-medium underline-offset-2 hover:underline ${muted}`}>
             {labels.bookCall}
           </LocalizedLink>
-        )}
-        {pkg.shopifyVariantId && pkg.shopifyProductTitle && (
-          <PackageAddToCart variantId={pkg.shopifyVariantId} productTitle={pkg.shopifyProductTitle} className="flex-1 min-w-0" />
         )}
       </div>
     </div>
   )
 }
 
-export default function PricingPackages({ packages, lang }: PricingPackagesProps) {
+export default function PricingPackages({ packages, lang, products = [] }: PricingPackagesProps) {
   const items = packages?.packagesItems ?? []
   const isNo = lang === 'no' || lang === 'nb-NO' || (lang ?? '').startsWith('nb')
 
   const labels: Labels = {
     eyebrow: isNo ? 'Alle pakker' : 'All packages',
     heading: isNo ? 'Velg nivå. Alt i pakken under er med.' : 'Pick a level. Everything below it is included.',
-    viewDetails: isNo ? 'Se detaljer' : 'View details',
+    lead: isNo ? 'Fast månedspris, ingen binding utover oppstartsperioden. Bytt nivå når behovet endrer seg.' : 'Fixed monthly price, no lock-in beyond onboarding. Change level when your needs change.',
+    viewDetails: isNo ? 'Se alt som inngår' : 'See everything included',
     bookCall: isNo ? 'Book en samtale' : 'Book a call',
+    addToCart: isNo ? 'Bestill pakken' : 'Order package',
     bestFor: isNo ? 'Passer for' : 'Best for',
     whatsIncluded: isNo ? 'Inkludert' : 'Included',
-    timeline: isNo ? 'Tidsramme' : 'Timeline',
-    more: (n) => (isNo ? `+${n} til` : `+${n} more`),
+    perMonth: isNo ? 'per måned' : 'per month',
+    recommended: isNo ? 'Mest valgt' : 'Most popular',
+    compare: isNo ? 'Sammenlign alle tjenester' : 'Compare every service',
+    exVat: isNo ? 'eks. mva' : 'ex. VAT',
   }
 
   if (items.length === 0) return null
 
-  // Remotion: tier columns with the services that are new in each tier.
-  const tierNodes = items.map((p) => ({ label: p.title, logos: [] as string[] }))
-  const tierSteps = items.flatMap((p) => (p.included ?? []).map(clean).filter((s) => !/^alt i /i.test(s)).slice(0, 5).map((s) => ({ from: p.title, to: p.title, payload: s })))
-  const featuredIndex = items.length > 1 ? items.length - 1 : -1
+  const featuredIndex = items.findIndex((p) => /premium/i.test(p.title))
+  const matrixPrices: Partial<Record<PackageTier, string>> = {}
+  for (const pkg of items) {
+    const tail = (pkg.slug ?? '').split('/').filter(Boolean).pop() as PackageTier | undefined
+    const tier = tail && PACKAGE_TIERS.includes(tail) ? tail : (PACKAGE_TIERS.find((t) => t === handleOf(pkg.title)) as PackageTier | undefined)
+    if (!tier) continue
+    const v = productFor(pkg, products)?.variants?.[0]
+    matrixPrices[tier] = v ? nok(v.price) : pkg.price
+  }
+  const cols = items.length >= 4 ? 'lg:grid-cols-4' : items.length === 3 ? 'lg:grid-cols-3' : ''
 
   return (
-    <section className="bg-white py-16 lg:py-20">
-      <div className="mx-auto flex max-w-[1100px] flex-col gap-10 px-5 lg:px-8">
-        <div className="flex flex-col gap-2.5">
-          <div className="text-xs font-semibold uppercase tracking-[0.12em] text-sc-cyan-500">{labels.eyebrow}</div>
-          <h2 className="text-[32px] font-bold leading-[1.25] tracking-[-0.02em] text-sc-ink-900 lg:text-[44px]">{labels.heading}</h2>
+    <>
+      <section id="pakker" className="scroll-mt-24 bg-white py-16 lg:py-20">
+        <div className={`${ui.container} flex flex-col gap-10`}>
+          <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between lg:gap-8">
+            <div className="flex flex-col gap-2.5">
+              <div className={ui.eyebrow}>{labels.eyebrow}</div>
+              <h2 className={ui.h2}>{labels.heading}</h2>
+            </div>
+            <p className="m-0 max-w-[520px] text-base leading-relaxed text-sc-ink-600 lg:text-lg">{labels.lead}</p>
+          </div>
+          <div className={`grid grid-cols-1 gap-4 pt-3 md:grid-cols-2 ${cols} lg:gap-5`}>
+            {items.map((pkg, index) => (
+              <PackageCard key={index} pkg={pkg} labels={labels} featured={index === featuredIndex} product={productFor(pkg, products)} lang={isNo ? 'no' : 'en'} />
+            ))}
+          </div>
+          {isNo && (
+            <div className="text-center">
+              <a href="#sammenlign" className={ui.btnSecondary}>{labels.compare}</a>
+            </div>
+          )}
         </div>
-        <DataFlowAnimation variant="tiers" systems={[{ name: 'Shopify', role: 'source' }]} steps={tierSteps} language={isNo ? 'no' : 'en'} nodes={tierNodes} />
-        <div className={`grid gap-6 md:grid-cols-2 ${items.length === 3 ? "lg:grid-cols-3" : ""}`}>
-          {items.map((pkg, index) => (
-            <PackageCard key={index} pkg={pkg} labels={labels} featured={index === featuredIndex} />
-          ))}
-        </div>
-      </div>
-    </section>
+      </section>
+      {isNo && <PackageMatrix prices={matrixPrices} />}
+    </>
   )
 }

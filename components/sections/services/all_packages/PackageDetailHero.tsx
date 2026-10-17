@@ -10,6 +10,8 @@ interface ShopifyProduct {
   productTitle: string
   hasVariants: boolean
   variants: Parameters<typeof AddToCartDropdown>[0]['variants']
+  /** Formatted price from the Storefront API; wins over the CMS string. */
+  price?: string
 }
 
 interface PackageDetailHeroProps {
@@ -62,7 +64,7 @@ export default function PackageDetailHero({ pkg, tier, shopifyProduct, lang = 'e
             {/* Price */}
             <div className="mt-8 flex flex-wrap items-baseline gap-x-3 gap-y-1">
               <span className="font-mono text-[32px] font-medium tracking-tight text-sc-ink-900 lg:text-[40px]">
-                {card?.price || pkg.price}
+                {shopifyProduct?.price || pkg.price || card?.price}
               </span>
               {(card ? 'per måned' : pkg.priceType) && (
                 <span className="text-[15px] text-sc-ink-500">{card ? 'per måned' : pkg.priceType}</span>

@@ -1,105 +1,50 @@
 'use client'
 
 import { useState } from 'react'
-import { HiShoppingBag, HiCheck } from 'react-icons/hi2'
-import { motion } from 'framer-motion'
 import { useCart } from '@/contexts/CartContext'
-import { Button } from '@/components/ui'
 
 interface PackageAddToCartProps {
   variantId: string
   productTitle: string
   quantity?: number
   className?: string
+  /** Button label; defaults to Norwegian. */
+  label?: string
+  /** Light button for dark cards. */
+  onDark?: boolean
 }
 
-export default function PackageAddToCart({
-  variantId,
-  productTitle,
-  quantity = 1,
-  className = '',
-}: PackageAddToCartProps) {
-  const [isAddingToCart, setIsAddingToCart] = useState(false)
-  const [showSuccessMessage, setShowSuccessMessage] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+const T = { add: 'Legg i handlekurv', adding: 'Legger til …', added: 'Lagt i handlekurven', failed: 'Kunne ikke legge i handlekurven' }
 
+/** Add-to-cart on the site's ink button; success and error states inline. */
+export default function PackageAddToCart({ variantId, productTitle, quantity = 1, className = '', label = T.add, onDark = false }: PackageAddToCartProps) {
+  const [busy, setBusy] = useState(false)
+  const [done, setDone] = useState(false)
+  const [error, setError] = useState<string | null>(null)
   const { addToCart } = useCart()
 
-  const handleAddToCart = async () => {
-    if (!variantId) {
-      setError('Product variant ID is required')
-      return
-    }
-
-    setIsAddingToCart(true)
+  const handle = async () => {
+    if (!variantId || busy) return
+    setBusy(true)
     setError(null)
-
     const result = await addToCart(variantId, quantity, productTitle)
-
     if (result.success) {
-      setShowSuccessMessage(true)
-      setTimeout(() => setShowSuccessMessage(false), 2000)
+      setDone(true)
+      setTimeout(() => setDone(false), 2500)
     } else {
-      setError(result.error || 'Failed to add to cart')
+      setError(result.error || T.failed)
     }
-
-    setIsAddingToCart(false)
+    setBusy(false)
   }
 
+  const base = 'inline-flex min-h-[46px] w-full items-center justify-center gap-2 rounded-lg px-[22px] py-3 text-sm font-semibold tracking-[0.02em] transition-colors disabled:cursor-wait disabled:opacity-70'
+  const tone = onDark ? 'bg-white text-sc-ink-900 hover:bg-sc-ink-50' : 'bg-sc-ink-900 text-white hover:bg-sc-ink-700'
   return (
     <div className={className}>
-      <Button
-        onClick={handleAddToCart}
-        disabled={isAddingToCart || !variantId}
-        className={`${isAddingToCart || !variantId
-          ? '!bg-gray-300 text-sc-ink-500 cursor-not-allowed'
-          : '!bg-sc-cyan-500 text-white hover:bg-[#02A8B0]'
-          }`}
-      >
-        {isAddingToCart ? (
-          <>
-            <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
-              <circle
-                className="opacity-25"
-                cx="12"
-                cy="12"
-                r="10"
-                stroke="currentColor"
-                strokeWidth="4"
-                fill="none"
-              />
-              <path
-                className="opacity-75"
-                fill="currentColor"
-                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-              />
-            </svg>
-            <span>Adding...</span>
-          </>
-        ) : showSuccessMessage ? (
-          <>
-            <HiCheck className="w-5 h-5" />
-            <span>Added to Cart!</span>
-          </>
-        ) : (
-          <>
-            <HiShoppingBag className="w-5 h-5" />
-            <span>Add to Cart</span>
-          </>
-        )}
-      </Button>
-
-      {/* Error Message */}
-      {error && (
-        <motion.p
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -10 }}
-          className="text-red-500 text-sm mt-3"
-        >
-          {error}
-        </motion.p>
-      )}
+      <button type="button" onClick={handle} disabled={busy || !variantId} className={`${base} ${tone}`} aria-live="polite">
+        {busy ? T.adding : done ? `✓ ${T.added}` : label}
+      </button>
+      {error && <p className="mt-2 text-sm text-red-600">{error}</p>}
     </div>
   )
 }
