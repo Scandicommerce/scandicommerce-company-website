@@ -165,6 +165,26 @@ export async function GET() {
     }
   }
 
+  // Code-built pages have no Sanity document, so they are listed here.
+  // Norwegian-only until their English routes exist.
+  const CODE_ROUTES: { path: string; languages: Language[] }[] = [
+    { path: 'tjenester', languages: ['no'] },
+    { path: 'tjenester/shopify', languages: ['no'] },
+    { path: 'tjenester/migrering', languages: ['no'] },
+    { path: 'tjenester/b2b', languages: ['no'] },
+    { path: 'tjenester/utvikling', languages: ['no'] },
+    { path: 'nexuspos', languages: ['no'] },
+  ]
+  for (const route of CODE_ROUTES) {
+    for (const lang of route.languages) {
+      if (siteForLanguage(lang).key !== site.key) continue
+      const loc = absoluteUrl(lang, route.path)
+      if (seenLoc.has(loc)) continue
+      seenLoc.add(loc)
+      entries.push(['  <url>', `    <loc>${escapeXml(loc)}</loc>`, '  </url>'].join('\n'))
+    }
+  }
+
   const xml = [
     '<?xml version="1.0" encoding="UTF-8"?>',
     `<urlset xmlns="${SITEMAP_NS}" xmlns:xhtml="${XHTML_NS}">`,
