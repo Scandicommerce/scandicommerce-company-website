@@ -152,12 +152,12 @@ export const navigationNo: NavItem[] = [
         title: 'Partnere',
         items: [
           { label: 'Alle partnere', href: '/partnere', description: '14 partnerselskaper' },
-          { label: 'Bli partner', href: '/partnere/bli-partner', live: false },
+          { label: 'Bli partner', href: '/partnere/bli-partner' },
         ],
       },
     ],
   },
-  { label: 'Agentisk handel', href: '/agentisk-handel', live: false },
+  { label: 'Agentisk handel', href: '/agentisk-handel' },
   { label: 'NexusPOS', href: '/nexuspos' },
   { label: 'Kundecaser', href: '/kundecaser' },
 ]

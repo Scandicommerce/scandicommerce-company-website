@@ -7,10 +7,10 @@ const dataset = process.env.TARGET_DATASET || 'production'
 const client = getCliClient({ apiVersion: '2025-02-19' }).withConfig({ dataset })
 
 const L: Record<string, Record<string, string>> = {
-  en: { services: 'Services', deliveries: 'Services', overview: 'Services overview', overviewDesc: 'Everything we deliver and which package it belongs to', store: 'Shopify store', migrate: 'Migration to Shopify', b2b: 'B2B and order portal', dev: 'Development and custom work', packages: 'Packages', allPackages: 'All packages', partners: 'Partners', work: 'Case studies', about: 'About', contact: 'Contact' },
-  sv: { services: 'Tjänster', deliveries: 'Leveranser', overview: 'Översikt över tjänster', overviewDesc: 'Allt vi levererar och vilket paket det ingår i', store: 'Shopify-butik', migrate: 'Migrering till Shopify', b2b: 'B2B och orderportal', dev: 'Utveckling och skräddarsytt', packages: 'Paket', allPackages: 'Alla paket', partners: 'Partners', work: 'Kundcase', about: 'Om oss', contact: 'Kontakt' },
-  da: { services: 'Tjenester', deliveries: 'Leverancer', overview: 'Oversigt over tjenester', overviewDesc: 'Alt det, vi leverer, og hvilken pakke det hører til', store: 'Shopify-butik', migrate: 'Migrering til Shopify', b2b: 'B2B og ordreportal', dev: 'Udvikling og skræddersyet', packages: 'Pakker', allPackages: 'Alle pakker', partners: 'Partnere', work: 'Kundecases', about: 'Om os', contact: 'Kontakt' },
-  de: { services: 'Leistungen', deliveries: 'Leistungen', overview: 'Leistungen im Überblick', overviewDesc: 'Alles, was wir liefern, und zu welchem Paket es gehört', store: 'Shopify-Shop', migrate: 'Migration zu Shopify', b2b: 'B2B und Bestellportal', dev: 'Entwicklung und Individuelles', packages: 'Pakete', allPackages: 'Alle Pakete', partners: 'Partner', work: 'Kundenprojekte', about: 'Über uns', contact: 'Kontakt' },
+  en: { services: 'Services', deliveries: 'Services', overview: 'Services overview', overviewDesc: 'Everything we deliver and which package it belongs to', store: 'Shopify store', migrate: 'Migration to Shopify', b2b: 'B2B and order portal', dev: 'Development and custom work', packages: 'Packages', allPackages: 'All packages', partners: 'Partners', allPartners: 'All partners', becomePartner: 'Become a partner', agentic: 'Agentic commerce', work: 'Case studies', about: 'About', contact: 'Contact' },
+  sv: { services: 'Tjänster', deliveries: 'Leveranser', overview: 'Översikt över tjänster', overviewDesc: 'Allt vi levererar och vilket paket det ingår i', store: 'Shopify-butik', migrate: 'Migrering till Shopify', b2b: 'B2B och orderportal', dev: 'Utveckling och skräddarsytt', packages: 'Paket', allPackages: 'Alla paket', partners: 'Partners', allPartners: 'Alla partners', becomePartner: 'Bli partner', agentic: 'Agentisk handel', work: 'Kundcase', about: 'Om oss', contact: 'Kontakt' },
+  da: { services: 'Tjenester', deliveries: 'Leverancer', overview: 'Oversigt over tjenester', overviewDesc: 'Alt det, vi leverer, og hvilken pakke det hører til', store: 'Shopify-butik', migrate: 'Migrering til Shopify', b2b: 'B2B og ordreportal', dev: 'Udvikling og skræddersyet', packages: 'Pakker', allPackages: 'Alle pakker', partners: 'Partnere', allPartners: 'Alle partnere', becomePartner: 'Bliv partner', agentic: 'Agentisk handel', work: 'Kundecases', about: 'Om os', contact: 'Kontakt' },
+  de: { services: 'Leistungen', deliveries: 'Leistungen', overview: 'Leistungen im Überblick', overviewDesc: 'Alles, was wir liefern, und zu welchem Paket es gehört', store: 'Shopify-Shop', migrate: 'Migration zu Shopify', b2b: 'B2B und Bestellportal', dev: 'Entwicklung und Individuelles', packages: 'Pakete', allPackages: 'Alle Pakete', partners: 'Partner', allPartners: 'Alle Partner', becomePartner: 'Partner werden', agentic: 'Agentic Commerce', work: 'Kundenprojekte', about: 'Über uns', contact: 'Kontakt' },
 }
 
 const menu = (t: Record<string, string>) => [
@@ -29,8 +29,12 @@ const menu = (t: Record<string, string>) => [
       { _type: 'menuLink', _key: 'pk-enterprise', label: 'Enterprise', href: '/services/all-packages/enterprise', indent: true },
     ] },
   ] },
+  { _type: 'menuItem', _key: 'agentic', label: t.agentic, href: '/agentic-commerce' },
   { _type: 'menuItem', _key: 'nexuspos', label: 'NexusPOS', href: '/nexuspos' },
-  { _type: 'menuItem', _key: 'partners', label: t.partners, href: '/partners' },
+  { _type: 'menuItem', _key: 'partners', label: t.partners, columns: [{ _type: 'menuColumn', _key: 'partners-col', title: t.partners, items: [
+    { _type: 'menuLink', _key: 'pa-all', label: t.allPartners, href: '/partners' },
+    { _type: 'menuLink', _key: 'pa-become', label: t.becomePartner, href: '/partners/become-a-partner' },
+  ] }] },
   { _type: 'menuItem', _key: 'work', label: t.work, href: '/work' },
   { _type: 'menuItem', _key: 'about', label: t.about, href: '/about' },
   { _type: 'menuItem', _key: 'contact', label: t.contact, href: '/contact' },
