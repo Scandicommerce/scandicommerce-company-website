@@ -1,116 +1,56 @@
 'use client'
 
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
+import { ui } from '@/components/integrations/labels'
 
 interface OrderFormData {
   title?: string
   description?: string
 }
 
-interface OrderFormProps {
-  orderForm?: OrderFormData
-}
+const HUBSPOT_SRC = 'https://js.hsforms.net/forms/embed/49119369.js'
 
-export default function OrderForm({ orderForm }: OrderFormProps) {
-  const title = orderForm?.title || 'Order Vipps Quick Checkout here'
-  const description = orderForm?.description || 'Fill out the order form and we will respond via email'
+/* HubSpot renders into .hs-form-frame; these arbitrary variants restyle its inputs like BookingSection's. */
+const FORM =
+  '[&_.hs-form-field]:mb-4 ' +
+  '[&_.hs-form-field>label]:mb-1.5 [&_.hs-form-field>label]:block [&_.hs-form-field>label]:text-[13px] [&_.hs-form-field>label]:font-semibold [&_.hs-form-field>label]:text-sc-ink-700 ' +
+  '[&_.hs-input]:w-full [&_.hs-input]:rounded-lg [&_.hs-input]:border [&_.hs-input]:border-sc-ink-200 [&_.hs-input]:bg-white [&_.hs-input]:px-3.5 [&_.hs-input]:py-2.5 [&_.hs-input]:text-[15px] [&_.hs-input]:text-sc-ink-900 [&_.hs-input]:outline-none [&_.hs-input]:transition-colors ' +
+  '[&_.hs-input:focus]:border-sc-cyan-500 [&_.hs-input:focus]:ring-2 [&_.hs-input:focus]:ring-sc-cyan-500/20 ' +
+  '[&_textarea.hs-input]:min-h-[140px] [&_textarea.hs-input]:resize-none ' +
+  '[&_.hs-button]:inline-flex [&_.hs-button]:min-h-[46px] [&_.hs-button]:w-full [&_.hs-button]:cursor-pointer [&_.hs-button]:items-center [&_.hs-button]:justify-center [&_.hs-button]:rounded-lg [&_.hs-button]:border-0 [&_.hs-button]:bg-sc-ink-900 [&_.hs-button]:px-[22px] [&_.hs-button]:py-3 [&_.hs-button]:text-sm [&_.hs-button]:font-semibold [&_.hs-button]:tracking-[0.02em] [&_.hs-button]:text-white [&_.hs-button]:transition-colors [&_.hs-button:hover]:bg-sc-ink-700 ' +
+  '[&_.hs-error-msgs]:mt-1.5 [&_.hs-error-msgs]:list-none [&_.hs-error-msgs]:p-0 [&_.hs-error-msgs]:text-[13px] [&_.hs-error-msgs]:text-red-700 ' +
+  '[&_.submitted-message]:rounded-lg [&_.submitted-message]:border [&_.submitted-message]:border-sc-cyan-200 [&_.submitted-message]:bg-sc-cyan-50 [&_.submitted-message]:p-4 [&_.submitted-message]:text-sm [&_.submitted-message]:text-sc-cyan-700'
+
+/** The HubSpot order form in a hairline card. The embed script and form ids are unchanged. */
+export default function OrderForm({ orderForm, lang = 'no' }: { orderForm?: OrderFormData; lang?: string }) {
+  const isNo = lang === 'no'
+  const title = orderForm?.title || (isNo ? 'Bestill Vipps Hurtigkasse her' : 'Order Vipps Quick Checkout here')
+  const description = orderForm?.description || (isNo ? 'Fyll ut bestillingsskjemaet, så svarer vi på e-post.' : 'Fill out the order form and we will respond via email.')
 
   useEffect(() => {
-    // Load HubSpot forms script
     const script = document.createElement('script')
-    script.src = 'https://js.hsforms.net/forms/embed/49119369.js'
+    script.src = HUBSPOT_SRC
     script.defer = true
     document.body.appendChild(script)
 
     return () => {
-      // Cleanup script on unmount
-      const existingScript = document.querySelector('script[src="https://js.hsforms.net/forms/embed/49119369.js"]')
-      if (existingScript) {
-        existingScript.remove()
-      }
+      const existing = document.querySelector(`script[src="${HUBSPOT_SRC}"]`)
+      if (existing) existing.remove()
     }
   }, [])
 
   return (
-    <section id="order-form" className="bg-[#03C1CA] py-16 lg:py-24">
-      <div className="section_container mx-auto page-padding-x">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-10">
-            <h2 className="text-[5.3vw] xs:text-[3.5vw] sm:text-[3.2vw] md:text-[3.2vw] lg:text-[28px] xl:text-[34px] font-bold text-white mb-4">
-              {title}
-            </h2>
-            <p className="text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[16px] xl:text-[18px] text-white/90">
-              {description}
-            </p>
-          </div>
-
-          <div className="bg-white p-8 lg:p-12 shadow-lg">
-            {/* HubSpot Form Embed */}
-            <div 
-              className="hs-form-frame hubspot-form-container" 
-              data-region="na1" 
-              data-form-id="10642b03-8cb9-4e6b-8fee-b000f8ccd434" 
-              data-portal-id="49119369"
-            />
-          </div>
+    <section id="order-form" className="scroll-mt-24 bg-sc-ink-50 py-16 lg:py-20">
+      <div className={`${ui.container} grid grid-cols-1 items-start gap-8 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-16`}>
+        <div className="flex flex-col gap-2.5">
+          <div className={ui.eyebrow}>{isNo ? 'Bestilling' : 'Order'}</div>
+          <h2 className={ui.h2}>{title}</h2>
+          <p className="m-0 text-lg leading-relaxed text-sc-ink-600">{description}</p>
+        </div>
+        <div className="rounded-lg border border-sc-ink-100 bg-white p-6 lg:p-8">
+          <div className={`hs-form-frame ${FORM}`} data-region="na1" data-form-id="10642b03-8cb9-4e6b-8fee-b000f8ccd434" data-portal-id="49119369" />
         </div>
       </div>
-
-      <style jsx global>{`
-        .hubspot-form-container .hs-form-field {
-          margin-bottom: 1.5rem;
-        }
-        .hubspot-form-container .hs-form-field label {
-          display: block;
-          font-size: 1rem;
-          font-weight: 500;
-          color: #374151;
-          margin-bottom: 0.75rem;
-        }
-        .hubspot-form-container .hs-input {
-          width: 100%;
-          padding: 1.25rem;
-          background-color: #F5F5F5;
-          font-size: 1rem;
-          color: black;
-          outline: none;
-          border: none;
-          transition: all 0.2s;
-        }
-        .hubspot-form-container .hs-input:focus {
-          ring: 2px;
-          ring-color: #03C1CA;
-        }
-        .hubspot-form-container textarea.hs-input {
-          min-height: 150px;
-          resize: none;
-        }
-        .hubspot-form-container .hs-button {
-          width: 100%;
-          background-color: #03C1CA;
-          color: white;
-          padding: 1.25rem;
-          font-weight: 600;
-          font-size: 1.125rem;
-          cursor: pointer;
-          transition: background-color 0.2s;
-          border: none;
-        }
-        .hubspot-form-container .hs-button:hover {
-          background-color: #02a8b0;
-        }
-        .hubspot-form-container .hs-error-msgs {
-          color: #ef4444;
-          font-size: 0.875rem;
-          margin-top: 0.5rem;
-        }
-        .hubspot-form-container .submitted-message {
-          text-align: center;
-          padding: 2rem;
-          font-size: 1.125rem;
-          color: #03C1CA;
-        }
-      `}</style>
     </section>
   )
 }

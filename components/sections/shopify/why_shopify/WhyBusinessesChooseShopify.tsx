@@ -1,4 +1,5 @@
-'use client'
+import { ui } from '@/components/integrations/labels'
+import { Bullet } from '@/components/sections/shopify/shopify_x_PIM/IntegratingPIM'
 
 interface Reason {
   title?: string
@@ -12,80 +13,55 @@ interface WhyBusinessesChooseData {
   reasons?: Reason[]
 }
 
-interface WhyBusinessesChooseShopifyProps {
-  whyBusinessesChoose?: WhyBusinessesChooseData
+/** "Category: detail" bullets keep the category bold. */
+function BulletText({ text }: { text: string }) {
+  const idx = text.indexOf(':')
+  if (idx > 0 && idx < 40 && !text.includes('http')) {
+    return (
+      <>
+        <strong className="font-semibold text-white">{text.slice(0, idx + 1)}</strong>
+        {text.slice(idx + 1)}
+      </>
+    )
+  }
+  return <>{text}</>
 }
 
-export default function WhyBusinessesChooseShopify({ whyBusinessesChoose }: WhyBusinessesChooseShopifyProps) {
-  const title = whyBusinessesChoose?.title
-  const reasons = whyBusinessesChoose?.reasons || []
-
+/** Ink section: reasons as a numbered two-column list over hairlines. */
+export default function WhyBusinessesChooseShopify({ whyBusinessesChoose, lang = 'no' }: { whyBusinessesChoose?: WhyBusinessesChooseData; lang?: string }) {
+  const reasons = (whyBusinessesChoose?.reasons ?? []).filter((r) => r?.title || r?.description)
+  if (!whyBusinessesChoose?.title && reasons.length === 0) return null
   return (
-    <section className="bg-[#222222] py-16 lg:py-24">
-      <div className="section_container mx-auto page-padding-x">
-        <div className="max-w-5xl mx-auto">
-          {title && (
-            <h2 className="text-[5.3vw] xs:text-[3.5vw] sm:text-[3.2vw] md:text-[3.2vw] lg:text-[28px] xl:text-[34px] font-bold text-white text-center mb-12 lg:mb-16">
-              {title}
-            </h2>
-          )}
-
-          {reasons.length > 0 && (
-            <div className="space-y-6 lg:space-y-8">
-              {reasons.map((reason, index) => (
-                <div
-                  key={index}
-                  className="bg-[#2A2A2A] rounded-lg p-6 lg:p-8"
-                >
-                  <div className="space-y-4">
-                    {reason.title && (
-                      <h3 className="text-[4.3vw] xs:text-[2.6vw] sm:text-[2.5vw] md:text-[2.2vw] lg:text-[18px] xl:text-[24px] font-bold text-[#03C1CA]">
-                        {index + 1}. {reason.title}
-                      </h3>
-                    )}
-                    {reason.description && (
-                      <p className="text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[16px] xl:text-[18px] text-white leading-relaxed">
-                        {reason.description}
-                      </p>
-                    )}
-                    {reason.bulletPoints && reason.bulletPoints.length > 0 && (
-                      <ul className="list-disc list-inside space-y-2 ml-4">
-                        {reason.bulletPoints.map((point, pointIndex) => {
-                          // Check if the point has a bold category (format: "Category: description")
-                          const parts = point.split(':')
-                          if (parts.length === 2) {
-                            return (
-                              <li
-                                key={pointIndex}
-                                className="text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[16px] xl:text-[18px] text-white leading-relaxed"
-                              >
-                                <strong className="font-bold">{parts[0]}:</strong>
-                                {parts[1]}
-                              </li>
-                            )
-                          }
-                          return (
-                            <li
-                              key={pointIndex}
-                              className="text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[16px] xl:text-[18px] text-white leading-relaxed"
-                            >
-                              {point}
-                            </li>
-                          )
-                        })}
-                      </ul>
-                    )}
-                    {reason.concludingParagraph && (
-                      <p className="text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[16px] xl:text-[18px] text-white leading-relaxed mt-4">
-                        {reason.concludingParagraph}
-                      </p>
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
+    <section className="bg-sc-ink-900 py-16 text-white lg:py-20">
+      <div className={`${ui.container} flex flex-col gap-10`}>
+        <div className="flex max-w-[680px] flex-col gap-2.5">
+          <div className={ui.eyebrow}>{lang === 'no' ? 'Hvorfor Shopify' : 'Why Shopify'}</div>
+          {whyBusinessesChoose?.title && <h2 className="text-[32px] font-bold leading-[1.25] tracking-[-0.02em] lg:text-[44px]">{whyBusinessesChoose.title}</h2>}
         </div>
+        {reasons.length > 0 && (
+          <ol className="m-0 grid list-none grid-cols-1 gap-8 p-0 lg:grid-cols-2 lg:gap-x-10 lg:gap-y-10">
+            {reasons.map((reason, i) => {
+              const bullets = (reason.bulletPoints ?? []).filter(Boolean)
+              return (
+                <li key={i} className="flex flex-col gap-3 border-t border-sc-ink-700 pt-5">
+                  <span className="font-mono text-[13px] text-sc-ink-400">{String(i + 1).padStart(2, '0')}</span>
+                  {reason.title && <h3 className="m-0 text-[20px] font-bold leading-snug tracking-[-0.01em] text-white">{reason.title}</h3>}
+                  {reason.description && <p className="m-0 text-[15px] leading-relaxed text-sc-ink-300">{reason.description}</p>}
+                  {bullets.length > 0 && (
+                    <ul className="m-0 flex list-none flex-col gap-2 p-0">
+                      {bullets.map((b, j) => (
+                        <Bullet key={j} dark>
+                          <BulletText text={b} />
+                        </Bullet>
+                      ))}
+                    </ul>
+                  )}
+                  {reason.concludingParagraph && <p className="m-0 text-[15px] leading-relaxed text-sc-ink-300">{reason.concludingParagraph}</p>}
+                </li>
+              )
+            })}
+          </ol>
+        )}
       </div>
     </section>
   )

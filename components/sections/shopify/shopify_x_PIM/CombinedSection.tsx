@@ -1,6 +1,7 @@
-'use client'
-
-import LocalizedLink from '@/components/ui/LocalizedLink'
+import { Faq } from '@/components/integrations/LinkBlocks'
+import { ui } from '@/components/integrations/labels'
+import { ImpactPanel, resolveHref } from './IntegratingPIM'
+import { ProseQuote } from './WhatIsPIM'
 
 interface Step {
   title?: string
@@ -45,210 +46,73 @@ interface CombinedSectionData {
 
 interface CombinedSectionProps {
   combinedSection?: CombinedSectionData
+  lang?: string
 }
 
-export default function CombinedSection({ combinedSection }: CombinedSectionProps) {
+/** Four blocks from one Sanity object: choosing a PIM, getting started, FAQ and the closing prose. */
+export default function CombinedSection({ combinedSection, lang = 'no' }: CombinedSectionProps) {
+  const isNo = lang === 'no'
   const choosingPim = combinedSection?.choosingPim
   const gettingStarted = combinedSection?.gettingStarted
   const faq = combinedSection?.faq
   const transformExperience = combinedSection?.transformExperience
 
-  const selectionCriteria = choosingPim?.selectionCriteria || []
-  const steps = gettingStarted?.steps || []
-  const faqItems = faq?.items || []
+  const steps = (gettingStarted?.steps ?? []).filter((s) => s?.title || s?.description)
+  const faqItems = (faq?.items ?? []).filter((f): f is { question: string; answer: string } => !!f?.question && !!f?.answer)
+  const stepCols = steps.length >= 4 ? 'lg:grid-cols-4' : 'lg:grid-cols-3'
 
   return (
-    <section className="bg-[#F8F8F8] py-16 lg:py-24">
-      <div className="section_container mx-auto page-padding-x">
-        {/* Choosing the Right PIM Section */}
-        {choosingPim && (
-          <div className="mb-16 lg:mb-24">
-            <div className="text-center mb-12 lg:mb-16">
-              {choosingPim.title && (
-                <h2 className="text-[5.3vw] xs:text-[3.5vw] sm:text-[3.2vw] md:text-[3.2vw] lg:text-[28px] xl:text-[34px] font-bold text-[#222222] mb-4">
-                  {choosingPim.title}
-                </h2>
-              )}
-              {choosingPim.description && (
-                <p className="text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[16px] xl:text-[18px] text-[#565454] max-w-5xl mx-auto">
-                  {choosingPim.description}
-                </p>
-              )}
+    <>
+      {choosingPim && (
+        <ImpactPanel
+          eyebrow={isNo ? 'Velg riktig PIM' : 'Choosing a PIM'}
+          title={choosingPim.title}
+          description={choosingPim.description}
+          leftTitle={choosingPim.leftColumnTitle}
+          leftDescription={choosingPim.leftColumnDescription}
+          points={choosingPim.selectionCriteria}
+          impactTitle={isNo ? 'Effekten' : 'The impact'}
+          impactParagraph1={choosingPim.impactParagraph1}
+          impactParagraph2={choosingPim.impactParagraph2}
+          linkText={choosingPim.linkText}
+          href={resolveHref(choosingPim.linkSlug, choosingPim.linkHref)}
+        />
+      )}
+
+      {gettingStarted && (gettingStarted.title || steps.length > 0) && (
+        <section className="bg-white py-16 lg:py-20">
+          <div className={`${ui.container} flex flex-col gap-10`}>
+            <div className="flex max-w-[680px] flex-col gap-2.5">
+              <div className={ui.eyebrow}>{isNo ? 'Kom i gang' : 'Getting started'}</div>
+              {gettingStarted.title && <h2 className={ui.h2}>{gettingStarted.title}</h2>}
+              {gettingStarted.description && <p className="m-0 text-lg leading-relaxed text-sc-ink-600">{gettingStarted.description}</p>}
             </div>
-
-            {/* Two Column Layout with wrapper */}
-            <div className="bg-white max-w-5xl mx-auto">
-              <div className="grid grid-cols-1 lg:grid-cols-2">
-                {/* Left Column - Cyan Background */}
-                <div className="bg-[#03C1CA] p-6 lg:p-8">
-                  {choosingPim.leftColumnTitle && (
-                    <h3 className="text-[4.3vw] xs:text-[2.6vw] sm:text-[2.5vw] md:text-[2.2vw] lg:text-[18px] xl:text-[24px] font-bold text-white mb-4">
-                      {choosingPim.leftColumnTitle}
-                    </h3>
-                  )}
-                  {choosingPim.leftColumnDescription && (
-                    <p className="text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[16px] xl:text-[18px] text-white/90 mb-6">
-                      {choosingPim.leftColumnDescription}
-                    </p>
-                  )}
-                  {selectionCriteria.length > 0 && (
-                    <ul className="space-y-4">
-                      {selectionCriteria.map((criterion, index) => (
-                        <li key={index} className="flex items-start text-white">
-                          <span className="mr-3 text-white">•</span>
-                          <span className="text-sm lg:text-base">{criterion}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                </div>
-
-                {/* Right Column - White Background */}
-                <div className="p-6 lg:p-8 flex flex-col justify-center">
-                  {choosingPim.impactParagraph1 && (
-                    <p className="text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[16px] xl:text-[18px] text-[#565454] mb-6">
-                      <span className="font-bold text-[#222222]">The Impact:</span>{' '}
-                      {choosingPim.impactParagraph1}
-                    </p>
-                  )}
-                  {choosingPim.impactParagraph2 && (
-                    <p className="text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[16px] xl:text-[18px] text-[#565454] mb-6">
-                      {choosingPim.impactParagraph2}
-                    </p>
-                  )}
-                  {choosingPim.linkText && (() => {
-                    const href = choosingPim.linkSlug ? `/${choosingPim.linkSlug}` : choosingPim.linkHref || '/contact'
-                    return href.startsWith('http') ? (
-                      <a href={href} target="_blank" rel="noopener noreferrer" className="text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[16px] xl:text-[18px] text-[#03C1CA] hover:underline font-medium">
-                        {choosingPim.linkText}
-                      </a>
-                    ) : (
-                      <LocalizedLink href={href} className="text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[16px] xl:text-[18px] text-[#03C1CA] hover:underline font-medium">
-                        {choosingPim.linkText}
-                      </LocalizedLink>
-                    )
-                  })()}
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Getting Started Section */}
-        {gettingStarted && (
-          <div className="mb-16 lg:mb-24 max-w-5xl mx-auto">
-            <div className="bg-[#03C1CA] p-8 lg:p-12">
-              <div className="text-center mb-12">
-                {gettingStarted.title && (
-                  <h2 className="text-[5.3vw] xs:text-[3.5vw] sm:text-[3.2vw] md:text-[3.2vw] lg:text-[28px] xl:text-[34px] font-bold text-white mb-4">
-                    {gettingStarted.title}
-                  </h2>
-                )}
-                {gettingStarted.description && (
-                  <p className="text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[16px] xl:text-[18px] text-white/90 max-w-5xl mx-auto">
-                    {gettingStarted.description}
-                  </p>
-                )}
-              </div>
-
-              {/* Steps Grid */}
-              {steps.length > 0 && (
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 lg:gap-6 mb-12">
-                  {steps.map((step, index) => (
-                    <div
-                      key={index}
-                      className="bg-[#1CD8E2] p-6"
-                    >
-                      <h3 className="text-[4.3vw] xs:text-[2.6vw] sm:text-[2.5vw] md:text-[2.2vw] lg:text-[18px] xl:text-[24px] font-semibold text-white mb-2">
-                        {index + 1}. {step.title}
-                      </h3>
-                      {step.description && (
-                        <p className="text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[16px] xl:text-[18px] text-white/90">
-                          {step.description}
-                        </p>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              )}
-
-              {/* Implementation Timeline Note */}
-              {gettingStarted.bottomNote && (
-                <p className="text-center text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[16px] xl:text-[18px] text-white max-w-5xl mx-auto">
-                  {gettingStarted.bottomNote}
-                </p>
-              )}
-            </div>
-          </div>
-        )}
-
-        {/* FAQ Section */}
-        {faq && faqItems.length > 0 && (
-          <div className="mb-16 lg:mb-24 max-w-5xl mx-auto">
-            {faq.title && (
-              <h2 className="text-[5.3vw] xs:text-[3.5vw] sm:text-[3.2vw] md:text-[3.2vw] lg:text-[28px] xl:text-[34px] font-bold text-[#222222] text-center mb-12 lg:mb-16">
-                {faq.title}
-              </h2>
+            {steps.length > 0 && (
+              <ol className={`m-0 grid list-none grid-cols-1 gap-6 p-0 sm:grid-cols-2 ${stepCols} lg:gap-8`}>
+                {steps.map((step, i) => (
+                  <li key={i} className="flex flex-col gap-3 border-t border-sc-ink-900 pt-5">
+                    <span className={ui.mono}>{String(i + 1).padStart(2, '0')}</span>
+                    {step.title && <h3 className="m-0 text-lg font-semibold leading-snug text-sc-ink-900">{step.title}</h3>}
+                    {step.description && <p className="m-0 text-[15px] leading-relaxed text-sc-ink-600">{step.description}</p>}
+                  </li>
+                ))}
+              </ol>
             )}
-
-            {/* FAQ Items */}
-            <div className="space-y-6">
-              {faqItems.map((item, index) => (
-                <div
-                  key={index}
-                  className="bg-white p-6 lg:p-8"
-                >
-                  {item.question && (
-                    <h3 className="text-[4.3vw] xs:text-[2.6vw] sm:text-[2.5vw] md:text-[2.2vw] lg:text-[18px] xl:text-[24px] font-semibold text-[#222222] mb-3">
-                      {item.question}
-                    </h3>
-                  )}
-                  {item.answer && (
-                    <p className="text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[16px] xl:text-[18px] text-[#565454] leading-relaxed">
-                      {item.answer}
-                    </p>
-                  )}
-                </div>
-              ))}
-            </div>
+            {gettingStarted.bottomNote && <p className="m-0 max-w-[760px] text-[15px] leading-relaxed text-sc-ink-500">{gettingStarted.bottomNote}</p>}
           </div>
-        )}
+        </section>
+      )}
 
-        {/* Transform Experience Section */}
-        {transformExperience && (
-          <div className="max-w-5xl mx-auto">
-            {transformExperience.title && (
-              <h2 className="text-[5.3vw] xs:text-[3.5vw] sm:text-[3.2vw] md:text-[3.2vw] lg:text-[28px] xl:text-[34px] font-bold text-[#222222] text-center mb-8">
-                {transformExperience.title}
-              </h2>
-            )}
+      {faqItems.length > 0 && <Faq heading={faq?.title || (isNo ? 'Vanlige spørsmål' : 'Frequently asked questions')} items={faqItems} />}
 
-            {/* Content */}
-            <div className="space-y-6 mb-8">
-              {transformExperience.paragraph1 && (
-                <p className="text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[16px] xl:text-[18px] text-[#565454] leading-relaxed">
-                  {transformExperience.paragraph1}
-                </p>
-              )}
-
-              {transformExperience.paragraph2 && (
-                <p className="text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[16px] xl:text-[18px] text-[#565454] leading-relaxed">
-                  {transformExperience.paragraph2}
-                </p>
-              )}
-            </div>
-
-            {/* Quote Block */}
-            {transformExperience.quoteText && (
-              <div className="bg-[#1DEFFA15] p-6 lg:p-8">
-                <p className="text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[16px] xl:text-[18px] text-[#565454]">
-                  &ldquo;{transformExperience.quoteText}&rdquo;
-                </p>
-              </div>
-            )}
-          </div>
-        )}
-      </div>
-    </section>
+      {transformExperience && (
+        <ProseQuote
+          eyebrow={isNo ? 'Resultatet' : 'The result'}
+          title={transformExperience.title}
+          paragraphs={[transformExperience.paragraph1, transformExperience.paragraph2]}
+          quote={transformExperience.quoteText ? { text: transformExperience.quoteText } : undefined}
+        />
+      )}
+    </>
   )
 }

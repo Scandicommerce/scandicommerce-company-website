@@ -1,4 +1,4 @@
-'use client'
+import { ui } from '@/components/integrations/labels'
 
 interface AISolution {
   title?: string
@@ -11,59 +11,30 @@ interface ShopifyAiData {
   aiSolutions?: AISolution[]
 }
 
-interface ShopifyAIProps {
-  shopifyAi?: ShopifyAiData
-}
-
-export default function ShopifyAI({ shopifyAi }: ShopifyAIProps) {
-  const title = shopifyAi?.title
-  const description = shopifyAi?.description
-  const aiSolutions = shopifyAi?.aiSolutions || []
-
+/** AI in Shopify: numbered steps over a hairline on the ink-50 surface. */
+export default function ShopifyAI({ shopifyAi, lang = 'no' }: { shopifyAi?: ShopifyAiData; lang?: string }) {
+  const solutions = (shopifyAi?.aiSolutions ?? []).filter((s) => s?.title || s?.description)
+  if (!shopifyAi?.title && solutions.length === 0) return null
+  const cols = solutions.length >= 4 && solutions.length % 3 !== 0 ? 'lg:grid-cols-4' : 'lg:grid-cols-3'
   return (
-    <section className="bg-white py-16 lg:py-24">
-      <div className="section_container mx-auto page-padding-x">
-        <div className="max-w-5xl mx-auto">
-          {title && (
-            <h2 className="text-[5.3vw] xs:text-[3.5vw] sm:text-[3.2vw] md:text-[3.2vw] lg:text-[28px] xl:text-[34px] font-bold text-[#222222] text-center mb-4 lg:mb-6">
-              {title}
-            </h2>
-          )}
-          {description && (
-            <p className="text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[16px] xl:text-[18px] text-[#565454] text-center mb-12 lg:mb-16 max-w-3xl mx-auto">
-              {description}
-            </p>
-          )}
-
-          {aiSolutions.length > 0 && (
-            <div className="space-y-6 lg:space-y-8">
-              {aiSolutions.map((solution, index) => (
-                <div
-                  key={index}
-                  className="bg-[#F8F8F8] rounded-lg p-6 lg:p-8 flex items-start gap-6"
-                >
-                  <div className="flex-shrink-0 w-9 h-9 xs:w-12 xs:h-12 sm:w-16 sm:h-16 bg-[#03C1CA] rounded-full flex items-center justify-center">
-                    <span className="text-white font-bold text-lg xs:text-xl sm:text-2xl lg:text-3xl">
-                      {index + 1}
-                    </span>
-                  </div>
-                  <div className="flex-1">
-                    {solution.title && (
-                      <h3 className="text-[4.3vw] xs:text-[2.6vw] sm:text-[2.5vw] md:text-[2.2vw] lg:text-[18px] xl:text-[24px] font-bold text-[#222222] mb-3">
-                        {solution.title}
-                      </h3>
-                    )}
-                    {solution.description && (
-                      <p className="text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[16px] xl:text-[18px] text-[#565454] leading-relaxed">
-                        {solution.description}
-                      </p>
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
+    <section className="bg-sc-ink-50 py-16 lg:py-20">
+      <div className={`${ui.container} flex flex-col gap-10`}>
+        <div className="flex max-w-[680px] flex-col gap-2.5">
+          <div className={ui.eyebrow}>{lang === 'no' ? 'Shopify og KI' : 'Shopify and AI'}</div>
+          {shopifyAi?.title && <h2 className={ui.h2}>{shopifyAi.title}</h2>}
+          {shopifyAi?.description && <p className="m-0 text-lg leading-relaxed text-sc-ink-600">{shopifyAi.description}</p>}
         </div>
+        {solutions.length > 0 && (
+          <ol className={`m-0 grid list-none grid-cols-1 gap-6 p-0 sm:grid-cols-2 ${cols} lg:gap-8`}>
+            {solutions.map((s, i) => (
+              <li key={i} className="flex flex-col gap-3 border-t border-sc-ink-900 pt-5">
+                <span className={ui.mono}>{String(i + 1).padStart(2, '0')}</span>
+                {s.title && <h3 className="m-0 text-lg font-semibold leading-snug text-sc-ink-900">{s.title}</h3>}
+                {s.description && <p className="m-0 text-[15px] leading-relaxed text-sc-ink-600">{s.description}</p>}
+              </li>
+            ))}
+          </ol>
+        )}
       </div>
     </section>
   )

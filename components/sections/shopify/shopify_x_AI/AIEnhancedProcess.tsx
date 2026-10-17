@@ -1,4 +1,4 @@
-'use client'
+import { ui } from '@/components/integrations/labels'
 
 interface ProcessStep {
   title?: string
@@ -10,52 +10,28 @@ interface AiEnhancedProcessData {
   processSteps?: ProcessStep[]
 }
 
-interface AIEnhancedProcessProps {
-  aiEnhancedProcess?: AiEnhancedProcessData
-}
-
-export default function AIEnhancedProcess({ aiEnhancedProcess }: AIEnhancedProcessProps) {
-  const title = aiEnhancedProcess?.title
-  const processSteps = aiEnhancedProcess?.processSteps || []
-
+/** Process as numbered steps: mono numbers over a hairline, like HowWeWork. */
+export default function AIEnhancedProcess({ aiEnhancedProcess, lang = 'no' }: { aiEnhancedProcess?: AiEnhancedProcessData; lang?: string }) {
+  const steps = (aiEnhancedProcess?.processSteps ?? []).filter((s) => s?.title || s?.description)
+  if (!aiEnhancedProcess?.title && steps.length === 0) return null
+  const cols = steps.length >= 4 && steps.length % 3 !== 0 ? 'lg:grid-cols-4' : 'lg:grid-cols-3'
   return (
-    <section className="bg-white py-16 lg:py-24">
-      <div className="section_container mx-auto page-padding-x">
-        {/* Header */}
-        <div className="text-center mb-12 lg:mb-16">
-          {title && (
-            <h2 className="text-[5.3vw] xs:text-[3.5vw] sm:text-[3.2vw] md:text-[3.2vw] lg:text-[28px] xl:text-[34px] font-bold text-[#222222] mb-4">
-              {title}
-            </h2>
-          )}
+    <section className="bg-sc-ink-50 py-16 lg:py-20">
+      <div className={`${ui.container} flex flex-col gap-10`}>
+        <div className="flex max-w-[680px] flex-col gap-2.5">
+          <div className={ui.eyebrow}>{lang === 'no' ? 'Prosess' : 'Process'}</div>
+          {aiEnhancedProcess?.title && <h2 className={ui.h2}>{aiEnhancedProcess.title}</h2>}
         </div>
-
-        {/* Process Steps */}
-        {processSteps.length > 0 && (
-          <div className="max-w-3xl mx-auto space-y-8">
-            {processSteps.map((step, index) => (
-              <div key={index} className="flex items-start gap-6">
-                {/* Step Number */}
-                <div className="flex-shrink-0 w-9 h-9 sm:w-12 sm:h-12 rounded-full bg-[#03C1CA] flex items-center justify-center">
-                  <span className="text-white font-bold text-lg">{index + 1}</span>
-                </div>
-
-                {/* Step Content */}
-                <div className="flex-1 pt-2">
-                  {step.title && (
-                    <h3 className="text-[4.3vw] xs:text-[2.6vw] sm:text-[2.5vw] md:text-[2.2vw] lg:text-[18px] xl:text-[24px] font-semibold text-[#222222] mb-2">
-                      {step.title}
-                    </h3>
-                  )}
-                  {step.description && (
-                    <p className="text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[16px] xl:text-[18px] text-[#565454] leading-relaxed">
-                      {step.description}
-                    </p>
-                  )}
-                </div>
-              </div>
+        {steps.length > 0 && (
+          <ol className={`m-0 grid list-none grid-cols-1 gap-6 p-0 sm:grid-cols-2 ${cols} lg:gap-8`}>
+            {steps.map((step, i) => (
+              <li key={i} className="flex flex-col gap-3 border-t border-sc-ink-900 pt-5">
+                <span className={ui.mono}>{String(i + 1).padStart(2, '0')}</span>
+                {step.title && <h3 className="m-0 text-lg font-semibold leading-snug text-sc-ink-900">{step.title}</h3>}
+                {step.description && <p className="m-0 text-[15px] leading-relaxed text-sc-ink-600">{step.description}</p>}
+              </li>
             ))}
-          </div>
+          </ol>
         )}
       </div>
     </section>

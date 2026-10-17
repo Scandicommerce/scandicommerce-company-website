@@ -1,6 +1,9 @@
 'use client'
 
-import LocalizedLink from '@/components/ui/LocalizedLink'
+import { usePathname } from 'next/navigation'
+import { useLanguage } from '@/contexts/LanguageContext'
+import { isLocaleId } from '@/sanity/lib/languages'
+import { CtaBand } from '@/components/integrations/LinkBlocks'
 
 interface CTAData {
   title?: string
@@ -14,46 +17,27 @@ interface CTAProps {
   cta?: CTAData
 }
 
-export default function CTA({ cta }: CTAProps) {
-  const title = cta?.title
-  const description = cta?.description
-  const buttonText = cta?.buttonText
-  const buttonHref = cta?.buttonSlug ? `/${cta.buttonSlug}` : cta?.buttonLink || '/contact'
-  const isExternal = buttonHref.startsWith('http')
+const LOCALE_PREFIX = /^\/(en|no|sv|da|de)(\/|$)/i
 
-  return (
-    <section className="bg-white py-16 lg:py-24">
-      <div className="section_container mx-auto page-padding-x">
-        <div className="text-center max-w-5xl mx-auto">
-          {title && (
-            <h2 className="text-[5.3vw] xs:text-[3.5vw] sm:text-[3.2vw] md:text-[3.2vw] lg:text-[28px] xl:text-[34px] font-bold text-[#222222] mb-6">
-              {title}
-            </h2>
-          )}
-          {description && (
-            <p className="text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[16px] xl:text-[18px] text-[#565454] mb-8">
-              {description}
-            </p>
-          )}
-          {buttonText && (isExternal ? (
-            <a
-              href={buttonHref}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-block bg-[#03C1CA] text-white px-8 py-4 font-medium hover:bg-[#03C1CA]/90 transition-colors"
-            >
-              {buttonText}
-            </a>
-          ) : (
-            <LocalizedLink
-              href={buttonHref}
-              className="inline-block bg-[#03C1CA] text-white px-8 py-4 font-medium hover:bg-[#03C1CA]/90 transition-colors"
-            >
-              {buttonText}
-            </LocalizedLink>
-          ))}
-        </div>
-      </div>
-    </section>
-  )
+/**
+ * Shared closing CTA for the Shopify sub-pages (PIM, AI, Why Shopify, Vipps),
+ * on the CtaBand the integrations pages use. The href is localised the same
+ * way LocalizedLink does it, so /en/... stays in English.
+ */
+export default function CTA({ cta }: CTAProps) {
+  const { localizedHref } = useLanguage()
+  const pathname = usePathname() || '/'
+  const title = cta?.title
+  const buttonText = cta?.buttonText
+  if (!title || !buttonText) return null
+
+  const raw = cta?.buttonSlug ? `/${cta.buttonSlug}` : cta?.buttonLink || '/contact'
+  let href = localizedHref(raw)
+  const seg = pathname.split('/')[1]?.toLowerCase() ?? ''
+  const prefix = seg && isLocaleId(seg) ? seg : null
+  if (prefix && href.startsWith('/') && !href.startsWith('//') && !LOCALE_PREFIX.test(href) && !href.startsWith('/api/')) {
+    href = href === '/' ? `/${prefix}` : `/${prefix}${href}`
+  }
+
+  return <CtaBand heading={title} text={cta?.description} buttonLabel={buttonText} buttonHref={href} />
 }
