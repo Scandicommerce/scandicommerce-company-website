@@ -50,11 +50,11 @@ export function PartnersPageSectionRenderer({ sections, lang = 'no' }: { section
             )
           }
           case 'partnersPageWhyOurPartnershipSection':
-            return <HowWeChoose key={_key} title={(rest as { title?: string }).title} contactHref={contactHref} />
+            return <HowWeChoose key={_key} title={(rest as { title?: string }).title} contactHref={contactHref} lang={lang} />
           case 'partnersPagePartnersGridSection':
             return (
               <div key={_key}>
-                <CorePartners partners={partners} />
+                <CorePartners partners={partners} lang={lang} />
                 <PartnerCatalog partners={partners} lang={lang} contactHref={contactHref} />
               </div>
             )

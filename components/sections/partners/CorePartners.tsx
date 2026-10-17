@@ -3,7 +3,8 @@ import { categoryTitle, type PartnerEntry } from '@/lib/partnersCatalog'
 import PartnerLogo from './PartnerLogo'
 
 /** The partners we build nearly everything with: dark cards, horizontal scroll on phones. */
-export default function CorePartners({ partners }: { partners: PartnerEntry[] }) {
+export default function CorePartners({ partners, lang = 'no' }: { partners: PartnerEntry[]; lang?: string }) {
+  const isNo = lang === 'no'
   const core = partners.filter((p) => p.core)
   if (core.length === 0) return null
   return (
@@ -11,10 +12,10 @@ export default function CorePartners({ partners }: { partners: PartnerEntry[] })
       <div className={ui.container}>
         <div className="mb-8 flex flex-col gap-4 lg:mb-10 lg:flex-row lg:items-end lg:justify-between lg:gap-8">
           <div className="flex flex-col gap-2.5">
-            <div className={ui.eyebrow}>Kjernepartnere</div>
-            <h2 className={ui.h2}>De vi bygger nesten alt sammen med</h2>
+            <div className={ui.eyebrow}>{isNo ? 'Kjernepartnere' : 'Core partners'}</div>
+            <h2 className={ui.h2}>{isNo ? 'De vi bygger nesten alt sammen med' : 'The partners we build almost everything with'}</h2>
           </div>
-          <p className="m-0 max-w-[520px] text-base leading-relaxed text-sc-ink-600 lg:text-lg">Dypere samarbeid enn en partnerstatus: delt produktutvikling, direkte linjer og felles prosjekter.</p>
+          <p className="m-0 max-w-[520px] text-base leading-relaxed text-sc-ink-600 lg:text-lg">{isNo ? 'Dypere samarbeid enn en partnerstatus: delt produktutvikling, direkte linjer og felles prosjekter.' : 'Deeper than a partner badge: shared product development, direct lines and joint projects.'}</p>
         </div>
       </div>
       <div className="mx-auto max-w-[1100px] lg:px-8">
