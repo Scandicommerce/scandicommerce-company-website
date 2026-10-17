@@ -450,7 +450,18 @@
       "newPath": "legal/app-privacy-policy",
       "oldPublicPath": "/legal/app-privacy-policy",
       "newPublicPath": "/legal/app-privacy-policy",
-      "group": null
+      "group": "legal-app-privacy-policy"
+    },
+    {
+      "id": "1f035874-4200-4401-a12e-432be2c1eb33",
+      "type": "legalPage",
+      "language": "no",
+      "oldSlug": "app-privacy-policy",
+      "newSlug": "app-privacy-policy",
+      "newPath": "legal/app-privacy-policy",
+      "oldPublicPath": "/legal/app-privacy-policy",
+      "newPublicPath": "/legal/app-privacy-policy",
+      "group": "legal-app-privacy-policy"
     },
     {
       "id": "65f79227-e195-4205-af85-8a672976a04e",
@@ -1764,6 +1775,10 @@
       "en": "work",
       "no": "kundecaser",
       "sv": "work"
+    },
+    "legal-app-privacy-policy": {
+      "en": "legal/app-privacy-policy",
+      "no": "legal/app-privacy-policy"
     }
   }
 }

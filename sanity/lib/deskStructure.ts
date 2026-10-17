@@ -8,455 +8,161 @@ import {
   EarthGlobeIcon,
   LinkIcon,
   DocumentTextIcon,
+  CaseIcon,
+  TagIcon,
+  BasketIcon,
+  UsersIcon,
 } from '@sanity/icons'
 import { PageListWithDelete } from '@/sanity/components/PageListWithDelete'
 import { CalendlySetup } from '@/sanity/components/CalendlySetup'
 import { languages } from '@/sanity/lib/languages'
 
-function pageListWithDelete(
-  S: StructureBuilder,
-  schemaType: string,
-  title: string
-) {
+const API_VERSION = '2025-02-19'
+
+/**
+ * One document type, one folder, with the language picked first so no list
+ * mixes five languages. The "All languages" entry stays for bulk work.
+ */
+function byLanguage(S: StructureBuilder, schemaType: string, title: string) {
   return S.listItem()
     .title(title)
     .schemaType(schemaType)
     .child(
-      S.component(PageListWithDelete)
-        .options({ schemaType, title })
-        .id(`pages-${schemaType}`)
-    )
-}
-
-/** Blog posts grouped by language; each folder uses default list so clicking a post opens it in the next pane */
-const DEFAULT_LANG_ID = 'en'
-function blogPostsByLanguage(S: StructureBuilder) {
-  return S.listItem()
-    .title('Blog Posts')
-    .schemaType('blogPost')
-    .child(
       S.list()
-        .title('Blog Posts by Language')
-        .items(
-          languages.map(lang =>
+        .title(title)
+        .items([
+          ...languages.map((lang) =>
             S.listItem()
+              .id(`${schemaType}-${lang.id}`)
               .title(lang.title)
-              .schemaType('blogPost')
+              .schemaType(schemaType)
               .child(
                 S.documentList()
-                  .apiVersion('2024-01-01')
-                  .title(`Blog Posts (${lang.title})`)
-                  .schemaType('blogPost')
-                  .filter(
-                    '_type == "blogPost" && (language == $language || (!defined(language) && $isDefault))'
-                  )
-                  .params({
-                    language: lang.id,
-                    isDefault: lang.id === DEFAULT_LANG_ID,
-                  })
+                  .id(`${schemaType}-list-${lang.id}`)
+                  .title(`${title} (${lang.title})`)
+                  .schemaType(schemaType)
+                  .apiVersion(API_VERSION)
+                  .filter('_type == $type && language == $lang')
+                  .params({ type: schemaType, lang: lang.id })
               )
-          )
-        )
+          ),
+          S.divider(),
+          S.listItem()
+            .id(`${schemaType}-all`)
+            .title('All languages')
+            .schemaType(schemaType)
+            .child(S.documentTypeList(schemaType).title(`${title} (all)`)),
+        ])
     )
 }
 
-/** Case Studies grouped by language */
-function caseStudiesByLanguage(S: StructureBuilder) {
+/** Plain type list for types without a language field. */
+function plain(S: StructureBuilder, schemaType: string, title: string) {
   return S.listItem()
-    .title('Case Studies')
-    .schemaType('caseStudy')
-    .child(
-      S.list()
-        .title('Case Studies by Language')
-        .items(
-          languages.map(lang =>
-            S.listItem()
-              .title(lang.title)
-              .schemaType('caseStudy')
-              .child(
-                S.documentList()
-                  .apiVersion('2024-01-01')
-                  .title(`Case Studies (${lang.title})`)
-                  .schemaType('caseStudy')
-                  .filter(
-                    '_type == "caseStudy" && (language == $language || (!defined(language) && $isDefault))'
-                  )
-                  .params({
-                    language: lang.id,
-                    isDefault: lang.id === DEFAULT_LANG_ID,
-                  })
-              )
-          )
-        )
-    )
+    .title(title)
+    .schemaType(schemaType)
+    .child(S.documentTypeList(schemaType).title(title))
 }
 
-/** Posts (page builder) grouped by language */
-function postsByLanguage(S: StructureBuilder) {
-  return S.listItem()
-    .title('Posts (Page Builder)')
-    .schemaType('post')
-    .child(
-      S.list()
-        .title('Posts by Language')
-        .items(
-          languages.map(lang =>
-            S.listItem()
-              .title(lang.title)
-              .schemaType('post')
-              .child(
-                S.documentList()
-                  .apiVersion('2024-01-01')
-                  .title(`Posts (${lang.title})`)
-                  .schemaType('post')
-                  .filter(
-                    '_type == "post" && (language == $language || (!defined(language) && $isDefault))'
-                  )
-                  .params({
-                    language: lang.id,
-                    isDefault: lang.id === DEFAULT_LANG_ID,
-                  })
-              )
-          )
-        )
-    )
+function folder(S: StructureBuilder, title: string, icon: React.ComponentType, items: ReturnType<StructureBuilder['listItem']>[]) {
+  return S.listItem().title(title).icon(icon).child(S.list().title(title).items(items))
 }
 
+/**
+ * Studio desk. Every document type appears exactly once, grouped the way the
+ * site is organised: site pages, services, Shopify lead-gen pages, SEO
+ * templates, articles, case studies, partners, merch, legal, bookings,
+ * settings. Lists are filtered by language.
+ */
 export const deskStructure = (S: StructureBuilder) =>
   S.list()
     .title('Content')
     .items([
-      // First Section: Pages Overview
-      S.listItem()
-        .title('Pages')
-        .icon(DocumentsIcon)
-        .child(
-          S.list()
-            .title('All Pages')
-            .items([
-              pageListWithDelete(S, 'landingPage', 'Home Pages'),
-              pageListWithDelete(S, 'servicesPage', 'Services Pages'),
-              pageListWithDelete(S, 'aboutPage', 'About Pages'),
-              pageListWithDelete(S, 'contactPage', 'Contact Pages'),
-              pageListWithDelete(S, 'workPage', 'Work Pages'),
-              pageListWithDelete(S, 'blogPage', 'Blog Pages'),
-              blogPostsByLanguage(S),
-            ])
-        ),
-
+      folder(S, 'Site pages', DocumentsIcon, [
+        byLanguage(S, 'landingPage', 'Home page'),
+        byLanguage(S, 'aboutPage', 'About'),
+        byLanguage(S, 'contactPage', 'Contact'),
+        byLanguage(S, 'partnersPage', 'Partners page'),
+        byLanguage(S, 'workPage', 'Case studies page'),
+        byLanguage(S, 'blogPage', 'Blog page'),
+        byLanguage(S, 'merchPage', 'Merch page'),
+      ]),
+      folder(S, 'Services and packages', CogIcon, [
+        byLanguage(S, 'allPackagesPage', 'All packages'),
+        byLanguage(S, 'packageDetailPage', 'Package detail pages'),
+        byLanguage(S, 'shopifyDevelopmentPage', 'Development (tjenester/utvikling)'),
+        byLanguage(S, 'migratePage', 'Migration hub (tjenester/migrering)'),
+        byLanguage(S, 'shopifyPosPage', 'Shopify POS service page'),
+        byLanguage(S, 'vippsHurtigkassePage', 'Vipps Hurtigkasse'),
+      ]),
+      folder(S, 'Shopify lead-gen pages', ComposeIcon, [
+        byLanguage(S, 'shopifyPlatformPage', 'Shopify platform'),
+        byLanguage(S, 'shopifyPosInfoPage', 'Shopify POS info'),
+        byLanguage(S, 'shopifyTcoCalculatorPage', 'TCO calculator'),
+        byLanguage(S, 'shopifyXPimPage', 'Shopify x PIM'),
+        byLanguage(S, 'shopifyXAiPage', 'Shopify x AI'),
+        byLanguage(S, 'whyShopifyPage', 'Why Shopify'),
+      ]),
+      folder(S, 'SEO templates', EarthGlobeIcon, [
+        byLanguage(S, 'pillarPage', 'Pillar pages'),
+        byLanguage(S, 'integrationCategory', 'Integration categories'),
+        byLanguage(S, 'integrationPage', 'Integration pages'),
+        byLanguage(S, 'migrationPage', 'Migration pages (per platform)'),
+      ]),
       S.divider(),
-
-      // Home Page - Quick Access
-      S.listItem()
-        .title('Home Page')
-        .icon(ComposeIcon)
-        .schemaType('landingPage')
-        .child(S.documentTypeList('landingPage').title('Home Pages')),
-
-      // Service Pages - Contains sub-pages like Shopify Development
-      S.listItem()
-        .title('Service Pages')
-        .icon(CogIcon)
-        .child(
-          S.list()
-            .title('Service Pages')
-            .items([
-              S.listItem()
-                .title('Shopify Development Page')
-                .schemaType('shopifyDevelopmentPage')
-                .child(
-                  S.documentTypeList('shopifyDevelopmentPage').title(
-                    'Shopify Development Page'
-                  )
-                ),
-              S.listItem()
-                .title('Migrate Page')
-                .schemaType('migratePage')
-                .child(S.documentTypeList('migratePage').title('Migrate Page')),
-              S.listItem()
-                .title('Shopify POS Page')
-                .schemaType('shopifyPosPage')
-                .child(
-                  S.documentTypeList('shopifyPosPage').title('Shopify POS Page')
-                ),
-              S.listItem()
-                .title('All Packages Page')
-                .schemaType('allPackagesPage')
-                .child(
-                  S.documentTypeList('allPackagesPage').title(
-                    'All Packages Page'
-                  )
-                ),
-              S.listItem()
-                .title('Package Detail Pages')
-                .schemaType('packageDetailPage')
-                .child(
-                  S.documentTypeList('packageDetailPage').title(
-                    'Package Detail Pages'
-                  )
-                ),
-            ])
-        ),
-
-      // Shopify Pages - Contains Shopify Platform, POS Info, TCO Calculator, x PIM, x AI, Why Shopify
-      S.listItem()
-        .title('Shopify Pages')
-        .icon(CogIcon)
-        .child(
-          S.list()
-            .title('Shopify Pages')
-            .items([
-              S.listItem()
-                .title('Shopify Platform Page')
-                .schemaType('shopifyPlatformPage')
-                .child(
-                  S.documentTypeList('shopifyPlatformPage').title(
-                    'Shopify Platform Page'
-                  )
-                ),
-              S.listItem()
-                .title('Shopify POS Info Page')
-                .schemaType('shopifyPosInfoPage')
-                .child(
-                  S.documentTypeList('shopifyPosInfoPage').title(
-                    'Shopify POS Info Page'
-                  )
-                ),
-              S.listItem()
-                .title('Shopify TCO Calculator Page')
-                .schemaType('shopifyTcoCalculatorPage')
-                .child(
-                  S.documentTypeList('shopifyTcoCalculatorPage').title(
-                    'Shopify TCO Calculator Page'
-                  )
-                ),
-              S.listItem()
-                .title('Shopify x PIM Page')
-                .schemaType('shopifyXPimPage')
-                .child(
-                  S.documentTypeList('shopifyXPimPage').title(
-                    'Shopify x PIM Page'
-                  )
-                ),
-              S.listItem()
-                .title('Shopify x AI Page')
-                .schemaType('shopifyXAiPage')
-                .child(
-                  S.documentTypeList('shopifyXAiPage').title(
-                    'Shopify x AI Page'
-                  )
-                ),
-              S.listItem()
-                .title('Why Shopify Page')
-                .schemaType('whyShopifyPage')
-                .child(
-                  S.documentTypeList('whyShopifyPage').title('Why Shopify Page')
-                ),
-              S.listItem()
-                .title('Vipps Hurtigkasse Page')
-                .schemaType('vippsHurtigkassePage')
-                .child(
-                  S.documentTypeList('vippsHurtigkassePage').title(
-                    'Vipps Hurtigkasse Page'
-                  )
-                ),
-            ])
-        ),
-
-      // SEO templates (SITE-SEO-ARCHITECTURE §7): pillar, integration, migration
-      S.listItem()
-        .title('SEO templates')
-        .icon(EarthGlobeIcon)
-        .child(
-          S.list()
-            .title('SEO templates')
-            .items([
-              S.listItem()
-                .title('Pillar pages')
-                .schemaType('pillarPage')
-                .child(S.documentTypeList('pillarPage').title('Pillar pages')),
-              S.listItem()
-                .title('Integration categories')
-                .schemaType('integrationCategory')
-                .child(S.documentTypeList('integrationCategory').title('Integration categories')),
-              S.listItem()
-                .title('Integration pages')
-                .schemaType('integrationPage')
-                .child(S.documentTypeList('integrationPage').title('Integration pages')),
-              S.listItem()
-                .title('Migration pages')
-                .schemaType('migrationPage')
-                .child(S.documentTypeList('migrationPage').title('Migration pages')),
-              caseStudiesByLanguage(S),
-            ])
-        ),
-
-      S.listItem()
-        .title('About Page')
-        .schemaType('aboutPage')
-        .child(S.documentTypeList('aboutPage').title('About Pages')),
-
-      S.listItem()
-        .title('Contact Page')
-        .schemaType('contactPage')
-        .child(S.documentTypeList('contactPage').title('Contact Pages')),
-
-      S.listItem()
-        .title('Calendly Bookings')
-        .icon(CalendarIcon)
-        .child(
-          S.list()
-            .title('Calendly Bookings')
-            .items([
-              S.listItem()
-                .title('Sync existing meetings')
-                .icon(PlugIcon)
-                .child(S.component(CalendlySetup).id('calendly-setup')),
-              S.listItem()
-                .title('Bookings')
-                .schemaType('calendlyBooking')
-                .child(
-                  S.documentTypeList('calendlyBooking')
-                    .title('Calendly Bookings')
-                    .defaultOrdering([
-                      { field: 'startTime', direction: 'desc' },
-                    ])
-                ),
-            ])
-        ),
-
-      S.listItem()
-        .title('Work Page')
-        .schemaType('workPage')
-        .child(S.documentTypeList('workPage').title('Work Pages')),
-
-      S.listItem()
-        .title('Blog')
-        .child(
-          S.list()
-            .title('Blog')
-            .items([
-              S.listItem()
-                .title('Blog Page')
-                .schemaType('blogPage')
-                .child(S.documentTypeList('blogPage').title('Blog Pages')),
-              blogPostsByLanguage(S),
-              postsByLanguage(S),
-              caseStudiesByLanguage(S),
-              S.listItem()
-                .title('Authors')
-                .schemaType('author')
-                .child(S.documentTypeList('author').title('Authors')),
-            ])
-        ),
-
-      S.listItem()
-        .title('Partners Page')
-        .schemaType('partnersPage')
-        .child(
-          S.list()
-            .title('Partners')
-            .items([
-              S.listItem()
-                .title('Partners Pages')
-                .schemaType('partnersPage')
-                .child(
-                  S.documentTypeList('partnersPage').title('Partners Pages')
-                ),
-              S.listItem()
-                .title('Partner Categories')
-                .schemaType('partnerCategory')
-                .child(
-                  S.documentTypeList('partnerCategory')
-                    .title('Partner Categories')
-                    .filter('_type == "partnerCategory"')
-                ),
-            ])
-        ),
-
-      // Merch Pages
-      S.listItem()
-        .title('Merch Pages')
-        .icon(CogIcon)
-        .child(
-          S.list()
-            .title('Merch Pages')
-            .items([
-              S.listItem()
-                .title('Merch Page')
-                .schemaType('merchPage')
-                .child(S.documentTypeList('merchPage').title('Merch Page')),
-              S.listItem()
-                .title('Merch Product Settings')
-                .schemaType('merchProductSettings')
-                .child(
-                  S.documentTypeList('merchProductSettings').title(
-                    'Merch Product Settings'
-                  )
-                ),
-            ])
-        ),
-
-      // Legal pages (privacy policy, terms of service, …) at /legal/[slug]
-      S.listItem()
-        .title('Legal Pages')
-        .icon(DocumentTextIcon)
-        .schemaType('legalPage')
-        .child(S.documentTypeList('legalPage').title('Legal Pages')),
-
+      folder(S, 'Articles', DocumentTextIcon, [
+        byLanguage(S, 'post', 'Articles'),
+        byLanguage(S, 'blogPost', 'Articles (legacy format)'),
+        plain(S, 'author', 'Authors'),
+      ]),
+      folder(S, 'Case studies', CaseIcon, [byLanguage(S, 'caseStudy', 'Case studies')]),
+      folder(S, 'Partners', UsersIcon, [plain(S, 'partnerCategory', 'Partner categories')]),
+      folder(S, 'Merch', BasketIcon, [byLanguage(S, 'merchProductSettings', 'Product settings')]),
+      byLanguage(S, 'legalPage', 'Legal pages'),
       S.divider(),
-
-      // Site Settings
-      S.listItem()
-        .title('Site Settings')
-        .icon(CogIcon)
-        .child(
-          S.list()
-            .title('Site Settings')
-            .items([
-              S.listItem()
-                .title('Site Settings (Global)')
-                .icon(EarthGlobeIcon)
-                .schemaType('siteSettings')
-                .child(
-                  S.list()
-                    .title('Site Settings by language')
-                    .items(
-                      languages.map(lang =>
-                        S.listItem()
-                          .id(`siteSettings-${lang.id}`)
-                          .title(lang.title)
-                          .schemaType('siteSettings')
-                          .child(
-                            S.editor()
-                              .id(`siteSettings-${lang.id}`)
-                              .schemaType('siteSettings')
-                              .documentId(`siteSettings-${lang.id}`)
-                          )
-                      )
-                    )
-                ),
-              S.listItem()
-                .title('Header Settings')
-                .schemaType('headerSettings')
-                .child(
-                  S.documentTypeList('headerSettings').title('Header Settings')
-                ),
-              S.listItem()
-                .title('Footer Settings')
-                .schemaType('footerSettings')
-                .child(
-                  S.documentTypeList('footerSettings').title('Footer Settings')
-                ),
-              S.listItem()
-                .title('Redirects')
-                .icon(LinkIcon)
-                .schemaType('redirect')
-                .child(
-                  S.documentTypeList('redirect')
-                    .title('Redirects')
-                    .defaultOrdering([{ field: 'source', direction: 'asc' }])
-                ),
-            ])
-        ),
+      folder(S, 'Calendly bookings', CalendarIcon, [
+        S.listItem().title('Sync existing meetings').icon(PlugIcon).child(S.component(CalendlySetup).id('calendly-setup')),
+        S.listItem()
+          .title('Bookings')
+          .schemaType('calendlyBooking')
+          .child(S.documentTypeList('calendlyBooking').title('Calendly bookings').defaultOrdering([{ field: 'startTime', direction: 'desc' }])),
+      ]),
+      folder(S, 'Site settings', CogIcon, [
+        S.listItem()
+          .title('Site settings (global)')
+          .icon(EarthGlobeIcon)
+          .schemaType('siteSettings')
+          .child(
+            S.list()
+              .title('Site settings by language')
+              .items(
+                languages.map((lang) =>
+                  S.listItem()
+                    .id(`siteSettings-${lang.id}`)
+                    .title(lang.title)
+                    .schemaType('siteSettings')
+                    .child(S.editor().id(`siteSettings-${lang.id}`).schemaType('siteSettings').documentId(`siteSettings-${lang.id}`))
+                )
+              )
+          ),
+        byLanguage(S, 'headerSettings', 'Header'),
+        byLanguage(S, 'footerSettings', 'Footer'),
+        S.listItem()
+          .title('Redirects')
+          .icon(LinkIcon)
+          .schemaType('redirect')
+          .child(S.documentTypeList('redirect').title('Redirects').defaultOrdering([{ field: 'source', direction: 'asc' }])),
+        S.listItem()
+          .title('Bulk delete pages')
+          .icon(TagIcon)
+          .child(
+            S.list()
+              .title('Bulk delete')
+              .items(
+                ['landingPage', 'aboutPage', 'contactPage', 'workPage', 'blogPage', 'partnersPage'].map((t) =>
+                  S.listItem().title(t).schemaType(t).child(S.component(PageListWithDelete).options({ schemaType: t, title: t }).id(`pages-${t}`))
+                )
+              )
+          ),
+      ]),
     ])
