@@ -1,16 +1,21 @@
 import TCOCalculatorClient from '@/app/shopify/shopify_TCO_calculator/TCOCalculatorClient'
+import { getServerLanguage } from '@/lib/language'
 import type { SanitySectionItem } from '@/lib/sanity/normalizeDocumentSections'
 
 type HeroProp = Parameters<typeof TCOCalculatorClient>[0]['hero']
 type CalcConfigProp = Parameters<typeof TCOCalculatorClient>[0]['calculatorConfig']
 
-export function ShopifyTcoCalculatorPageSectionRenderer({
+export async function ShopifyTcoCalculatorPageSectionRenderer({
   sections,
   legacyHero,
+  lang,
 }: {
   sections: SanitySectionItem[]
   legacyHero?: HeroProp
+  lang?: string
 }) {
+  const language = lang ?? (await getServerLanguage())
+
   const heroSection = sections.find((s) => s._type === 'shopifyTcoCalculatorPageHeroSection')
   const heroFromSections = heroSection
     ? (() => {
@@ -29,5 +34,5 @@ export function ShopifyTcoCalculatorPageSectionRenderer({
 
   const hero = heroFromSections ?? legacyHero
 
-  return <TCOCalculatorClient hero={hero} calculatorConfig={calculatorConfig} />
+  return <TCOCalculatorClient hero={hero} calculatorConfig={calculatorConfig} lang={language} />
 }
