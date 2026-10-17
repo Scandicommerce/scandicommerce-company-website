@@ -1,57 +1,32 @@
-"use client";
-
-import { PortableText } from "@/sanity";
-import type { ComparisonCardsBlock } from "@/lib/blogBuilder";
+import type { ComparisonCardsBlock } from '@/lib/blogBuilder'
+import PostPortableText from './PostPortableText'
 
 interface ComparisonCardsProps {
-  block: ComparisonCardsBlock;
+  block: ComparisonCardsBlock
 }
 
-function Card({
-  title,
-  body,
-  headerClass,
-}: {
-  title: string;
-  body?: unknown;
-  headerClass: string;
-}) {
-  const hasBody = Array.isArray(body) && body.length > 0;
+function Card({ title, body, tone }: { title: string; body?: unknown; tone: 'ink' | 'cyan' }) {
+  const head = tone === 'cyan' ? 'bg-sc-cyan-50 text-sc-cyan-700' : 'bg-sc-ink-50 text-sc-ink-600'
   return (
-    <div className="border border-black rounded overflow-hidden flex flex-col">
-      <div className={`${headerClass} px-4 py-3 text-white font-bold uppercase text-sm`}>
-        {title}
-      </div>
-      <div className="p-6 bg-white flex-1 text-[#1F1D1D] prose prose-slate max-w-none prose-p:my-3 prose-ul:my-3 prose-li:my-1">
-        {hasBody ? <PortableText value={body} /> : null}
+    <div className="flex flex-col overflow-hidden rounded-lg border border-sc-ink-100 bg-white">
+      <div className={`border-b border-sc-ink-100 px-5 py-3 text-xs font-semibold uppercase tracking-[0.12em] ${head}`}>{title}</div>
+      <div className="flex-1 p-5 lg:p-6">
+        <PostPortableText value={body} size="compact" />
       </div>
     </div>
-  );
+  )
 }
 
+/** Two hairline cards side by side: the left in ink, the right (the recommended side) in cyan. */
 export default function ComparisonCards({ block }: ComparisonCardsProps) {
-  const left = block.leftCard;
-  const right = block.rightCard;
-  if (!left && !right) return null;
+  const left = block.leftCard
+  const right = block.rightCard
+  if (!left && !right) return null
 
   return (
-    <section className="my-8 md:my-10">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {left && (
-          <Card
-            title={left.title ?? "Left"}
-            body={left.body}
-            headerClass="bg-red-600"
-          />
-        )}
-        {right && (
-          <Card
-            title={right.title ?? "Right"}
-            body={right.body}
-            headerClass="bg-green-600"
-          />
-        )}
-      </div>
-    </section>
-  );
+    <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-5">
+      {left && <Card title={left.title ?? ''} body={left.body} tone="ink" />}
+      {right && <Card title={right.title ?? ''} body={right.body} tone="cyan" />}
+    </div>
+  )
 }

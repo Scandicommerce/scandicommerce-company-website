@@ -1,53 +1,24 @@
-"use client";
-
-import type { GradientTitleBlock } from "@/lib/blogBuilder";
+import type { GradientTitleBlock } from '@/lib/blogBuilder'
+import { H2 } from './labels'
 
 interface GradientTitleProps {
-  block: GradientTitleBlock;
+  block: GradientTitleBlock
+  /** Anchor id assigned by the outline, so the table of contents can link here. */
+  id?: string
 }
 
-const GRADIENT_STYLE = {
-  background: "linear-gradient(to right, #03C1CA, #8B5CF6)",
-};
-
-export default function GradientTitle({ block }: GradientTitleProps) {
-  const title = block.title?.trim();
-  const highlightPrefix = block.highlightPrefix?.trim();
-
-  if (!title) return null;
-
-  const prefixMatch =
-    highlightPrefix &&
-    title.toLowerCase().startsWith(highlightPrefix.toLowerCase());
-  const prefix = prefixMatch ? highlightPrefix! : null;
-  const rest = prefixMatch ? title.slice(prefix!.length).trimStart() : null;
+/** Section heading; the highlighted prefix is set in brand cyan. */
+export default function GradientTitle({ block, id }: GradientTitleProps) {
+  const title = block.title?.trim()
+  if (!title) return null
+  const prefix = block.highlightPrefix?.trim()
+  const match = prefix && title.toLowerCase().startsWith(prefix.toLowerCase()) ? title.slice(0, prefix.length) : null
+  const rest = match ? title.slice(match.length) : title
 
   return (
-    <section className="my-8 md:my-10">
-      <div className="text-left">
-        <h2 className="text-xl md:text-2xl lg:text-3xl font-bold text-black uppercase tracking-tight">
-          {prefix != null ? (
-            <>
-              <span className="inline-block">
-                {prefix}
-                <span
-                  className="block w-16 h-1 mt-2 rounded-full"
-                  style={GRADIENT_STYLE}
-                />
-              </span>
-              {rest ? <span className="block mt-2">{rest}</span> : null}
-            </>
-          ) : (
-            <>
-              {title}
-              <span
-                className="block w-16 h-1 mt-2 rounded-full"
-                style={GRADIENT_STYLE}
-              />
-            </>
-          )}
-        </h2>
-      </div>
-    </section>
-  );
+    <h2 id={id} className={`${H2} mt-2`}>
+      {match && <span className="text-sc-cyan-500">{match}</span>}
+      {rest}
+    </h2>
+  )
 }

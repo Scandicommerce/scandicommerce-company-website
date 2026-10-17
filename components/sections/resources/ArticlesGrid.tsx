@@ -3,7 +3,6 @@
 import { useMemo, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { articles as allArticles } from '@/lib/articles'
 import { hrefFor } from '@/lib/routes'
 import { ui } from '@/components/integrations/labels'
 import { formatArticleDate } from './FeaturedArticle'
@@ -53,19 +52,6 @@ interface NormalizedArticle {
 }
 
 const ALL = '__all__'
-
-const defaultArticles = allArticles.map((article, index) => ({
-  id: article.id || index + 1,
-  title: article.title,
-  description: article.description,
-  category: article.category,
-  date: article.date,
-  readTime: article.readTime.replace(' read', ''),
-  imageUrl: article.image,
-  slug: article.slug,
-  _type: 'post',
-  author: undefined,
-}))
 
 function parseDate(d: string | undefined): Date | null {
   if (!d) return null
@@ -178,7 +164,7 @@ export default function ArticlesGrid({ articlesGrid, lang }: ArticlesGridProps) 
             _type: a._type ?? 'post',
             author: a.author,
           }))
-        : defaultArticles
+        : []
 
     return raw.map((a) => ({ ...a, parsedDate: parseDate(a.date) }))
   }, [articlesGrid])

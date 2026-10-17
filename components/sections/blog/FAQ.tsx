@@ -1,52 +1,30 @@
-"use client";
-
-import { useState } from "react";
-import type { FaqBlock } from "@/lib/blogBuilder";
+import type { FaqBlock } from '@/lib/blogBuilder'
+import { H2 } from './labels'
 
 interface FAQProps {
-  block: FaqBlock;
+  block: FaqBlock
 }
 
+/** Questions as the site's details/summary list on hairline rules. */
 export default function FAQ({ block }: FAQProps) {
-  const items = (block.items ?? []).filter(
-    (i) => i && (i.question != null || i.answer != null)
-  );
-  const [openIndex, setOpenIndex] = useState<number | null>(0);
-
-  if (items.length === 0) return null;
+  const items = (block.items ?? []).filter((i) => i && (i.question || i.answer))
+  if (items.length === 0) return null
 
   return (
-    <section className="my-8 md:my-10">
-      {block.title && (
-        <h2 className="text-2xl font-bold text-[#1F1D1D] mb-6">
-          {block.title}
-        </h2>
-      )}
-      <div className="space-y-2">
-        {items.map((item, i) => {
-          const isOpen = openIndex === i;
-          return (
-            <div
-              key={i}
-              className="border border-black rounded overflow-hidden"
-            >
-              <button
-                type="button"
-                onClick={() => setOpenIndex(isOpen ? null : i)}
-                className="w-full flex items-center justify-between gap-4 bg-black text-white px-4 py-4 text-left font-medium"
-              >
-                <span>{item.question ?? "Question"}</span>
-                <span className="text-xl shrink-0">{isOpen ? "−" : "+"}</span>
-              </button>
-              {isOpen && (
-                <div className="p-4 bg-white text-[#1F1D1D] leading-relaxed whitespace-pre-line">
-                  {item.answer ?? ""}
-                </div>
-              )}
-            </div>
-          );
-        })}
+    <div className="flex flex-col gap-5">
+      {block.title && <h2 className={H2}>{block.title}</h2>}
+      <div className="border-t border-sc-ink-200">
+        {items.map((item, i) => (
+          <details key={i} className="group border-b border-sc-ink-200 py-4" open={i === 0}>
+            <summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-[17px] font-semibold leading-snug text-sc-ink-900 [&::-webkit-details-marker]:hidden">
+              <h3 className="m-0 inline text-[17px]">{item.question ?? ''}</h3>
+              <span aria-hidden="true" className="text-sc-ink-500 group-open:hidden">+</span>
+              <span aria-hidden="true" className="hidden text-sc-ink-500 group-open:inline">–</span>
+            </summary>
+            <p className="m-0 mt-3 whitespace-pre-line text-base leading-relaxed text-sc-ink-600">{item.answer ?? ''}</p>
+          </details>
+        ))}
       </div>
-    </section>
-  );
+    </div>
+  )
 }

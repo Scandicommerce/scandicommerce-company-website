@@ -1,37 +1,26 @@
-"use client";
+import type { StatItem, StatsRowBlock } from '@/lib/blogBuilder'
 
-import type { StatsRowBlock } from "@/lib/blogBuilder";
+/** Numbers in one hairline strip, the case-study stats style. */
+export function StatsGrid({ stats }: { stats: StatItem[] }) {
+  const items = stats.filter((s) => s && (s.value != null || s.label != null))
+  if (items.length === 0) return null
+  const cols = items.length === 1 ? 'sm:grid-cols-1' : items.length === 2 ? 'sm:grid-cols-2' : items.length === 3 ? 'sm:grid-cols-3' : 'sm:grid-cols-2 lg:grid-cols-4'
+  return (
+    <div className={`grid grid-cols-1 ${cols} divide-y divide-sc-ink-100 overflow-hidden rounded-lg border border-sc-ink-100 sm:divide-y-0 sm:divide-x`}>
+      {items.map((stat, i) => (
+        <div key={i} className={`px-6 py-6 ${items.length > 3 ? 'lg:border-t-0 sm:[&:nth-child(n+3)]:border-t sm:[&:nth-child(n+3)]:border-sc-ink-100 sm:[&:nth-child(3)]:border-l-0 lg:[&:nth-child(3)]:border-l' : ''}`}>
+          <div className="text-[32px] font-extrabold leading-none tracking-[-0.03em] text-sc-cyan-500 md:text-[40px]">{stat.value ?? '—'}</div>
+          {stat.label && <div className="mt-2.5 text-sm font-semibold text-sc-ink-600">{stat.label}</div>}
+        </div>
+      ))}
+    </div>
+  )
+}
 
 interface StatsRowProps {
-  block: StatsRowBlock;
+  block: StatsRowBlock
 }
 
 export default function StatsRow({ block }: StatsRowProps) {
-  const stats = (block.stats ?? []).filter(
-    (s) => s && (s.value != null || s.label != null)
-  );
-  if (stats.length === 0) return null;
-
-  return (
-    <section className="my-8 md:my-10">
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
-        {stats.map((stat, i) => (
-          <div
-            key={i}
-            className="bg-gray-50 border border-black rounded-b overflow-hidden"
-          >
-            <div className="h-[3px] bg-gradient-to-r from-cyan-400 to-purple-500" />
-            <div className="p-6 text-center">
-              <div className="text-2xl md:text-3xl font-bold text-[#1F1D1D]">
-                {stat.value ?? "—"}
-              </div>
-              <div className="mt-2 text-xs md:text-sm font-medium uppercase tracking-wide text-[#1F1D1D]">
-                {stat.label ?? ""}
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
-    </section>
-  );
+  return <StatsGrid stats={block.stats ?? []} />
 }
