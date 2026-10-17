@@ -10,7 +10,7 @@ import type { ShopifyProduct } from '@/lib/shopify'
  * Shopify yet render from this file alone, without a cart button.
  */
 
-export const NEXUS_COLLECTION_HANDLE = 'nexus-pos'
+export const NEXUS_COLLECTION_HANDLE = 'nexuspos'
 
 export type NexusGroup = 'pricing' | 'kit' | 'equipment' | 'consumable'
 
@@ -26,6 +26,10 @@ export interface NexusItem {
   price: number
   unit?: string
   image?: string
+  /** Handle of the matching product in Shopify when it differs from `handle`. */
+  shopifyHandle?: string
+  /** Variant title to buy when the Shopify product has several (e.g. 'Med iPad'). */
+  shopifyVariant?: string
   imageAlt?: string
   /** Second colourway, shown as swatches. */
   variants?: { label: string; swatch: string; image?: string }[]
@@ -38,30 +42,30 @@ export interface NexusItem {
 
 export const nexusItems: NexusItem[] = [
   // Pricing
-  { handle: 'nexus-pos-oppstart', group: 'pricing', type: 'Engangs', name: 'Oppstart', description: 'Gjennomgang av dagens kasse og migrering, oppsett av Nexus POS, Shopify POS og terminal, og opplæring av deg og de ansatte.', price: 15000, unit: 'én gang' },
-  { handle: 'nexus-pos-lisens', group: 'pricing', type: 'Mest valgt', name: 'Nexus POS lisens', description: 'Kvittering, journal, X/Z-rapporter og SAF-T. Inntil 2 timer support i måneden, svar neste virkedag. Løpende oppdateringer og videreutvikling.', price: 2500, unit: 'per kassepunkt / mnd', badge: 'Mest valgt' },
+  { handle: 'nexus-pos-oppstart', shopifyHandle: 'nexuspos-onboarding', group: 'pricing', type: 'Engangs', name: 'Oppstart', description: 'Gjennomgang av dagens kasse og migrering, oppsett av Nexus POS, Shopify POS og terminal, og opplæring av deg og de ansatte.', price: 15000, unit: 'én gang' },
+  { handle: 'nexus-pos-lisens', shopifyHandle: 'nexuspos-abonnement', shopifyVariant: 'Starter', group: 'pricing', type: 'Mest valgt', name: 'Nexus POS lisens', description: 'Kvittering, journal, X/Z-rapporter og SAF-T. Inntil 2 timer support i måneden, svar neste virkedag. Løpende oppdateringer og videreutvikling.', price: 2500, unit: 'per kassepunkt / mnd', badge: 'Mest valgt' },
   { handle: 'nexus-pos-standard-sla', group: 'pricing', type: 'Tillegg', name: 'POS Standard SLA', description: 'For butikker som vil ha mer enn grunnsupporten. Dekker inntil tre terminaler per kunde. Har du forvaltningsavtale på nettbutikken hos oss, får du rabatt.', price: 4500, unit: 'per mnd' },
   // Kits
-  { handle: 'nexus-pos-pakke-a-full-kassedisk', group: 'kit', type: 'Pakke A', name: 'Full kassedisk', description: 'Klassisk oppsett med egen kvitteringsskriver og kasseskuff.', price: 25190, unit: 'per kassepunkt, inkl. N950' },
-  { handle: 'nexus-pos-pakke-b-kompakt-kasse', group: 'kit', type: 'Pakke B', name: 'Kompakt kasse', description: 'Skriver, skuff og nettbrettholder i én enhet. Perfekt der disken er trang.', price: 23990, unit: 'per kassepunkt, inkl. N950', badge: '1 200 kr billigere enn full kassedisk' },
+  { handle: 'nexus-pos-pakke-a-full-kassedisk', shopifyHandle: 'komplett-butikk-kit', shopifyVariant: 'Med iPad', group: 'kit', type: 'Pakke A', name: 'Full kassedisk', description: 'Klassisk oppsett med egen kvitteringsskriver og kasseskuff.', price: 25190, unit: 'per kassepunkt, inkl. N950' },
+  { handle: 'nexus-pos-pakke-b-kompakt-kasse', shopifyHandle: 'kompakt-kassepunkt', group: 'kit', type: 'Pakke B', name: 'Kompakt kasse', description: 'Skriver, skuff og nettbrettholder i én enhet. Perfekt der disken er trang.', price: 23990, unit: 'per kassepunkt, inkl. N950', badge: '1 200 kr billigere enn full kassedisk' },
   // Equipment
-  { handle: 'nets-n950', group: 'equipment', type: 'Betalingsterminal', name: 'Nets N950', description: 'Mobil terminal med innebygd skriver. Kort, kontaktløst og Vipps.', price: 8750, image: '/images/nexuspos/nets-n950.jpg' },
-  { handle: 'apple-ipad-11-a16', group: 'equipment', type: 'Nettbrett', name: 'Apple iPad 11" (A16)', description: 'Wi-Fi, 128 GB, sølv.', price: 5490, image: '/images/nexuspos/ipad-11.jpg' },
+  { handle: 'nets-n950', shopifyHandle: 'nets-smartpos-n950', group: 'equipment', type: 'Betalingsterminal', name: 'Nets N950', description: 'Mobil terminal med innebygd skriver. Kort, kontaktløst og Vipps.', price: 8750, image: '/images/nexuspos/nets-n950.jpg' },
+  { handle: 'apple-ipad-11-a16', shopifyHandle: 'ipad-for-kassepunkt', group: 'equipment', type: 'Nettbrett', name: 'Apple iPad 11" (A16)', description: 'Wi-Fi, 128 GB, sølv.', price: 5490, image: '/images/nexuspos/ipad-11.jpg' },
   { handle: 'bouncepad-eddy', group: 'equipment', type: 'iPad-stativ', name: 'Bouncepad Eddy', description: 'Stativet som får disken til å se ferdig ut. Snu iPaden mot kunden med én hånd, og lås den fast når butikken stenger.', price: 1990, image: '/images/nexuspos/bouncepad-eddy-sort.jpg', badge: 'Kundefavoritt', variants: [{ label: 'Sort', swatch: '#12181a', image: '/images/nexuspos/bouncepad-eddy-sort.jpg' }, { label: 'Hvit', swatch: '#ffffff', image: '/images/nexuspos/bouncepad-eddy-hvit.jpg' }] },
   { handle: 'socket-mobile-s740', group: 'equipment', type: 'Trådløs strekkodeleser', name: 'Socket Mobile S740', description: 'Bluetooth-skanner for 1D- og 2D-koder. Gå ut på gulvet, skann og selg. Rundt 20 timer batteri.', price: 4500, image: '/images/nexuspos/socket-s740.jpg', badge: 'Populær' },
-  { handle: 'ipad-stativ-dreiefot', group: 'equipment', type: 'Stativ', name: 'iPad-stativ med dreiefot', description: 'Snu skjermen mot kunden.', price: 1990, image: '/images/nexuspos/ipad-stativ.jpg' },
-  { handle: 'zebra-ds9308', group: 'equipment', type: 'Strekkodeleser', name: 'Zebra DS9308 2D', description: 'Bordskanner, USB. Også i hvit.', price: 3690, image: '/images/nexuspos/zebra-ds9308.jpg' },
+  { handle: 'ipad-stativ-dreiefot', shopifyHandle: 'ipad-stativ-for-kassa', group: 'equipment', type: 'Stativ', name: 'iPad-stativ med dreiefot', description: 'Snu skjermen mot kunden.', price: 1990, image: '/images/nexuspos/ipad-stativ.jpg' },
+  { handle: 'zebra-ds9308', shopifyHandle: 'strekkodeskanner', group: 'equipment', type: 'Strekkodeleser', name: 'Zebra DS9308 2D', description: 'Bordskanner, USB. Også i hvit.', price: 3690, image: '/images/nexuspos/zebra-ds9308.jpg' },
   { handle: 'star-tsp143iv', group: 'equipment', type: 'Kvitteringsskriver', name: 'Star TSP143IV', description: '80 mm, Ethernet. Også i hvit.', price: 3690, image: '/images/nexuspos/star-tsp143iv.jpg' },
-  { handle: 'kasseskuff-hs330', group: 'equipment', type: 'Kasseskuff', name: 'Kasseskuff HS330', description: 'Åpnes av skriveren. Hvit på forespørsel.', price: 990, image: '/images/nexuspos/kasseskuff-hs330.jpg' },
+  { handle: 'kasseskuff-hs330', shopifyHandle: 'kassaskuff', group: 'equipment', type: 'Kasseskuff', name: 'Kasseskuff HS330', description: 'Åpnes av skriveren. Hvit på forespørsel.', price: 990, image: '/images/nexuspos/kasseskuff-hs330.jpg' },
   { handle: 'star-mpop', group: 'equipment', type: 'Skriver + skuff', name: 'Star mPOP', description: '58 mm skriver og skuff i ett.', price: 5490, image: '/images/nexuspos/star-mpop.jpg' },
-  { handle: 'samsung-galaxy-tab-a11', group: 'equipment', type: 'Kundedisplay', name: 'Samsung Galaxy Tab A11', description: 'Viser handlekurv og total til kunden.', price: 2490, image: '/images/nexuspos/galaxy-tab-a11.jpg' },
-  { handle: 'zebra-zd420d', group: 'equipment', type: 'Etikettskriver', name: 'Zebra ZD420d', description: 'Pris- og hylleetiketter.', price: 5990, image: '/images/nexuspos/zebra-zd420d.jpg' },
-  { handle: 'veggstativ-nettbrett', group: 'equipment', type: 'Stativ', name: 'Veggstativ for nettbrett', description: 'For 7–13" nettbrett.', price: 1190, image: '/images/nexuspos/veggstativ.jpg' },
-  { handle: 'star-munite-gulvstativ', group: 'equipment', type: 'Stativ', name: 'Star mUnite gulvstativ', description: 'Selvbetjening og pop-up. Svart eller hvit.', price: 3190, image: '/images/nexuspos/star-munite.jpg' },
+  { handle: 'samsung-galaxy-tab-a11', shopifyHandle: 'kundedisplay', group: 'equipment', type: 'Kundedisplay', name: 'Samsung Galaxy Tab A11', description: 'Viser handlekurv og total til kunden.', price: 2490, image: '/images/nexuspos/galaxy-tab-a11.jpg' },
+  { handle: 'zebra-zd420d', shopifyHandle: 'etikettskriver', group: 'equipment', type: 'Etikettskriver', name: 'Zebra ZD420d', description: 'Pris- og hylleetiketter.', price: 5990, image: '/images/nexuspos/zebra-zd420d.jpg' },
+  { handle: 'veggstativ-nettbrett', shopifyHandle: 'veggstativ-ipad', group: 'equipment', type: 'Stativ', name: 'Veggstativ for nettbrett', description: 'For 7–13" nettbrett.', price: 1190, image: '/images/nexuspos/veggstativ.jpg' },
+  { handle: 'star-munite-gulvstativ', shopifyHandle: 'gulvstativ', group: 'equipment', type: 'Stativ', name: 'Star mUnite gulvstativ', description: 'Selvbetjening og pop-up. Svart eller hvit.', price: 3190, image: '/images/nexuspos/star-munite.jpg' },
   // Consumables
-  { handle: 'kabelsett-pos', group: 'consumable', type: 'Tilbehør', name: 'Kabelsett – 2 × USB-C-lader + nettverkskabel', description: '', price: 590 },
-  { handle: 'kvitteringspapir-80mm', group: 'consumable', type: 'Forbruk', name: 'Kvitteringspapir 80 mm, per rull', description: '', price: 22 },
-  { handle: 'kvitteringspapir-58mm', group: 'consumable', type: 'Forbruk', name: 'Kvitteringspapir 58 mm, per rull', description: '', price: 14 },
+  { handle: 'kabelsett-pos', shopifyHandle: 'kabler-og-strom-kassepunkt', group: 'consumable', type: 'Tilbehør', name: 'Kabelsett – 2 × USB-C-lader + nettverkskabel', description: '', price: 590 },
+  { handle: 'kvitteringspapir-80mm', shopifyHandle: 'kvitteringspapir', shopifyVariant: '80 mm', group: 'consumable', type: 'Forbruk', name: 'Kvitteringspapir 80 mm, 20 ruller', description: '', price: 440, unit: 'per pakke' },
+  { handle: 'kvitteringspapir-58mm', shopifyHandle: 'kvitteringspapir', shopifyVariant: '58 mm', group: 'consumable', type: 'Forbruk', name: 'Kvitteringspapir 58 mm, 20 ruller', description: '', price: 280, unit: 'per pakke' },
 ]
 
 export const nexusKitContents: Record<'nexus-pos-pakke-a-full-kassedisk' | 'nexus-pos-pakke-b-kompakt-kasse', { lines: string[]; images: string[]; alts: string[] }> = {
@@ -118,20 +122,25 @@ export const formatNok = (n: number) => `${new Intl.NumberFormat('nb-NO').format
 const norm = (s: string) => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, ' ').trim()
 
 /**
- * Overlay live Shopify data on the catalog. Match on handle first, then on
- * a normalised title. Shopify wins on price and image when it has them.
+ * Overlay live Shopify data on the catalog. Match on the Shopify handle (or
+ * the catalog handle), then on a normalised title. The bought variant is the
+ * one named in `shopifyVariant`, else the first that is for sale. Shopify wins
+ * on price; the catalog keeps its own photo when it has one.
  */
 export function mergeNexusItems(items: NexusItem[], products: ShopifyProduct[]): NexusItem[] {
   if (products.length === 0) return items
   const byHandle = new Map(products.map((p) => [p.handle, p]))
   const byTitle = new Map(products.map((p) => [norm(p.title), p]))
   return items.map((item) => {
-    const hit = byHandle.get(item.handle) ?? byTitle.get(norm(item.name)) ?? products.find((p) => norm(p.title).includes(norm(item.name)) || norm(item.name).includes(norm(p.title)))
+    const hit = byHandle.get(item.shopifyHandle ?? item.handle) ?? byTitle.get(norm(item.name))
     if (!hit) return item
-    const variant = hit.variants?.find((v) => v.availableForSale) ?? hit.variants?.[0]
+    const variants = hit.variants ?? []
+    const wanted = item.shopifyVariant ? variants.find((v) => norm(v.title).startsWith(norm(item.shopifyVariant!))) : undefined
+    const variant = wanted ?? variants.find((v) => v.availableForSale) ?? variants[0]
+    const price = variant?.price ?? hit.price
     return {
       ...item,
-      price: hit.price > 0 ? Math.round(hit.price) : item.price,
+      price: price > 0 ? Math.round(price) : item.price,
       shopifyImage: hit.image || undefined,
       image: item.image ?? (hit.image || undefined),
       variantId: variant?.id,
