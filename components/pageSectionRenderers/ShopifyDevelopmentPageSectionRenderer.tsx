@@ -7,7 +7,7 @@ import Testimonial from '@/components/sections/services/shopify_development/Test
 import ReadyToBuild from '@/components/sections/services/shopify_development/ReadyToBuild'
 import type { SanitySectionItem } from '@/lib/sanity/normalizeDocumentSections'
 
-export function ShopifyDevelopmentPageSectionRenderer({ sections }: { sections: SanitySectionItem[] }) {
+export function ShopifyDevelopmentPageSectionRenderer({ sections, lang }: { sections: SanitySectionItem[]; lang?: string }) {
   return (
     <>
       {sections.map((section) => {
@@ -32,15 +32,15 @@ export function ShopifyDevelopmentPageSectionRenderer({ sections }: { sections: 
             )
           }
           case 'shopifyDevelopmentPageWhyShopifySection':
-            return <WhyShopifyWins key={_key} whyShopify={{ whyShopifyEyebrow: 'Hvorfor Shopify', ...(rest as Parameters<typeof WhyShopifyWins>[0]['whyShopify']) }} />
+            return <WhyShopifyWins key={_key} lang={lang} whyShopify={{ whyShopifyEyebrow: 'Hvorfor Shopify', ...(rest as Parameters<typeof WhyShopifyWins>[0]['whyShopify']) }} />
           case 'shopifyDevelopmentPageScenariosSection':
-            return <CommonScenarios key={_key} scenarios={rest as Parameters<typeof CommonScenarios>[0]['scenarios']} />
+            return <CommonScenarios key={_key} lang={lang} scenarios={rest as Parameters<typeof CommonScenarios>[0]['scenarios']} />
           case 'shopifyDevelopmentPageHowWeWorkSection':
-            return <HowWeWork key={_key} howWeWork={rest as Parameters<typeof HowWeWork>[0]['howWeWork']} />
+            return <HowWeWork key={_key} lang={lang} howWeWork={rest as Parameters<typeof HowWeWork>[0]['howWeWork']} />
           case 'shopifyDevelopmentPageTestimonialSection':
             return <Testimonial key={_key} testimonial={rest as Parameters<typeof Testimonial>[0]['testimonial']} />
           case 'shopifyDevelopmentPageCtaSection':
-            return <ReadyToBuild key={_key} cta={rest as Parameters<typeof ReadyToBuild>[0]['cta']} />
+            return <ReadyToBuild key={_key} lang={lang} cta={rest as Parameters<typeof ReadyToBuild>[0]['cta']} />
           default:
             return null
         }

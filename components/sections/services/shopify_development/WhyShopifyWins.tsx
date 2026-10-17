@@ -14,6 +14,7 @@ interface WhyShopifyData {
 
 interface WhyShopifyWinsProps {
   whyShopify?: WhyShopifyData
+  lang?: string
 }
 
 const ICONS: Record<string, LucideIcon> = {
@@ -24,7 +25,8 @@ const ICONS: Record<string, LucideIcon> = {
 }
 
 /** Feature grid on the integrations category-card pattern: cyan disc, Lucide icon, hairline card. */
-export default function WhyShopifyWins({ whyShopify }: WhyShopifyWinsProps) {
+export default function WhyShopifyWins({ whyShopify, lang }: WhyShopifyWinsProps) {
+  const isNo = (lang ?? 'no') === 'no'
   const title = whyShopify?.whyShopifyTitle
   const subtitle = whyShopify?.whyShopifySubtitle
   const features = whyShopify?.whyShopifyFeatures
@@ -34,7 +36,7 @@ export default function WhyShopifyWins({ whyShopify }: WhyShopifyWinsProps) {
       <div className={`${ui.container} flex flex-col gap-10`}>
         {(title || subtitle) && (
           <div className="flex max-w-[680px] flex-col gap-2.5">
-            <div className={ui.eyebrow}>{whyShopify?.whyShopifyEyebrow || 'Hva du får'}</div>
+            <div className={ui.eyebrow}>{whyShopify?.whyShopifyEyebrow || (isNo ? 'Hva du får' : 'What you get')}</div>
             {title && <h2 className={ui.h2}>{title}</h2>}
             {subtitle && <p className="m-0 text-lg leading-relaxed text-sc-ink-600">{subtitle}</p>}
           </div>

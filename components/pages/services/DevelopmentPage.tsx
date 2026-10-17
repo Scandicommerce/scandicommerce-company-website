@@ -118,6 +118,7 @@ export default async function DevelopmentPage({ language }: { language: string }
         <ServiceHero {...copy.hero} buttons={buttons} visual={<CodeEditorMockup />} />
         <ServiceFacts depth={depth} />
         <ShopifyDevelopmentPageSectionRenderer
+          lang={language}
           sections={sections.filter((s) => s._type !== 'shopifyDevelopmentPageHeroSection' && s._type !== 'shopifyDevelopmentPageCtaSection')}
         />
         <ServiceDeliverables depth={depth} language={language} />
@@ -125,7 +126,7 @@ export default async function DevelopmentPage({ language }: { language: string }
         <ServiceIntegrations depth={depth} language={language} />
         <ServiceFaq depth={depth} />
         <ServiceLinks depth={depth} language={language} />
-        <ShopifyDevelopmentPageSectionRenderer sections={sections.filter((s) => s._type === 'shopifyDevelopmentPageCtaSection')} />
+        <ShopifyDevelopmentPageSectionRenderer lang={language} sections={sections.filter((s) => s._type === 'shopifyDevelopmentPageCtaSection')} />
       </main>
       <FooterWrapper />
     </div>

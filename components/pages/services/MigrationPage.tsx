@@ -114,13 +114,13 @@ export default async function MigrationPage({ language }: { language: string }) 
           visual={<MigrationMockup fromPlatforms={fromPlatforms} />}
         />
         <ServiceFacts depth={depth} />
-        <MigratePageSectionRenderer sections={sections.filter((s) => s._type !== 'migratePageHeroSection' && s._type !== 'migratePageCtaSection')} />
+        <MigratePageSectionRenderer lang={language} sections={sections.filter((s) => s._type !== 'migratePageHeroSection' && s._type !== 'migratePageCtaSection')} />
         <ServiceDeliverables depth={depth} language={language} />
         <ServicePrerequisites depth={depth} language={language} />
         <ServiceIntegrations depth={depth} language={language} />
         <ServiceFaq depth={depth} />
         <ServiceLinks depth={depth} language={language} />
-        <MigratePageSectionRenderer sections={sections.filter((s) => s._type === 'migratePageCtaSection')} />
+        <MigratePageSectionRenderer lang={language} sections={sections.filter((s) => s._type === 'migratePageCtaSection')} />
       </main>
       <FooterWrapper />
     </div>

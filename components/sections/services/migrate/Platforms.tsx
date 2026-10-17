@@ -11,10 +11,12 @@ interface PlatformsData {
 
 interface PlatformsProps {
   platforms?: PlatformsData
+  lang?: string
 }
 
 /** Source platforms as hairline cards with the typical duration in mono. */
-export default function Platforms({ platforms }: PlatformsProps) {
+export default function Platforms({ platforms, lang }: PlatformsProps) {
+  const isNo = (lang ?? 'no') === 'no'
   const title = platforms?.platformsTitle
   const items = platforms?.platformsItems
 
@@ -23,7 +25,7 @@ export default function Platforms({ platforms }: PlatformsProps) {
       <div className={`${ui.container} flex flex-col gap-10`}>
         {title && (
           <div className="flex max-w-[680px] flex-col gap-2.5">
-            <div className={ui.eyebrow}>{platforms?.platformsEyebrow || 'Plattformer'}</div>
+            <div className={ui.eyebrow}>{platforms?.platformsEyebrow || (isNo ? 'Plattformer' : 'Platforms')}</div>
             <h2 className={ui.h2}>{title}</h2>
           </div>
         )}

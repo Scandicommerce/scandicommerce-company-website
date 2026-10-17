@@ -12,10 +12,12 @@ interface HowWeWorkData {
 
 interface HowWeWorkProps {
   howWeWork?: HowWeWorkData
+  lang?: string
 }
 
 /** Process as a numbered row: mono step numbers over a hairline, like the data-flow steps. */
-export default function HowWeWork({ howWeWork }: HowWeWorkProps) {
+export default function HowWeWork({ howWeWork, lang }: HowWeWorkProps) {
+  const isNo = (lang ?? 'no') === 'no'
   const title = howWeWork?.howWeWorkTitle
   const steps = howWeWork?.howWeWorkSteps
 
@@ -24,7 +26,7 @@ export default function HowWeWork({ howWeWork }: HowWeWorkProps) {
       <div className={`${ui.container} flex flex-col gap-10`}>
         {title && (
           <div className="flex max-w-[680px] flex-col gap-2.5">
-            <div className={ui.eyebrow}>{howWeWork?.howWeWorkEyebrow || 'Prosess'}</div>
+            <div className={ui.eyebrow}>{howWeWork?.howWeWorkEyebrow || (isNo ? 'Prosess' : 'Process')}</div>
             <h2 className={ui.h2}>{title}</h2>
           </div>
         )}

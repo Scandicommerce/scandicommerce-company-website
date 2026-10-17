@@ -13,10 +13,12 @@ interface ProcessData {
 
 interface MigrationProcessProps {
   process?: ProcessData
+  lang?: string
 }
 
 /** Migration phases as a numbered row over a hairline, week label in mono. */
-export default function MigrationProcess({ process }: MigrationProcessProps) {
+export default function MigrationProcess({ process, lang }: MigrationProcessProps) {
+  const isNo = (lang ?? 'no') === 'no'
   const title = process?.processTitle
   const subtitle = process?.processSubtitle
   const phases = process?.processPhases
@@ -26,7 +28,7 @@ export default function MigrationProcess({ process }: MigrationProcessProps) {
       <div className={`${ui.container} flex flex-col gap-10`}>
         {(title || subtitle) && (
           <div className="flex max-w-[680px] flex-col gap-2.5">
-            <div className={ui.eyebrow}>{process?.processEyebrow || 'Prosess'}</div>
+            <div className={ui.eyebrow}>{process?.processEyebrow || (isNo ? 'Prosess' : 'Process')}</div>
             {title && <h2 className={ui.h2}>{title}</h2>}
             {subtitle && <p className="m-0 text-lg leading-relaxed text-sc-ink-600">{subtitle}</p>}
           </div>

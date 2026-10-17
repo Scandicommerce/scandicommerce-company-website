@@ -12,10 +12,12 @@ interface ResultsData {
 
 interface RealMigrationResultsProps {
   results?: ResultsData
+  lang?: string
 }
 
 /** Outcomes as hairline cards with the figure in mono, like the case-study results. */
-export default function RealMigrationResults({ results }: RealMigrationResultsProps) {
+export default function RealMigrationResults({ results, lang }: RealMigrationResultsProps) {
+  const isNo = (lang ?? 'no') === 'no'
   const title = results?.resultsTitle
   const items = results?.resultsItems
 
@@ -24,7 +26,7 @@ export default function RealMigrationResults({ results }: RealMigrationResultsPr
       <div className={`${ui.container} flex flex-col gap-10`}>
         {title && (
           <div className="flex max-w-[680px] flex-col gap-2.5">
-            <div className={ui.eyebrow}>{results?.resultsEyebrow || 'Resultater'}</div>
+            <div className={ui.eyebrow}>{results?.resultsEyebrow || (isNo ? 'Resultater' : 'Results')}</div>
             <h2 className={ui.h2}>{title}</h2>
           </div>
         )}

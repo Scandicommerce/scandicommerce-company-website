@@ -14,12 +14,14 @@ interface ScenariosData {
 
 interface CommonScenariosProps {
   scenarios?: ScenariosData
+  lang?: string
 }
 
 /** Scenarios as hairline cards, two per row. */
-export default function CommonScenarios({ scenarios }: CommonScenariosProps) {
+export default function CommonScenarios({ scenarios, lang }: CommonScenariosProps) {
+  const isNo = (lang ?? 'no') === 'no'
   const title = scenarios?.scenariosTitle
-  const linkText = scenarios?.scenariosLinkText || 'Se hvordan vi hjelper'
+  const linkText = scenarios?.scenariosLinkText || (isNo ? 'Se hvordan vi hjelper' : 'See how we help')
   const items = scenarios?.scenariosItems
 
   return (
@@ -27,7 +29,7 @@ export default function CommonScenarios({ scenarios }: CommonScenariosProps) {
       <div className={`${ui.container} flex flex-col gap-10`}>
         {title && (
           <div className="flex max-w-[680px] flex-col gap-2.5">
-            <div className={ui.eyebrow}>{scenarios?.scenariosEyebrow || 'Typiske oppdrag'}</div>
+            <div className={ui.eyebrow}>{scenarios?.scenariosEyebrow || (isNo ? 'Typiske oppdrag' : 'Typical projects')}</div>
             <h2 className={ui.h2}>{title}</h2>
           </div>
         )}
