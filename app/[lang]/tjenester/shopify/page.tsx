@@ -8,6 +8,8 @@ import WhyShopifyWins from '@/components/sections/services/shopify_development/W
 import HowWeWork from '@/components/sections/services/shopify_development/HowWeWork'
 import ReadyToBuild from '@/components/sections/services/shopify_development/ReadyToBuild'
 import ReadMoreSection from '@/components/sections/services/ReadMoreSection'
+import { ServiceDeliverables, ServiceFacts, ServiceFaq, ServiceIntegrations, ServiceLinks, ServicePrerequisites } from '@/components/sections/services/depth/ServiceDepth'
+import { servicesDepth } from '@/lib/servicesDepth'
 import Image from 'next/image'
 import { getLanguageFromParams } from '@/lib/language'
 import { getPageTeaserText } from '@/lib/pageTeaser'
@@ -117,6 +119,7 @@ export default async function ShopifyNettbutikkPage({ params }: { params: Promis
   if (language !== 'no') notFound()
 
   const platformText = await getPageTeaserText(platform.href, language)
+  const depth = servicesDepth.shopify
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -124,7 +127,11 @@ export default async function ShopifyNettbutikkPage({ params }: { params: Promis
       <main className="flex-grow">
         <ServiceHero {...hero} visual={<StorefrontMockup />} />
         <WhyShopifyWins whyShopify={included} />
+        <ServiceFacts depth={depth} />
         <HowWeWork howWeWork={process} />
+        <ServiceDeliverables depth={depth} />
+        <ServicePrerequisites depth={depth} />
+        <ServiceIntegrations depth={depth} language={language} />
         <ReadMoreSection
           eyebrow={platform.eyebrow}
           title={platform.title}
@@ -133,6 +140,8 @@ export default async function ShopifyNettbutikkPage({ params }: { params: Promis
           linkText={platform.linkText}
           visual={<Image src="/images/shopifyPlus.svg" alt="Shopify Plus" width={220} height={96} unoptimized className="h-auto w-[160px] md:w-full" />}
         />
+        <ServiceFaq depth={depth} />
+        <ServiceLinks depth={depth} />
         <ReadyToBuild cta={cta} />
       </main>
       <FooterWrapper />

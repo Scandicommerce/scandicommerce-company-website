@@ -5,6 +5,8 @@ import FooterWrapper from '@/components/layout/FooterWrapper'
 import ServiceHero from '@/components/sections/services/ServiceHero'
 import CodeEditorMockup from '@/components/sections/services/visuals/CodeEditorMockup'
 import { ShopifyDevelopmentPageSectionRenderer } from '@/components/pageSectionRenderers/ShopifyDevelopmentPageSectionRenderer'
+import { ServiceDeliverables, ServiceFacts, ServiceFaq, ServiceIntegrations, ServiceLinks, ServicePrerequisites } from '@/components/sections/services/depth/ServiceDepth'
+import { servicesDepth } from '@/lib/servicesDepth'
 import { getLanguageFromParams } from '@/lib/language'
 import { coalescePageSeo, getPageSeo, getSiteSettings } from '@/lib/sanity/pageSeo'
 import { normalizePageSections } from '@/lib/sanity/pageBuilderLegacy'
@@ -63,6 +65,7 @@ export default async function UtviklingPage({ params }: { params: Promise<{ lang
     .catch(() => null)
   const sections = normalizePageSections('shopifyDevelopmentPage', pageData)
   const heroSection = sections.find((s) => s._type === 'shopifyDevelopmentPageHeroSection') as HeroSection | undefined
+  const depth = servicesDepth.utvikling
 
   const buttons = heroSection?.heroButtons?.length
     ? heroSection.heroButtons.map((b, i) => ({
@@ -80,9 +83,16 @@ export default async function UtviklingPage({ params }: { params: Promise<{ lang
       <HeaderWrapper />
       <main className="flex-grow">
         <ServiceHero {...hero} buttons={buttons} visual={<CodeEditorMockup />} />
+        <ServiceFacts depth={depth} />
         <ShopifyDevelopmentPageSectionRenderer
-          sections={sections.filter((s) => s._type !== 'shopifyDevelopmentPageHeroSection')}
+          sections={sections.filter((s) => s._type !== 'shopifyDevelopmentPageHeroSection' && s._type !== 'shopifyDevelopmentPageCtaSection')}
         />
+        <ServiceDeliverables depth={depth} />
+        <ServicePrerequisites depth={depth} />
+        <ServiceIntegrations depth={depth} language={language} />
+        <ServiceFaq depth={depth} />
+        <ServiceLinks depth={depth} />
+        <ShopifyDevelopmentPageSectionRenderer sections={sections.filter((s) => s._type === 'shopifyDevelopmentPageCtaSection')} />
       </main>
       <FooterWrapper />
     </div>

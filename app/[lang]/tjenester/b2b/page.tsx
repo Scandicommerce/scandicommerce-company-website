@@ -8,6 +8,8 @@ import WhyShopifyWins from '@/components/sections/services/shopify_development/W
 import HowWeWork from '@/components/sections/services/shopify_development/HowWeWork'
 import ReadyToBuild from '@/components/sections/services/shopify_development/ReadyToBuild'
 import ReadMoreSection from '@/components/sections/services/ReadMoreSection'
+import { ServiceDeliverables, ServiceFacts, ServiceFaq, ServiceIntegrations, ServiceLinks, ServicePrerequisites } from '@/components/sections/services/depth/ServiceDepth'
+import { servicesDepth } from '@/lib/servicesDepth'
 import { getLanguageFromParams } from '@/lib/language'
 import { getPageTeaserText } from '@/lib/pageTeaser'
 import { coalescePageSeo, getSiteSettings } from '@/lib/sanity/pageSeo'
@@ -108,6 +110,7 @@ export default async function B2bPage({ params }: { params: Promise<{ lang: stri
   if (language !== 'no') notFound()
 
   const caseText = await getPageTeaserText(caseStudy.href, language)
+  const depth = servicesDepth.b2b
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -115,7 +118,11 @@ export default async function B2bPage({ params }: { params: Promise<{ lang: stri
       <main className="flex-grow">
         <ServiceHero {...hero} visual={<OrderPortalMockup />} />
         <WhyShopifyWins whyShopify={included} />
+        <ServiceFacts depth={depth} />
         <HowWeWork howWeWork={process} />
+        <ServiceDeliverables depth={depth} />
+        <ServicePrerequisites depth={depth} />
+        <ServiceIntegrations depth={depth} language={language} />
         <ReadMoreSection
           eyebrow={caseStudy.eyebrow}
           title={caseText.title || caseStudy.fallbackTitle}
@@ -123,6 +130,8 @@ export default async function B2bPage({ params }: { params: Promise<{ lang: stri
           href={caseStudy.href}
           linkText={caseStudy.linkText}
         />
+        <ServiceFaq depth={depth} />
+        <ServiceLinks depth={depth} />
         <ReadyToBuild cta={cta} />
       </main>
       <FooterWrapper />

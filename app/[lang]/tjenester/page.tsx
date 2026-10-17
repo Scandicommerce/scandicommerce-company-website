@@ -14,6 +14,8 @@ import { packagesHref, CONTACT_SLUG, trimSlashes } from '@/lib/routes'
 import { coalescePageSeo, getSiteSettings } from '@/lib/sanity/pageSeo'
 import { buildMetadata } from '@/lib/seo/buildMetadata'
 import { ui } from '@/components/integrations/labels'
+import { Faq } from '@/components/integrations/LinkBlocks'
+import { servicesOverview } from '@/lib/servicesDepth'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -168,6 +170,50 @@ export default async function TjenesterOverviewPage({ params }: { params: Promis
             </ul>
           </div>
         </section>
+
+        <section id="hva-passer" className="scroll-mt-24 bg-sc-ink-50 py-16 lg:py-20">
+          <div className={ui.container}>
+            <div className="mb-8 flex flex-col gap-4 lg:mb-10 lg:flex-row lg:items-end lg:justify-between lg:gap-8">
+              <div className="flex flex-col gap-2.5">
+                <div className={ui.eyebrow}>Hva passer deg</div>
+                <h2 className={ui.h2}>Start med situasjonen din</h2>
+              </div>
+              <p className="m-0 max-w-[520px] text-base leading-relaxed text-sc-ink-600 lg:text-lg">Finn linjen som ligner mest. Er du usikker, tar vi en kartlegging og anbefaler.</p>
+            </div>
+            <ul className="m-0 grid list-none grid-cols-1 gap-px overflow-hidden rounded-lg border border-sc-ink-100 bg-sc-ink-100 p-0">
+              {servicesOverview.chooser.map((c) => (
+                <li key={c.href}>
+                  <LocalizedLink href={c.href} className="group flex flex-col gap-2 bg-white p-5 no-underline transition-colors hover:bg-sc-ink-50 md:flex-row md:items-center md:justify-between md:gap-8 lg:px-6">
+                    <span className="text-[16px] leading-snug text-sc-ink-700 md:max-w-[520px]">{c.situation}</span>
+                    <span className="flex items-center gap-2 text-[15px] font-semibold text-sc-ink-900 group-hover:text-sc-cyan-600">
+                      {c.service} <span aria-hidden="true">→</span>
+                    </span>
+                  </LocalizedLink>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
+
+        <section className="bg-white py-16 lg:py-20">
+          <div className={`${ui.container} flex flex-col gap-10`}>
+            <div className="flex max-w-[680px] flex-col gap-2.5">
+              <div className={ui.eyebrow}>Slik jobber vi</div>
+              <h2 className={ui.h2}>Samme fremgangsmåte, uansett leveranse</h2>
+            </div>
+            <ol className="m-0 grid list-none grid-cols-1 gap-6 p-0 sm:grid-cols-2 lg:grid-cols-4 lg:gap-8">
+              {servicesOverview.process.map((step, i) => (
+                <li key={step.title} className="flex flex-col gap-3 border-t border-sc-ink-900 pt-5">
+                  <span className="font-mono text-[13px] text-sc-ink-500">{String(i + 1).padStart(2, '0')}</span>
+                  <h3 className="m-0 text-lg font-semibold leading-snug text-sc-ink-900">{step.title}</h3>
+                  <p className="m-0 text-[15px] leading-relaxed text-sc-ink-600">{step.text}</p>
+                </li>
+              ))}
+            </ol>
+          </div>
+        </section>
+
+        <Faq items={servicesOverview.faq} heading="Vanlige spørsmål" />
 
         <section className="bg-sc-ink-900 py-16 text-white lg:py-20">
           <div className={`${ui.container} flex flex-wrap items-center justify-between gap-8`}>

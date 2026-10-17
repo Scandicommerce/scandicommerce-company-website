@@ -5,6 +5,8 @@ import FooterWrapper from '@/components/layout/FooterWrapper'
 import ServiceHero from '@/components/sections/services/ServiceHero'
 import MigrationMockup from '@/components/sections/services/visuals/MigrationMockup'
 import { MigratePageSectionRenderer } from '@/components/pageSectionRenderers/MigratePageSectionRenderer'
+import { ServiceDeliverables, ServiceFacts, ServiceFaq, ServiceIntegrations, ServiceLinks, ServicePrerequisites } from '@/components/sections/services/depth/ServiceDepth'
+import { servicesDepth } from '@/lib/servicesDepth'
 import { getLanguageFromParams } from '@/lib/language'
 import { coalescePageSeo, getPageSeo, getSiteSettings } from '@/lib/sanity/pageSeo'
 import { normalizePageSections } from '@/lib/sanity/pageBuilderLegacy'
@@ -68,6 +70,7 @@ export default async function MigreringPage({ params }: { params: Promise<{ lang
   const heroSection = sections.find((s) => s._type === 'migratePageHeroSection') as HeroSection | undefined
   const platforms = sections.find((s) => s._type === 'migratePagePlatformsSection') as PlatformsSection | undefined
   const fromPlatforms = platforms?.platformsItems?.map((p) => p.name).filter((n): n is string => Boolean(n))
+  const depth = servicesDepth.migrering
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -86,7 +89,14 @@ export default async function MigreringPage({ params }: { params: Promise<{ lang
           highlights={['SEO-rangeringer bevart', 'Null nedetid', 'Over 50 migreringer']}
           visual={<MigrationMockup fromPlatforms={fromPlatforms} />}
         />
-        <MigratePageSectionRenderer sections={sections.filter((s) => s._type !== 'migratePageHeroSection')} />
+        <ServiceFacts depth={depth} />
+        <MigratePageSectionRenderer sections={sections.filter((s) => s._type !== 'migratePageHeroSection' && s._type !== 'migratePageCtaSection')} />
+        <ServiceDeliverables depth={depth} />
+        <ServicePrerequisites depth={depth} />
+        <ServiceIntegrations depth={depth} language={language} />
+        <ServiceFaq depth={depth} />
+        <ServiceLinks depth={depth} />
+        <MigratePageSectionRenderer sections={sections.filter((s) => s._type === 'migratePageCtaSection')} />
       </main>
       <FooterWrapper />
     </div>
