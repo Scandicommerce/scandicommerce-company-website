@@ -40,8 +40,8 @@ export default function ContactHero({ hero, cards, eyebrow }: { hero?: HeroData;
           <h1 className="mb-5 text-[36px] font-bold leading-[1.02] tracking-[-0.028em] text-sc-ink-900 sm:text-[44px] lg:mb-6 lg:text-[56px]">{renderTitle(title, hero?.heroTitle?.highlight)}</h1>
           {hero?.heroDescription && <p className="m-0 max-w-[560px] text-base leading-relaxed text-sc-ink-600 lg:text-lg">{hero.heroDescription}</p>}
           <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-            <a href="#book" className={ui.btnPrimary}>Book en samtale</a>
-            <a href="#melding" className={ui.btnSecondary}>Send en melding</a>
+            <a href="#book" className={ui.btnPrimary}>{eyebrow === 'Kontakt' ? 'Book en samtale' : 'Book a call'}</a>
+            <a href="#melding" className={ui.btnSecondary}>{eyebrow === 'Kontakt' ? 'Send en melding' : 'Send a message'}</a>
           </div>
         </div>
         {list.length > 0 && (

@@ -21,7 +21,8 @@ interface TrustedPartnershipsData {
 const norm = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '')
 
 /** Certifications as partner tiles; the logo comes from Sanity, else from the partner catalog. */
-export default function TrustedPartnerships({ trustedPartnerships }: { trustedPartnerships?: TrustedPartnershipsData }) {
+export default function TrustedPartnerships({ trustedPartnerships, lang = 'no' }: { trustedPartnerships?: TrustedPartnershipsData; lang?: string }) {
+  const isNo = lang === 'no'
   const items = (trustedPartnerships?.partnerships ?? []).filter((p) => p?.name)
   if (items.length === 0) return null
   return (
@@ -29,7 +30,7 @@ export default function TrustedPartnerships({ trustedPartnerships }: { trustedPa
       <div className={`${ui.container} flex flex-col gap-10`}>
         <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between lg:gap-8">
           <div className="flex flex-col gap-2.5">
-            <div className={ui.eyebrow}>Sertifiseringer</div>
+            <div className={ui.eyebrow}>{isNo ? 'Sertifiseringer' : 'Certifications'}</div>
             {trustedPartnerships?.title && <h2 className={ui.h2}>{trustedPartnerships.title}</h2>}
           </div>
           {trustedPartnerships?.subtitle && <p className="m-0 max-w-[520px] text-base leading-relaxed text-sc-ink-600 lg:text-lg">{trustedPartnerships.subtitle}</p>}
@@ -51,7 +52,7 @@ export default function TrustedPartnerships({ trustedPartnerships }: { trustedPa
           })}
         </ul>
         <div>
-          <LocalizedLink href="/partnere" className="text-sm font-semibold text-sc-ink-900 hover:text-sc-cyan-600">Se alle partnerne våre →</LocalizedLink>
+          <LocalizedLink href={isNo ? '/partnere' : '/partners'} className="text-sm font-semibold text-sc-ink-900 hover:text-sc-cyan-600">{isNo ? 'Se alle partnerne våre →' : 'See all our partners →'}</LocalizedLink>
         </div>
       </div>
     </section>

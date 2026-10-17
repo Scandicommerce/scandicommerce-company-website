@@ -347,7 +347,7 @@ async function main() {
   }
 
   for (const d of docs) {
-    await client.createOrReplace(d)
+    await client.createOrReplace(d as { _id: string; _type: string } & Doc)
     console.log(dataset, 'wrote', d._id, d.definition ? `(${words(d.definition)} words in definition)` : '')
   }
   for (const no of sources) {

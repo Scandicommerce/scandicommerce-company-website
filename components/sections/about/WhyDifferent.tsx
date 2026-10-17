@@ -16,7 +16,7 @@ interface WhyDifferentData {
 const ICONS: Record<string, LucideIcon> = { pricing: Coins, product: Package, results: TrendingUp }
 
 /** Three reasons on the integrations card: cyan disc, Lucide icon, hairline card. */
-export default function WhyDifferent({ whyDifferent }: { whyDifferent?: WhyDifferentData }) {
+export default function WhyDifferent({ whyDifferent, lang = 'no' }: { whyDifferent?: WhyDifferentData; lang?: string }) {
   const features = (whyDifferent?.features ?? []).filter((f) => f?.title)
   if (!whyDifferent?.title && features.length === 0) return null
   return (
@@ -24,7 +24,7 @@ export default function WhyDifferent({ whyDifferent }: { whyDifferent?: WhyDiffe
       <div className={`${ui.container} flex flex-col gap-10`}>
         <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between lg:gap-8">
           <div className="flex flex-col gap-2.5">
-            <div className={ui.eyebrow}>Hvorfor oss</div>
+            <div className={ui.eyebrow}>{lang === 'no' ? 'Hvorfor oss' : 'Why us'}</div>
             {whyDifferent?.title && <h2 className={ui.h2}>{whyDifferent.title}</h2>}
           </div>
           {whyDifferent?.subtitle && <p className="m-0 max-w-[520px] text-base leading-relaxed text-sc-ink-600 lg:text-lg">{whyDifferent.subtitle}</p>}

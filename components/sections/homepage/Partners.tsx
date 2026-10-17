@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useRef } from 'react'
-import Link from 'next/link'
+import Link from '@/components/ui/LocalizedLink'
 import { motion, useInView } from 'framer-motion'
 
 interface PartnersData {

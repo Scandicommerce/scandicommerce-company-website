@@ -23,7 +23,7 @@ export function ContactPageSectionRenderer({ sections, lang = 'no' }: { sections
             return <BookingSection key={_key} lang={lang} bookingSection={r.bookingSection} messageSection={r.messageSection} benefits={r.benefits} />
           }
           case 'contactPageMapSection':
-            return <MapSection key={_key} mapSection={rest as Parameters<typeof MapSection>[0]['mapSection']} />
+            return <MapSection key={_key} mapSection={rest as Parameters<typeof MapSection>[0]['mapSection']} lang={lang} />
           case 'contactPageFaqSection':
             return <FAQ key={_key} faq={rest as Parameters<typeof FAQ>[0]['faq']} />
           default:

@@ -13,7 +13,7 @@ function buildMapUrl(lat: number, lng: number): string {
 }
 
 /** Office map in a hairline frame. */
-export default function MapSection({ mapSection }: { mapSection?: MapSectionData }) {
+export default function MapSection({ mapSection, lang = 'no' }: { mapSection?: MapSectionData; lang?: string }) {
   const lat = mapSection?.latitude ?? 59.9242
   const lng = mapSection?.longitude ?? 10.6994
   return (
@@ -21,7 +21,7 @@ export default function MapSection({ mapSection }: { mapSection?: MapSectionData
       <div className={`${ui.container} flex flex-col gap-8`}>
         <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between lg:gap-8">
           <div className="flex flex-col gap-2.5">
-            <div className={ui.eyebrow}>Besøk oss</div>
+            <div className={ui.eyebrow}>{lang === 'no' ? 'Besøk oss' : 'Visit us'}</div>
             {mapSection?.title && <h2 className={ui.h2}>{mapSection.title}</h2>}
           </div>
           {mapSection?.description && <p className="m-0 max-w-[520px] text-base leading-relaxed text-sc-ink-600 lg:text-lg">{mapSection.description}</p>}

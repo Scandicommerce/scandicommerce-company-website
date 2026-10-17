@@ -3,7 +3,7 @@
 /* eslint-disable @next/next/no-img-element */
 import React from 'react'
 import { sanityImg } from '@/lib/sanityImage'
-import Link from 'next/link'
+import Link from '@/components/ui/LocalizedLink'
 import Marquee from 'react-fast-marquee'
 
 interface Brand {

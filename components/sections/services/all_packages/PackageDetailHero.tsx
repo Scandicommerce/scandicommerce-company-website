@@ -37,10 +37,11 @@ const T = {
  */
 export default function PackageDetailHero({ pkg, tier, shopifyProduct, lang = 'en' }: PackageDetailHeroProps) {
   const t = T[lang as keyof typeof T] ?? T.en
-  const card = tier ? cardForTier(tier) : undefined
-  const below = tier ? tierBelow(tier) : undefined
+  const isNo = lang === 'no'
+  const card = tier && isNo ? cardForTier(tier) : undefined
+  const below = tier && isNo ? tierBelow(tier) : undefined
   const belowCard = below ? cardForTier(below) : undefined
-  const total = tier ? serviceCount(tier) : undefined
+  const total = tier && isNo ? serviceCount(tier) : undefined
   const audience = card?.audience || pkg.idealFor?.[0]
 
   return (
@@ -120,7 +121,7 @@ export default function PackageDetailHero({ pkg, tier, shopifyProduct, lang = 'e
                 )}
                 {belowCard && (
                   <div>
-                    <dt className="text-sm text-sc-ink-500">Bygger på</dt>
+                    <dt className="text-sm text-sc-ink-500">{isNo ? 'Bygger på' : 'Builds on'}</dt>
                     <dd className="text-[24px] font-bold text-sc-ink-900">{belowCard.name}</dd>
                   </div>
                 )}

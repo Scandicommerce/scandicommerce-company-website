@@ -259,7 +259,7 @@ async function main() {
   for (const key of KEYS) {
     const no = byId.get(`integration-${key}-no`)!
     const en = buildEn(no, key)
-    await client.createOrReplace(en)
+    await client.createOrReplace(en as { _id: string; _type: string } & Doc)
     console.log(dataset, 'wrote', en._id, `(${en.definition.split(/\s+/).length} words in definition)`)
     const metaId = `integration-${key}-meta`
     await client.createOrReplace({ _id: metaId, _type: 'translation.metadata', schemaTypes: ['integrationPage'], translations: [

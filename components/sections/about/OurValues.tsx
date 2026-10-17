@@ -11,14 +11,14 @@ interface OurValuesData {
 }
 
 /** Values as a numbered hairline list, four to a row on desktop. */
-export default function OurValues({ ourValues }: { ourValues?: OurValuesData }) {
+export default function OurValues({ ourValues, lang = 'no' }: { ourValues?: OurValuesData; lang?: string }) {
   const values = (ourValues?.values ?? []).filter((v) => v?.title)
   if (values.length === 0) return null
   return (
     <section id="verdier" className="scroll-mt-24 bg-sc-ink-50 py-16 lg:py-20">
       <div className={`${ui.container} flex flex-col gap-10`}>
         <div className="flex max-w-[680px] flex-col gap-2.5">
-          <div className={ui.eyebrow}>Verdier</div>
+          <div className={ui.eyebrow}>{lang === 'no' ? 'Verdier' : 'Values'}</div>
           {ourValues?.title && <h2 className={ui.h2}>{ourValues.title}</h2>}
         </div>
         <ol className="m-0 grid list-none grid-cols-1 gap-px overflow-hidden rounded-lg border border-sc-ink-100 bg-sc-ink-100 p-0 sm:grid-cols-2 lg:grid-cols-4">

@@ -19,7 +19,7 @@ interface MeetTheTeamData {
 }
 
 /** Team on an ink band: portrait cards with role, specialties as chips and the fun fact in mono. */
-export default function MeetTheTeam({ meetTheTeam }: { meetTheTeam?: MeetTheTeamData }) {
+export default function MeetTheTeam({ meetTheTeam, lang = 'no' }: { meetTheTeam?: MeetTheTeamData; lang?: string }) {
   const members = (meetTheTeam?.teamMembers ?? []).filter((m) => m?.name)
   if (members.length === 0) return null
   return (
@@ -27,7 +27,7 @@ export default function MeetTheTeam({ meetTheTeam }: { meetTheTeam?: MeetTheTeam
       <div className={`${ui.container} flex flex-col gap-10`}>
         <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between lg:gap-8">
           <div className="flex flex-col gap-2.5">
-            <div className="text-xs font-semibold uppercase tracking-[0.12em] text-sc-cyan-300">Teamet</div>
+            <div className="text-xs font-semibold uppercase tracking-[0.12em] text-sc-cyan-300">{lang === 'no' ? 'Teamet' : 'The team'}</div>
             {meetTheTeam?.title && <h2 className="m-0 text-[32px] font-bold leading-[1.25] tracking-[-0.02em] lg:text-[44px]">{meetTheTeam.title}</h2>}
           </div>
           {meetTheTeam?.subtitle && <p className="m-0 max-w-[520px] text-base leading-relaxed text-sc-ink-200 lg:text-lg">{meetTheTeam.subtitle}</p>}

@@ -16,18 +16,19 @@ export function AboutPageSectionRenderer({ sections, lang = 'no' }: { sections: 
           case 'aboutPageHeroSection':
             return <AboutHero key={_key} hero={rest as Parameters<typeof AboutHero>[0]['hero']} eyebrow={lang === 'no' ? 'Om oss' : 'About us'} />
           case 'aboutPageWhyDifferentSection':
-            return <WhyDifferent key={_key} whyDifferent={rest as Parameters<typeof WhyDifferent>[0]['whyDifferent']} />
+            return <WhyDifferent key={_key} whyDifferent={rest as Parameters<typeof WhyDifferent>[0]['whyDifferent']} lang={lang} />
           case 'aboutPageOurStorySection':
-            return <OurStory key={_key} ourStory={rest as Parameters<typeof OurStory>[0]['ourStory']} />
+            return <OurStory key={_key} ourStory={rest as Parameters<typeof OurStory>[0]['ourStory']} lang={lang} />
           case 'aboutPageOurValuesSection':
-            return <OurValues key={_key} ourValues={rest as Parameters<typeof OurValues>[0]['ourValues']} />
+            return <OurValues key={_key} ourValues={rest as Parameters<typeof OurValues>[0]['ourValues']} lang={lang} />
           case 'aboutPageMeetTheTeamSection':
-            return <MeetTheTeam key={_key} meetTheTeam={rest as Parameters<typeof MeetTheTeam>[0]['meetTheTeam']} />
+            return <MeetTheTeam key={_key} meetTheTeam={rest as Parameters<typeof MeetTheTeam>[0]['meetTheTeam']} lang={lang} />
           case 'aboutPageTrustedPartnershipsSection':
             return (
               <TrustedPartnerships
                 key={_key}
                 trustedPartnerships={rest as Parameters<typeof TrustedPartnerships>[0]['trustedPartnerships']}
+                lang={lang}
               />
             )
           case 'aboutPageCtaSection':

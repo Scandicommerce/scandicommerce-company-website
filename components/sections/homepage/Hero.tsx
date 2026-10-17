@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react'
 import { sanityImg } from '@/lib/sanityImage'
-import Link from 'next/link'
+import Link from '@/components/ui/LocalizedLink'
 
 interface HeroData {
   heroBadge?: string

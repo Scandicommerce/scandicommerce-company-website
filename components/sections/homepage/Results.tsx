@@ -3,7 +3,7 @@
 /* eslint-disable @next/next/no-img-element */
 import React from 'react'
 import { sanityImg } from '@/lib/sanityImage'
-import Link from 'next/link'
+import Link from '@/components/ui/LocalizedLink'
 import { workIndexHref } from '@/lib/routes'
 
 interface ResultsItem {
@@ -72,7 +72,7 @@ export default function Results({ data , lang = 'no' }: ResultsProps) {
         <div className="flex items-end justify-between gap-6 mb-6 lg:mb-10">
           <div>
             <div className="text-[11px] lg:text-xs font-semibold uppercase tracking-[0.12em] text-sc-cyan-500 mb-2.5">
-              Kundecaser
+              {lang === 'no' ? 'Kundecaser' : lang === 'sv' ? 'Kundcase' : lang === 'da' ? 'Kundecases' : lang === 'de' ? 'Kundenprojekte' : 'Case studies'}
             </div>
             {title && (
               <h2 className="text-[26px] lg:text-[44px] font-bold text-sc-ink-900 tracking-[-0.02em] leading-tight m-0">
