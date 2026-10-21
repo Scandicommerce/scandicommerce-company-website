@@ -2,7 +2,6 @@ import HeaderWrapper from '@/components/layout/HeaderWrapper'
 import FooterWrapper from '@/components/layout/FooterWrapper'
 import { PackageDetailPageSectionRenderer } from '@/components/pageSectionRenderers/PackageDetailPageSectionRenderer'
 import { getPackageBySlug, Package } from '@/lib/packages'
-import { getShopifyProductByHandle } from '@/lib/shopify'
 import { notFound } from 'next/navigation'
 import { sanityPageFetch } from '@/sanity/lib/fetch'
 import { packageDetailPageQuery } from '@/sanity/lib/queries'
@@ -125,48 +124,9 @@ export default async function PackageDetailPage({ params }: { params: Promise<{ 
     if (!pkg.faq?.length) pkg.faq = staticPkg.faq
   }
 
-  // The slug is the full path (tjenester/alle-pakker/premium); the Shopify
-  // handle is its last segment.
-  const handle = slug.split('/').filter(Boolean).pop() ?? slug
-  let shopifyProduct = null
-  try {
-    shopifyProduct = await getShopifyProductByHandle(handle)
-  } catch {
-    /* not a Shopify product */
-  }
-
-  const titleToHandle = (title: string) => title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '')
-  const addOnsToProcess =
-    sanityData?.addOns?.items && sanityData.addOns.items.length > 0
-      ? sanityData.addOns.items
-      : [
-          { title: 'CRO Audit', description: 'Comprehensive conversion optimization analysis', price: '12.000 kr' },
-          { title: 'Monthly Support', description: 'Ongoing updates, bug fixes, and improvements', price: '8.000 kr/mo' },
-        ]
-
-  const addOnsWithShopify = await Promise.all(
-    addOnsToProcess.map(async (addOn) => {
-      if (!addOn.title) return { ...addOn }
-      const handle = titleToHandle(addOn.title)
-      let shopifyAddOn = null
-      try {
-        shopifyAddOn = await getShopifyProductByHandle(handle)
-      } catch {
-        /* not a product */
-      }
-      return {
-        ...addOn,
-        shopifyProduct: shopifyAddOn
-          ? {
-              variantId: shopifyAddOn.variants?.[0]?.id || '',
-              productTitle: shopifyAddOn.title,
-              hasVariants: (shopifyAddOn.variants?.length || 0) > 1,
-              variants: shopifyAddOn.variants || [],
-            }
-          : undefined,
-      }
-    })
-  )
+  // Packages and add-ons are sold through a call, not the Shopify cart, so
+  // price and copy come from Sanity only.
+  const addOnItems = sanityData?.addOns?.items ?? []
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -175,18 +135,7 @@ export default async function PackageDetailPage({ params }: { params: Promise<{ 
         <PackageDetailPageSectionRenderer
           sections={sections}
           pkg={pkg}
-          shopifyProduct={
-            shopifyProduct
-              ? {
-                  variantId: shopifyProduct.variants?.[0]?.id || '',
-                  productTitle: shopifyProduct.title,
-                  hasVariants: (shopifyProduct.variants?.length || 0) > 1,
-                  variants: shopifyProduct.variants || [],
-                  price: shopifyProduct.variants?.[0] ? `${new Intl.NumberFormat('nb-NO', { maximumFractionDigits: 0 }).format(shopifyProduct.variants[0].price).replace(/\u00a0/g, ' ')} kr` : undefined,
-                }
-              : undefined
-          }
-          addOns={{ ...sanityData?.addOns, items: addOnsWithShopify }}
+          addOns={{ ...sanityData?.addOns, items: addOnItems }}
           caseStudiesBanner={sanityData?.caseStudiesBanner}
           lang={lang}
         />
