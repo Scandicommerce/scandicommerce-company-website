@@ -69,5 +69,9 @@ export async function sanityPageFetch<T = any>(
       next: { revalidate: 0, tags: options?.next?.tags },
     });
   }
-  return client.fetch<T>(query, params, { next: options?.next });
+  // Pages pass revalidate: 0, which made every visit an uncached Sanity API
+  // call. Published pages now revalidate at most every 5 minutes.
+  const revalidate = options?.next?.revalidate
+  const next = { ...options?.next, revalidate: revalidate === 0 || revalidate === undefined ? 300 : revalidate }
+  return client.fetch<T>(query, params, { next });
 }
