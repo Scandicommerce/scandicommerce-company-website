@@ -53,7 +53,6 @@ interface Labels {
   bestFor: string
   whatsIncluded: string
   perMonth: string
-  recommended: string
   compare: string
   exVat: string
 }
@@ -79,7 +78,6 @@ function PackageCard({ pkg, labels, featured, lang }: { pkg: Package; labels: La
 
   return (
     <div className={`relative flex min-w-0 flex-col gap-5 rounded-lg border p-6 lg:p-7 ${featured ? 'border-sc-ink-900 bg-sc-ink-900 text-white' : 'border-sc-ink-100 bg-white text-sc-ink-900'}`}>
-      {featured && <span className="absolute -top-3 left-6 inline-flex items-center rounded-md bg-sc-cyan-500 px-2.5 py-1 text-xs font-semibold text-sc-ink-900">{labels.recommended}</span>}
       <div className="flex flex-col gap-1.5">
         <h3 className="m-0 text-[26px] font-bold leading-tight tracking-[-0.02em]">{pkg.title}</h3>
         {pkg.subtitle && <p className={`m-0 text-[15px] leading-snug ${body}`}>{pkg.subtitle}</p>}
@@ -143,7 +141,6 @@ export default function PricingPackages({ packages, lang }: PricingPackagesProps
     bestFor: isNo ? 'Passer for' : 'Best for',
     whatsIncluded: isNo ? 'Inkludert' : 'Included',
     perMonth: isNo ? 'per måned' : 'per month',
-    recommended: isNo ? 'Mest valgt' : 'Most popular',
     compare: isNo ? 'Sammenlign alle tjenester' : 'Compare every service',
     exVat: isNo ? 'eks. mva' : 'ex. VAT',
   }
