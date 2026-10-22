@@ -51,6 +51,9 @@ const UPSELL: Partial<Record<PackageTier, { next: PackageTier; text: string }>> 
   },
 }
 
+/** Keep "48 000" and "10 000 kr" on one line. */
+const nb = (s: string) => s.replace(/(\d) (\d{3})/g, '$1\u00a0$2').replace(/(\d) kr/g, '$1\u00a0kr')
+
 const Check = () => (
   <span aria-hidden="true" className="mt-[3px] font-bold text-sc-cyan-700">
     ✓
@@ -63,7 +66,7 @@ function ServiceItem({ service }: { service: PackageService }) {
       <Check />
       <div className="min-w-0">
         <div className="font-semibold text-sc-ink-900">{service.name}</div>
-        <div className="text-[14px] leading-snug text-sc-ink-500">{service.text}</div>
+        <div className="text-[14px] leading-snug text-sc-ink-500">{nb(service.text)}</div>
       </div>
     </li>
   )
@@ -91,6 +94,19 @@ export default function PackageDetailRedesign({ pkg, tier, addOns, contactHref }
   const price = pkg.price || card?.price || ''
   const groups = servicesForTier(tier).sort((a, b) => PANEL_ORDER.indexOf(a.section) - PANEL_ORDER.indexOf(b.section))
   const panels = groups.filter((g) => g.added.length > 0)
+  // Big panels span the row; a small panel left without a partner spans it too.
+  const wideFlags: boolean[] = []
+  let run = 0
+  panels.forEach((g, i) => {
+    const big = g.added.length > 3
+    wideFlags[i] = big
+    if (!big) run += 1
+    const runEnds = big || i === panels.length - 1 || panels[i + 1].added.length > 3
+    if (!big && runEnds) {
+      if (run % 2 === 1) wideFlags[i] = true
+      run = 0
+    }
+  })
   const inheritedCount = groups.reduce((n, g) => n + g.inherited.length, 0)
   const idealFor = (pkg.idealFor ?? []).filter(Boolean)
   const steps = (pkg.processSteps ?? []).filter((s) => s?.title)
@@ -99,7 +115,7 @@ export default function PackageDetailRedesign({ pkg, tier, addOns, contactHref }
   const upsell = UPSELL[tier]
   const upsellCard = upsell ? cardForTier(upsell.next) : undefined
   const bookHref = pkg.heroButtons?.primaryButtonLink || contactHref
-  const bookText = pkg.heroButtons?.primaryButtonText || 'Book en samtale'
+  const bookText = 'Book en samtale'
 
   return (
     <div className="bg-white">
@@ -129,11 +145,20 @@ export default function PackageDetailRedesign({ pkg, tier, addOns, contactHref }
                   </li>
                 ))}
               </ul>
+              <div className="mt-2 flex flex-col gap-3 rounded-[20px] border border-sc-ink-200 p-5 lg:hidden">
+                <div className="flex flex-wrap items-baseline gap-2">
+                  <span className="font-mono text-[32px] font-medium leading-none tracking-[-0.03em] text-sc-ink-900">{nb(price)}</span>
+                  <span className="text-[15px] text-sc-ink-500">/mnd eks. mva</span>
+                </div>
+                <a href={bookHref} className="flex min-h-[48px] items-center justify-center rounded-full bg-sc-ink-900 px-6 font-semibold text-white">
+                  {bookText}
+                </a>
+              </div>
             </section>
 
             {idealFor.length > 0 && (
               <section className="flex flex-col gap-5">
-                <SectionTitle id="passer-for">Passer for deg som</SectionTitle>
+                <SectionTitle id="passer-for">Passer for</SectionTitle>
                 <ul className="m-0 grid list-none grid-cols-1 gap-3 p-0 sm:grid-cols-2 xl:grid-cols-3">
                   {idealFor.map((item) => (
                     <li key={item} className="rounded-xl border border-sc-ink-100 p-4 text-[15px] leading-relaxed text-sc-ink-700">
@@ -153,8 +178,8 @@ export default function PackageDetailRedesign({ pkg, tier, addOns, contactHref }
               </div>
 
               <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                {panels.map((group) => {
-                  const wide = group.added.length > 3 || (panels.length % 2 === 1 && group === panels[panels.length - 1])
+                {panels.map((group, i) => {
+                  const wide = wideFlags[i]
                   return (
                     <div key={group.section} className={`flex flex-col gap-5 rounded-[20px] bg-sc-ink-50 p-6 lg:p-7 ${wide ? 'md:col-span-2' : ''}`}>
                       <div className="flex items-center gap-3.5">
@@ -225,12 +250,12 @@ export default function PackageDetailRedesign({ pkg, tier, addOns, contactHref }
                 </div>
                 <ul className="m-0 list-none overflow-hidden rounded-xl border border-sc-ink-100 p-0">
                   {extras.map((item) => (
-                    <li key={item.title} className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1 border-b border-sc-ink-100 px-5 py-4 last:border-b-0">
-                      <div className="min-w-0">
+                    <li key={item.title} className="flex items-baseline justify-between gap-6 border-b border-sc-ink-100 px-5 py-4 last:border-b-0">
+                      <div className="min-w-0 flex-1">
                         <div className="font-medium text-sc-ink-900">{item.title}</div>
                         {item.description && <div className="text-sm text-sc-ink-500">{item.description}</div>}
                       </div>
-                      {item.price && <span className="font-mono text-[15px] text-sc-ink-900">{item.price}</span>}
+                      {item.price && <span className="flex-none whitespace-nowrap font-mono text-[15px] text-sc-ink-900">{nb(item.price)}</span>}
                     </li>
                   ))}
                 </ul>
@@ -260,7 +285,7 @@ export default function PackageDetailRedesign({ pkg, tier, addOns, contactHref }
           <aside className="flex w-full flex-col gap-4 lg:sticky lg:top-24 lg:w-[340px] lg:flex-none">
             <div className="flex flex-col gap-5 rounded-[20px] border border-sc-ink-200 bg-white p-7 shadow-[0_8px_20px_rgba(10,13,15,0.10)]">
               <div className="flex flex-wrap items-baseline gap-2">
-                <span className="font-mono text-[40px] font-medium leading-none tracking-[-0.03em] text-sc-ink-900">{price}</span>
+                <span className="font-mono text-[40px] font-medium leading-none tracking-[-0.03em] text-sc-ink-900">{nb(price)}</span>
                 <span className="text-[15px] text-sc-ink-500">/mnd eks. mva</span>
               </div>
               <ul className="m-0 flex list-none flex-col gap-2 border-y border-dashed border-sc-ink-200 p-0 py-4 text-[15px] text-sc-ink-700">
@@ -277,8 +302,8 @@ export default function PackageDetailRedesign({ pkg, tier, addOns, contactHref }
             {upsell && upsellCard && (
               <div className="flex flex-col gap-2.5 rounded-[20px] border border-sc-cyan-200 bg-sc-cyan-50 p-6">
                 <div className="text-[20px] font-bold tracking-[-0.01em] text-sc-ink-900">Trenger du mer hjelp?</div>
-                <p className="m-0 text-[15px] leading-relaxed text-sc-ink-600">{upsell.text}</p>
-                <p className="m-0 text-[15px] font-semibold text-sc-ink-900">{upsellCard.price}/mnd</p>
+                <p className="m-0 text-[15px] leading-relaxed text-sc-ink-600">{nb(upsell.text)}</p>
+                <p className="m-0 text-[15px] font-semibold text-sc-ink-900">{nb(upsellCard.price)}/mnd</p>
                 <Link href={`/tjenester/alle-pakker/${upsell.next}`} className="text-[15px] font-semibold text-sc-cyan-700 underline-offset-2 hover:underline">
                   Se {upsellCard.name}
                 </Link>

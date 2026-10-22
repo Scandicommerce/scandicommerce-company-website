@@ -34,7 +34,7 @@ interface PricingPackagesProps {
 }
 
 /** Sanity entries often start with a check mark; the UI draws its own. */
-const clean = (s: string) => s.replace(/^[\s✓✔☑•-]+/, '').trim()
+const clean = (s: string) => s.replace(/^[\s✓✔☑•-]+/, '').trim().replace(/(\d) (\d{3})/g, '$1\u00a0$2')
 const handleOf = (s: string) => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '')
 
 /** Resolves Book Call URL: page slug (preferred), then custom href, then /contact. */
