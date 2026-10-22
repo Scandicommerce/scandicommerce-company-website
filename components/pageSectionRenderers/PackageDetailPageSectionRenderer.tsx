@@ -3,6 +3,8 @@ import PackageDetailBody from '@/components/sections/services/all_packages/Packa
 import PackageFaq from '@/components/sections/services/all_packages/PackageFaq'
 import FrequentlyAddedTogether from '@/components/sections/services/all_packages/FrequentlyAddedTogether'
 import CaseStudiesBanner from '@/components/sections/services/all_packages/CaseStudiesBanner'
+import PackageDetailRedesign from '@/components/sections/services/all_packages/PackageDetailRedesign'
+import { contactHref } from '@/lib/routes'
 import type { Package } from '@/lib/packages'
 import { PACKAGE_TIERS, type PackageTier } from '@/lib/packageMatrix'
 import type { SanitySectionItem } from '@/lib/sanity/normalizeDocumentSections'
@@ -39,6 +41,17 @@ export function PackageDetailPageSectionRenderer({
   const tier = PACKAGE_TIERS.includes(slugTail as PackageTier)
     ? (slugTail as PackageTier)
     : undefined
+
+  // Norwegian tier pages use the redesigned layout; other languages and
+  // non-matrix packages keep the previous one until their copy is updated.
+  if (tier && lang === 'no') {
+    return (
+      <>
+        <PackageDetailRedesign pkg={pkg} tier={tier} addOns={addOns} contactHref={contactHref(lang)} />
+        <CaseStudiesBanner packageName={pkg.title} caseStudiesBanner={caseStudiesBanner} />
+      </>
+    )
+  }
 
   return (
     <>
