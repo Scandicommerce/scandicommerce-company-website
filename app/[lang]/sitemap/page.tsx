@@ -10,9 +10,6 @@ import { getShopifyProducts } from '@/lib/shopify'
 import LocalizedLink from '@/components/ui/LocalizedLink'
 import { ui } from '@/components/integrations/labels'
 
-export const dynamic = 'force-dynamic'
-export const revalidate = 0
-
 interface SitemapEntry {
   _type: string
   title: string

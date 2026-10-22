@@ -3,9 +3,6 @@ import { notFound } from 'next/navigation'
 import B2bPage, { b2bMetadata } from '@/components/pages/services/B2bPage'
 import { getLanguageFromParams } from '@/lib/language'
 
-export const dynamic = 'force-dynamic'
-export const revalidate = 0
-
 export async function generateMetadata({ params }: { params: Promise<{ lang: string }> }): Promise<Metadata> {
   const { lang } = await params
   return b2bMetadata(getLanguageFromParams({ lang }))

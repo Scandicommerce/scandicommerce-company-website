@@ -3,9 +3,6 @@ import { notFound } from 'next/navigation'
 import DevelopmentPage, { developmentMetadata } from '@/components/pages/services/DevelopmentPage'
 import { getLanguageFromParams } from '@/lib/language'
 
-export const dynamic = 'force-dynamic'
-export const revalidate = 0
-
 export async function generateMetadata({ params }: { params: Promise<{ lang: string }> }): Promise<Metadata> {
   const { lang } = await params
   return developmentMetadata(getLanguageFromParams({ lang }))

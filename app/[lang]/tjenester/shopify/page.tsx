@@ -3,9 +3,6 @@ import { notFound } from 'next/navigation'
 import ShopifyStorePage, { shopifyStoreMetadata } from '@/components/pages/services/ShopifyStorePage'
 import { getLanguageFromParams } from '@/lib/language'
 
-export const dynamic = 'force-dynamic'
-export const revalidate = 0
-
 export async function generateMetadata({ params }: { params: Promise<{ lang: string }> }): Promise<Metadata> {
   const { lang } = await params
   return shopifyStoreMetadata(getLanguageFromParams({ lang }))

@@ -9,9 +9,6 @@ import { getLanguageFromParams } from '@/lib/language'
 import { coalescePageSeo, getSiteSettings } from '@/lib/sanity/pageSeo'
 import { buildMetadata } from '@/lib/seo/buildMetadata'
 
-export const dynamic = 'force-dynamic'
-export const revalidate = 0
-
 interface LegalPageData {
   pageTitle: string
   language?: string

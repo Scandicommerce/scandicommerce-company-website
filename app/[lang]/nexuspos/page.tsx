@@ -13,9 +13,6 @@ import { buildMetadata } from '@/lib/seo/buildMetadata'
 import { getShopifyCollectionProducts } from '@/lib/shopify'
 import type { Language } from '@/lib/site-config'
 
-export const dynamic = 'force-dynamic'
-export const revalidate = 0
-
 const ROUTE_PATH = 'nexuspos'
 
 const META = {
