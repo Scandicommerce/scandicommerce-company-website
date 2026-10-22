@@ -12,9 +12,6 @@ import type { HomepageFromSanity, HomepageSectionBlock } from '@/lib/homepageSec
 import type { TeaserPost } from '@/components/sections/homepage/BlogTeaser'
 import { normalizePageSections } from '@/lib/sanity/pageBuilderLegacy'
 
-export const dynamic = 'force-dynamic'
-export const revalidate = 0
-
 interface HomepageData extends HomepageFromSanity {
   _id: string
   pageTitle: string
