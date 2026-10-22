@@ -1,7 +1,5 @@
 import LocalizedLink from '@/components/ui/LocalizedLink'
 import { ui } from '@/components/integrations/labels'
-import type { ShopifyProduct } from '@/lib/shopify'
-import PackageAddToCart from './PackageAddToCart'
 import PackageMatrix from './PackageMatrix'
 import { PACKAGE_TIERS, type PackageTier } from '@/lib/packageMatrix'
 
@@ -24,8 +22,6 @@ interface Package {
   bookCallSlug?: string | null
   /** Custom link for Book Call when no page is selected (path or URL). */
   bookCallHref?: string | null
-  shopifyVariantId?: string
-  shopifyProductTitle?: string
 }
 
 interface PackagesData {
@@ -35,14 +31,11 @@ interface PackagesData {
 interface PricingPackagesProps {
   packages?: PackagesData
   lang?: string
-  /** Products from the Shopify `packages` collection; matched by handle. */
-  products?: ShopifyProduct[]
 }
 
 /** Sanity entries often start with a check mark; the UI draws its own. */
 const clean = (s: string) => s.replace(/^[\s✓✔☑•-]+/, '').trim()
 const handleOf = (s: string) => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '')
-const nok = (n: number) => `${new Intl.NumberFormat('nb-NO', { maximumFractionDigits: 0 }).format(n).replace(/ /g, ' ')} kr`
 
 /** Resolves Book Call URL: page slug (preferred), then custom href, then /contact. */
 function resolveBookCallHref(pkg: Package): string {
@@ -51,24 +44,15 @@ function resolveBookCallHref(pkg: Package): string {
   return '/contact'
 }
 
-/** Match a Sanity package to its Shopify product: slug tail first, then title. */
-function productFor(pkg: Package, products: ShopifyProduct[]): ShopifyProduct | undefined {
-  const tail = (pkg.slug ?? '').split('/').filter(Boolean).pop()
-  const candidates = [tail, handleOf(pkg.title)].filter(Boolean) as string[]
-  return products.find((p) => candidates.includes(p.handle)) ?? products.find((p) => handleOf(p.title) === handleOf(pkg.title))
-}
-
 interface Labels {
   eyebrow: string
   heading: string
   lead: string
   viewDetails: string
   bookCall: string
-  addToCart: string
   bestFor: string
   whatsIncluded: string
   perMonth: string
-  recommended: string
   compare: string
   exVat: string
 }
@@ -79,24 +63,21 @@ const CHECK = (
 
 /**
  * One tier column: name, one-line promise, mono price, the "everything in"
- * pill, audience, deliverables as a check list and the actions. Shopify
- * supplies the price and the cart button when the product exists.
+ * pill, audience, deliverables as a check list and the actions. Price comes from Sanity.
  */
-function PackageCard({ pkg, labels, featured, product, lang }: { pkg: Package; labels: Labels; featured: boolean; product?: ShopifyProduct; lang: string }) {
+function PackageCard({ pkg, labels, featured, lang }: { pkg: Package; labels: Labels; featured: boolean; lang: string }) {
   const included = (pkg.included ?? []).map(clean).filter(Boolean)
   const inherits = included.find((s) => /^(alt i|everything in)\s/i.test(s))
   const items = included.filter((s) => s !== inherits).slice(0, 7)
   const bookHref = resolveBookCallHref(pkg)
   const detailHref = pkg.slug ? `/${pkg.slug}` : pkg.href || null
-  const variant = product?.variants?.[0]
-  const price = variant ? nok(variant.price) : pkg.price
+  const price = pkg.price
   const custom = /tilpass|custom|avtale/i.test(pkg.price)
   const muted = featured ? 'text-sc-ink-300' : 'text-sc-ink-500'
   const body = featured ? 'text-sc-ink-200' : 'text-sc-ink-600'
 
   return (
     <div className={`relative flex min-w-0 flex-col gap-5 rounded-lg border p-6 lg:p-7 ${featured ? 'border-sc-ink-900 bg-sc-ink-900 text-white' : 'border-sc-ink-100 bg-white text-sc-ink-900'}`}>
-      {featured && <span className="absolute -top-3 left-6 inline-flex items-center rounded-md bg-sc-cyan-500 px-2.5 py-1 text-xs font-semibold text-sc-ink-900">{labels.recommended}</span>}
       <div className="flex flex-col gap-1.5">
         <h3 className="m-0 text-[26px] font-bold leading-tight tracking-[-0.02em]">{pkg.title}</h3>
         {pkg.subtitle && <p className={`m-0 text-[15px] leading-snug ${body}`}>{pkg.subtitle}</p>}
@@ -134,21 +115,12 @@ function PackageCard({ pkg, labels, featured, product, lang }: { pkg: Package; l
       )}
 
       <div className="mt-auto flex flex-col gap-2.5 pt-2">
-        {variant && !custom ? (
-          <PackageAddToCart variantId={variant.id} productTitle={product!.title} label={labels.addToCart} onDark={featured} />
-        ) : (
-          <LocalizedLink href={bookHref} className={featured ? 'inline-flex min-h-[46px] items-center justify-center rounded-lg bg-white px-[22px] py-3 text-sm font-semibold tracking-[0.02em] text-sc-ink-900 hover:bg-sc-ink-50' : ui.btnPrimary}>
-            {labels.bookCall}
-          </LocalizedLink>
-        )}
+        <LocalizedLink href={bookHref} className={featured ? 'inline-flex min-h-[46px] items-center justify-center rounded-lg bg-white px-[22px] py-3 text-sm font-semibold tracking-[0.02em] text-sc-ink-900 hover:bg-sc-ink-50' : ui.btnPrimary}>
+          {labels.bookCall}
+        </LocalizedLink>
         {detailHref && (
           <LocalizedLink href={detailHref} className={featured ? 'inline-flex min-h-[46px] items-center justify-center rounded-lg border border-sc-ink-600 px-[22px] py-3 text-sm font-semibold tracking-[0.02em] text-white hover:bg-sc-ink-800' : ui.btnSecondary}>
             {labels.viewDetails}
-          </LocalizedLink>
-        )}
-        {variant && !custom && (
-          <LocalizedLink href={bookHref} className={`text-center text-[13px] font-medium underline-offset-2 hover:underline ${muted}`}>
-            {labels.bookCall}
           </LocalizedLink>
         )}
       </div>
@@ -156,21 +128,19 @@ function PackageCard({ pkg, labels, featured, product, lang }: { pkg: Package; l
   )
 }
 
-export default function PricingPackages({ packages, lang, products = [] }: PricingPackagesProps) {
+export default function PricingPackages({ packages, lang }: PricingPackagesProps) {
   const items = packages?.packagesItems ?? []
   const isNo = lang === 'no' || lang === 'nb-NO' || (lang ?? '').startsWith('nb')
 
   const labels: Labels = {
     eyebrow: isNo ? 'Alle pakker' : 'All packages',
     heading: isNo ? 'Velg nivå. Alt i pakken under er med.' : 'Pick a level. Everything below it is included.',
-    lead: isNo ? 'Fast månedspris, ingen binding utover oppstartsperioden. Bytt nivå når behovet endrer seg.' : 'Fixed monthly price, no lock-in beyond onboarding. Change level when your needs change.',
+    lead: isNo ? 'Fast månedspris og ingen bindingstid. Bytt nivå når behovet endrer seg.' : 'Fixed monthly price and no lock-in. Change level when your needs change.',
     viewDetails: isNo ? 'Se alt som inngår' : 'See everything included',
     bookCall: isNo ? 'Book en samtale' : 'Book a call',
-    addToCart: isNo ? 'Bestill pakken' : 'Order package',
     bestFor: isNo ? 'Passer for' : 'Best for',
     whatsIncluded: isNo ? 'Inkludert' : 'Included',
     perMonth: isNo ? 'per måned' : 'per month',
-    recommended: isNo ? 'Mest valgt' : 'Most popular',
     compare: isNo ? 'Sammenlign alle tjenester' : 'Compare every service',
     exVat: isNo ? 'eks. mva' : 'ex. VAT',
   }
@@ -183,8 +153,7 @@ export default function PricingPackages({ packages, lang, products = [] }: Prici
     const tail = (pkg.slug ?? '').split('/').filter(Boolean).pop() as PackageTier | undefined
     const tier = tail && PACKAGE_TIERS.includes(tail) ? tail : (PACKAGE_TIERS.find((t) => t === handleOf(pkg.title)) as PackageTier | undefined)
     if (!tier) continue
-    const v = productFor(pkg, products)?.variants?.[0]
-    matrixPrices[tier] = v ? nok(v.price) : pkg.price
+    matrixPrices[tier] = pkg.price
   }
   const cols = items.length >= 4 ? 'lg:grid-cols-4' : items.length === 3 ? 'lg:grid-cols-3' : ''
 
@@ -201,7 +170,7 @@ export default function PricingPackages({ packages, lang, products = [] }: Prici
           </div>
           <div className={`grid grid-cols-1 gap-4 pt-3 md:grid-cols-2 ${cols} lg:gap-5`}>
             {items.map((pkg, index) => (
-              <PackageCard key={index} pkg={pkg} labels={labels} featured={index === featuredIndex} product={productFor(pkg, products)} lang={isNo ? 'no' : 'en'} />
+              <PackageCard key={index} pkg={pkg} labels={labels} featured={index === featuredIndex} lang={isNo ? 'no' : 'en'} />
             ))}
           </div>
           {isNo && (

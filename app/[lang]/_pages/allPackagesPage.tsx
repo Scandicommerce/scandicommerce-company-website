@@ -6,7 +6,6 @@ import { allPackagesPageQuery } from '@/sanity/lib/queries'
 import { getQueryParams } from '@/sanity/lib/queryHelpers'
 import { getLanguageFromParams } from '@/lib/language'
 import { normalizePageSections } from '@/lib/sanity/pageBuilderLegacy'
-import { getShopifyCollectionProducts } from '@/lib/shopify'
 
 interface AllPackagesPageData {
   _id: string
@@ -18,10 +17,8 @@ interface AllPackagesPageData {
 export default async function AllPackagesPage({ params }: { params: Promise<{ lang: string; slug?: string }> }) {
   const resolvedParams = await params
   const language = getLanguageFromParams(resolvedParams)
-  const [pageData, products] = await Promise.all([
-    sanityPageFetch<AllPackagesPageData>(allPackagesPageQuery, getQueryParams({}, language), { next: { revalidate: 0 } }),
-    getShopifyCollectionProducts('packages'),
-  ])
+  // Package prices come from Sanity only; the Shopify store sells merch, not packages.
+  const pageData = await sanityPageFetch<AllPackagesPageData>(allPackagesPageQuery, getQueryParams({}, language), { next: { revalidate: 0 } })
 
   const sections = normalizePageSections('allPackagesPage', pageData)
 
@@ -29,7 +26,7 @@ export default async function AllPackagesPage({ params }: { params: Promise<{ la
     <div className="flex flex-col min-h-screen">
       <HeaderWrapper />
       <main className="flex-grow">
-        <AllPackagesPageSectionRenderer sections={sections} lang={resolvedParams.lang} products={products} />
+        <AllPackagesPageSectionRenderer sections={sections} lang={resolvedParams.lang} />
         <FooterWrapper />
       </main>
     </div>

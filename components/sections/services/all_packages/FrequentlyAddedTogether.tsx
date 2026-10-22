@@ -85,6 +85,7 @@ function AddOnCard({ addOn, index }: { addOn: AddOn; index: number }) {
   return (
     <div className="relative rounded-lg border border-sc-ink-100 bg-white p-6">
       {/* Add to Cart button - top right */}
+      {hasShopifyProduct && (
       <button
         onClick={handleAddToCart}
         disabled={isDisabled}
@@ -131,6 +132,7 @@ function AddOnCard({ addOn, index }: { addOn: AddOn; index: number }) {
           </>
         )}
       </button>
+      )}
 
       {/* Title */}
       <h3 className="text-lg font-semibold leading-snug text-sc-ink-900 mb-2 pr-20">
@@ -145,6 +147,7 @@ function AddOnCard({ addOn, index }: { addOn: AddOn; index: number }) {
         {addOn.price}
       </p>
 
+      {hasShopifyProduct && (
       <button
         onClick={handleAddToCart}
         disabled={isDisabled}
@@ -191,6 +194,7 @@ function AddOnCard({ addOn, index }: { addOn: AddOn; index: number }) {
           </>
         )}
       </button>
+      )}
     </div>
   )
 }

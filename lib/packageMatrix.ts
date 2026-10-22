@@ -115,7 +115,6 @@ export const packageCards: PackageCard[] = [
       'E-post, analyse og månedlig rapport',
       'Support på e-post og chat',
       'Universell utforming (WCAG) og ytelse',
-      '10 timer i måneden',
     ],
   },
   {
@@ -131,7 +130,6 @@ export const packageCards: PackageCard[] = [
       'Skreddersydd utvikling og full tematilpasning',
       'Drift av integrasjoner mot ERP, PIM og 3PL',
       'Fast kontaktperson, prioritert support og kvartalsvis vekstplan',
-      '15 timer i måneden',
     ],
   },
   {
