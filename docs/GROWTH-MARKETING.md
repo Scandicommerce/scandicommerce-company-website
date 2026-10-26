@@ -150,7 +150,7 @@ npm run dev                 # http://localhost:3000/no/growth-marketing
 
 ## 7. Åpne spørsmål
 
-**Menyen (nytt etter merge av `main`):** Øyvind har satt `live: false` på Growth marketing i `lib/navigation.ts`, så menyen er skjult. Oppføringen der følger fortsatt den gamle IA-en (`/geo`, `/google-ads`, `/analyse`), som ikke stemmer med URL-ene våre. Ifølge commit-meldingen hans (fc15d00) skal branchen som leverer en seksjon, fjerne flagget i samme endring. Det kolliderer med regelen vår i §5. Avklares med Øyvind: enten bytter han inn `growthNavItem()`, eller så gjør vi det selv i PR-en.
+**Menyen (nytt etter merge av `main`):** Øyvind har satt `live: false` på Growth marketing i `lib/navigation.ts`, så menyen er skjult. Oppføringen der følger fortsatt den gamle IA-en (`/geo`, `/google-ads`, `/analyse`), som ikke stemmer med URL-ene våre. Ifølge commit-meldingen hans (fc15d00) skal branchen som leverer en seksjon, fjerne flagget i samme endring. Det kolliderer med regelen vår i §5. Avklares med Øyvind: enten bytter han inn `growthNavItem()`, eller så gjør vi det selv i PR-en. **Merk (2026-10-26):** Headeren bruker menyen fra Sanity (`headerSettingsQuery` i `HeaderWrapper`) når den finnes. `navigation.ts` er bare en reserve. Growth-menyen må derfor også legges inn i header-innstillingene i Sanity for å vises på nettsiden. Det gjelder også lokalt, så menyforslaget kan ikke forhåndsvises ved å endre `navigation.ts`.
 
 **Må bekreftes før SEM og Google Ads publiseres:**
 - [ ] Priser: Pakkekortene lenker til pakkeoversikten (`/tjenester/alle-pakker`) i stedet for å vise pris. **Pakkeoversikten viser i dag bare Shopify-pakkene.** SEM- og Google Ads-pakkene må legges inn der (i Sanity) før lenken gir mening.
