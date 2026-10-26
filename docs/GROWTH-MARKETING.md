@@ -81,6 +81,12 @@ Følger tjenestesidene under `/tjenester` (Shopify, Migrering, Utvikling), så h
 
 Sider uten tekst viser hero og malen som en nummerert brief.
 
+**Forelder og kanal:** SEM og SoMe handler om valg av kanal, fordeling av budsjett og samspillet med resten. Detaljene for hver kanal står bare på kanalsiden. Hver kanalside har sin egen vinkel: Google Ads (feed og rammer for automatikken), Bing Ads (import og desktop), AI-søk (hva som finnes i Norge), Meta (katalog, data og Advantage+), TikTok (video som passer inn, skapere og Spark Ads) og Snapchat (fullskjerm, Story og Collection, og rekkevidden en vanlig dag).
+
+**Ikke love for mye:** Produksjon av kreativer, innhold og skapere står som «etter avtale». Vi lover ingen fast frekvens (ukentlig, månedlig) eller møter før det er avklart i §7.
+
+**Mobil:** «Her i modellen» vises bare på desktop. På mobil kommer «Kort fortalt» rett etter hero, og «Les videre» har lenken «Se hvordan alle tjenestene henger sammen». Seksjonene har mindre luft på mobil.
+
 ## 4. Retningslinjer for innhold
 
 **Merkevare.** Følg designsystemet: https://claude.ai/artifact/SrBevWGhR5ojNANtxzniqu
@@ -176,7 +182,7 @@ npm run dev                 # http://localhost:3000/no/growth-marketing
 - [ ] **Bevis:** Ingen av sidene har kundecase, egne tall eller navngitt spesialist. Dette er den største svakheten for konvertering og E-E-A-T. Vi trenger tillatelse til 2–3 case med tall, og en navngitt spesialist med bilde per område.
 - [ ] **Pris og «Se pakkene»:** Samlesiden sier «fastpris», og «Se pakkene» går til pakkeoversikten. Der finnes bare Shopify-pakker, én av dem heter «Growth» (8 000 kr/mnd), og den inneholder allerede «E-post og markedsføringsautomatisering» og «Analyse og sporing». Enten lager vi Growth-pakker med pris, eller så fjerner vi «fastpris» og «Se pakkene» og avklarer forholdet til Shopify-pakken.
 - [ ] **Neste steg:** Et konkret inngangstilbud (for eksempel en revisjon med omfang, varighet og pris), og «Før vi starter» med minstebudsjett, oppsigelse og oppstartstid, slik tjenestesidene har.
-- [ ] **Overlapp mellom sidene:** SEM og Google Ads, og SoMe og kanalsidene, dekker mye av det samme. Forslag: SEM og SoMe handler om valg av kanal og fordeling av budsjett, og detaljene står bare på kanalsidene. Kanalsidene får hver sin egen vinkel, så de ikke leses som samme mal.
+- [x] **Overlapp mellom sidene (delvis løst 2026-10-26):** SEM og Google Ads, og SoMe og kanalsidene, dekker mye av det samme. Forslag: SEM og SoMe handler om valg av kanal og fordeling av budsjett, og detaljene står bare på kanalsidene. Kanalsidene får hver sin egen vinkel, så de ikke leses som samme mal.
 - [ ] **Hero for besøkende fra Google:** «Steg 2 · Fang etterspørselen» og modellpanelet er intern logikk. Vurder bevis i hero og modellen lenger ned, særlig på mobil.
 - [ ] **To grupperinger:** Menyen (Strategi og innsikt · Annonsering · Egne kanaler) og modellen (Skap · Fang · Selg og behold · Grunnmur) plasserer SEO ulikt. Velg én.
 - [ ] **Titler og beskrivelser:** Ingen titler har kommersiell hensikt (for eksempel «byrå»), og meta-beskrivelsen er ingressen, ofte under 100 tegn.
@@ -332,3 +338,4 @@ Tekstene skal bare inneholde påstander vi kan stå for. Tidsavhengige fakta sje
 | 2026-10-26 | Nye kanalsider: AI-søk under SEM, og TikTok og Snapchat under SoMe | Brukeren ville ha kanalene med; AI-søk dekker den betalte delen, mens GEO blir under SEO |
 | 2026-10-26 | Oppstarten kortes fra 0–30/30–60/60–90 dager til uke 1–2, uke 3–4 og fra måned 2, og seksjonen heter «Slik kommer vi i gang» | Brukeren: vi er raskt i gang når tilganger, strategi og mål er på plass. Stemmer med Growth-pakken («De to første ukene kartlegger vi butikken …») |
 | 2026-10-26 | Kvalitetskontroll: rettet universell utforming (CRO), Ahrefs-påstand, unntaket i § 15 og attribusjon (E-post), påstander om billigere klikk uten kilde (Bing), produktannonser og daglig bruk (Snapchat), forbehold om AI Max og nye flater (AI-søk), samtykkeforbehold for server-side på annonsesidene, én definisjon av lønnsomhet, språk; «Les videre» viser inntil fire kort | Uavhengig gjennomgang (Opus) og egne sjekker; strategiske funn står i §7 |
+| 2026-10-26 | SEM og SoMe blir sider om kanalvalg og budsjett, og kanalsidene får hver sin vinkel; produksjon av kreativer og frekvenser står som «etter avtale»; mobil: modellpanelet skjules, fakta, kort og luft strammes inn | Brukeren ba om mindre overlapp, ikke å love for mye, og bedre mobil |

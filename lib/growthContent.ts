@@ -72,12 +72,12 @@ export interface GrowthPageContent {
 export const growthContent: Record<string, GrowthPageContent> = {
   'merkevare-og-strategi': {
     highlight: 'vekststrategi',
-    highlights: ['Posisjonering', 'Vekstplan for 12 måneder', 'Målt med andel av søk'],
+    highlights: ['Posisjonering', 'Vekstplan for 12 måneder', 'Målt med merkevaresøk'],
     facts: [
       { label: 'Starter med', value: 'Workshop', note: 'innsikt om kunder og konkurrenter' },
       { label: 'Leveranse', value: 'Strategi', note: 'og vekstplan, som engangsleveranse' },
-      { label: 'Videre', value: 'Partner', note: 'månedlig oppfølging i kanalene' },
-      { label: 'Vi måler', value: 'Andel av søk', note: 'mot konkurrentene, hver måned' },
+      { label: 'Videre', value: 'Partner', note: 'oppfølging etter avtale' },
+      { label: 'Vi måler', value: 'Merkevaresøk', note: 'og nye kunder over tid' },
     ],
     why: {
       title: 'Vekst kommer fra flere kjøpere',
@@ -107,7 +107,7 @@ export const growthContent: Record<string, GrowthPageContent> = {
       { name: 'Merkevareelementer', text: 'Farger, form, tone og budskap som skal eies og brukes likt i alle kanaler over tid.' },
       { name: 'Fordeling mellom merkevare og salg', text: 'Hvor mye som skal skape etterspørsel og hvor mye som skal fange den, ut fra fasen du er i.' },
       { name: 'Vekstplan', text: 'Prioriterte tiltak for de neste 12 månedene, på tvers av kanalene.' },
-      { name: 'Måling og oppfølging', text: 'Andel av søk, merkevaresøk og nye kunder, fulgt opp hver måned.' },
+      { name: 'Måling og oppfølging', text: 'Merkevaresøk, nye kunder og andel av søk, fulgt opp jevnlig.' },
     ],
     notIncluded: ['Logodesign og full visuell identitet', 'Film- og fotoproduksjon', 'Medieinnkjøp'],
     process: [
@@ -146,22 +146,22 @@ export const growthContent: Record<string, GrowthPageContent> = {
 
   some: {
     highlight: 'sosiale medier',
-    highlights: ['Meta, TikTok og Snapchat', 'Nye kreativer hver måned', 'Målt på nye kunder'],
+    highlights: ['Meta, TikTok og Snapchat', 'Kanaler og budsjett der kundene er', 'Målt på nye kunder'],
     facts: [
       { label: 'Kanaler', value: 'Meta · TikTok', note: 'Snapchat og andre der kundene er' },
-      { label: 'Starter med', value: 'Revisjon', note: 'og kreativ plan' },
-      { label: 'Videre', value: 'Løpende drift', note: 'med nye kreativer hver måned' },
+      { label: 'Starter med', value: 'Revisjon', note: 'og kanalplan' },
+      { label: 'Kreativer', value: 'Plan og test', note: 'produksjon etter avtale' },
       { label: 'Vi måler', value: 'Nye kunder', note: 'ikke bare siste klikk' },
     ],
     why: {
       title: 'Sosiale medier skaper etterspørsel',
       paragraphs: [
-        'Søk fanger etterspørsel som allerede finnes. I sosiale medier når du folk før de begynner å lete, slik at det er deg de kommer på når behovet melder seg.',
+        'Søk fanger etterspørsel som allerede finnes. I sosiale medier når du folk før de begynner å lete, slik at det er deg de kommer på når behovet melder seg. Hvilke kanaler som passer, avhenger av hvor kundene dine er.',
         'Algoritmene til Meta, TikTok og Snapchat velger i stor grad selv hvem som ser hvilken annonse. Gode og varierte kreativer er derfor blitt avgjørende, og Meta skriver selv at variasjon gir systemet mer å jobbe med.',
       ],
       insight: {
         title: 'Kreativet er målrettingen',
-        text: 'Metas annonsesystem Andromeda snevrer titalls millioner annonser inn til noen tusen kandidater for hver person. Meta skriver at flere og mer varierte kreativer gir systemet mer å matche mot. Derfor jobber vi med bred målretting og mange kreativer.',
+        text: 'Metas annonsesystem Andromeda snevrer titalls millioner annonser inn til noen tusen kandidater for hver person. Meta skriver at flere og mer varierte kreativer gir systemet mer å matche mot. Derfor jobber vi med bred målretting og varierte kreativer.',
         source: {
           label: 'Meta Engineering: Meta Andromeda (2024)',
           href: 'https://engineering.fb.com/2024/12/02/production-engineering/meta-andromeda-advantage-automation-next-gen-personalized-ads-retrieval-engine/',
@@ -171,22 +171,22 @@ export const growthContent: Record<string, GrowthPageContent> = {
     situations: [
       { title: 'Kampanjene lever på retargeting', text: 'Det meste av budsjettet går til folk som allerede har besøkt butikken, og publikummet krymper hver måned.' },
       { title: 'Annonsene ser like ut og slites fort', text: 'Noen få kreativer går lenge, resultatene faller, og ingen har en plan for nye.' },
-      { title: 'Ingen kjenner merkevaren utenfor kundebasen', text: 'Nye kunder kommer bare når dere setter ned prisen.' },
+      { title: 'Alt budsjettet ligger i én kanal', text: 'Meta får alt av vane, og ingen har vurdert om TikTok eller Snapchat når kundene bedre.' },
       { title: 'ROAS ser bra ut, men veksten uteblir', text: 'Rapportene gir æren til siste klikk, mens det som skaper nye kunder, ikke blir målt.' },
     ],
     deliverables: [
-      { name: 'Kanalplan', text: 'Meta, TikTok, Snapchat og andre kanaler der kundene dine er, med fordeling mellom rekkevidde og salg.' },
-      { name: 'Kreativ plattform', text: 'Faste merkevareelementer og budskap som går igjen, så annonsene kjennes igjen.' },
-      { name: 'Mange kreative varianter', text: 'Video i 9:16, UGC-stil, bilder og karuseller, byttet ut før de slites ut.' },
-      { name: 'Kampanjer for rekkevidde og salg', text: 'Egne kampanjer for å nå nye kunder, ved siden av salgskampanjer med bred målretting og produktkatalog.' },
-      { name: 'Organisk innhold og skapere', text: 'Innholdsplan med rød tråd, og samarbeid med skapere med riktig reklamemerking.' },
-      { name: 'Kreativrapport', text: 'Hva som virker og hvorfor, med nye kunder og merkevaresøk over tid.' },
+      { name: 'Revisjon og kanalplan', text: 'Hvilke kanaler som passer kundene dine, og hvordan budsjettet fordeles mellom dem.' },
+      { name: 'Rekkevidde og salg', text: 'Egne kampanjer for å nå nye kunder, ved siden av salgskampanjene, med hver sin jobb.' },
+      { name: 'Kreativ plattform', text: 'Faste merkevareelementer og budskap som går igjen i alle kanalene.' },
+      { name: 'Kreativ plan og testing', text: 'Hvilke konsepter og formater som testes, og når kreativene bør byttes. Produksjonen gjøres av dere, en partner eller oss etter avtale.' },
+      { name: 'Måling utover siste klikk', text: 'Nye kunder, merkevaresøk og løftstester der det er mulig.' },
+      { name: 'Rapport på tvers', text: 'Resultatene fra kanalene samlet, med plan for neste periode.' },
     ],
-    notIncluded: ['Annonsebudsjett, som du betaler direkte til plattformene', 'Større film- og fotoproduksjoner', 'Honorarer til influensere og skapere'],
+    notIncluded: ['Annonsebudsjett, som du betaler direkte til plattformene', 'Produksjon av kreativer, med mindre det er avtalt', 'Honorarer til influensere og skapere'],
     process: [
-      { period: 'Uke 1–2', title: 'Innsikt og kreativ plattform', text: 'Revisjon av kontoer og kreativer, målgrupper og kjøpssituasjoner, og faste merkevareelementer.' },
-      { period: 'Uke 3–4', title: 'Lansering og testing', text: 'Nye kampanjer for rekkevidde og salg, med mange kreative varianter som testes mot hverandre.' },
-      { period: 'Fra måned 2', title: 'Skaler det som virker', text: 'Mer budsjett til kreativene som gir nye kunder, og en fast rytme for nye kreativer.' },
+      { period: 'Uke 1–2', title: 'Revisjon og kanalplan', text: 'Kontoer, kreativer og målgrupper gjennomgått, og en plan for kanaler og budsjett.' },
+      { period: 'Uke 3–4', title: 'Lansering og testing', text: 'Kampanjer for rekkevidde og salg i de valgte kanalene, med kreative varianter som testes mot hverandre.' },
+      { period: 'Fra måned 2', title: 'Fordel etter resultat', text: 'Mer budsjett til kanalene og kreativene som gir nye kunder.' },
     ],
     kpis: [
       { name: 'Kostnad per ny kunde', text: 'Hva det koster å vinne kunder som ikke har handlet før.' },
@@ -195,20 +195,20 @@ export const growthContent: Record<string, GrowthPageContent> = {
     ],
     faq: [
       {
+        question: 'Hvilke kanaler bør vi bruke?',
+        answer: 'Det avhenger av hvor kundene dine er og hva du selger. Vi anbefaler heller få kanaler med nok budsjett til å lære, enn mange som får for lite.',
+      },
+      {
         question: 'Hvorfor fokus på merkevare når vi vil selge?',
         answer: 'Salgskampanjer treffer bare dem som allerede vurderer å kjøpe. Merkevarebygging gjør at flere kommer på deg når behovet oppstår, og at salgskampanjene, søket og e-posten din fungerer bedre. Vi kjører begge, med hver sin jobb.',
       },
       {
-        question: 'Hvor mange kreativer trenger vi?',
-        answer: 'Det finnes ikke et magisk tall, og Meta oppgir ikke ett. Det viktige er variasjon i konsepter, formater og vinkler, og at kreativene byttes ut før de slites ut. Vi lager en fast rytme som passer budsjettet ditt.',
+        question: 'Hvem lager kreativene?',
+        answer: 'Det avtaler vi. Mange har egne folk, et kreativt byrå eller skapere de samarbeider med. Vi lager planen og briefen, tester og forteller hva som virker. Produksjon kan vi ta etter avtale.',
       },
       {
         question: 'Hvordan måler dere effekten?',
         answer: 'Siste klikk undervurderer sosiale medier, fordi mange ser annonsen og kjøper senere via søk. Vi følger nye kunder og merkevaresøk, og bruker konverteringsløftstester i Meta der det er mulig.',
-      },
-      {
-        question: 'Hva må vi passe på med influensere?',
-        answer: 'Reklame skal være tydelig merket, og merkingen bør komme først. Forbrukertilsynet mener plattformenes egen merking ikke er tydelig nok, og anbefaler å legge til «reklame» eller «annonse». Det bygger vi inn i alle samarbeid.',
       },
     ],
     related: [{ slug: 'merkevare-og-strategi', why: 'Posisjonering og merkevareelementer gir kreativene en rød tråd.' }],
@@ -250,7 +250,7 @@ export const growthContent: Record<string, GrowthPageContent> = {
       { name: 'Plattformene koblet på', text: 'Metas Conversions API, Googles forbedrede konverteringer, GA4 og øvrige annonseplattformer.' },
       { name: 'Samtykke', text: 'Consent Mode v2 koblet til samtykkebanneret, så valgene til den besøkende følges.' },
       { name: 'BigQuery og dashboards', text: 'Data fra nettbutikken, GA4 og annonseplattformene samlet, med dashboards for omsetning, kanaler og lønnsomhet.' },
-      { name: 'Kontroll av datakvalitet', text: 'Månedlig sjekk av avvik mot nettbutikken og av hendelsesmatchkvaliteten i Meta.' },
+      { name: 'Kontroll av datakvalitet', text: 'Jevnlig sjekk av avvik mot nettbutikken og av hendelsesmatchkvaliteten i Meta.' },
     ],
     notIncluded: ['Lisens til Tracklution og kostnader i Google Cloud, som du betaler direkte', 'Juridisk rådgivning om personvern'],
     process: [
@@ -289,38 +289,38 @@ export const growthContent: Record<string, GrowthPageContent> = {
 
   sem: {
     highlight: 'Betalt søk',
-    highlights: ['Google, Bing og AI-søk', 'Søk, Shopping og Performance Max', 'Styrt mot lønnsomhet'],
+    highlights: ['Google, Bing og AI-søk', 'Budsjett der det lønner seg', 'Betalt og organisk søk sammen'],
     facts: [
       { label: 'Kanaler', value: 'Google · Bing', note: 'og annonser i AI-søk' },
       { label: 'Starter med', value: 'Revisjon', note: 'konto, sporing og feed' },
-      { label: 'Videre', value: 'Løpende drift', note: 'arbeid i kontoen hver uke' },
+      { label: 'Videre', value: 'Løpende drift', note: 'omfang etter avtale' },
       { label: 'Vi måler', value: 'Lønnsomhet', note: 'og kostnad per ny kunde' },
     ],
     why: {
-      title: 'Lønnsomt salg, ikke flest klikk',
+      title: 'Riktig kanal, riktig budsjett',
       paragraphs: [
-        'SEM er betalt synlighet i søkemotorer og AI-søk: søkeannonser, Shopping-annonser med produktene dine og Performance Max på tvers av Googles flater.',
-        'Vi kjører det sammen med SEO, sporing og produktfeeden. Betalt og organisk søk konkurrerer om de samme klikkene, og budstrategiene er bare så gode som dataene de lærer av.',
+        'SEM er betalt synlighet i søk: Google, Bing og annonser i AI-søk. Spørsmålet er ikke bare hvordan kampanjene settes opp, men hvor budsjettet gir mest, og hvor du allerede vinner klikkene uten å betale.',
+        'Derfor planlegger vi betalt søk sammen med SEO, sporing og produktfeeden. Hvordan vi jobber i hver kanal, står på kanalsidene.',
       ],
     },
     situations: [
       { title: 'Annonsekostnaden stiger, salget gjør det ikke', text: 'Du bruker mer enn før, men vet ikke hvilke kampanjer som faktisk tjener penger.' },
       { title: 'Du bruker for mye på ditt eget merkenavn', text: 'Merkevaresøk og gjenkjøp tar en stor del av budsjettet, og du ser ikke hva som gir nye kunder.' },
-      { title: 'Du betaler for søk som aldri blir salg', text: 'Søkeordsrapporten er full av irrelevante treff, og ingen har ryddet med negative søkeord på lenge.' },
-      { title: 'Performance Max er en svart boks', text: 'Du ser totalen, men ikke hva som skjer i Søk, Shopping og YouTube hver for seg.' },
+      { title: 'Alt går til Google av vane', text: 'Bing og annonser i AI-søk er aldri vurdert, og budsjettet fordeles slik det alltid har gjort.' },
+      { title: 'Betalt og organisk søk konkurrerer', text: 'Du betaler for klikk der du allerede rangerer godt, mens søk du ikke rangerer på, står uten annonser.' },
     ],
     deliverables: [
       { name: 'Revisjon', text: 'Konto, sporing og produktfeed, med en prioritert tiltaksliste.' },
+      { name: 'Kanal- og budsjettplan', text: 'Hvor mye som skal til Google, Bing og AI-søk, ut fra marginer og hvor etterspørselen er.' },
       { name: 'Søkeordsanalyse sammen med SEO', text: 'Hvor du allerede rangerer organisk, og hvor betalt søk gir mest.' },
       { name: 'Kontroll på merkevaresøk', text: 'Merkevaresøk skilt fra nye kunder, med et tak på hva ditt eget navn får koste.' },
-      { name: 'Kampanjestruktur og budstrategi', text: 'Søk, Shopping og Performance Max, med budstrategi mot lønnsomhet.' },
-      { name: 'Negative søkeordslister', text: 'Bygget ut hver måned fra søkeordsrapporten, på tvers av kampanjetypene.' },
-      { name: 'Månedlig rapport og møte', text: 'Inntekt, lønnsomhet og nye kunder, med plan for neste periode.' },
+      { name: 'Drift av kanalene', text: 'Kampanjene i de kanalene vi blir enige om, slik kanalsidene beskriver. Omfanget avtales ut fra budsjett og behov.' },
+      { name: 'Rapport på tvers', text: 'Inntekt, lønnsomhet og nye kunder fra søkekanalene samlet, med plan for neste periode.' },
     ],
     notIncluded: ['Annonsebudsjett, som du betaler direkte til Google og Microsoft', 'Produksjon av video og foto', 'Annonsering i sosiale medier'],
     process: [
       { period: 'Uke 1–2', title: 'Rydd og mål', text: 'Revisjon, sporing på plass, feed i orden og en kampanjestruktur vi kan stole på.' },
-      { period: 'Uke 3–4', title: 'Bygg og test', text: 'Ny struktur i drift, budstrategier stilt inn mot lønnsomhet og de første testene i gang.' },
+      { period: 'Uke 3–4', title: 'Fordel og bygg', text: 'Budsjettet fordelt mellom kanalene, budstrategier stilt inn mot lønnsomhet og de første testene i gang.' },
       { period: 'Fra måned 2', title: 'Skaler det som virker', text: 'Mer budsjett til det som leverer, kutt i det som ikke gjør det, og plan for neste kvartal.' },
     ],
     kpis: [
@@ -330,16 +330,16 @@ export const growthContent: Record<string, GrowthPageContent> = {
     ],
     faq: [
       {
+        question: 'Hvilke kanaler bør vi bruke?',
+        answer: 'Som regel Google først, fordi det er der de fleste søkene skjer. Bing og annonser i AI-søk kommer som tillegg når Google-kontoen er i orden og tallene viser at det lønner seg.',
+      },
+      {
         question: 'Hvor stort annonsebudsjett trenger jeg?',
         answer: 'Det avhenger av marginer, konkurranse og hvor mye etterspørsel som finnes. Vi anbefaler et budsjett etter revisjonen, når vi har sett kontoen din.',
       },
       {
         question: 'Hvorfor ser dere på SEO når vi kjøper SEM?',
         answer: 'Fordi betalt og organisk søk konkurrerer om de samme klikkene. Rangerer du allerede godt organisk på et søkeord, kan det være bortkastet å by høyt på det. Omvendt viser søkeordsdata fra annonsene hvor det er verdt å satse på SEO.',
-      },
-      {
-        question: 'Bør jeg annonsere på Bing i tillegg til Google?',
-        answer: 'Ofte, men ikke alltid. Bing er en liten del av søkene i Norge totalt, men står for om lag ett av fem søk på desktop. Vi tester det som et tillegg når Google-kontoen er i orden.',
       },
       {
         question: 'Hvem eier kontoen og dataene?',
@@ -375,7 +375,7 @@ export const growthContent: Record<string, GrowthPageContent> = {
       { name: 'Merchant Center og feed', text: 'GTIN, titler, frakt og bilder i orden, og egendefinerte etiketter for margin, bestselgere og sesong.' },
       { name: 'Sporing og samtykke', text: 'Google-tagg, forbedrede konverteringer og Consent Mode v2 koblet til samtykkebanneret.' },
       { name: 'Performance Max med rammer', text: 'Merkeutelukkelser, negative søkeord og søketemaer.' },
-      { name: 'Negative søkeordslister', text: 'På kontonivå, oppdatert fra søkeordsrapporten hver måned.' },
+      { name: 'Negative søkeordslister', text: 'På kontonivå, oppdatert jevnlig fra søkeordsrapporten.' },
       { name: 'Styring mot lønnsomhet', text: 'Mål for nye kunder og varekost i feeden, så budstrategien styrer mot det som tjener penger.' },
       { name: 'Tester av nye funksjoner', text: 'AI Max for Search og andre nyheter testet som eksperimenter, der det er tilgjengelig.' },
     ],
@@ -400,8 +400,8 @@ export const growthContent: Record<string, GrowthPageContent> = {
         answer: 'Delvis. Du kan legge inn negative søkeord på kampanjenivå, utelukke merkenavn og gi søketemaer, og du får innsikt i hvilke søk kampanjen vises på. Trenger du full kontroll, kombinerer vi med vanlige søkekampanjer.',
       },
       {
-        question: 'Hva er en CSS, og trenger jeg det?',
-        answer: 'I EØS, også Norge, plasseres Shopping-annonser gjennom en Comparison Shopping Service. Googles egen trekker en fast margin av budet ditt, mens en annen CSS-partner kan gi lavere klikkpris. Vi tester det på dine egne tall.',
+        question: 'Følger dere Googles anbefalinger?',
+        answer: 'Bare når vi har vurdert dem. Automatiske anbefalinger som endrer kontoen uten at noen har sett på dem, skrur vi av, og nye funksjoner testes som eksperimenter.',
       },
       {
         question: 'Fungerer det med Shopifys Google & YouTube-app?',
@@ -596,21 +596,21 @@ export const growthContent: Record<string, GrowthPageContent> = {
       { title: 'Eksisterende kunder spiser budsjettet', text: 'Salgskampanjene finner dem som uansett ville handlet, og du ser ikke hvor mye som går til nye kunder.' },
       { title: 'Produktannonsene viser feil varer', text: 'Katalogen er ikke synkronisert, eller ID-ene i hendelsene stemmer ikke med katalogen.' },
       { title: 'Meta ser færre kjøp enn butikken', text: 'Pikselen alene stoppes av annonseblokkere, og kampanjene lærer av for lite data.' },
-      { title: 'De samme annonsene har gått i månedsvis', text: 'Resultatene faller, men ingen har en plan for nye kreativer.' },
+      { title: 'Advantage+ styrer, men ingen har satt rammene', text: 'Kampanjene er automatiske, men kundelister, katalog og hendelser er ikke satt opp så systemet lærer riktig.' },
     ],
     deliverables: [
       { name: 'Revisjon', text: 'Kontostruktur, katalog, hendelser og kreativer, med en prioritert tiltaksliste.' },
       { name: 'Katalogen i orden', text: 'Synkronisert med nettbutikken, med samme ID-er som i hendelsene, og produktsett til kampanjene.' },
       { name: 'Conversions API', text: 'Kjøp og andre hendelser sendt server-side, med Tracklution som standard, og hendelsesmatchkvaliteten fulgt opp.' },
       { name: 'Kampanjestruktur', text: 'Advantage+ salgskampanjer med katalog, og kundelister som holder budsjettet på nye kunder der det trengs.' },
-      { name: 'Kreativer for Reels, Stories og feed', text: 'Video i 9:16, bilder og karuseller, med kantene frie for tekst og logo.' },
+      { name: 'Formater for Reels, Stories og feed', text: 'Kreativene tilpasset Metas formater og sikre soner, enten de lages av dere, en partner eller oss etter avtale.' },
       { name: 'Rapport mot butikken', text: 'Nye kunder og salg målt mot ordrene i nettbutikken, med løftstester der det går.' },
     ],
     notIncluded: ['Annonsebudsjett, som du betaler direkte til Meta', 'Større film- og fotoproduksjoner'],
     process: [
       { period: 'Uke 1–2', title: 'Data og katalog', text: 'Revisjon, Conversions API på plass og katalogen synkronisert med riktige ID-er.' },
       { period: 'Uke 3–4', title: 'Struktur og kreativer', text: 'Ny kampanjestruktur, kundelister for nye kunder og de første kreative variantene i test.' },
-      { period: 'Fra måned 2', title: 'Skaler og test', text: 'Mer budsjett til det som gir nye kunder, og en fast rytme for nye kreativer.' },
+      { period: 'Fra måned 2', title: 'Skaler og test', text: 'Mer budsjett til det som gir nye kunder, og katalog og hendelser fulgt opp jevnlig.' },
     ],
     kpis: [
       { name: 'Kostnad per ny kunde', text: 'Hva det koster å vinne kunder som ikke har handlet før.' },
@@ -666,31 +666,31 @@ export const growthContent: Record<string, GrowthPageContent> = {
       { title: 'Dere er ikke på TikTok', text: 'Målgruppen er der, men ingen har en plan for innhold og annonser.' },
       { title: 'Annonsene ser ut som reklame', text: 'Polerte filmer fra andre kanaler blir scrollet forbi.' },
       { title: 'Innhold fra skapere brukes ikke', text: 'Samarbeidene gir gode videoer, men de blir liggende i skapernes kanaler.' },
-      { title: 'TikTok ser ikke salgene', text: 'Pikselen alene mister kjøp, og kampanjene optimaliserer på for lite data.' },
+      { title: 'Ingen vet om TikTok passer', text: 'Dere har hørt at alle burde være der, men ikke sett på om kundene deres er det.' },
     ],
     deliverables: [
       { name: 'Kanalplan', text: 'Hvilken rolle TikTok skal ha ved siden av Meta og Snapchat, med mål og budsjett.' },
-      { name: 'Kreativer laget for TikTok', text: 'Vertikal video med lyd og en tydelig start, i mange varianter som testes mot hverandre.' },
+      { name: 'Kreativ retning for TikTok', text: 'Hvordan videoene skal se ut for å passe inn: vertikalt, med lyd og en tydelig start. Produksjonen avtales.' },
       { name: 'Skapere og Spark Ads', text: 'Samarbeid med skapere, og innlegg fra dem og fra egen konto brukt som annonser med tillatelse.' },
       { name: 'Smart+ og kampanjestruktur', text: 'Kampanjer der TikTok finner publikum, med kundelister og budsjett satt av oss.' },
       { name: 'Piksel og Events API', text: 'TikTok-pikselen og Events API via Tracklution, så TikTok ser kjøpene fra besøkende som har samtykket.' },
       { name: 'Rapport mot butikken', text: 'Nye kunder og salg målt mot ordrene i nettbutikken, ikke bare visninger.' },
     ],
-    notIncluded: ['Annonsebudsjett, som du betaler direkte til TikTok', 'Honorarer til skapere', 'TikTok Shop, som ikke er lansert i Norge'],
+    notIncluded: ['Annonsebudsjett, som du betaler direkte til TikTok', 'Produksjon av video og honorarer til skapere, med mindre det er avtalt', 'TikTok Shop, som ikke er lansert i Norge'],
     process: [
       { period: 'Uke 1–2', title: 'Plan og data', text: 'Kanalplan, pikselen og Events API på plass, og de første kreative konseptene.' },
       { period: 'Uke 3–4', title: 'Test kreativer', text: 'Mange varianter og innhold fra skapere testes mot hverandre.' },
-      { period: 'Fra måned 2', title: 'Skaler', text: 'Mer budsjett til kreativene som gir nye kunder, og en fast rytme for nytt innhold.' },
+      { period: 'Fra måned 2', title: 'Skaler', text: 'Mer budsjett til videoene og skaperne som gir nye kunder.' },
     ],
     kpis: [
-      { name: 'Kostnad per ny kunde', text: 'Hva det koster å vinne kunder som ikke har handlet før.' },
       { name: 'Kreativ effekt', text: 'Hvor mange som ser videre etter de første sekundene, og hvilke videoer som gir salg.' },
+      { name: 'Salg fra TikTok', text: 'Kjøp i nettbutikken fra besøkende via TikTok, målt med Events API.' },
       { name: 'Merkevaresøk', text: 'Om flere søker på navnet ditt når kampanjene går.' },
     ],
     faq: [
       {
-        question: 'Er TikTok bare for unge?',
-        answer: 'Ikke bare. Ifølge Ipsos hadde 29 % av nordmenn over 18 år en TikTok-profil i fjerde kvartal 2023. Vi ser på om målgruppen din er der før vi anbefaler budsjett.',
+        question: 'Passer TikTok for oss?',
+        answer: 'Det kommer an på kundene dine. Ifølge Ipsos hadde 29 % av nordmenn over 18 år en TikTok-profil i fjerde kvartal 2023. Vi ser på om målgruppen din er der før vi anbefaler budsjett.',
       },
       {
         question: 'Kan vi selge direkte i TikTok?',
@@ -698,11 +698,11 @@ export const growthContent: Record<string, GrowthPageContent> = {
       },
       {
         question: 'Må vi lage innholdet selv?',
-        answer: 'Ikke nødvendigvis. Kreativene kan komme fra dere, fra oss eller fra skapere. Med Spark Ads kan innlegg fra skapere brukes som annonser når de gir tillatelse.',
+        answer: 'Ikke nødvendigvis. Kreativene kan komme fra dere, fra skapere eller fra oss etter avtale. Med Spark Ads kan innlegg fra skapere brukes som annonser når de gir tillatelse.',
       },
       {
-        question: 'Hvordan måler dere effekten?',
-        answer: 'Mange ser en video og handler senere, via søk eller direkte besøk. Vi sender kjøpene server-side med Events API, og følger nye kunder og merkevaresøk, ikke bare klikk.',
+        question: 'Hva må vi passe på med skapere?',
+        answer: 'Reklame skal være tydelig merket, og merkingen bør komme først. Forbrukertilsynet mener plattformenes egen merking ikke er tydelig nok, og anbefaler å legge til «reklame» eller «annonse».',
       },
     ],
     related: [
@@ -750,24 +750,24 @@ export const growthContent: Record<string, GrowthPageContent> = {
       { title: 'Snapchat er ikke testet', text: 'Kanalen der mange av kundene er hver dag, er ikke med i planen.' },
       { title: 'Annonsene er laget for andre kanaler', text: 'Kvadratiske bilder og lange filmer fra feeden fungerer dårlig i fullskjerm.' },
       { title: 'Alle ser de samme annonsene', text: 'Katalogen er ikke koblet til, så annonsene viser ikke produktene hver person er interessert i.' },
-      { title: 'Snapchat ser ikke salgene', text: 'Pikselen alene mister kjøp, og kampanjene lærer av for lite data.' },
+      { title: 'Én annonse skal gjøre alt', text: 'Ett bilde eller én video skal både bygge merkevaren og selge, i stedet for å bruke Story- og Collection-formatene.' },
     ],
     deliverables: [
       { name: 'Kanalplan', text: 'Hvilken rolle Snapchat skal ha ved siden av Meta og TikTok, med mål og budsjett.' },
-      { name: 'Kreativer i fullskjerm', text: 'Vertikal video og bilder i 9:16, korte og med budskapet tidlig.' },
+      { name: 'Kreativer i fullskjerm', text: 'Vertikal video og bilder i 9:16, korte og med budskapet tidlig. Produksjonen avtales.' },
       { name: 'Produktannonser', text: 'Katalogen koblet til Snapchat, så annonsene viser produktene som passer hver person, når formatet er tilgjengelig for kontoen.' },
       { name: 'Story- og Collection-annonser', text: 'Flere bilder eller produkter i samme annonse, så kundene kan bla og velge.' },
       { name: 'Piksel og Conversions API', text: 'Snap-pikselen og Conversions API via Tracklution, så Snapchat ser kjøpene fra besøkende som har samtykket.' },
       { name: 'Rapport mot butikken', text: 'Nye kunder og salg målt mot ordrene i nettbutikken.' },
     ],
-    notIncluded: ['Annonsebudsjett, som du betaler direkte til Snapchat', 'AR-linser og større produksjoner'],
+    notIncluded: ['Annonsebudsjett, som du betaler direkte til Snapchat', 'Produksjon av kreativer og AR-linser, med mindre det er avtalt'],
     process: [
       { period: 'Uke 1–2', title: 'Plan og data', text: 'Kanalplan, pikselen og Conversions API på plass, og katalogen koblet til.' },
       { period: 'Uke 3–4', title: 'Test', text: 'Vertikale kreativer og produktannonser testes mot hverandre.' },
-      { period: 'Fra måned 2', title: 'Skaler', text: 'Mer budsjett til det som gir nye kunder, og nye kreativer før de gamle slites ut.' },
+      { period: 'Fra måned 2', title: 'Skaler', text: 'Mer budsjett til formatene og kreativene som gir nye kunder.' },
     ],
     kpis: [
-      { name: 'Kostnad per ny kunde', text: 'Hva det koster å vinne kunder som ikke har handlet før.' },
+      { name: 'Rekkevidde i målgruppen', text: 'Hvor mange i målgruppen dere når, og hvor ofte.' },
       { name: 'Kreativ effekt', text: 'Hvor mange som ser videre, og hvilke kreativer som gir salg.' },
       { name: 'Salg fra produktannonser', text: 'Hva katalogannonsene gir, målt mot ordrene i nettbutikken.' },
     ],
@@ -828,7 +828,7 @@ export const growthContent: Record<string, GrowthPageContent> = {
       { name: 'Segmentering', text: 'Segmenter ut fra kjøpshistorikk og atferd, og prediksjoner som forventet neste kjøp når dataene er store nok.' },
       { name: 'Kampanjer med plan', text: 'En fast kampanjekalender, koblet til sesongene og resten av markedsføringen.' },
       { name: 'Levering og samtykke', text: 'SPF, DKIM og DMARC, avmelding med ett klikk, og samtykke som samles inn riktig.' },
-      { name: 'Månedlig rapport', text: 'Inntekt per flyt og kampanje, gjenkjøp og listehelse.' },
+      { name: 'Rapport', text: 'Inntekt per flyt og kampanje, gjenkjøp og listehelse.' },
     ],
     notIncluded: ['Lisens til Klaviyo, som du betaler direkte', 'SMS-markedsføring', 'Fotoproduksjon'],
     process: [

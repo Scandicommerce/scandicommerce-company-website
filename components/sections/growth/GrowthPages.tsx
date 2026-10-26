@@ -99,7 +99,7 @@ function DraftNotice() {
 /** Eyebrow and heading on the left, lead on the right: the Tjenester section header. */
 function SectionHead({ eyebrow, title, lead }: { eyebrow: string; title: string; lead?: string }) {
   return (
-    <div className="mb-8 flex flex-col gap-4 lg:mb-10 lg:flex-row lg:items-end lg:justify-between lg:gap-8">
+    <div className="mb-6 flex flex-col gap-3 lg:mb-10 lg:flex-row lg:items-end lg:justify-between lg:gap-8">
       <div className="flex flex-col gap-2.5">
         <div className={ui.eyebrow}>{eyebrow}</div>
         <h2 className={`m-0 ${ui.h2}`}>{title}</h2>
@@ -109,14 +109,17 @@ function SectionHead({ eyebrow, title, lead }: { eyebrow: string; title: string;
   )
 }
 
-/** Hero panel: the model with this service's stage and service marked, so every page shows where it fits. */
+/**
+ * Hero panel: the model with this service's stage and service marked, so every page shows where it fits.
+ * Desktop only: on a phone it would push the content down; the eyebrow and the hub link in "Les videre" carry it there.
+ */
 function ModelPosition({ service }: { service: GrowthService }) {
   const { stages, foundation } = growthHubContent.model
   const current = growthStageOf(service.slug)
   const root = service.parent ?? service.slug
   const rows = [...stages, foundation]
   return (
-    <div>
+    <div className="hidden rounded-lg border border-sc-ink-100 bg-sc-ink-50 px-12 pb-14 pt-10 lg:block">
       <div className="mb-5 text-xs font-semibold uppercase tracking-[0.12em] text-sc-ink-500">Her i modellen</div>
       <ol className="m-0 flex list-none flex-col gap-2.5 p-0">
         {rows.map((stage, index) => {
@@ -170,14 +173,14 @@ function ModelPosition({ service }: { service: GrowthService }) {
 
 function FactsSection({ facts }: { facts: NonNullable<GrowthPageContent['facts']> }) {
   return (
-    <section className="bg-white pb-12 lg:pb-16">
+    <section className="bg-white pb-10 lg:pb-16">
       <div className={ui.container}>
         <div className={`${ui.eyebrow} mb-5`}>Kort fortalt</div>
         <dl className="m-0 grid grid-cols-2 gap-px overflow-hidden rounded-lg border border-sc-ink-100 bg-sc-ink-100 lg:grid-cols-4">
           {facts.map((fact) => (
-            <div key={fact.label} className="flex flex-col gap-1 bg-white p-5 lg:p-6">
+            <div key={fact.label} className="flex min-w-0 flex-col gap-1 bg-white p-4 sm:p-5 lg:p-6">
               <dt className="text-xs font-semibold uppercase tracking-[0.12em] text-sc-ink-500">{fact.label}</dt>
-              <dd className="m-0 font-mono text-[18px] font-medium leading-tight tracking-tight text-sc-ink-900 lg:text-[22px]">{fact.value}</dd>
+              <dd className="m-0 break-words font-mono text-[15px] font-medium leading-tight tracking-tight text-sc-ink-900 sm:text-[18px] lg:text-[22px]">{fact.value}</dd>
               {fact.note && <dd className="m-0 text-[13px] leading-snug text-sc-ink-500">{fact.note}</dd>}
             </div>
           ))}
@@ -233,7 +236,7 @@ function FlowDiagram({ flow }: { flow: GrowthFlow }) {
 
 function WhySection({ why }: { why: NonNullable<GrowthPageContent['why']> }) {
   return (
-    <section className="bg-sc-ink-50 py-16 lg:py-20">
+    <section className="bg-sc-ink-50 py-12 lg:py-20">
       <div className={`${ui.container} grid items-start gap-10 ${why.insight ? 'lg:grid-cols-[1fr_1.1fr] lg:gap-16' : ''}`}>
         <div className={`flex flex-col gap-2.5 ${why.insight ? '' : 'max-w-[760px]'}`}>
           <div className={ui.eyebrow}>Hvorfor</div>
@@ -257,12 +260,12 @@ function WhySection({ why }: { why: NonNullable<GrowthPageContent['why']> }) {
 
 function SituationsSection({ situations }: { situations: NonNullable<GrowthPageContent['situations']> }) {
   return (
-    <section className="bg-white py-16 lg:py-20">
+    <section className="bg-white py-12 lg:py-20">
       <div className={ui.container}>
         <SectionHead eyebrow="Når du trenger dette" title="Kjenner du deg igjen?" />
         <ul className="m-0 grid list-none grid-cols-1 gap-px overflow-hidden rounded-lg border border-sc-ink-100 bg-sc-ink-100 p-0 md:grid-cols-2">
           {situations.map((item) => (
-            <li key={item.title} className="bg-white p-5 lg:p-6">
+            <li key={item.title} className="bg-white p-4 sm:p-5 lg:p-6">
               <h3 className="m-0 text-[17px] font-semibold leading-snug text-sc-ink-900">{item.title}</h3>
               <p className="m-0 mt-1 text-[15px] leading-relaxed text-sc-ink-600">{item.text}</p>
             </li>
@@ -278,7 +281,7 @@ function NumberedList({ items }: { items: { name: string; text: string }[] }) {
   return (
     <ol className="m-0 grid list-none grid-cols-1 gap-px overflow-hidden rounded-lg border border-sc-ink-100 bg-sc-ink-100 p-0 md:grid-cols-2">
       {items.map((item, index) => (
-        <li key={item.name} className="flex gap-4 bg-white p-5 lg:p-6">
+        <li key={item.name} className="flex gap-3 bg-white p-4 sm:gap-4 sm:p-5 lg:p-6">
           <span className="font-mono text-[13px] leading-6 text-sc-ink-500">{String(index + 1).padStart(2, '0')}</span>
           <div className="min-w-0">
             <h3 className="m-0 text-[17px] font-semibold leading-snug text-sc-ink-900">{item.name}</h3>
@@ -292,7 +295,7 @@ function NumberedList({ items }: { items: { name: string; text: string }[] }) {
 
 function DeliverablesSection({ deliverables, notIncluded }: { deliverables: NonNullable<GrowthPageContent['deliverables']>; notIncluded?: string[] }) {
   return (
-    <section className="bg-sc-ink-50 py-16 lg:py-20">
+    <section className="bg-sc-ink-50 py-12 lg:py-20">
       <div className={ui.container}>
         <SectionHead
           eyebrow="Leveranser"
@@ -321,7 +324,7 @@ function ProcessSection({
   kpis?: GrowthPageContent['kpis']
 }) {
   return (
-    <section className="bg-white py-16 lg:py-20">
+    <section className="bg-white py-12 lg:py-20">
       <div className={ui.container}>
         <SectionHead eyebrow="Prosess" title={title} lead={PROCESS_LEAD} />
         <ol className="m-0 grid list-none grid-cols-1 gap-6 p-0 md:grid-cols-3 lg:gap-8">
@@ -334,11 +337,11 @@ function ProcessSection({
           ))}
         </ol>
         {kpis?.length ? (
-          <div className="mt-12 lg:mt-14">
+          <div className="mt-10 lg:mt-14">
             <div className={`${ui.eyebrow} mb-5`}>Det vi styrer etter</div>
             <dl className="m-0 grid grid-cols-1 gap-px overflow-hidden rounded-lg border border-sc-ink-100 bg-sc-ink-100 md:grid-cols-3">
               {kpis.map((kpi) => (
-                <div key={kpi.name} className="bg-white p-5 lg:p-6">
+                <div key={kpi.name} className="bg-white p-4 sm:p-5 lg:p-6">
                   <dt className="text-[17px] font-semibold text-sc-ink-900">{kpi.name}</dt>
                   <dd className="m-0 mt-1 text-[15px] leading-relaxed text-sc-ink-600">{kpi.text}</dd>
                 </div>
@@ -361,7 +364,7 @@ function LinksSection({ service, related }: { service: GrowthService; related?: 
   const items = [...channels, ...others].slice(0, 4)
   if (!items.length) return null
   return (
-    <section className="bg-white py-16 lg:py-20">
+    <section className="bg-white py-12 lg:py-20">
       <div className={ui.container}>
         <div className={`${ui.eyebrow} mb-5`}>Les videre</div>
         <ul className={`m-0 grid list-none grid-cols-1 gap-4 p-0 md:grid-cols-2 lg:gap-5 ${items.length === 4 ? 'lg:grid-cols-4' : 'lg:grid-cols-3'}`}>
@@ -376,6 +379,9 @@ function LinksSection({ service, related }: { service: GrowthService; related?: 
             </li>
           ))}
         </ul>
+        <LocalizedLink href={growthHref()} className="mt-6 inline-block text-sm font-semibold text-sc-ink-900 hover:text-sc-cyan-600">
+          Se hvordan alle tjenestene henger sammen →
+        </LocalizedLink>
       </div>
     </section>
   )
@@ -383,7 +389,7 @@ function LinksSection({ service, related }: { service: GrowthService; related?: 
 
 function BriefSection() {
   return (
-    <section className="bg-sc-ink-50 py-16 lg:py-20">
+    <section className="bg-sc-ink-50 py-12 lg:py-20">
       <div className={ui.container}>
         <SectionHead
           eyebrow="Kommer"
@@ -409,6 +415,7 @@ export function GrowthServicePage({ service }: { service: GrowthService }) {
         buttons={HERO_BUTTONS}
         highlights={content?.highlights}
         visual={<ModelPosition service={service} />}
+        visualFrame={false}
       />
       {content ? (
         <>
@@ -492,7 +499,7 @@ function ModelServiceLink({ slug, onDark }: { slug: string; onDark?: boolean }) 
 function ModelSection({ intro }: { intro: string }) {
   const { stages, foundation } = growthHubContent.model
   return (
-    <section className="bg-white pb-16 lg:pb-20">
+    <section className="bg-white pb-12 lg:pb-20">
       <div className={ui.container}>
         <SectionHead eyebrow="Modellen" title="Slik henger det sammen" lead={intro} />
         <ol className="m-0 grid list-none grid-cols-1 gap-4 p-0 md:grid-cols-3 lg:gap-5">
@@ -533,7 +540,7 @@ function ModelStage({ stage, marker }: { stage: GrowthStage; marker: string }) {
 
 function PrinciplesSection({ principles }: { principles: typeof growthHubContent.principles }) {
   return (
-    <section className="bg-sc-ink-50 py-16 lg:py-20">
+    <section className="bg-sc-ink-50 py-12 lg:py-20">
       <div className={ui.container}>
         <SectionHead eyebrow="Prinsipper" title="Slik jobber vi" />
         <NumberedList items={principles.map((p) => ({ name: p.title, text: p.text }))} />

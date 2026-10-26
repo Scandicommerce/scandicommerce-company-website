@@ -103,7 +103,7 @@ export const growthServices: GrowthService[] = [
     group: 'annonsering',
     label: 'SoMe',
     title: 'Markedsføring i sosiale medier for nettbutikker',
-    lead: 'Merkevarebygging og kreativer som skaper etterspørsel – organisk og betalt, der kundene dine bruker tiden sin.',
+    lead: 'Riktige kanaler og budsjett i Meta, TikTok og Snapchat – med merkevare og kreativer som skaper etterspørsel.',
   },
   {
     slug: 'some/meta-ads',
@@ -127,7 +127,7 @@ export const growthServices: GrowthService[] = [
     parent: 'some',
     label: 'Snapchat',
     title: 'Snapchat-annonsering for nettbutikker',
-    lead: 'Vertikale annonser og produktannonser der mange nordmenn er hver dag – målt mot salget i nettbutikken.',
+    lead: 'Vertikale annonser i fullskjerm der mange nordmenn er en vanlig dag – målt mot salget i nettbutikken.',
   },
   {
     // Includes CSS partners (Comparison Shopping Services) for Google Shopping
