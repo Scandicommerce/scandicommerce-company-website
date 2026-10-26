@@ -4,7 +4,7 @@ Arbeidsdokument for Growth marketing-sidene på nettsiden: hva vi bygger, hvorda
 er strukturert, hvilke regler vi følger og hva som er besluttet. Oppdateres i samme
 commit som endringen den beskriver.
 
-**Branch:** `growth/growth-marketing-seo` · **Bygger på:** `tjenester` (ny IA, Øyvind) · **PR:** [#2](https://github.com/Scandicommerce/scandicommerce-company-website/pull/2) (draft, mot `tjenester`)
+**Branch:** `growth/growth-marketing-seo` · **Bygger på:** `main` (`tjenester` ble merget inn 22. oktober) · **PR:** [#2](https://github.com/Scandicommerce/scandicommerce-company-website/pull/2) (draft, mot `main`)
 
 ---
 
@@ -36,10 +36,11 @@ Samleside: `/growth-marketing`. Gjelder bare norsk side (.no). Andre språk gir 
 
 | Del | Status |
 |---|---|
-| Samleside | Tekstutkast og navigasjonsside: tjenesteoversikt øverst (alle tjenester med kanalsider som lenker), modellen «Slik henger det sammen», prinsipper, to forskningsgrafer side om side, oppstart og måltall i én seksjon, FAQ, og pakker i den avsluttende knappeseksjonen. Kompakt layout. Bevis står igjen som plassholder |
+| Samleside | Tekstutkast. Modellen er også navigasjonen: alle tjenester og kanalsider står i sitt steg. Deretter prinsipper (4), oppstart og måltall, FAQ og CTA |
 | Tjenestesider (11) | `noindex`, ikke i XML-sitemap. Status per side: se «Ekte innhold» |
 | Menyforslag | Ligger i `lib/growthServices.ts` (`growthNavItem()`). **Ikke koblet inn** i headeren ennå (se §5) |
-| Ekte innhold | **SoMe**, **Sporing og analyse**, **Merkevare og strategi**, **SEM**, **Google Ads** og **Affiliate, CSS og feed** har tekstutkast til gjennomlesning (alle seksjoner unntatt bevis; priser via pakkeoversikten). Resten er dummyer |
+| Ekte innhold | **Merkevare og strategi**, **Sporing og analyse**, **SoMe**, **SEM**, **Google Ads** og **Affiliate, CSS og feed** har kortet ned tekstutkast (2026-10-26). **SEO**, **E-post**, **CRO**, **Meta Ads** og **Bing Ads** viser malen som brief |
+| Layout | Samme byggeklosser og stil som tjenestesidene i `main` (`ServiceHero`, `Faq`, `CtaBand`, `ui`-tokens) |
 | Innhold i Sanity | Ikke startet. Innholdet ligger i kode til tekstene er klare |
 
 ## 3. Struktur
@@ -62,19 +63,23 @@ Regler for menyen:
 
 ### Mal for tjenestesider
 
-Rekkefølgen er fast. Plassholderne på dummysidene er briefen for den som skriver teksten.
+Følger tjenestesidene under `/tjenester` (Shopify, Migrering, Utvikling), så hele nettstedet ser likt ut. Rekkefølgen er fast, og hver seksjon har en fast lengde, slik at bare det viktigste står der:
 
-1. **Hero:** Brødsmuler, H1 «[Tjeneste] for nettbutikker», én setning om hvem, hva og pris, og knappene «Book møte» og «Se pakker».
-2. **Når du trenger dette:** 4–6 konkrete kjøpssituasjoner.
-3. **Hva du får:** Strategi · Gjennomføring · Rapportering, og hva som *ikke* er inkludert.
-4. **Pakker og pris:** Fastpris, med «fra»-pris.
-5. **De første 90 dagene:** Hva som skjer når.
-6. **Resultater og folkene bak:** Kundecase med tall, navngitt spesialist og partnermerker.
-7. **Hva vi måler og rapporterer:** 3–5 måltall.
-8. **FAQ:** 5–8 ekte spørsmål.
-9. **Avsluttende CTA.**
+1. **Hero** (`ServiceHero`): Eyebrow med stedet i modellen («Steg 2 · Fang etterspørselen»), H1 «[Tjeneste] for nettbutikker» med ett uthevet ord, ingress, knappene «Book møte» og «Se pakkene», og tre korte poenger. Til høyre står **«Her i modellen»**: de tre stegene og grunnmuren, med denne tjenesten markert.
+2. **Kort fortalt:** Fire fakta (kanaler eller kjerne, hva vi starter med, hvordan vi jobber videre, hva vi måler).
+3. **Hvorfor:** To korte avsnitt, med **ett** forskningspunkt med kilde, eller én dataflyt.
+4. **Når du trenger dette:** Fire situasjoner.
+5. **Leveranser:** Rundt seks, nummerert i den rekkefølgen de skjer, pluss én linje om hva som ikke er inkludert.
+6. **De første 90 dagene:** Tre steg og tre måltall («Det vi styrer etter»).
+7. **Vanlige spørsmål:** Fire.
+8. **Les videre:** Inntil tre kort. Kanalsidene kommer først, deretter relaterte tjenester med stedet i modellen.
+9. **CTA** (`CtaBand`).
 
-SEM og SoMe viser i tillegg kanalene sine som kort under hero.
+**Den røde tråden:** Modellen (skap etterspørsel → fang etterspørselen → selg mer og behold kundene, med riktig data som grunnmur) står i eyebrow, i hero-panelet og på kortene i «Les videre». Samlesiden viser den samme modellen som navigasjon.
+
+**Tatt bort ved forkortingen (2026-10-26):** Egne pakkekort (prisene ligger i pakkeoversikten, og «Se pakkene» står i hero), plassholdere for bevis, lange kildelister og plattformlister, og ekstra forskningsgrafer. Faktagrunnlaget i §8 gjelder fortsatt og kan hentes inn igjen ved behov.
+
+Sider uten tekst viser hero og malen som en nummerert brief.
 
 ## 4. Retningslinjer for innhold
 
@@ -123,8 +128,9 @@ i `navigationNo` med `growthNavItem()`.
 
 **Filer**
 - `lib/growthServices.ts`: Alle tjenester (slug, gruppe, navn, H1, ingress), grupper og menyforslag. **Eneste sted å endre tjenestelisten.**
-- `lib/growthContent.ts`: `growthHubContent` er teksten til samlesiden (modell, prinsipper og resten). Teksten per tjenesteside (intro, kjøpssituasjoner, leveranser, pakker, 90 dager, måltall, FAQ). Seksjoner uten tekst vises som plassholder. Bevis vises alltid som plassholder til vi har ekte case.
-- `components/sections/growth/GrowthPages.tsx`: Samleside og tjenestesidemal, inkludert «Hva forskningen sier» (felt `insights`), «Kilder og videre lesning» (`sources`) og «Fungerer best sammen med» (`related`).
+- `lib/growthContent.ts`: Teksten per tjenesteside (`highlight`, `highlights`, `facts`, `why` med `insight` eller `flow`, `situations`, `deliverables`, `notIncluded`, `process`, `kpis`, `faq` og `related`), og `growthHubContent`, som er modellen, prinsippene og resten av samlesiden. `growthStageOf(slug)` gir steget en tjeneste hører til; kanalsider arver fra forelderen.
+- `components/sections/growth/GrowthPages.tsx`: Samleside og tjenestesidemal på byggeklossene fra tjenestesidene (`ServiceHero`, `Faq`, `CtaBand`, `ui` fra `components/integrations/labels`). Vi endrer ikke de delte komponentene. Seksjonene som trenger egen form (fakta, leveranser, prosess, lenker), ligger i denne filen med de samme klassene.
+- `lib/growthServices.ts`: `heroTitle` er en valgfri H1 med myke bindestreker, for lange ord som ikke får plass på mobil (CRO).
 - `components/sections/growth/GrowthCharts.tsx`: SVG-grafer uten bibliotek: stolper, delt stolpe og prinsippskisse for kort og lang effekt.
 - `app/[lang]/growth-marketing/[[...slug]]/page.tsx`: Rute og metadata (noindex).
 
@@ -144,12 +150,14 @@ npm run dev                 # http://localhost:3000/no/growth-marketing
 
 ## 7. Åpne spørsmål
 
+**Menyen (nytt etter merge av `main`):** Øyvind har satt `live: false` på Growth marketing i `lib/navigation.ts`, så menyen er skjult. Oppføringen der følger fortsatt den gamle IA-en (`/geo`, `/google-ads`, `/analyse`), som ikke stemmer med URL-ene våre. Ifølge commit-meldingen hans (fc15d00) skal branchen som leverer en seksjon, fjerne flagget i samme endring. Det kolliderer med regelen vår i §5. Avklares med Øyvind: enten bytter han inn `growthNavItem()`, eller så gjør vi det selv i PR-en.
+
 **Må bekreftes før SEM og Google Ads publiseres:**
 - [ ] Priser: Pakkekortene lenker til pakkeoversikten (`/tjenester/alle-pakker`) i stedet for å vise pris. **Pakkeoversikten viser i dag bare Shopify-pakkene.** SEM- og Google Ads-pakkene må legges inn der (i Sanity) før lenken gir mening.
 - [ ] Vilkår: «Ingen bindingstid – 30 dagers oppsigelse» er hentet fra Growth-pakken. Gjelder det også her?
 - [ ] Leveranser: Stemmer listene med det vi faktisk gjør (Bing som tillegg, CSS-vurdering, AI Max-tester, Demand Gen)?
 - [ ] Affiliate og feed: Stemmer leveransene (feed-revisjon, distribusjon til prissammenligning, oppfølging av affiliate-partnere)? Nevner vi riktige eksempler (Prisjakt; Adtraction og Awin)? Hvilke feed-verktøy bruker vi?
-- [ ] Bevis: Kundecase med tall fra annonsering, og navngitt spesialist.
+- [ ] Bevis: Kundecase med tall fra annonsering, og navngitt spesialist. Plassholderne er fjernet fra sidene; når vi har case, legges de inn som kort i «Les videre» (kundecasesidene finnes nå i `main`).
 - [ ] Samlesiden: Stemmer modellen (merkevare og etterspørsel → fange etterspørselen → salg og gjenkjøp, med data som grunnmur) og de seks prinsippene med hvordan vi jobber? FAQ-en om samarbeid med andre byråer bygger på FAQ-en til Growth-pakken i Sanity.
 - [ ] SoMe: Stemmer pakkene (revisjon og kreativ plan, løpende drift med nye kreativer hver måned)? Hvilke kanaler leverer vi i praksis (Meta, TikTok, Snapchat, Pinterest, LinkedIn)? Lager vi kreativer selv, eller med partnere?
 - [ ] Sporing og analyse: Stemmer leveransene og de tre pakkene (sporingsrevisjon, server-side sporing, analyse og dashboards månedlig)? Lover vi «varsling og retting når sporingen brytes»? Hvilke dashboardverktøy bruker vi i praksis (Looker, Looker Studio, annet)?
@@ -243,3 +251,8 @@ Tekstene skal bare inneholde påstander vi kan stå for. Tidsavhengige fakta sje
 | 2026-10-16 | Samlesiden viser vår måte å jobbe på: en modell i tre steg (bygg merkevare og etterspørsel → fang den → gjør besøk til salg og kunder til gjengangere) på en grunnmur av data, pluss seks prinsipper | Samler det vi har landet på for tjenestene: merkevare og salg sammen, data først, én feed, kreativ variasjon, lønnsomhet, bare Shopify |
 | 2026-10-16 | Growth-området posisjoneres mot nettbutikker generelt, ikke bare Shopify («… for nettbutikker»); prinsippet «Bare Shopify» blir «Bare netthandel» | Vi tar de fleste e-handelsbedrifter innen growth; Shopify er fortsatt hjemmebanen |
 | 2026-10-16 | Samlesiden er også navigasjonsside, og layouten er strammet inn: tjenesteoversikt med alle undersider rett under hero, mindre luft og titler, færre og sammenslåtte seksjoner | Brukeren ville ha mindre luft, og siden skal fungere som hub; alle undersider ett klikk unna gir også intern lenking |
+| 2026-10-26 | `main` merget inn (inkludert `tjenester`), og PR #2 skal gå mot `main` | `tjenester` ble merget til `main` 22. oktober |
+| 2026-10-26 | Growth-sidene bygges på de samme byggeklossene og den samme stilen som tjenestesidene (`ServiceHero`, `Faq`, `CtaBand`, `ui`-tokens) | Hele nettstedet skal se likt ut |
+| 2026-10-26 | Innholdet kortes ned til en fast mal: 4 fakta, ett forskningspunkt eller én flyt, 4 situasjoner, ~6 leveranser, 3 steg, 3 måltall, 4 spørsmål i FAQ og inntil 3 kort i «Les videre». Pakkekort, plassholdere, kildelister og plattformlister er tatt bort | Brukeren ville ha bare det viktigste og en rød tråd |
+| 2026-10-26 | Modellen er den røde tråden: hver side viser steget sitt i eyebrow og i «Her i modellen» i hero, og på samlesiden er modellen også navigasjonen | Leseren ser hvordan tjenestene henger sammen, og den doble tjenesteoversikten på samlesiden forsvinner |
+| 2026-10-26 | Samlesiden: fire prinsipper (i stedet for seks), ingen forskningsgraf | «Én feed» og «Kreativet er målrettingen» står på Affiliate og SoMe; grafen for kort og lang effekt står på Merkevare og strategi |

@@ -36,8 +36,10 @@ export interface GrowthService {
   parent?: string
   /** Label in the menu, breadcrumbs and cards. */
   label: string
-  /** H1. */
+  /** H1 and meta title. */
   title: string
+  /** H1 with soft hyphens (\u00AD) where a long word would not fit on a phone. Defaults to `title`. */
+  heroTitle?: string
   /** Opening sentence: who it is for and what it is. Placeholder until copy is written. */
   lead: string
 }
@@ -131,6 +133,7 @@ export const growthServices: GrowthService[] = [
     group: 'egne-kanaler',
     label: 'CRO',
     title: 'Konverteringsoptimalisering (CRO) for nettbutikker',
+    heroTitle: 'Konverterings\u00ADoptimalisering (CRO) for nettbutikker',
     lead: 'Flere kjøp fra trafikken du allerede har – med data, tester og forbedringer i butikken.',
   },
 ]
