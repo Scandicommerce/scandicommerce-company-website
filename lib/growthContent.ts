@@ -1,0 +1,1127 @@
+/**
+ * Written copy for the Growth marketing pages, keyed by service slug
+ * (lib/growthServices.ts). Pages follow the Tjenester layout: hero, facts,
+ * why, buying situations, deliverables, the first 90 days, FAQ and onward
+ * links. A page without an entry here renders the template brief instead.
+ *
+ * Kept apart from growthServices.ts because that file also feeds the header
+ * menu; this one is only loaded by the pages.
+ *
+ * Rules (docs/GROWTH-MARKETING.md §4): no invented prices, clients or numbers,
+ * and keep each page to what matters most: one point of evidence, four
+ * situations, six deliverables, three steps, three KPIs and four questions.
+ */
+
+/** Chart specs rendered by components/sections/growth/GrowthCharts.tsx. */
+export type GrowthChart =
+  | {
+      kind: 'bars'
+      /** Unit shown in the table header, e.g. "Korrelasjon". */
+      valueLabel: string
+      /** First column header in the table view. Defaults to "Faktor". */
+      categoryLabel?: string
+      /** "decimal" (0,664) or "percent" (82 %). Defaults to decimal. */
+      format?: 'decimal' | 'percent'
+      /** Leave out for a single series (all items emphasis): the title names it. */
+      legend?: { emphasis: string; context: string }
+      items: { label: string; value: number; emphasis: boolean }[]
+    }
+  | {
+      kind: 'split'
+      items: { label: string; value: number; emphasis: boolean }[]
+    }
+  | { kind: 'longShortConcept' }
+
+/** One research point, optionally with a chart, always with its source. */
+export interface GrowthInsight {
+  title: string
+  text: string
+  chart?: GrowthChart
+  source: { label: string; href: string }
+}
+
+/** Source → processing → destination diagram. */
+export interface GrowthFlow {
+  title: string
+  stages: { title: string; items: string[] }[]
+}
+
+export interface GrowthPageContent {
+  /** Part of the H1 rendered in brand cyan. */
+  highlight?: string
+  /** Three short proof points under the hero buttons. */
+  highlights?: string[]
+  /** "Kort fortalt": four facts. */
+  facts?: { label: string; value: string; note?: string }[]
+  /** Why the service matters, with at most one insight or one flow beside it. */
+  why?: { title: string; paragraphs: string[]; insight?: GrowthInsight; flow?: GrowthFlow }
+  /** "Når du trenger dette": four situations the reader recognises. */
+  situations?: { title: string; text: string }[]
+  /** "Leveranser": about six, in the order they happen. */
+  deliverables?: { name: string; text: string }[]
+  notIncluded?: string[]
+  /** "Slik kommer vi i gang": three steps (Uke 1–2, Uke 3–4, Fra måned 2). */
+  process?: { period: string; title: string; text: string }[]
+  /** What we steer by: three KPIs. */
+  kpis?: { name: string; text: string }[]
+  faq?: { question: string; answer: string }[]
+  /** "Les videre": other growth services, by slug. Channel pages are added automatically. */
+  related?: { slug: string; why: string }[]
+}
+
+export const growthContent: Record<string, GrowthPageContent> = {
+  'merkevare-og-strategi': {
+    highlight: 'vekststrategi',
+    highlights: ['Posisjonering', 'Vekstplan for 12 måneder', 'Målt med merkevaresøk'],
+    facts: [
+      { label: 'Starter med', value: 'Workshop', note: 'innsikt om kunder og konkurrenter' },
+      { label: 'Leveranse', value: 'Strategi', note: 'og vekstplan, som engangsleveranse' },
+      { label: 'Videre', value: 'Partner', note: 'oppfølging etter avtale' },
+      { label: 'Vi måler', value: 'Merkevaresøk', note: 'og nye kunder over tid' },
+    ],
+    why: {
+      title: 'Vekst kommer fra flere kjøpere',
+      paragraphs: [
+        'Forskningen bak How Brands Grow viser at merkevarer vokser ved å nå flere kjøpere, ikke ved å presse mer ut av de lojale. For en nettbutikk betyr det to ting: å bli husket når folk skal handle, og å være lett å finne og kjøpe hos når de gjør det.',
+        'Merkevarearbeidet tar seg av det første. Søk, feed og konvertering tar seg av det andre. Vi planlegger dem sammen.',
+      ],
+      insight: {
+        title: 'Merkevare og salg virker på ulik tid',
+        text: 'Salgsaktivering gir raske topper som faller tilbake. Merkevarebygging løfter grunnsalget gradvis, og gjør at hver annonsekrone gir mer over tid.',
+        chart: { kind: 'longShortConcept' },
+        source: {
+          label: 'IPA: The Long and the Short of It (Binet & Field)',
+          href: 'https://ipa.co.uk/knowledge/publications-reports/the-long-and-the-short-of-it-balancing-short-and-long-term-marketing-strategies',
+        },
+      },
+    },
+    situations: [
+      { title: 'Du konkurrerer bare på pris', text: 'Kundene ser ingen grunn til å velge deg fremfor neste butikk, så rabatten blir det eneste argumentet.' },
+      { title: 'Annonsene blir dyrere, men få søker på navnet ditt', text: 'Du betaler for hver eneste kunde, fordi få kjenner merkevaren fra før.' },
+      { title: 'Du er usynlig i AI-svar', text: 'ChatGPT og Googles AI-oversikter nevner konkurrentene når folk spør om produkter i kategorien din.' },
+      { title: 'Kampanjene virker, men veksten flater ut', text: 'Hvert salg gir en topp, men grunnsalget mellom kampanjene står stille.' },
+    ],
+    deliverables: [
+      { name: 'Posisjonering', text: 'Hvorfor kundene skal velge deg, sagt så kort at det huskes.' },
+      { name: 'Kjøpssituasjoner', text: 'Når og hvorfor folk handler i kategorien din, og hvor du må være synlig da.' },
+      { name: 'Merkevareelementer', text: 'Farger, form, tone og budskap som skal eies og brukes likt i alle kanaler over tid.' },
+      { name: 'Fordeling mellom merkevare og salg', text: 'Hvor mye som skal skape etterspørsel og hvor mye som skal fange den, ut fra fasen du er i.' },
+      { name: 'Vekstplan', text: 'Prioriterte tiltak for de neste 12 månedene, på tvers av kanalene.' },
+      { name: 'Måling og oppfølging', text: 'Merkevaresøk, nye kunder og andel av søk, fulgt opp jevnlig.' },
+    ],
+    notIncluded: ['Logodesign og full visuell identitet', 'Film- og fotoproduksjon', 'Medieinnkjøp'],
+    process: [
+      { period: 'Uke 1–2', title: 'Innsikt', text: 'Workshop, kundedata, konkurrenter og søkedata. Vi finner kjøpssituasjonene og det som skiller deg ut.' },
+      { period: 'Uke 3–4', title: 'Strategi', text: 'Posisjonering, merkevareelementer, fordeling mellom merkevare og salg, og en vekstplan.' },
+      { period: 'Fra måned 2', title: 'Ut i kanalene', text: 'Strategien tas i bruk i kampanjer, innhold og nettbutikk, og målingen starter.' },
+    ],
+    kpis: [
+      { name: 'Andel av søk', text: 'Din andel av merkenavnsøkene i kategorien, en tidlig indikator på markedsandel, der det er nok søk til å måle.' },
+      { name: 'Merkevaresøk', text: 'Hvor mange som søker på navnet ditt, over tid.' },
+      { name: 'Andel nye kunder', text: 'Om veksten kommer fra flere kjøpere, ikke bare de samme.' },
+    ],
+    faq: [
+      {
+        question: 'Merkevare eller performance – hva bør vi satse på?',
+        answer: 'Begge. Salgsaktivering gir salg nå, merkevarebygging gjør det billigere å selge senere. Mindre og nye merkevarer trenger ofte mer aktivering i starten, men uten merkevarearbeid blir hver ny kunde dyrere å vinne.',
+      },
+      {
+        question: 'Hvordan måler dere merkevare?',
+        answer: 'Med tall som kan følges hver måned: merkevaresøk i Search Console, andel nye kunder og, der det er nok søk, andel av søk mot konkurrentene i Google Trends. For de viktigste spørsmålene i kategorien sjekker vi også om du nevnes i AI-svar.',
+      },
+      {
+        question: 'Hvorfor betyr merkevaren noe for AI-søk?',
+        answer: 'AI-tjenester gjengir det som sies om deg på nettet. En analyse av 75 000 merkevarer fra Ahrefs fant at omtale av merkevaren hang sterkest sammen med synlighet i Googles AI-oversikter, klart sterkere enn antall lenkende domener. Det er sammenheng, ikke bevist årsak.',
+      },
+      {
+        question: 'Er dette bare for store merkevarer?',
+        answer: 'Nei. Små merkevarer har mest å vinne på å bli husket, fordi de ellers betaler full pris for hver kunde. Strategien tilpasses budsjettet. Det viktigste er at den brukes konsekvent.',
+      },
+    ],
+    related: [
+      { slug: 'some', why: 'Der merkevaren bygges bredt, også mot dem som ikke leter ennå.' },
+      { slug: 'seo', why: 'Merkevaresignaler og synlighet i Google og AI-søk henger tett sammen.' },
+    ],
+  },
+
+  some: {
+    highlight: 'sosiale medier',
+    highlights: ['Meta, TikTok og Snapchat', 'Kanaler og budsjett der kundene er', 'Målt på nye kunder'],
+    facts: [
+      { label: 'Kanaler', value: 'Meta · TikTok', note: 'Snapchat og andre der kundene er' },
+      { label: 'Starter med', value: 'Revisjon', note: 'og kanalplan' },
+      { label: 'Kreativer', value: 'Plan og test', note: 'produksjon etter avtale' },
+      { label: 'Vi måler', value: 'Nye kunder', note: 'ikke bare siste klikk' },
+    ],
+    why: {
+      title: 'Sosiale medier skaper etterspørsel',
+      paragraphs: [
+        'Søk fanger etterspørsel som allerede finnes. I sosiale medier når du folk før de begynner å lete, slik at det er deg de kommer på når behovet melder seg. Hvilke kanaler som passer, avhenger av hvor kundene dine er.',
+        'Algoritmene til Meta, TikTok og Snapchat velger i stor grad selv hvem som ser hvilken annonse. Gode og varierte kreativer er derfor blitt avgjørende, og Meta skriver selv at variasjon gir systemet mer å jobbe med.',
+      ],
+      insight: {
+        title: 'Kreativet er målrettingen',
+        text: 'Metas annonsesystem Andromeda snevrer titalls millioner annonser inn til noen tusen kandidater for hver person. Meta skriver at flere og mer varierte kreativer gir systemet mer å matche mot. Derfor jobber vi med bred målretting og varierte kreativer.',
+        source: {
+          label: 'Meta Engineering: Meta Andromeda (2024)',
+          href: 'https://engineering.fb.com/2024/12/02/production-engineering/meta-andromeda-advantage-automation-next-gen-personalized-ads-retrieval-engine/',
+        },
+      },
+    },
+    situations: [
+      { title: 'Kampanjene lever på retargeting', text: 'Det meste av budsjettet går til folk som allerede har besøkt butikken, og publikummet krymper hver måned.' },
+      { title: 'Annonsene ser like ut og slites fort', text: 'Noen få kreativer går lenge, resultatene faller, og ingen har en plan for nye.' },
+      { title: 'Alt budsjettet ligger i én kanal', text: 'Meta får alt av vane, og ingen har vurdert om TikTok eller Snapchat når kundene bedre.' },
+      { title: 'ROAS ser bra ut, men veksten uteblir', text: 'Rapportene gir æren til siste klikk, mens det som skaper nye kunder, ikke blir målt.' },
+    ],
+    deliverables: [
+      { name: 'Revisjon og kanalplan', text: 'Hvilke kanaler som passer kundene dine, og hvordan budsjettet fordeles mellom dem.' },
+      { name: 'Rekkevidde og salg', text: 'Egne kampanjer for å nå nye kunder, ved siden av salgskampanjene, med hver sin jobb.' },
+      { name: 'Kreativ plattform', text: 'Faste merkevareelementer og budskap som går igjen i alle kanalene.' },
+      { name: 'Kreativ plan og testing', text: 'Hvilke konsepter og formater som testes, og når kreativene bør byttes. Produksjonen gjøres av dere, en partner eller oss etter avtale.' },
+      { name: 'Måling utover siste klikk', text: 'Nye kunder, merkevaresøk og løftstester der det er mulig.' },
+      { name: 'Rapport på tvers', text: 'Resultatene fra kanalene samlet, med plan for neste periode.' },
+    ],
+    notIncluded: ['Annonsebudsjett, som du betaler direkte til plattformene', 'Produksjon av kreativer, med mindre det er avtalt', 'Honorarer til influensere og skapere'],
+    process: [
+      { period: 'Uke 1–2', title: 'Revisjon og kanalplan', text: 'Kontoer, kreativer og målgrupper gjennomgått, og en plan for kanaler og budsjett.' },
+      { period: 'Uke 3–4', title: 'Lansering og testing', text: 'Kampanjer for rekkevidde og salg i de valgte kanalene, med kreative varianter som testes mot hverandre.' },
+      { period: 'Fra måned 2', title: 'Fordel etter resultat', text: 'Mer budsjett til kanalene og kreativene som gir nye kunder.' },
+    ],
+    kpis: [
+      { name: 'Kostnad per ny kunde', text: 'Hva det koster å vinne kunder som ikke har handlet før.' },
+      { name: 'Inkrementell effekt', text: 'Salg som ikke ville kommet uten annonsene, målt med løftstester der det går.' },
+      { name: 'Merkevaresøk', text: 'Om flere søker på navnet ditt, et tegn på at etterspørselen vokser.' },
+    ],
+    faq: [
+      {
+        question: 'Hvilke kanaler bør vi bruke?',
+        answer: 'Det avhenger av hvor kundene dine er og hva du selger. Vi anbefaler heller få kanaler med nok budsjett til å lære, enn mange som får for lite.',
+      },
+      {
+        question: 'Hvorfor fokus på merkevare når vi vil selge?',
+        answer: 'Salgskampanjer treffer bare dem som allerede vurderer å kjøpe. Merkevarebygging gjør at flere kommer på deg når behovet oppstår, og at salgskampanjene, søket og e-posten din fungerer bedre. Vi kjører begge, med hver sin jobb.',
+      },
+      {
+        question: 'Hvem lager kreativene?',
+        answer: 'Det avtaler vi. Mange har egne folk, et kreativt byrå eller skapere de samarbeider med. Vi lager planen og briefen, tester og forteller hva som virker. Produksjon kan vi ta etter avtale.',
+      },
+      {
+        question: 'Hvordan måler dere effekten?',
+        answer: 'Siste klikk undervurderer sosiale medier, fordi mange ser annonsen og kjøper senere via søk. Vi følger nye kunder og merkevaresøk, og bruker konverteringsløftstester i Meta der det er mulig.',
+      },
+    ],
+    related: [{ slug: 'merkevare-og-strategi', why: 'Posisjonering og merkevareelementer gir kreativene en rød tråd.' }],
+  },
+
+  'sporing-og-analyse': {
+    highlight: 'Sporing og analyse',
+    highlights: ['Server-side med Tracklution', 'GA4 og BigQuery', 'Egne dashboards'],
+    facts: [
+      { label: 'Standard', value: 'Tracklution', note: 'server-side sporing' },
+      { label: 'Starter med', value: 'Revisjon', note: 'piksler, tagger og samtykke' },
+      { label: 'Analyse', value: 'GA4 · BigQuery', note: 'data du eier selv' },
+      { label: 'Vi måler', value: 'Sporede ordre', note: 'mot ordrene i nettbutikken' },
+    ],
+    why: {
+      title: 'Alt annet lærer av disse dataene',
+      paragraphs: [
+        'Sporing som bare kjører i nettleseren mister data. Annonseblokkere stopper skript, og Safari begrenser informasjonskapsler satt med JavaScript til sju dager. Da ser Meta, Google og GA4 færre kjøp enn nettbutikken, og budstrategiene lærer av et ufullstendig bilde.',
+        'Med server-side sporing sendes hendelsene også fra en server. Samtykke er fortsatt et krav: det endrer hvordan data sendes, ikke hvem som har sagt ja.',
+      ],
+      flow: {
+        title: 'Server-side sporing med Tracklution',
+        stages: [
+          { title: 'Nettbutikken', items: ['Hendelser og ordre', 'Samtykke fra banneret'] },
+          { title: 'Tracklution', items: ['Eget førstepartsdomene', 'Datasenter i Stockholm (AWS)'] },
+          { title: 'Plattformer', items: ['Meta (Conversions API)', 'Google Ads og GA4', 'TikTok, Klaviyo m.fl.'] },
+        ],
+      },
+    },
+    situations: [
+      { title: 'Tallene i nettbutikken, GA4 og annonsene spriker', text: 'Ingen kilder er enige om hvor mange ordre markedsføringen ga, og du vet ikke hvilken du skal stole på.' },
+      { title: 'Meta og Google ser for få kjøp', text: 'Kampanjene optimaliserer på for lite data, og budstrategiene treffer dårligere.' },
+      { title: 'Samtykket er ikke koblet riktig', text: 'Banneret er på plass, men pikslene følger ikke valgene. Enten mister du data, eller du sporer uten gyldig samtykke.' },
+      { title: 'Dataene ligger i ti forskjellige verktøy', text: 'Rapportene lages for hånd, og ingen har en samlet oversikt over kanaler og lønnsomhet.' },
+    ],
+    deliverables: [
+      { name: 'Sporingsrevisjon og måleplan', text: 'Piksler, tagger, dobbelttelling og samtykke, og en plan for hvilke hendelser og måltall som skal spores.' },
+      { name: 'Server-side med Tracklution', text: 'Eget førstepartsdomene, i Shopify via kundehendelser og en ordre-webhook. Server-side Google Tag Manager når det passer bedre.' },
+      { name: 'Plattformene koblet på', text: 'Metas Conversions API, Googles forbedrede konverteringer, GA4 og øvrige annonseplattformer.' },
+      { name: 'Samtykke', text: 'Consent Mode v2 koblet til samtykkebanneret, så valgene til den besøkende følges.' },
+      { name: 'BigQuery og dashboards', text: 'Data fra nettbutikken, GA4 og annonseplattformene samlet, med dashboards for omsetning, kanaler og lønnsomhet.' },
+      { name: 'Kontroll av datakvalitet', text: 'Jevnlig sjekk av avvik mot nettbutikken og av hendelsesmatchkvaliteten i Meta.' },
+    ],
+    notIncluded: ['Lisens til Tracklution og kostnader i Google Cloud, som du betaler direkte', 'Juridisk rådgivning om personvern'],
+    process: [
+      { period: 'Uke 1–2', title: 'Revisjon og plan', text: 'Vi kartlegger sporing og samtykke, finner avvikene og lager en måleplan.' },
+      { period: 'Uke 3–4', title: 'Server-side på plass', text: 'Tracklution settes opp, plattformene kobles på, og tallene kontrolleres mot ordrene i nettbutikken.' },
+      { period: 'Fra måned 2', title: 'Analyse og dashboards', text: 'Data samles i BigQuery, og dashboardene bygges rundt måltallene dere styrer etter.' },
+    ],
+    kpis: [
+      { name: 'Andel sporede ordre', text: 'Hvor mange av ordrene i nettbutikken som også registreres i plattformene og GA4.' },
+      { name: 'Hendelsesmatchkvalitet', text: 'Metas mål på hvor godt hendelsene kan kobles til riktige personer.' },
+      { name: 'Avvik mot nettbutikken', text: 'Forskjellen mellom ordre og omsetning i nettbutikken og i plattformene, over tid.' },
+    ],
+    faq: [
+      {
+        question: 'Hva er server-side sporing?',
+        answer: 'At hendelser som kjøp sendes fra en server direkte til for eksempel Meta og Google, i tillegg til fra nettleseren. Det gjør sporingen mindre sårbar for annonseblokkere og nettleserbegrensninger, og gir plattformene bedre data å optimalisere på.',
+      },
+      {
+        question: 'Trenger vi fortsatt samtykke?',
+        answer: 'Ja. Etter ekomloven § 3-15 krever lagring og lesing av informasjon på brukerens enhet samtykke, med unntak for det som er strengt nødvendig. Vi kobler sporingen til samtykkebanneret og Consent Mode v2.',
+      },
+      {
+        question: 'Hvorfor Tracklution?',
+        answer: 'Tracklution er en ferdig server-side løsning med koblinger til de vanligste annonse- og analyseplattformene, oppsett for blant annet Shopify, WooCommerce og Magento, og datasenter i Stockholm. Du slipper å drifte egne servere.',
+      },
+      {
+        question: 'Hva koster BigQuery?',
+        answer: 'Google tar ikke betalt for selve eksporten fra GA4, men lagring og spørringer koster etter bruk. Vi estimerer kostnaden før oppstart, så du vet hva du går til.',
+      },
+    ],
+    related: [
+      { slug: 'sem/google-ads', why: 'Budstrategiene i Google Ads lærer av konverteringene sporingen sender.' },
+      { slug: 'some/meta-ads', why: 'Conversions API og god hendelsesmatch er grunnlaget for Meta-kampanjene.' },
+    ],
+  },
+
+  sem: {
+    highlight: 'Betalt søk',
+    highlights: ['Google, Bing og AI-søk', 'Budsjett der det lønner seg', 'Betalt og organisk søk sammen'],
+    facts: [
+      { label: 'Kanaler', value: 'Google · Bing', note: 'og annonser i AI-søk' },
+      { label: 'Starter med', value: 'Revisjon', note: 'konto, sporing og feed' },
+      { label: 'Videre', value: 'Løpende drift', note: 'omfang etter avtale' },
+      { label: 'Vi måler', value: 'Lønnsomhet', note: 'og kostnad per ny kunde' },
+    ],
+    why: {
+      title: 'Riktig kanal, riktig budsjett',
+      paragraphs: [
+        'SEM er betalt synlighet i søk: Google, Bing og annonser i AI-søk. Spørsmålet er ikke bare hvordan kampanjene settes opp, men hvor budsjettet gir mest, og hvor du allerede vinner klikkene uten å betale.',
+        'Derfor planlegger vi betalt søk sammen med SEO, sporing og produktfeeden. Hvordan vi jobber i hver kanal, står på kanalsidene.',
+      ],
+    },
+    situations: [
+      { title: 'Annonsekostnaden stiger, salget gjør det ikke', text: 'Du bruker mer enn før, men vet ikke hvilke kampanjer som faktisk tjener penger.' },
+      { title: 'Du bruker for mye på ditt eget merkenavn', text: 'Merkevaresøk og gjenkjøp tar en stor del av budsjettet, og du ser ikke hva som gir nye kunder.' },
+      { title: 'Alt går til Google av vane', text: 'Bing og annonser i AI-søk er aldri vurdert, og budsjettet fordeles slik det alltid har gjort.' },
+      { title: 'Betalt og organisk søk konkurrerer', text: 'Du betaler for klikk der du allerede rangerer godt, mens søk du ikke rangerer på, står uten annonser.' },
+    ],
+    deliverables: [
+      { name: 'Revisjon', text: 'Konto, sporing og produktfeed, med en prioritert tiltaksliste.' },
+      { name: 'Kanal- og budsjettplan', text: 'Hvor mye som skal til Google, Bing og AI-søk, ut fra marginer og hvor etterspørselen er.' },
+      { name: 'Søkeordsanalyse sammen med SEO', text: 'Hvor du allerede rangerer organisk, og hvor betalt søk gir mest.' },
+      { name: 'Kontroll på merkevaresøk', text: 'Merkevaresøk skilt fra nye kunder, med et tak på hva ditt eget navn får koste.' },
+      { name: 'Drift av kanalene', text: 'Kampanjene i de kanalene vi blir enige om, slik kanalsidene beskriver. Omfanget avtales ut fra budsjett og behov.' },
+      { name: 'Rapport på tvers', text: 'Inntekt, lønnsomhet og nye kunder fra søkekanalene samlet, med plan for neste periode.' },
+    ],
+    notIncluded: ['Annonsebudsjett, som du betaler direkte til Google og Microsoft', 'Produksjon av video og foto', 'Annonsering i sosiale medier'],
+    process: [
+      { period: 'Uke 1–2', title: 'Rydd og mål', text: 'Revisjon, sporing på plass, feed i orden og en kampanjestruktur vi kan stole på.' },
+      { period: 'Uke 3–4', title: 'Fordel og bygg', text: 'Budsjettet fordelt mellom kanalene, budstrategier stilt inn mot lønnsomhet og de første testene i gang.' },
+      { period: 'Fra måned 2', title: 'Skaler det som virker', text: 'Mer budsjett til det som leverer, kutt i det som ikke gjør det, og plan for neste kvartal.' },
+    ],
+    kpis: [
+      { name: 'Lønnsomhet', text: 'Hva som er igjen etter varekost og annonsekostnad, ikke bare ROAS.' },
+      { name: 'Kostnad per ny kunde', text: 'Hva det koster å vinne en kunde som ikke har handlet hos deg før.' },
+      { name: 'Kostnad på merkevaresøk', text: 'Hvor stor del av budsjettet som går til ditt eget navn, og om det kan senkes.' },
+    ],
+    faq: [
+      {
+        question: 'Hvilke kanaler bør vi bruke?',
+        answer: 'Som regel Google først, fordi det er der de fleste søkene skjer. Bing og annonser i AI-søk kommer som tillegg når Google-kontoen er i orden og tallene viser at det lønner seg.',
+      },
+      {
+        question: 'Hvor stort annonsebudsjett trenger jeg?',
+        answer: 'Det avhenger av marginer, konkurranse og hvor mye etterspørsel som finnes. Vi anbefaler et budsjett etter revisjonen, når vi har sett kontoen din.',
+      },
+      {
+        question: 'Hvorfor ser dere på SEO når vi kjøper SEM?',
+        answer: 'Fordi betalt og organisk søk konkurrerer om de samme klikkene. Rangerer du allerede godt organisk på et søkeord, kan det være bortkastet å by høyt på det. Omvendt viser søkeordsdata fra annonsene hvor det er verdt å satse på SEO.',
+      },
+      {
+        question: 'Hvem eier kontoen og dataene?',
+        answer: 'Du. Kontoene ligger hos deg, og vi jobber med tilgangen du gir oss. Slutter du, beholder du alt.',
+      },
+    ],
+    related: [{ slug: 'affiliate', why: 'Produktfeeden er grunnmuren i Shopping og Performance Max.' }],
+  },
+
+  'sem/google-ads': {
+    highlight: 'Google Ads',
+    highlights: ['Søk, Shopping og Performance Max', 'Feed og sporing i orden', 'Kontroll på automatikken'],
+    facts: [
+      { label: 'Kampanjer', value: 'Søk · Shopping', note: 'og Performance Max' },
+      { label: 'Starter med', value: 'Revisjon', note: 'konto, feed og sporing' },
+      { label: 'Feed', value: 'Merchant Center', note: 'med etiketter for margin' },
+      { label: 'Vi måler', value: 'Lønnsomhet', note: 'og nye kunder' },
+    ],
+    why: {
+      title: 'Automatikken er bare så god som dataene',
+      paragraphs: [
+        'Performance Max, AI Max for Search og Smart Bidding tar mange av beslutningene som før ble tatt for hånd. Det gjør tre ting viktigere enn før: produktfeeden, sporingen og rammene du gir automatikken.',
+        'Det er der vi starter. Riktig data inn, tydelige mål og kontroll på hva Google gjør med pengene dine.',
+      ],
+    },
+    situations: [
+      { title: 'Produktene vises ikke i Shopping', text: 'Avviste varer i Merchant Center, manglende GTIN eller fraktinnstillinger som ikke stemmer med butikken.' },
+      { title: 'Performance Max spiser budsjettet', text: 'Kampanjen bruker mye på merkevaresøk og gjenkjøp, og du ser ikke hva som skjer per kanal.' },
+      { title: 'Ingen kontroll på søkeordene', text: 'Annonsene vises på søk du aldri ville valgt, og ingen negative søkeordslister holder det i sjakk.' },
+      { title: 'Konverteringene stemmer ikke med nettbutikken', text: 'Dobbelttelling, manglende samtykkesignaler eller feil verdier gjør at budstrategien styrer i blinde.' },
+    ],
+    deliverables: [
+      { name: 'Merchant Center og feed', text: 'GTIN, titler, frakt og bilder i orden, og egendefinerte etiketter for margin, bestselgere og sesong.' },
+      { name: 'Sporing og samtykke', text: 'Google-tagg, forbedrede konverteringer og Consent Mode v2 koblet til samtykkebanneret.' },
+      { name: 'Performance Max med rammer', text: 'Merkeutelukkelser, negative søkeord og søketemaer.' },
+      { name: 'Negative søkeordslister', text: 'På kontonivå, oppdatert jevnlig fra søkeordsrapporten.' },
+      { name: 'Styring mot lønnsomhet', text: 'Mål for nye kunder og varekost i feeden, så budstrategien styrer mot det som tjener penger.' },
+      { name: 'Tester av nye funksjoner', text: 'AI Max for Search og andre nyheter testet som eksperimenter, der det er tilgjengelig.' },
+    ],
+    notIncluded: ['Annonsebudsjett til Google', 'Videoproduksjon til YouTube'],
+    process: [
+      { period: 'Uke 1–2', title: 'Data i orden', text: 'Feed, sporing og samtykke rettes opp, slik at Google lærer av riktige tall.' },
+      { period: 'Uke 3–4', title: 'Ny struktur', text: 'Merkevare og nye kunder skilles, Performance Max får rammer, og budstrategiene settes mot lønnsomhet.' },
+      { period: 'Fra måned 2', title: 'Test og skaler', text: 'Eksperimenter med nye kampanjetyper, og mer budsjett til det som leverer.' },
+    ],
+    kpis: [
+      { name: 'Konverteringsverdi og ROAS', text: 'Inntekt fra Google Ads per annonsekrone, målt mot nettbutikken.' },
+      { name: 'Nye kunder', text: 'Andel og kostnad per ny kunde, skilt fra gjenkjøp og merkevaresøk.' },
+      { name: 'Shopping-dekning', text: 'Andel godkjente produkter og visningsandel i Shopping.' },
+    ],
+    faq: [
+      {
+        question: 'Performance Max eller vanlig Shopping?',
+        answer: 'Det kommer an på kontoen. Performance Max gir rekkevidde på tvers av Google, mens vanlig Shopping gir mer kontroll. Mange butikker får best resultat med en kombinasjon, og vi tester heller enn å gjette.',
+      },
+      {
+        question: 'Kan jeg styre søkeordene i Performance Max?',
+        answer: 'Delvis. Du kan legge inn negative søkeord på kampanjenivå, utelukke merkenavn og gi søketemaer, og du får innsikt i hvilke søk kampanjen vises på. Trenger du full kontroll, kombinerer vi med vanlige søkekampanjer.',
+      },
+      {
+        question: 'Følger dere Googles anbefalinger?',
+        answer: 'Bare når vi har vurdert dem. Automatiske anbefalinger som endrer kontoen uten at noen har sett på dem, skrur vi av, og nye funksjoner testes som eksperimenter.',
+      },
+      {
+        question: 'Fungerer det med Shopifys Google & YouTube-app?',
+        answer: 'Ja. Appen sender produktdata til Merchant Center. Vi justerer innstillingene og legger på tilleggsdata der appen ikke strekker til.',
+      },
+    ],
+    related: [
+      { slug: 'affiliate', why: 'Feedoptimalisering og CSS avgjør hvordan produktene vises i Shopping.' },
+      { slug: 'sporing-og-analyse', why: 'Konverteringer og samtykke som budstrategiene kan stole på.' },
+    ],
+  },
+
+  'sem/bing-ads': {
+    highlight: 'Bing Ads',
+    highlights: ['Importert fra Google Ads', 'Søk og Shopping', 'Når søkerne på desktop'],
+    facts: [
+      { label: 'Utgangspunkt', value: 'Google Ads', note: 'kampanjene importeres' },
+      { label: 'Kampanjer', value: 'Søk · Shopping', note: 'og Performance Max' },
+      { label: 'Sporing', value: 'UET-taggen', note: 'med samtykkesignaler' },
+      { label: 'Vi måler', value: 'Lønnsomhet', note: 'side om side med Google' },
+    ],
+    why: {
+      title: 'Søkene Google ikke tar',
+      paragraphs: [
+        'Microsoft Advertising viser annonsene dine i Bing og søkemotorene som bruker Bing. Det er en liten del av søkene i Norge totalt, men en langt større del på desktop.',
+        'Derfor starter vi når Google Ads er i orden. Kampanjene importeres, tilpasses og følges opp for seg, så Bing bare får budsjett når det lønner seg.',
+      ],
+      insight: {
+        title: 'Om lag ett av fem søk på desktop',
+        text: 'I september 2026 sto Bing for om lag 21 % av søkene på desktop i Norge, og om lag 6 % på tvers av alle enheter. Google er størst på begge, men på desktop er Bing en klar nummer to.',
+        chart: {
+          kind: 'bars',
+          valueLabel: 'Bings andel av søk',
+          categoryLabel: 'Enhet',
+          format: 'percent',
+          legend: { emphasis: 'Desktop', context: 'Alle enheter' },
+          items: [
+            { label: 'Desktop', value: 20.66, emphasis: true },
+            { label: 'Alle enheter', value: 6.38, emphasis: false },
+          ],
+        },
+        source: {
+          label: 'Statcounter: Search engine market share Norway, september 2026',
+          href: 'https://gs.statcounter.com/search-engine-market-share/desktop/norway',
+        },
+      },
+    },
+    situations: [
+      { title: 'Google Ads er i orden, men veksten stopper', text: 'Du har tatt ut det meste i Google og trenger nye søk å vinne, uten å starte fra null.' },
+      { title: 'Ingen har testet Bing', text: 'Kontoen ble aldri satt opp, eller den ble satt opp én gang og glemt.' },
+      { title: 'Kampanjene i Bing er kopier ingen følger opp', text: 'Importen kjører, men budsjett, bud og søkeord er ikke tilpasset Bing.' },
+      { title: 'Konverteringene i Bing er borte', text: 'UET-taggen sender ikke samtykkesignaler, og da slutter Microsoft å spore konverteringer fra EØS.' },
+    ],
+    deliverables: [
+      { name: 'Vurdering', text: 'Om Bing passer for deg, ut fra kundene, produktene og marginene dine, før vi bruker budsjett.' },
+      { name: 'Import fra Google Ads', text: 'Kampanjene importeres med fast synkronisering, og tilpasses der Bing skiller seg fra Google.' },
+      { name: 'Shopping og produktfeed', text: 'Microsoft Merchant Center med den samme feeden som går til Google, og Shopping-kampanjer for Norge.' },
+      { name: 'UET-tagg og samtykke', text: 'Konverteringssporing med Consent Mode, så Microsoft kan måle besøk fra EØS.' },
+      { name: 'Eget budsjett og egne bud', text: 'Satt for Bing, ikke kopiert fra Google.' },
+      { name: 'Rapport side om side med Google', text: 'Lønnsomhet og nye kunder fra Bing i den samme månedsrapporten som Google.' },
+    ],
+    notIncluded: ['Annonsebudsjett, som du betaler direkte til Microsoft'],
+    process: [
+      { period: 'Uke 1–2', title: 'Vurder og importer', text: 'Vi ser på om Bing passer, setter opp UET-taggen med samtykke og importerer kampanjene.' },
+      { period: 'Uke 3–4', title: 'Tilpass', text: 'Budsjett, bud og søkeord justeres for Bing, og Shopping kobles på.' },
+      { period: 'Fra måned 2', title: 'Skaler eller kutt', text: 'Vi sammenligner lønnsomheten med Google og anbefaler å øke, holde eller avslutte.' },
+    ],
+    kpis: [
+      { name: 'Lønnsomhet', text: 'Hva som er igjen etter varekost og annonsekostnad i Bing, målt mot nettbutikken.' },
+      { name: 'Kostnad per ny kunde', text: 'Hva en ny kunde koster i Bing, sammenlignet med Google.' },
+      { name: 'Klikkpris', text: 'Hva et klikk koster i Bing på de samme søkene som i Google.' },
+    ],
+    faq: [
+      {
+        question: 'Er Bing verdt det i Norge?',
+        answer: 'For mange nettbutikker, ja, som et tillegg. Bing er liten totalt, men står for om lag en femtedel av søkene på desktop. Vi tester det på dine tall og avslutter hvis det ikke lønner seg.',
+      },
+      {
+        question: 'Må vi bygge alt på nytt?',
+        answer: 'Nei. Kampanjene importeres fra Google Ads og synkroniseres jevnlig. Vi tilpasser det som bør være ulikt, som budsjett, bud og enkelte søkeord.',
+      },
+      {
+        question: 'Kan vi bruke Microsoft Channel-appen i Shopify?',
+        answer: 'Den finnes og er gratis å installere, men har blandede omtaler. Vi vurderer den opp mot å sende feeden direkte til Microsoft Merchant Center.',
+      },
+      {
+        question: 'Hvorfor er samtykke så viktig her?',
+        answer: 'Siden mai 2025 krever Microsoft samtykkesignaler for besøk fra EØS. Uten dem slutter Microsoft å spore konverteringer fra UET-taggen og å fylle remarketinglistene.',
+      },
+    ],
+    related: [
+      { slug: 'sem/google-ads', why: 'Bing bygger på kampanjene og feeden fra Google Ads.' },
+      { slug: 'sporing-og-analyse', why: 'UET-taggen og samtykket må være riktig for at Bing skal kunne måle.' },
+    ],
+  },
+
+  'sem/ai-sok': {
+    highlight: 'AI-søk',
+    highlights: ['AI Max for Search', 'Produktdata klare for AI', 'Tester når nye flater åpner'],
+    facts: [
+      { label: 'I dag', value: 'Google', note: 'annonser rundt AI-oversiktene' },
+      { label: 'Verktøy', value: 'AI Max', note: 'for Search, der det er tilgjengelig' },
+      { label: 'Grunnlag', value: 'Produktdata', note: 'Merchant Center og nettbutikken' },
+      { label: 'Nye flater', value: 'Testes', note: 'når de åpner for norske annonsører' },
+    ],
+    why: {
+      title: 'Søk blir til samtaler',
+      paragraphs: [
+        'Kundene stiller lengre spørsmål til Google og AI-tjenester, og får svar med tekst, produkter og annonser. Da må både kampanjene og produktdataene være klare for det.',
+        'Mye er ennå ikke åpnet i Norge. Vi er derfor konkrete på hva som virker i dag: annonser rundt Googles AI-oversikter, AI Max for Search og produktdata som AI-tjenestene kan bruke. Det som kommer, tester vi når det kommer.',
+      ],
+      insight: {
+        title: 'Annonser rundt AI-oversiktene',
+        text: 'Annonser over og under Googles AI-oversikter kan vises i alle markeder der oversiktene finnes, fra vanlige kampanjer for Søk, Shopping og Performance Max. Annonser inne i selve oversikten finnes foreløpig bare på engelsk, i 12 land, og ikke i Norge.',
+        source: { label: 'Google Ads Help: About ads and AI Overviews', href: 'https://support.google.com/google-ads/answer/16297775?hl=en' },
+      },
+    },
+    situations: [
+      { title: 'Søkekampanjene er bygget for korte søkeord', text: 'Lengre spørsmål fanges ikke opp, eller treffer feil annonser.' },
+      { title: 'Produktdataene er ikke klare', text: 'Titler, attributter og lager i Merchant Center og nettbutikken er mangelfulle.' },
+      { title: 'Du vil teste AI Max, men vil ha kontroll', text: 'Uten rammer kan automatikken treffe søk og sider du ikke ønsker.' },
+      { title: 'Du vet ikke hva som finnes i Norge', text: 'Nyhetene kommer tett, og det er vanskelig å skille det som er lansert her fra det som bare finnes i USA.' },
+    ],
+    deliverables: [
+      { name: 'Status for Norge', text: 'Hva som er tilgjengelig for norske annonsører nå, og hva som kommer.' },
+      { name: 'Kampanjer for lengre spørsmål', text: 'Annonsene rundt AI-oversiktene kommer fra vanlige kampanjer. Vi sørger for at søkeord, tekster og produktdata passer til lengre spørsmål.' },
+      { name: 'AI Max for Search som eksperiment', text: 'Der det er tilgjengelig, testet mot vanlige søkekampanjer, med kontroll på merker, URL-er og tekster.' },
+      { name: 'Produktdata for AI-tjenester', text: 'Merchant Center og produktkatalogen komplette og oppdaterte, så produktene kan hentes inn i AI-søk og AI-handel.' },
+      { name: 'Nye flater når de åpner', text: 'Annonser i ChatGPT, Copilot og andre AI-tjenester testes når de blir tilgjengelige i Norge.' },
+      { name: 'Tydelig rapportering', text: 'Hva vi kan og ikke kan måle: Google viser foreløpig ikke egne tall for annonser i AI-oversikter.' },
+    ],
+    notIncluded: ['Annonsebudsjett, som du betaler direkte til plattformene', 'Synlighet i AI-svar uten å betale, som ligger under SEO'],
+    process: [
+      { period: 'Uke 1–2', title: 'Status og data', text: 'Vi kartlegger hva som er tilgjengelig, og får produktdata og søkekampanjer klare.' },
+      { period: 'Uke 3–4', title: 'Test AI Max', text: 'AI Max kjøres som eksperiment mot dagens kampanjer, med tydelige rammer.' },
+      { period: 'Fra måned 2', title: 'Behold det som virker', text: 'Vi skalerer det som gir lønnsomt salg, og er klare når nye flater åpner.' },
+    ],
+    kpis: [
+      { name: 'Lønnsomhet i eksperimentene', text: 'AI Max og nye flater målt mot vanlige kampanjer.' },
+      { name: 'Nye søk', text: 'Søk vi ikke nådde før, og hva de gir i salg.' },
+      { name: 'Produktdekning', text: 'Andel produkter med komplette data i Merchant Center og katalogen.' },
+    ],
+    faq: [
+      {
+        question: 'Kan vi annonsere i ChatGPT?',
+        answer: 'OpenAI har begynt å teste annonser i ChatGPT. Vi følger med på når norske annonsører får tilgang, og tester det når det skjer.',
+      },
+      {
+        question: 'Hva er forskjellen på dette og GEO?',
+        answer: 'GEO, eller synlighet i AI-svar uten å betale, ligger under SEO. Her handler det om den betalte delen: annonser og produktdata.',
+      },
+      {
+        question: 'Hva er AI Max for Search?',
+        answer: 'En funksjon i Google Ads som utvider søkekampanjene til flere søk, lager tekster ut fra nettsiden og annonsene dine, og kan velge landingsside. Du kan styre merker og URL-er. Vi tester det som eksperiment før vi tar det i bruk fullt ut.',
+      },
+      {
+        question: 'Kan vi måle annonser i AI-oversikter for seg?',
+        answer: 'Ikke i dag. Google oppgir at det ikke finnes egen rapportering for annonser i AI-oversikter. Vi måler derfor effekten på kampanjenivå, mot salget i nettbutikken.',
+      },
+    ],
+    related: [
+      { slug: 'seo', why: 'Synlighet i AI-svar uten å betale, med GEO.' },
+      { slug: 'sem/google-ads', why: 'Kampanjene AI-søk bygger på.' },
+    ],
+  },
+
+  'some/meta-ads': {
+    highlight: 'Meta Ads',
+    highlights: ['Katalog og Conversions API', 'Mange varierte kreativer', 'Målt mot salget i butikken'],
+    facts: [
+      { label: 'Kampanjer', value: 'Advantage+', note: 'salgskampanjer med katalog' },
+      { label: 'Data', value: 'Conversions API', note: 'server-side, via Tracklution' },
+      { label: 'Starter med', value: 'Revisjon', note: 'konto, katalog og hendelser' },
+      { label: 'Vi måler', value: 'Nye kunder', note: 'mot ordrene i nettbutikken' },
+    ],
+    why: {
+      title: 'Katalogen, dataene og kreativene gjør jobben',
+      paragraphs: [
+        'Meta styrer i dag det meste av målrettingen selv. Advantage+ salgskampanjer velger publikum, plasseringer og budsjett, og produktannonsene henter varene fra katalogen din.',
+        'Det du styrer, er det systemet lærer av: en katalog som stemmer med butikken, kjøp som faktisk når Meta, og kreativer nok til å treffe ulike folk. Det er der vi bruker tiden.',
+      ],
+      insight: {
+        title: 'Katalogen må kjenne igjen produktene',
+        text: 'Produktannonsene virker bare når produkt-ID-ene i hendelsene fra nettbutikken stemmer med ID-ene i katalogen. Meta anbefaler å holde samsvaret over 75 %, og helst over 90 %.',
+        source: {
+          label: 'Meta Business Help Center: Om samsvarsraten for katalogen',
+          href: 'https://www.facebook.com/business/help/1183006658734497',
+        },
+      },
+    },
+    situations: [
+      { title: 'Eksisterende kunder spiser budsjettet', text: 'Salgskampanjene finner dem som uansett ville handlet, og du ser ikke hvor mye som går til nye kunder.' },
+      { title: 'Produktannonsene viser feil varer', text: 'Katalogen er ikke synkronisert, eller ID-ene i hendelsene stemmer ikke med katalogen.' },
+      { title: 'Meta ser færre kjøp enn butikken', text: 'Pikselen alene stoppes av annonseblokkere, og kampanjene lærer av for lite data.' },
+      { title: 'Advantage+ styrer, men ingen har satt rammene', text: 'Kampanjene er automatiske, men kundelister, katalog og hendelser er ikke satt opp så systemet lærer riktig.' },
+    ],
+    deliverables: [
+      { name: 'Revisjon', text: 'Kontostruktur, katalog, hendelser og kreativer, med en prioritert tiltaksliste.' },
+      { name: 'Katalogen i orden', text: 'Synkronisert med nettbutikken, med samme ID-er som i hendelsene, og produktsett til kampanjene.' },
+      { name: 'Conversions API', text: 'Kjøp og andre hendelser sendt server-side, med Tracklution som standard, og hendelsesmatchkvaliteten fulgt opp.' },
+      { name: 'Kampanjestruktur', text: 'Advantage+ salgskampanjer med katalog, og kundelister som holder budsjettet på nye kunder der det trengs.' },
+      { name: 'Formater for Reels, Stories og feed', text: 'Kreativene tilpasset Metas formater og sikre soner, enten de lages av dere, en partner eller oss etter avtale.' },
+      { name: 'Rapport mot butikken', text: 'Nye kunder og salg målt mot ordrene i nettbutikken, med løftstester der det går.' },
+    ],
+    notIncluded: ['Annonsebudsjett, som du betaler direkte til Meta', 'Større film- og fotoproduksjoner'],
+    process: [
+      { period: 'Uke 1–2', title: 'Data og katalog', text: 'Revisjon, Conversions API på plass og katalogen synkronisert med riktige ID-er.' },
+      { period: 'Uke 3–4', title: 'Struktur og kreativer', text: 'Ny kampanjestruktur, kundelister for nye kunder og de første kreative variantene i test.' },
+      { period: 'Fra måned 2', title: 'Skaler og test', text: 'Mer budsjett til det som gir nye kunder, og katalog og hendelser fulgt opp jevnlig.' },
+    ],
+    kpis: [
+      { name: 'Kostnad per ny kunde', text: 'Hva det koster å vinne kunder som ikke har handlet før.' },
+      { name: 'Hendelsesmatchkvalitet', text: 'Metas mål fra 1 til 10 på hvor godt hendelsene kobles til riktige personer.' },
+      { name: 'Samsvar med katalogen', text: 'Andel hendelser med produkt-ID-er som finnes i katalogen.' },
+    ],
+    faq: [
+      {
+        question: 'Kan vi selge direkte i Facebook og Instagram?',
+        answer: 'I praksis skjer kjøpet i nettbutikken din. Meta støtter ikke lenger alle kassefunksjonene i appene, og annonsene sender kundene videre til kassen hos deg.',
+      },
+      {
+        question: 'Hvordan unngår vi å betale for kunder vi allerede har?',
+        answer: 'Meta har fjernet budsjettaket for eksisterende kunder i Advantage+ salgskampanjer. Vi styrer det i stedet selv, med kundelister som ekskluderes eller egne annonsesett med egne budsjettgrenser.',
+      },
+      {
+        question: 'Hvorfor Conversions API når vi har pikselen?',
+        answer: 'Pikselen kjører i nettleseren og kan stoppes av annonseblokkere. Conversions API sender hendelsene fra server til server, så Meta ser flere av kjøpene fra besøkende som har samtykket, og har mer å optimalisere på.',
+      },
+      {
+        question: 'Hvilket attribusjonsvindu bruker dere?',
+        answer: 'Metas standard er 7 dagers klikk eller 1 dags visning. Vi rapporterer det Meta viser, men styrer etter salget i nettbutikken og nye kunder, fordi plattformen og butikken teller ulikt.',
+      },
+    ],
+    related: [
+      { slug: 'some', why: 'Kanalplanen og den kreative plattformen Meta-kampanjene bygger på.' },
+      { slug: 'sporing-og-analyse', why: 'Conversions API og hendelser Meta kan stole på.' },
+    ],
+  },
+
+  'some/tiktok': {
+    highlight: 'TikTok',
+    highlights: ['Mange kreativer', 'Skapere og Spark Ads', 'Events API via Tracklution'],
+    facts: [
+      { label: 'Kampanjer', value: 'Smart+', note: 'automatisk målretting og kreativ' },
+      { label: 'Data', value: 'Events API', note: 'server-side, via Tracklution' },
+      { label: 'Kreativ', value: 'Video 9:16', note: 'med lyd og en sterk start' },
+      { label: 'Vi måler', value: 'Nye kunder', note: 'mot ordrene i nettbutikken' },
+    ],
+    why: {
+      title: 'Underholdning først, annonse etterpå',
+      paragraphs: [
+        'Folk åpner TikTok for å bli underholdt, ikke for å handle. Nettopp derfor kan kanalen skape etterspørsel hos dem som ikke leter ennå.',
+        'Det stiller krav til kreativene: annonser som ser ut som TikTok, ikke som reklamefilm. Innhold fra skapere og fra egen konto kan brukes som annonser med Spark Ads.',
+      ],
+      insight: {
+        title: 'De første sekundene avgjør',
+        text: 'TikTok anbefaler å vise hva du tilbyr i løpet av de første tre sekundene og å fange seeren i løpet av de første seks. Videoen bør være vertikal (9:16), ha lyd og holde det viktigste innenfor den sikre sonen.',
+        source: { label: 'TikTok Ads Help: Creative best practices', href: 'https://ads.tiktok.com/help/article/creative-best-practices?lang=en' },
+      },
+    },
+    situations: [
+      { title: 'Dere er ikke på TikTok', text: 'Målgruppen er der, men ingen har en plan for innhold og annonser.' },
+      { title: 'Annonsene ser ut som reklame', text: 'Polerte filmer fra andre kanaler blir scrollet forbi.' },
+      { title: 'Innhold fra skapere brukes ikke', text: 'Samarbeidene gir gode videoer, men de blir liggende i skapernes kanaler.' },
+      { title: 'Ingen vet om TikTok passer', text: 'Dere har hørt at alle burde være der, men ikke sett på om kundene deres er det.' },
+    ],
+    deliverables: [
+      { name: 'Kanalplan', text: 'Hvilken rolle TikTok skal ha ved siden av Meta og Snapchat, med mål og budsjett.' },
+      { name: 'Kreativ retning for TikTok', text: 'Hvordan videoene skal se ut for å passe inn: vertikalt, med lyd og en tydelig start. Produksjonen avtales.' },
+      { name: 'Skapere og Spark Ads', text: 'Samarbeid med skapere, og innlegg fra dem og fra egen konto brukt som annonser med tillatelse.' },
+      { name: 'Smart+ og kampanjestruktur', text: 'Kampanjer der TikTok finner publikum, med kundelister og budsjett satt av oss.' },
+      { name: 'Piksel og Events API', text: 'TikTok-pikselen og Events API via Tracklution, så TikTok ser kjøpene fra besøkende som har samtykket.' },
+      { name: 'Rapport mot butikken', text: 'Nye kunder og salg målt mot ordrene i nettbutikken, ikke bare visninger.' },
+    ],
+    notIncluded: ['Annonsebudsjett, som du betaler direkte til TikTok', 'Produksjon av video og honorarer til skapere, med mindre det er avtalt', 'TikTok Shop, som ikke er lansert i Norge'],
+    process: [
+      { period: 'Uke 1–2', title: 'Plan og data', text: 'Kanalplan, pikselen og Events API på plass, og de første kreative konseptene.' },
+      { period: 'Uke 3–4', title: 'Test kreativer', text: 'Mange varianter og innhold fra skapere testes mot hverandre.' },
+      { period: 'Fra måned 2', title: 'Skaler', text: 'Mer budsjett til videoene og skaperne som gir nye kunder.' },
+    ],
+    kpis: [
+      { name: 'Kreativ effekt', text: 'Hvor mange som ser videre etter de første sekundene, og hvilke videoer som gir salg.' },
+      { name: 'Salg fra TikTok', text: 'Kjøp i nettbutikken fra besøkende via TikTok, målt med Events API.' },
+      { name: 'Merkevaresøk', text: 'Om flere søker på navnet ditt når kampanjene går.' },
+    ],
+    faq: [
+      {
+        question: 'Passer TikTok for oss?',
+        answer: 'Det kommer an på kundene dine. Ifølge Ipsos hadde 29 % av nordmenn over 18 år en TikTok-profil i fjerde kvartal 2023. Vi ser på om målgruppen din er der før vi anbefaler budsjett.',
+      },
+      {
+        question: 'Kan vi selge direkte i TikTok?',
+        answer: 'Ikke i Norge ennå. TikTok Shop er lansert i flere europeiske land, men ikke her. Annonsene sender kundene til nettbutikken din.',
+      },
+      {
+        question: 'Må vi lage innholdet selv?',
+        answer: 'Ikke nødvendigvis. Kreativene kan komme fra dere, fra skapere eller fra oss etter avtale. Med Spark Ads kan innlegg fra skapere brukes som annonser når de gir tillatelse.',
+      },
+      {
+        question: 'Hva må vi passe på med skapere?',
+        answer: 'Reklame skal være tydelig merket, og merkingen bør komme først. Forbrukertilsynet mener plattformenes egen merking ikke er tydelig nok, og anbefaler å legge til «reklame» eller «annonse».',
+      },
+    ],
+    related: [
+      { slug: 'some', why: 'Kanalplanen og den kreative plattformen TikTok bygger på.' },
+      { slug: 'sporing-og-analyse', why: 'Events API og kjøp TikTok kan lære av.' },
+    ],
+  },
+
+  'some/snapchat': {
+    highlight: 'Snapchat',
+    highlights: ['58 % bruker den en vanlig dag', 'Vertikale annonser i fullskjerm', 'Piksel og Conversions API'],
+    facts: [
+      { label: 'Formater', value: 'Snap Ads', note: 'video, Story og Collection' },
+      { label: 'Katalog', value: 'Produktannonser', note: 'der formatet er tilgjengelig' },
+      { label: 'Data', value: 'Conversions API', note: 'via Tracklution' },
+      { label: 'Vi måler', value: 'Nye kunder', note: 'mot ordrene i nettbutikken' },
+    ],
+    why: {
+      title: 'Der mange nordmenn er en vanlig dag',
+      paragraphs: [
+        'Snapchat er et av de mest brukte sosiale mediene i Norge, og ikke bare blant de yngste. Annonsene vises vertikalt i fullskjerm og gir merkevaren plass til å bli lagt merke til.',
+        'For nettbutikker kan produktkatalogen bli til annonser som viser riktige produkter til riktige personer, der formatet er tilgjengelig. Det forutsetter at katalogen og kjøpene fra butikken når Snapchat.',
+      ],
+      insight: {
+        title: '58 % bruker Snapchat en vanlig dag',
+        text: 'Ifølge SSBs Norsk mediebarometer for 2025 bruker 58 % av befolkningen Snapchat en gjennomsnittsdag. Bare Facebook er høyere, med 63 %.',
+        chart: {
+          kind: 'bars',
+          valueLabel: 'Andel som bruker tjenesten en gjennomsnittsdag',
+          categoryLabel: 'Tjeneste',
+          format: 'percent',
+          legend: { emphasis: 'Snapchat', context: 'Facebook' },
+          items: [
+            { label: 'Facebook', value: 63, emphasis: false },
+            { label: 'Snapchat', value: 58, emphasis: true },
+          ],
+        },
+        source: {
+          label: 'SSB: Norsk mediebarometer 2025',
+          href: 'https://www.ssb.no/kultur-og-fritid/tids-og-mediebruk/statistikk/norsk-mediebarometer/artikler/dette-er-de-mest-populaere-sosiale-mediene',
+        },
+      },
+    },
+    situations: [
+      { title: 'Snapchat er ikke testet', text: 'Kanalen der mange av kundene er hver dag, er ikke med i planen.' },
+      { title: 'Annonsene er laget for andre kanaler', text: 'Kvadratiske bilder og lange filmer fra feeden fungerer dårlig i fullskjerm.' },
+      { title: 'Alle ser de samme annonsene', text: 'Katalogen er ikke koblet til, så annonsene viser ikke produktene hver person er interessert i.' },
+      { title: 'Én annonse skal gjøre alt', text: 'Ett bilde eller én video skal både bygge merkevaren og selge, i stedet for å bruke Story- og Collection-formatene.' },
+    ],
+    deliverables: [
+      { name: 'Kanalplan', text: 'Hvilken rolle Snapchat skal ha ved siden av Meta og TikTok, med mål og budsjett.' },
+      { name: 'Kreativer i fullskjerm', text: 'Vertikal video og bilder i 9:16, korte og med budskapet tidlig. Produksjonen avtales.' },
+      { name: 'Produktannonser', text: 'Katalogen koblet til Snapchat, så annonsene viser produktene som passer hver person, når formatet er tilgjengelig for kontoen.' },
+      { name: 'Story- og Collection-annonser', text: 'Flere bilder eller produkter i samme annonse, så kundene kan bla og velge.' },
+      { name: 'Piksel og Conversions API', text: 'Snap-pikselen og Conversions API via Tracklution, så Snapchat ser kjøpene fra besøkende som har samtykket.' },
+      { name: 'Rapport mot butikken', text: 'Nye kunder og salg målt mot ordrene i nettbutikken.' },
+    ],
+    notIncluded: ['Annonsebudsjett, som du betaler direkte til Snapchat', 'Produksjon av kreativer og AR-linser, med mindre det er avtalt'],
+    process: [
+      { period: 'Uke 1–2', title: 'Plan og data', text: 'Kanalplan, pikselen og Conversions API på plass, og katalogen koblet til.' },
+      { period: 'Uke 3–4', title: 'Test', text: 'Vertikale kreativer og produktannonser testes mot hverandre.' },
+      { period: 'Fra måned 2', title: 'Skaler', text: 'Mer budsjett til formatene og kreativene som gir nye kunder.' },
+    ],
+    kpis: [
+      { name: 'Rekkevidde i målgruppen', text: 'Hvor mange i målgruppen dere når, og hvor ofte.' },
+      { name: 'Kreativ effekt', text: 'Hvor mange som ser videre, og hvilke kreativer som gir salg.' },
+      { name: 'Salg fra produktannonser', text: 'Hva katalogannonsene gir, målt mot ordrene i nettbutikken.' },
+    ],
+    faq: [
+      {
+        question: 'Er Snapchat bare for unge?',
+        answer: 'Nei. Snap oppga i 2023 at de hadde over tre millioner månedlige brukere i Norge, og at over 60 % av dem var 25 år eller eldre.',
+      },
+      {
+        question: 'Hva er Sponsored Snaps?',
+        answer: 'Et format der annonsen sendes som en Snap til chatten. Annonser med konkrete tilbud eller rabatter er ikke tillatt der, så formatet passer best for merkevare og lanseringer.',
+      },
+      {
+        question: 'Hvilket attribusjonsvindu bruker dere?',
+        answer: 'Snapchat teller som standard kjøp inntil 28 dager etter et sveip og én dag etter en visning. Vi rapporterer det Snapchat viser, men styrer etter salget i nettbutikken og nye kunder.',
+      },
+      {
+        question: 'Holder det med Shopify-appen?',
+        answer: 'Snapchat-appen i Shopify synkroniserer katalogen og legger inn pikselen. Kjøpene sender vi i tillegg server-side via Tracklution, så Snapchat ser flere av dem, for besøkende som har samtykket.',
+      },
+    ],
+    related: [
+      { slug: 'some', why: 'Kanalplanen og den kreative plattformen Snapchat bygger på.' },
+      { slug: 'sporing-og-analyse', why: 'Conversions API og kjøp Snapchat kan lære av.' },
+    ],
+  },
+
+  'e-postmarkedsforing': {
+    highlight: 'E-postmarkedsføring',
+    highlights: ['Klaviyo', 'Flyter som går av seg selv', 'Samtykke og levering i orden'],
+    facts: [
+      { label: 'Plattform', value: 'Klaviyo', note: 'koblet til nettbutikken' },
+      { label: 'Kjernen', value: 'Flyter', note: 'som sendes når kunden gjør noe' },
+      { label: 'Starter med', value: 'Revisjon', note: 'flyter, lister og levering' },
+      { label: 'Vi måler', value: 'Gjenkjøp', note: 'og inntekt per mottaker' },
+    ],
+    why: {
+      title: 'Fra første kjøp til neste',
+      paragraphs: [
+        'Annonsene skaffer nye kunder. E-posten sørger for at de kommer tilbake. Med flytene på plass får kunden riktig melding når de registrerer seg, legger noe i handlekurven, handler eller blir borte, uten at noen trykker send.',
+        'Med data fra nettbutikken får hver kunde innhold ut fra hva de har kjøpt og hvor de er i kundereisen. Det er personlig kommunikasjon, automatisert, og det forutsetter at samtykke og levering er i orden.',
+      ],
+      insight: {
+        title: 'Gmail stiller krav til avsenderen',
+        text: 'Sender du mer enn 5 000 e-poster om dagen til Gmail, krever Google SPF, DKIM og DMARC, avmelding med ett klikk og en spamrate under 0,3 %. Yahoo har tilsvarende krav. Vi sjekker dette før vi skalerer utsendelsene.',
+        source: { label: 'Google: Email sender guidelines', href: 'https://support.google.com/a/answer/81126' },
+      },
+    },
+    situations: [
+      { title: 'Bare kampanjer, ingen flyter', text: 'Nyhetsbrevet går når noen har tid, og ingenting skjer automatisk mellom kampanjene.' },
+      { title: 'Alle får den samme e-posten', text: 'Nye og faste kunder, store og små kjøpere får det samme budskapet.' },
+      { title: 'E-postene havner i søppelpost', text: 'Domenet mangler riktig autentisering, eller listene er fulle av inaktive mottakere.' },
+      { title: 'Åpningsraten ser bra ut, men salget uteblir', text: 'Apple Mail laster ned e-poster automatisk, så åpninger sier lite. Det er klikk og salg som teller.' },
+    ],
+    deliverables: [
+      { name: 'Revisjon', text: 'Flyter, lister, segmenter, levering og samtykke, med en prioritert tiltaksliste.' },
+      { name: 'Kjerneflytene', text: 'Velkomstserie, forlatt handlekurv, sett produkt, etter kjøp og tilbakevinning.' },
+      { name: 'Segmentering', text: 'Segmenter ut fra kjøpshistorikk og atferd, og prediksjoner som forventet neste kjøp når dataene er store nok.' },
+      { name: 'Kampanjer med plan', text: 'En fast kampanjekalender, koblet til sesongene og resten av markedsføringen.' },
+      { name: 'Levering og samtykke', text: 'SPF, DKIM og DMARC, avmelding med ett klikk, og samtykke som samles inn riktig.' },
+      { name: 'Rapport', text: 'Inntekt per flyt og kampanje, gjenkjøp og listehelse.' },
+    ],
+    notIncluded: ['Lisens til Klaviyo, som du betaler direkte', 'SMS-markedsføring', 'Fotoproduksjon'],
+    process: [
+      { period: 'Uke 1–2', title: 'Revisjon og grunnmur', text: 'Levering, samtykke og Klaviyo-oppsettet gjennomgått, og de viktigste flytene prioritert.' },
+      { period: 'Uke 3–4', title: 'Flytene på plass', text: 'Velkomst, forlatt handlekurv og etter kjøp bygget og testet, med segmenter fra kjøpsdataene.' },
+      { period: 'Fra måned 2', title: 'Kampanjer og finjustering', text: 'Fast kampanjerytme, flere flyter og tester av emnelinjer, innhold og tidspunkt.' },
+    ],
+    kpis: [
+      { name: 'Inntekt per mottaker', text: 'Hva hver flyt og kampanje gir i salg, delt på antall mottakere.' },
+      { name: 'Gjenkjøpsrate', text: 'Andel kunder som handler igjen.' },
+      { name: 'Listehelse', text: 'Spamrate, avmeldinger og andel aktive mottakere.' },
+    ],
+    faq: [
+      {
+        question: 'Hvorfor Klaviyo?',
+        answer: 'Klaviyo er laget for netthandel og henter kunder, ordre og atferd fra nettbutikken, også fra Shopify. Da kan flyter og segmenter bygges på det kundene faktisk gjør. Bruker dere et annet verktøy, kan vi jobbe der.',
+      },
+      {
+        question: 'Hva sier loven?',
+        answer: 'Etter markedsføringsloven § 15 trenger du samtykke før du sender markedsføring på e-post til forbrukere. Unntaket er egne kunder: adressen må være samlet inn ved et kjøp, markedsføringen må gjelde lignende varer, og kunden må enkelt og gratis kunne reservere seg, både da adressen ble samlet inn og i hver e-post. Forbrukertilsynet anbefaler likevel å samle inn samtykke.',
+      },
+      {
+        question: 'Hvorfor styrer dere ikke etter åpningsraten?',
+        answer: 'Apple Mail laster ned e-poster i bakgrunnen, og da registreres åpninger som ingen har gjort. Vi styrer derfor etter klikk, salg og gjenkjøp.',
+      },
+      {
+        question: 'Hvordan måles salget fra e-post?',
+        answer: 'Klaviyo gir som standard æren til e-posten når kunden har åpnet eller klikket i løpet av fem dager før kjøpet. Fordi åpninger er upålitelige, legger vi mest vekt på klikk, og ser alltid salget fra e-post sammen med resten av markedsføringen.',
+      },
+    ],
+    related: [
+      { slug: 'cro', why: 'Flere kjøp fra trafikken du har, i samme steg av modellen.' },
+      { slug: 'sporing-og-analyse', why: 'Riktige kjøpsdata er grunnlaget for segmentene.' },
+    ],
+  },
+
+  cro: {
+    highlight: 'CRO',
+    highlights: ['Data før endringer', 'Tester før utrulling', 'Enklere vei gjennom kassen'],
+    facts: [
+      { label: 'Starter med', value: 'Analyse', note: 'trakt, heatmaps og opptak' },
+      { label: 'Metode', value: 'Test', note: 'før endringer rulles ut' },
+      { label: 'Fokus', value: 'Kassen', note: 'og produktsidene' },
+      { label: 'Vi måler', value: 'Konvertering', note: 'og inntekt per besøk' },
+    ],
+    why: {
+      title: 'Flere kjøp fra trafikken du allerede har',
+      paragraphs: [
+        'All annen markedsføring sender folk til butikken. CRO handler om det som skjer når de kommer: om de finner det de leter etter, stoler på butikken og kommer seg gjennom kassen.',
+        'Vi starter med data, ikke magefølelse. Analyse, heatmaps og opptak viser hvor kundene faller fra, og vi tester endringene før de rulles ut til alle.',
+      ],
+      insight: {
+        title: 'Sju av ti handlekurver forlates',
+        text: 'Baymard Institute har samlet 50 studier, og i snitt forlates om lag 70 % av handlekurvene. Blant dem som faktisk ville handle, er høye ekstrakostnader den vanligste grunnen.',
+        chart: {
+          kind: 'bars',
+          valueLabel: 'Andel som oppgir grunnen',
+          categoryLabel: 'Grunn',
+          format: 'percent',
+          items: [
+            { label: 'Høye ekstrakostnader', value: 40, emphasis: true },
+            { label: 'Treg levering', value: 20, emphasis: true },
+            { label: 'Manglende tillit', value: 19, emphasis: true },
+            { label: 'Krav om å lage konto', value: 18, emphasis: true },
+            { label: 'Komplisert kasse', value: 17, emphasis: true },
+          ],
+        },
+        source: { label: 'Baymard Institute: Cart Abandonment Rate', href: 'https://baymard.com/lists/cart-abandonment-rate' },
+      },
+    },
+    situations: [
+      { title: 'Mange legger i handlekurven, få fullfører', text: 'Kundene kommer langt, men faller fra i kassen, og ingen vet hvorfor.' },
+      { title: 'Mobil selger dårligere enn desktop', text: 'Det meste av trafikken kommer på mobil, men salget gjør det ikke.' },
+      { title: 'Endringer gjøres på magefølelse', text: 'Nye seksjoner og apper legges til uten at noen måler om de hjelper.' },
+      { title: 'Butikken er treg', text: 'Sidene laster sakte, særlig på mobil, og Core Web Vitals er i rødt.' },
+    ],
+    deliverables: [
+      { name: 'Analyse av kundereisen', text: 'Trakten fra produktside til kjøp i GA4, med heatmaps og opptak i Microsoft Clarity.' },
+      { name: 'Prioritert testplan', text: 'Hypoteser rangert etter effekt og innsats, så vi starter der gevinsten er størst.' },
+      { name: 'Tester', text: 'A/B-tester av tema og innhold med Shopify Rollouts der butikken har det, og nok trafikk til å vite.' },
+      { name: 'Produktsider og kasse', text: 'Pris og frakt tydelig tidlig, betalingsmåter som Vipps, og færre steg fram til kjøp.' },
+      { name: 'Hastighet', text: 'Core Web Vitals forbedret: bilder, apper og skript som bremser butikken.' },
+      { name: 'Rapport', text: 'Hva vi testet, hva som vant, og hva det ga i konvertering og inntekt.' },
+    ],
+    notIncluded: ['Nytt tema eller redesign, som er et eget prosjekt', 'Egenutviklede apper og funksjoner'],
+    process: [
+      { period: 'Uke 1–2', title: 'Analyse', text: 'Data, heatmaps og opptak viser hvor kundene faller fra, og vi lager en prioritert testplan.' },
+      { period: 'Uke 3–4', title: 'Raske forbedringer', text: 'Åpenbare feil rettes med en gang, og de første testene settes i gang.' },
+      { period: 'Fra måned 2', title: 'Test, lær og rull ut', text: 'Vinnerne rulles ut, og testplanen oppdateres med det vi har lært.' },
+    ],
+    kpis: [
+      { name: 'Konverteringsrate', text: 'Andel besøk som ender i kjøp, på mobil og desktop hver for seg.' },
+      { name: 'Inntekt per besøk', text: 'Salg delt på antall besøk, så både konvertering og ordreverdi teller.' },
+      { name: 'Forlatte handlekurver', text: 'Andel som legger i handlekurven uten å fullføre kjøpet.' },
+    ],
+    faq: [
+      {
+        question: 'Har vi nok trafikk til A/B-tester?',
+        answer: 'Ikke alltid. En test trenger nok besøk og kjøp til at forskjellen er til å stole på. Med lite trafikk prioriterer vi tydelige forbedringer basert på data, og tester der volumet holder.',
+      },
+      {
+        question: 'Hvilke verktøy bruker dere?',
+        answer: 'GA4 for trakten, Microsoft Clarity for heatmaps og opptak, og Shopify Rollouts for tester i Shopify. Clarity er gratis, men krever samtykke for besøk fra EØS, så vi kobler det til samtykkebanneret.',
+      },
+      {
+        question: 'Kan vi få Vipps Hurtigkasse i Shopify?',
+        answer: 'Vipps kan legges inn som betalingsmåte i kassen i Shopify. Hurtigkasse finnes ifølge Vipps MobilePay ikke for Shopify i dag.',
+      },
+      {
+        question: 'Må nettbutikken være universelt utformet?',
+        answer: 'Ja. Norske regler om universell utforming av IKT gjelder også private virksomheter med nettløsninger rettet mot allmennheten, og Uutilsynet fører tilsyn. EUs tilgjengelighetsdirektiv er ikke innført i Norge ennå, men gjelder hvis du selger til EU. Vi tar tilgjengelighet med i forbedringene.',
+      },
+    ],
+    related: [
+      { slug: 'e-postmarkedsforing', why: 'Får kundene tilbake etter første kjøp, i samme steg av modellen.' },
+      { slug: 'sporing-og-analyse', why: 'Riktige data viser hvor kundene faller fra.' },
+    ],
+  },
+
+  affiliate: {
+    highlight: 'feedoptimalisering',
+    highlights: ['Én feed, mange kanaler', 'Google Shopping via CSS', 'Prissammenligning og affiliate'],
+    facts: [
+      { label: 'Kjernen', value: 'Produktfeeden', note: 'optimalisert én gang' },
+      { label: 'Kanaler', value: 'Shopping · Prisjakt', note: 'CSS, affiliate og Meta-katalog' },
+      { label: 'Starter med', value: 'Feed-revisjon', note: 'det som stopper salg' },
+      { label: 'Vi måler', value: 'Salg per kanal', note: 'mot bekreftede ordre' },
+    ],
+    why: {
+      title: 'Én feed, mange salgskanaler',
+      paragraphs: [
+        'Produktfeeden er listen over varene dine med pris, lager, bilder og egenskaper. Google Shopping, Performance Max, prissammenligning, affiliate-partnere og Meta bruker alle den samme. Er feeden svak, betaler du for det i alle kanalene samtidig.',
+        'Vi optimaliserer feeden én gang og sender den dit den gir salg: Google Shopping via en CSS-partner, prissammenligning som Prisjakt, og affiliate-nettverk der partnere selger for deg mot provisjon.',
+      ],
+    },
+    situations: [
+      { title: 'Produktene blir avvist i Merchant Center', text: 'Manglende GTIN, feil frakt eller for små bilder gjør at varer ikke vises, og Google skjerper kravet til bildestørrelse.' },
+      { title: 'Du kan ikke styre etter margin', text: 'Alle produkter behandles likt i kampanjene, fordi feeden ikke sier noe om margin, bestselgere eller sesong.' },
+      { title: 'Du betaler full pris i Shopping', text: 'Annonsene går gjennom Googles egen CSS, og ingen har vurdert om en annen partner gir lavere klikkpris.' },
+      { title: 'Du vet ikke hva affiliate gir', text: 'Partnerne mangler gode produktdata, sporingen faller ut ved samtykke, eller kansellerte ordre gir likevel provisjon.' },
+    ],
+    deliverables: [
+      { name: 'Feed-revisjon', text: 'Avvisninger, mangler og kvalitet per produkt, med en prioritert liste.' },
+      { name: 'Titler og attributter', text: 'Merke, produkttype og viktigste egenskaper først, og GTIN, kategori og bilder på minst 500 × 500 piksler.' },
+      { name: 'Etiketter for margin', text: 'Egendefinerte etiketter for margin, bestselgere og sesong, så kampanjene kan styres etter lønnsomhet.' },
+      { name: 'CSS-partner', text: 'Vurdering og oppsett av CSS for Shopping-annonser, målt på dine egne tall.' },
+      { name: 'Prissammenligning og affiliate', text: 'Feed til Prisjakt og affiliate-nettverk, med samme priser som i butikken.' },
+      { name: 'Sporing og oppfølging', text: 'Affiliate-sporing med samtykke, og provisjon kontrollert mot bekreftede ordre.' },
+    ],
+    notIncluded: ['Klikkostnader og provisjon, som du betaler direkte', 'Produktfotografering'],
+    process: [
+      { period: 'Uke 1–2', title: 'Feeden i orden', text: 'Avvisninger rettet, titler og attributter strukturert, og etiketter for margin lagt inn.' },
+      { period: 'Uke 3–4', title: 'Ut i kanalene', text: 'CSS-partner koblet på, produktene ut til prissammenligning og affiliate satt opp med sporing.' },
+      { period: 'Fra måned 2', title: 'Mer fra det som selger', text: 'Vi ser på salg per kanal og etikett, og flytter innsatsen dit marginen og volumet er best.' },
+    ],
+    kpis: [
+      { name: 'Godkjente produkter', text: 'Andel av sortimentet som faktisk kan vises i Shopping og hos partnerne.' },
+      { name: 'Salg per kanal', text: 'Omsetning og kostnad fra Shopping, prissammenligning og affiliate hver for seg.' },
+      { name: 'Affiliate-kvalitet', text: 'Andel ordre fra partnere som blir stående, og provisjon per bekreftet ordre.' },
+    ],
+    faq: [
+      {
+        question: 'Hva er feedoptimalisering?',
+        answer: 'Å gjøre produktdataene så komplette og presise som mulig – titler, attributter, bilder, priser og etiketter – slik at kanalene viser riktige produkter til riktige søk, og du kan styre kampanjene etter margin.',
+      },
+      {
+        question: 'Holder det med Shopifys Google & YouTube-app?',
+        answer: 'Den er et godt utgangspunkt, men gir begrenset kontroll over titler og etiketter. Vi legger ofte på tilleggsfeeder, feed-regler eller et feed-verktøy der det trengs.',
+      },
+      {
+        question: 'Hva er en CSS?',
+        answer: 'En Comparison Shopping Service plasserer Shopping-annonsene dine hos Google. I EØS, også Norge, må alle Shopping-annonser gå gjennom en. Googles egen trekker en fast margin av budet, mens andre partnere kan gi lavere klikkpris. Vi måler effekten på dine tall i stedet for å love en prosent.',
+      },
+      {
+        question: 'Hva må vi passe på juridisk?',
+        answer: 'Priser i feeden og hos partnere må stemme med butikken, og førpriser må følge regelen om laveste pris de siste 30 dagene. Partnere som markedsfører deg, må merke innholdet som reklame. Vi bygger det inn i oppsettet, men ansvaret ligger hos deg som annonsør.',
+      },
+    ],
+    related: [
+      { slug: 'sem/google-ads', why: 'Shopping og Performance Max bygger direkte på produktfeeden.' },
+      { slug: 'some/meta-ads', why: 'Katalogannonser i Facebook og Instagram bruker de samme produktdataene.' },
+    ],
+  },
+}
+
+/** A stage in the growth model. `label` is the short form used in eyebrows. */
+export interface GrowthStage {
+  label: string
+  title: string
+  text: string
+  services: string[]
+}
+
+/** The /growth-marketing hub: the working model (which doubles as navigation) and principles. */
+export interface GrowthHubContent {
+  highlight: string
+  highlights: string[]
+  intro: string
+  model: { stages: GrowthStage[]; foundation: GrowthStage }
+  principles: { title: string; text: string }[]
+  process: NonNullable<GrowthPageContent['process']>
+  kpis: NonNullable<GrowthPageContent['kpis']>
+  faq: NonNullable<GrowthPageContent['faq']>
+}
+
+export const growthHubContent: GrowthHubContent = {
+  highlight: 'for nettbutikker',
+  highlights: ['Bare netthandel', 'Fastpris', 'Styrt etter lønnsomhet'],
+  intro:
+    'Nettbutikker vokser ved å nå flere kjøpere: å bli husket når folk skal handle, og å være lett å finne og kjøpe hos når de gjør det. Derfor ser vi på hele veien fra første inntrykk til gjenkjøp, med riktig data i bunnen.',
+  model: {
+    stages: [
+      {
+        label: 'Skap etterspørsel',
+        title: 'Skap etterspørsel',
+        text: 'Bli husket av dem som ikke leter ennå.',
+        services: ['merkevare-og-strategi', 'some'],
+      },
+      {
+        label: 'Fang etterspørselen',
+        title: 'Fang etterspørselen',
+        text: 'Vær der når folk søker og sammenligner.',
+        services: ['seo', 'sem', 'affiliate'],
+      },
+      {
+        label: 'Selg mer og behold',
+        title: 'Selg mer og behold kundene',
+        text: 'Flere kjøp fra trafikken du har, og flere som kommer tilbake.',
+        services: ['cro', 'e-postmarkedsforing'],
+      },
+    ],
+    foundation: {
+      label: 'Grunnmuren',
+      title: 'Grunnmuren: riktig data',
+      text: 'Sporing, samtykke og analyse som alle kanalene og budstrategiene lærer av.',
+      services: ['sporing-og-analyse'],
+    },
+  },
+  principles: [
+    {
+      title: 'Merkevare og salg sammen',
+      text: 'Kampanjer som skaper etterspørsel og kampanjer som fanger den, med hver sin jobb og en fordeling tilpasset fasen du er i.',
+    },
+    {
+      title: 'Data først',
+      text: 'Sporing og samtykke på plass før vi skalerer. Automatikken i Google og Meta er bare så god som dataene den lærer av.',
+    },
+    {
+      title: 'Lønnsomhet, ikke klikk',
+      text: 'Vi styrer etter margin og nye kunder, og planlegger betalt og organisk søk sammen, så du ikke betaler for det du vinner uansett.',
+    },
+    {
+      title: 'Bare netthandel',
+      text: 'Vi jobber kun med e-handel, på Shopify og andre plattformer. Du betaler ikke for at vi skal lære bransjen.',
+    },
+  ],
+  process: [
+    { period: 'Uke 1–2', title: 'Tilganger, mål og plan', text: 'Vi får tilgangene, går gjennom sporing, kontoer, feed og merkevare, og setter mål og plan sammen med deg.' },
+    { period: 'Uke 3–4', title: 'Oppsett og første tiltak', text: 'Data i orden, og de første kampanjene, tiltakene og testene i gang.' },
+    { period: 'Fra måned 2', title: 'Løpende forbedring', text: 'Mer innsats der lønnsomheten og de nye kundene kommer fra, med fast rytme for oppfølging.' },
+  ],
+  kpis: [
+    { name: 'Lønnsomhet', text: 'Hva som er igjen etter varekost og markedsføring, ikke bare omsetning eller ROAS.' },
+    { name: 'Nye kunder', text: 'Andel og kostnad per ny kunde, skilt fra gjenkjøp og merkevaresøk.' },
+    { name: 'Andel av søk', text: 'Din andel av merkenavnsøkene i kategorien, en tidlig indikator på markedsandel.' },
+  ],
+  faq: [
+    {
+      question: 'Må vi kjøpe alle tjenestene?',
+      answer: 'Nei. Du kan starte med én tjeneste, for eksempel sporing eller Google Ads. Vi ser likevel på helheten, slik at det du kjøper, spiller sammen med resten.',
+    },
+    {
+      question: 'Hvor bør vi starte?',
+      answer: 'Som regel med sporing og en revisjon. Uten riktige data vet du ikke hva som virker, og budstrategiene i Google og Meta optimaliserer mot feil mål.',
+    },
+    {
+      question: 'Jobber dere sammen med andre byråer?',
+      answer: 'Ja. Mange kunder har allerede et kreativt byrå, en innholdsprodusent eller et internt team. Vi tar den delen som trengs og samarbeider med resten.',
+    },
+    {
+      question: 'Hvordan fungerer pris og avtale?',
+      answer: 'Tjenestene leveres med fastpris, som engangsleveranser og løpende avtaler. Alle pakker og priser står i pakkeoversikten.',
+    },
+  ],
+}
+
+export function findGrowthContent(slug: string): GrowthPageContent | undefined {
+  return growthContent[slug]
+}
+
+/** The model stage a service belongs to; channel pages inherit their parent's. */
+export function growthStageOf(slug: string): GrowthStage | undefined {
+  const { stages, foundation } = growthHubContent.model
+  const root = slug.split('/')[0]
+  return [...stages, foundation].find((stage) => stage.services.includes(root))
+}
