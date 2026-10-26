@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { HiCheck, HiShoppingBag } from 'react-icons/hi2'
 import { useCart } from '@/contexts/CartContext'
+import { ui } from '@/components/integrations/labels'
 
 interface AddOn {
   title?: string
@@ -82,18 +83,19 @@ function AddOnCard({ addOn, index }: { addOn: AddOn; index: number }) {
   const isDisabled = isAdding
 
   return (
-    <div className="bg-white p-6 border border-gray-100 shadow-sm relative">
+    <div className="relative rounded-lg border border-sc-ink-100 bg-white p-6">
       {/* Add to Cart button - top right */}
+      {hasShopifyProduct && (
       <button
         onClick={handleAddToCart}
         disabled={isDisabled}
-        className={`absolute top-5 right-5 text-white px-5 py-1.5 text-sm font-medium transition-all duration-200 hidden sm:flex items-center gap-2 rounded ${isDisabled
-          ? 'bg-gray-300 cursor-not-allowed'
+        className={`absolute top-5 right-5 text-white px-4 py-2 text-sm font-semibold tracking-[0.02em] transition-colors hidden sm:flex items-center gap-2 rounded-lg ${isDisabled
+          ? 'bg-sc-ink-300 cursor-not-allowed'
           : showSuccess
             ? 'bg-green-500 hover:bg-green-600'
             : hasShopifyProduct
-              ? 'bg-[#03C1CA] hover:bg-[#02a9b1] active:bg-[#028a91]'
-              : 'bg-gray-400 hover:bg-gray-500'
+              ? 'bg-sc-ink-900 hover:bg-sc-ink-700'
+              : 'bg-sc-ink-400 hover:bg-sc-ink-500'
           }`}
         aria-label={`Add ${addOn.title} to cart`}
         title={!hasShopifyProduct ? `This add-on is not yet available for purchase` : `Add ${addOn.title} to cart`}
@@ -130,30 +132,32 @@ function AddOnCard({ addOn, index }: { addOn: AddOn; index: number }) {
           </>
         )}
       </button>
+      )}
 
       {/* Title */}
-      <h3 className="text-[4.3vw] xs:text-[2.6vw] sm:text-[2.5vw] md:text-[2.2vw] lg:text-[18px] xl:text-[24px] font-semibold text-gray-900 mb-2 pr-20">
+      <h3 className="text-lg font-semibold leading-snug text-sc-ink-900 mb-2 pr-20">
         {addOn.title}
       </h3>
 
       {/* Description */}
-      <p className="text-sm text-gray-500 mb-4">{addOn.description}</p>
+      <p className="text-[15px] leading-relaxed text-sc-ink-600 mb-4">{addOn.description}</p>
 
       {/* Price */}
-      <p className="text-[4.3vw] xs:text-[2.6vw] sm:text-[2.5vw] md:text-[2.2vw] lg:text-[18px] xl:text-[24px] font-bold text-[#03C1CA] font-mono tracking-tight sm:pb-0 pb-4">
+      <p className="font-mono text-[20px] font-medium tracking-tight text-sc-ink-900 sm:pb-0 pb-4">
         {addOn.price}
       </p>
 
+      {hasShopifyProduct && (
       <button
         onClick={handleAddToCart}
         disabled={isDisabled}
-        className={`text-white px-5 py-1.5 text-xs sm:text-sm font-medium transition-all duration-200 sm:hidden flex items-center gap-2 rounded ${isDisabled
-          ? 'bg-gray-300 cursor-not-allowed'
+        className={`text-white px-4 py-2 text-sm font-semibold tracking-[0.02em] transition-colors sm:hidden flex items-center gap-2 rounded-lg ${isDisabled
+          ? 'bg-sc-ink-300 cursor-not-allowed'
           : showSuccess
             ? 'bg-green-500 hover:bg-green-600'
             : hasShopifyProduct
-              ? 'bg-[#03C1CA] hover:bg-[#02a9b1] active:bg-[#028a91]'
-              : 'bg-gray-400 hover:bg-gray-500'
+              ? 'bg-sc-ink-900 hover:bg-sc-ink-700'
+              : 'bg-sc-ink-400 hover:bg-sc-ink-500'
           }`}
         aria-label={`Add ${addOn.title} to cart`}
         title={!hasShopifyProduct ? `This add-on is not yet available for purchase` : `Add ${addOn.title} to cart`}
@@ -190,6 +194,7 @@ function AddOnCard({ addOn, index }: { addOn: AddOn; index: number }) {
           </>
         )}
       </button>
+      )}
     </div>
   )
 }
@@ -214,13 +219,13 @@ export default function FrequentlyAddedTogether({ addOns }: FrequentlyAddedToget
   const items = addOns?.items && addOns.items.length > 0 ? addOns.items : defaultAddOns
 
   return (
-    <section className="bg-[#F8F8F8] py-16 lg:py-24">
-      <div className="section_container mx-auto page-padding-x">
+    <section className="bg-sc-ink-50 py-16 lg:py-24">
+      <div className={ui.container}>
         <div className="max-w-5xl mx-auto">
-          <h2 className="text-[5.3vw] xs:text-[3.5vw] sm:text-[3.2vw] md:text-[3.2vw] lg:text-[28px] xl:text-[34px] font-bold text-gray-900 text-center mb-3">
+          <h2 className="text-[32px] lg:text-[44px] leading-[1.25] font-bold tracking-[-0.02em] text-sc-ink-900 text-center mb-3">
             {sectionTitle}
           </h2>
-          <p className="text-[4.3vw] xs:text-[2.6vw] sm:text-[2.5vw] md:text-[2.2vw] lg:text-[18px] xl:text-[24px] text-gray-500 text-center mb-10">
+          <p className="text-base lg:text-lg leading-relaxed text-sc-ink-600 text-center mb-10">
             {sectionSubtitle}
           </p>
 

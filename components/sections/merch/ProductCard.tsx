@@ -27,11 +27,12 @@ interface ProductCardProps {
   product: Product
 }
 
+/** Product on the hairline card: image panel on ink-50, name, mono price, short description. */
 export default function ProductCard({ product }: ProductCardProps) {
   return (
-    <div className="group bg-white border-r border-b border-[#E5E5E5] last:border-r-0">
+    <div className="group flex flex-col overflow-hidden rounded-lg border border-sc-ink-100 bg-white transition-transform hover:-translate-y-1">
       <Link href={`/merch/${product.slug}`} className="block">
-        <div className="relative aspect-[3/4] overflow-hidden bg-white">
+        <div className="relative aspect-[3/4] overflow-hidden bg-sc-ink-50">
           <Image
             src={product.image}
             alt={product.name}
@@ -42,22 +43,18 @@ export default function ProductCard({ product }: ProductCardProps) {
           />
         </div>
       </Link>
-      <div className="p-5 border-t border-[#E5E5E5]">
-        <div className="flex items-start justify-between gap-2 mb-1">
-          <h3 className="text-base font-bold text-[#222222] leading-tight font-sans">
-            {product.name}
-          </h3>
-          <span className="inline-flex items-center px-3 py-1 rounded text-xs font-medium bg-[#222222] text-white whitespace-nowrap font-mono">
-            {product.price} {product.currency}
-          </span>
-        </div>
-        <p className="text-sm text-[#666666] mb-3 line-clamp-3">{product.description}</p>
+      <div className="flex flex-1 flex-col gap-2 p-5">
+        <h3 className="m-0 line-clamp-2 text-[17px] font-semibold leading-snug text-sc-ink-900">{product.name}</h3>
+        <span className="font-mono text-[13px] text-sc-ink-900">
+          {product.price} {product.currency}
+        </span>
+        <p className="m-0 line-clamp-3 text-[14px] leading-relaxed text-sc-ink-600">{product.description}</p>
         <Link
           href={`/merch/${product.slug}`}
-          className="inline-flex items-center text-sm font-medium text-[#03C1CA] hover:text-[#02A8B0] transition-colors group/link"
+          className="group/link mt-auto inline-flex items-center pt-2 text-sm font-semibold text-sc-ink-900 transition-colors hover:text-sc-cyan-600"
         >
           View product
-          <HiArrowRight className="ml-1 w-4 h-4 transition-transform group-hover/link:translate-x-1" />
+          <HiArrowRight className="ml-1 h-4 w-4 transition-transform group-hover/link:translate-x-1" />
         </Link>
       </div>
     </div>

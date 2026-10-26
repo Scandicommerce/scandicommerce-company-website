@@ -1,4 +1,4 @@
-'use client'
+import { ui } from '@/components/integrations/labels'
 
 interface FactCard {
   statistic?: string
@@ -11,45 +11,24 @@ interface ShopifyFactsData {
   facts?: FactCard[]
 }
 
-interface ShopifyFactsProps {
-  shopifyFacts?: ShopifyFactsData
-}
-
-export default function ShopifyFacts({ shopifyFacts }: ShopifyFactsProps) {
-  const title = shopifyFacts?.title
-  const facts = shopifyFacts?.facts || []
-
+/** Facts as stat tiles: mono figure, description, source in small mono. */
+export default function ShopifyFacts({ shopifyFacts, lang = 'no' }: { shopifyFacts?: ShopifyFactsData; lang?: string }) {
+  const facts = (shopifyFacts?.facts ?? []).filter((f) => f?.statistic || f?.description)
+  if (!shopifyFacts?.title && facts.length === 0) return null
   return (
-    <section className="bg-[#F8F8F8] py-16 lg:py-24">
-      <div className="section_container mx-auto page-padding-x">
-        {title && (
-          <h2 className="text-[5.3vw] xs:text-[3.5vw] sm:text-[3.2vw] md:text-[3.2vw] lg:text-[28px] xl:text-[34px] font-bold text-[#222222] text-center mb-12 lg:mb-16">
-            {title}
-          </h2>
-        )}
-
+    <section className="bg-sc-ink-50 py-16 lg:py-20">
+      <div className={`${ui.container} flex flex-col gap-10`}>
+        <div className="flex max-w-[680px] flex-col gap-2.5">
+          <div className={ui.eyebrow}>{lang === 'no' ? 'Tall og fakta' : 'Facts and figures'}</div>
+          {shopifyFacts?.title && <h2 className={ui.h2}>{shopifyFacts.title}</h2>}
+        </div>
         {facts.length > 0 && (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 max-w-6xl mx-auto">
-            {facts.map((fact, index) => (
-              <div
-                key={index}
-                className="bg-white rounded-lg p-6 lg:p-8 shadow-sm"
-              >
-                {fact.statistic && (
-                  <div className="text-[5.3vw] xs:text-[3.5vw] sm:text-[3.2vw] md:text-[3.2vw] lg:text-[28px] xl:text-[34px] font-bold text-[#03C1CA] mb-3 font-mono tracking-tight">
-                    {fact.statistic}
-                  </div>
-                )}
-                {fact.description && (
-                  <p className="text-sm lg:text-base text-[#565454] mb-4 leading-relaxed">
-                    {fact.description}
-                  </p>
-                )}
-                {fact.source && (
-                  <p className="text-xs lg:text-sm text-[#888888]">
-                    {fact.source}
-                  </p>
-                )}
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-5">
+            {facts.map((fact, i) => (
+              <div key={i} className="flex flex-col gap-3 rounded-lg border border-sc-ink-100 bg-white p-6">
+                {fact.statistic && <span className="break-words font-mono text-[32px] font-semibold leading-none tracking-[-0.02em] text-sc-ink-900 lg:text-[36px]">{fact.statistic}</span>}
+                {fact.description && <p className="m-0 text-[15px] leading-relaxed text-sc-ink-600">{fact.description}</p>}
+                {fact.source && <span className={`mt-auto ${ui.mono}`}>{fact.source}</span>}
               </div>
             ))}
           </div>

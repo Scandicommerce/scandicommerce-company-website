@@ -201,7 +201,7 @@
     },
     {
       "id": "05698970-abf9-4cc7-b255-772724a2aab7",
-      "type": "blogPost",
+      "type": "post",
       "language": "da",
       "oldSlug": "test",
       "newSlug": "test",
@@ -212,7 +212,7 @@
     },
     {
       "id": "233dd768-3a19-49c3-87bf-79537764897c",
-      "type": "blogPost",
+      "type": "post",
       "language": "de",
       "oldSlug": "10-unverzichtbare-shopify-apps-fuer-den-norwegischen-e-commerce-im-jahr-2025",
       "newSlug": "10-unverzichtbare-shopify-apps-fuer-den-norwegischen-e-commerce-im-jahr-2025",
@@ -223,7 +223,7 @@
     },
     {
       "id": "fd7abb59-97fe-44fe-9716-a74cf236c15c",
-      "type": "blogPost",
+      "type": "post",
       "language": "en",
       "oldSlug": "10-essential-shopify-apps-for-norwegian-e-commerce-in-2025",
       "newSlug": "10-essential-shopify-apps-for-norwegian-e-commerce-in-2025",
@@ -234,7 +234,7 @@
     },
     {
       "id": "a4bb989e-9835-4d0e-b4df-252783e3eb9d",
-      "type": "blogPost",
+      "type": "post",
       "language": "en",
       "oldSlug": "headed-vs-headless-commerce",
       "newSlug": "headed-vs-headless-commerce",
@@ -245,7 +245,7 @@
     },
     {
       "id": "decfa0fa-26c2-4071-a8e1-3ae2a59f3f31",
-      "type": "blogPost",
+      "type": "post",
       "language": "en",
       "oldSlug": "how-scandicommerce-helped-lanullva-achieve-35-sales-growth-by-modernizing-their-shopify",
       "newSlug": "how-scandicommerce-helped-lanullva-achieve-35-sales-growth-by-modernizing-their-shopify",
@@ -256,7 +256,7 @@
     },
     {
       "id": "d5b562ff-8d57-4246-a84e-a2cc534f4c9d",
-      "type": "blogPost",
+      "type": "post",
       "language": "en",
       "oldSlug": "slikkepott",
       "newSlug": "slikkepott",
@@ -267,7 +267,7 @@
     },
     {
       "id": "39300c79-224e-4540-a744-c1d0a9f2da14",
-      "type": "blogPost",
+      "type": "post",
       "language": "no",
       "oldSlug": "10-essensielle-shopify-apper-for-norsk-netthandel-i-2025",
       "newSlug": "10-essensielle-shopify-apper-for-norsk-netthandel-i-2025",
@@ -278,7 +278,7 @@
     },
     {
       "id": "91d068c3-d3d8-4224-ba0d-6778aac33145",
-      "type": "blogPost",
+      "type": "post",
       "language": "no",
       "oldSlug": "lanullva-35-salgsvekst-ved-a-modernisere-deres-shopify",
       "newSlug": "lanullva-35-salgsvekst-ved-a-modernisere-deres-shopify",
@@ -289,7 +289,7 @@
     },
     {
       "id": "2f527169-0ba3-4d3a-afd8-458fb4090191",
-      "type": "blogPost",
+      "type": "post",
       "language": "sv",
       "oldSlug": "10-essential-shopify-apps-for-norwegian-ecommerce-in-2025",
       "newSlug": "10-essential-shopify-apps-for-norwegian-ecommerce-in-2025",
@@ -450,7 +450,18 @@
       "newPath": "legal/app-privacy-policy",
       "oldPublicPath": "/legal/app-privacy-policy",
       "newPublicPath": "/legal/app-privacy-policy",
-      "group": null
+      "group": "legal-app-privacy-policy"
+    },
+    {
+      "id": "1f035874-4200-4401-a12e-432be2c1eb33",
+      "type": "legalPage",
+      "language": "no",
+      "oldSlug": "app-privacy-policy",
+      "newSlug": "app-privacy-policy",
+      "newPath": "legal/app-privacy-policy",
+      "oldPublicPath": "/legal/app-privacy-policy",
+      "newPublicPath": "/legal/app-privacy-policy",
+      "group": "legal-app-privacy-policy"
     },
     {
       "id": "65f79227-e195-4205-af85-8a672976a04e",
@@ -1764,6 +1775,10 @@
       "en": "work",
       "no": "kundecaser",
       "sv": "work"
+    },
+    "legal-app-privacy-policy": {
+      "en": "legal/app-privacy-policy",
+      "no": "legal/app-privacy-policy"
     }
   }
 }

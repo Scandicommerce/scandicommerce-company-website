@@ -26,8 +26,9 @@ import {
 // ============================================
 // Document Types (e.g. post page builder)
 // ============================================
-import { author, legalPage, post, siteSettings, redirect, pillarPage, integrationPage, migrationPage } from "./documents";
+import { author, legalPage, post, siteSettings, redirect, pillarPage, integrationPage, migrationPage, integrationCategory } from "./documents";
 import { faqItems } from "./objects";
+import { stepsBlock, animationBlock } from "./objects/pillar/pillarBlocks";
 
 // ============================================
 // Page Types (document types for pages)
@@ -182,12 +183,10 @@ import {
 } from "./pages/whyShopifyPage";
 import {
   landingPage,
-  servicesPage,
   aboutPage,
   contactPage,
   workPage,
   blogPage,
-  blogPost,
   shopifyDevelopmentPage,
   migratePage,
   shopifyPosPage,
@@ -246,8 +245,11 @@ export const schemaTypes = [
   post,
   pillarPage,
   integrationPage,
+  integrationCategory,
   migrationPage,
   faqItems,
+  stepsBlock,
+  animationBlock,
 
   // Landing page section blocks (reusable object types)
   heroSection,
@@ -374,12 +376,10 @@ export const schemaTypes = [
 
   // Page types
   landingPage,
-  servicesPage,
   aboutPage,
   contactPage,
   workPage,
   blogPage,
-  blogPost,
   shopifyDevelopmentPage,
   migratePage,
   shopifyPosPage,

@@ -27,12 +27,13 @@ import ShopifyDevelopmentPage from '../_pages/shopifyDevelopmentPage'
 import AllPackagesPage from '../_pages/allPackagesPage'
 import PackageDetailPage from '../_pages/packageDetailPage'
 import BlogPage from '../_pages/blogPage'
-import BlogPostPage from '../_pages/blogPostPage'
 import PostPage from '../_pages/postPage'
 import MerchProductPage from '../_pages/merchProductPage'
 import CaseStudyPage from '../_pages/caseStudyPage'
 import AuthorPage from '../_pages/authorPage'
 import TemplatePage from '../_pages/templatePage'
+import IntegrationDetailPage from '../_pages/integrationDetailPage'
+import IntegrationCategoryPage from '../_pages/integrationCategoryPage'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -59,13 +60,13 @@ const PAGE_COMPONENTS: Record<string, PageComponent> = {
   allPackagesPage: AllPackagesPage as PageComponent,
   packageDetailPage: PackageDetailPage as PageComponent,
   blogPage: BlogPage as PageComponent,
-  blogPost: BlogPostPage as PageComponent,
   post: PostPage as PageComponent,
   caseStudy: CaseStudyPage as PageComponent,
   merchProduct: MerchProductPage as PageComponent,
   author: AuthorPage as PageComponent,
   pillarPage: TemplatePage as PageComponent,
-  integrationPage: TemplatePage as PageComponent,
+  integrationPage: IntegrationDetailPage as PageComponent,
+  integrationCategory: IntegrationCategoryPage as PageComponent,
   migrationPage: TemplatePage as PageComponent,
 }
 
@@ -77,6 +78,9 @@ const PAGE_COMPONENTS: Record<string, PageComponent> = {
  */
 function redirectIfNotCanonical(path: string, language: string, resolved: NonNullable<ResolvedPage>): void {
   const requested = trimSlashes(path)
+  if (resolved.language && resolved.language !== language) {
+    permanentRedirect(publicPath(resolved.language, resolved.canonicalPath))
+  }
   if (requested !== resolved.canonicalPath) {
     permanentRedirect(publicPath(language, resolved.canonicalPath))
   }

@@ -1,9 +1,6 @@
 import { defineField, defineType, defineArrayMember } from "sanity";
 import { languageField } from "../objects/language";
-import {
-  seoExtendedField,
-  legacySeoFieldMinimal,
-} from "../_shared/seoFields";
+import { seoExtendedField } from "../_shared/seoFields";
 import { isUniquePerLanguage } from "@/sanity/lib/slugUtils";
 import { validatePublicSlug } from "@/sanity/lib/slugValidation";
 
@@ -46,14 +43,14 @@ export const blogPageFeaturedArticleSection = defineType({
       name: "article",
       title: "Featured Article",
       type: "reference",
-      to: [{ type: "blogPost" }, { type: "post" }, { type: "caseStudy" }],
+      to: [{ type: "post" }, { type: "caseStudy" }],
       description: "Link to a blog post, post (page builder), or case study. Leave empty to use manual fields below.",
       options: {
         filter: ({ document }) => {
           const pageLang = document?.language ?? "en";
           return {
             filter:
-              '(_type == "blogPost" || _type == "post" || _type == "caseStudy") && (language == $pageLang || (!defined(language) && $pageLang == "en"))',
+              '(_type == "post" || _type == "caseStudy") && (language == $pageLang || (!defined(language) && $pageLang == "en"))',
             params: { pageLang },
           };
         },
@@ -125,13 +122,13 @@ export const blogPageArticlesGridSection = defineType({
       of: [
         defineArrayMember({
           type: "reference",
-          to: [{ type: "blogPost" }, { type: "post" }, { type: "caseStudy" }],
+          to: [{ type: "post" }, { type: "caseStudy" }],
           options: {
             filter: ({ document }) => {
               const pageLang = document?.language ?? "en";
               return {
                 filter:
-                  '(_type == "blogPost" || _type == "post" || _type == "caseStudy") && (language == $pageLang || (!defined(language) && $pageLang == "en"))',
+                  '(_type == "post" || _type == "caseStudy") && (language == $pageLang || (!defined(language) && $pageLang == "en"))',
                 params: { pageLang },
               };
             },
@@ -214,7 +211,6 @@ export const blogPage = defineType({
       ],
     }),
     seoExtendedField,
-    legacySeoFieldMinimal,
   ],
   preview: {
     select: {

@@ -1,9 +1,6 @@
 import { defineArrayMember, defineField, defineType } from "sanity";
 import { languageField } from "../objects/language";
-import {
-  seoExtendedField,
-  legacySeoFieldMinimal,
-} from "../_shared/seoFields";
+import { seoExtendedField } from "../_shared/seoFields";
 import { isUniquePerLanguage } from "@/sanity/lib/slugUtils";
 import { validatePublicSlug } from "@/sanity/lib/slugValidation";
 
@@ -111,7 +108,6 @@ export const allPackagesPagePackagesSection = defineType({
               to: [
                 { type: "contactPage" },
                 { type: "landingPage" },
-                { type: "servicesPage" },
                 { type: "aboutPage" },
                 { type: "workPage" },
                 { type: "blogPage" },
@@ -203,7 +199,6 @@ export const allPackagesPage = defineType({
       ],
     }),
     seoExtendedField,
-    legacySeoFieldMinimal,
   ],
   preview: {
     select: {

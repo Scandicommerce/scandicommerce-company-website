@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react'
-import Link from 'next/link'
+import Link from '@/components/ui/LocalizedLink'
 import { packagesHref } from '@/lib/routes'
 
 interface ServicesShowcaseData {
@@ -59,6 +59,8 @@ function normalizeHref(href: string): string {
   return `/${href}`
 }
 
+const EYEBROW: Record<string, string> = { no: 'Tjenester', en: 'Services', sv: 'Tjänster', da: 'Ydelser', de: 'Leistungen' }
+
 export default function ServicesPackaged({ data, packages: packagesData, lang = 'no' }: ServicesPackagedProps) {
   // Content variables from Sanity (section title/subtitle from Homepage)
   const titleText = data?.title?.text || 'Fast pris. Ingen pingpong.'
@@ -102,11 +104,11 @@ export default function ServicesPackaged({ data, packages: packagesData, lang = 
 
   return (
     <section id="packages" className="relative bg-sc-ink-50 overflow-hidden">
-      <div className="section_container max-w-[1320px] mx-auto page-padding-x py-10 lg:py-24">
+      <div className="w-full max-w-[1320px] mx-auto px-5 lg:px-8 py-10 lg:py-24">
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.8fr] gap-8 lg:gap-16 items-start">
           <div>
             <div className="text-[11px] lg:text-xs font-semibold uppercase tracking-[0.12em] text-sc-cyan-500 mb-2.5">
-              Tjenester
+              {EYEBROW[lang] ?? EYEBROW.en}
             </div>
             <h2 className="text-[26px] lg:text-[40px] font-bold text-sc-ink-900 tracking-[-0.02em] leading-snug mb-2 lg:mb-3.5">
               {renderTitle()}

@@ -2,6 +2,17 @@
 
 import React, { useState, useMemo } from 'react'
 import { FiClock, FiCheck, FiLoader } from 'react-icons/fi'
+import { ui } from '@/components/integrations/labels'
+
+const L = {
+  no: { selectDate: 'Velg dato', days: ['Man', 'Tir', 'Ons', 'Tor', 'Fre', 'Lør', 'Søn'], times: 'Ledige tider (CET)', loadingTimes: 'Henter ledige tider …', noTimes: 'Ingen ledige tider denne dagen', meetingType: 'Type møte', name: 'Navn', email: 'E-post', firstName: 'Fornavn', lastName: 'Etternavn', company: 'Selskap', interest: 'Hva gjelder det?', select: 'Velg et tema', message: 'Melding', msgPlaceholder: 'Fortell oss kort om butikken og hva du trenger …', sending: 'Sender …', sent: 'Meldingen er sendt. Vi svarer så fort vi kan.', sendFail: 'Kunne ikke sende meldingen. Prøv igjen.', needEmail: 'Skriv inn e-post og melding.', booking: 'Oppretter booking …', booked: 'Booking bekreftet. Kalenderinvitasjon er sendt til e-posten din.', needAll: 'Fyll inn alle feltene.', bookFail: 'Kunne ikke opprette booking', openTab: 'Åpne i ny fane', or: 'Eller', options: [['shopify-development', 'Ny nettbutikk eller utvikling'], ['migration', 'Migrering til Shopify'], ['b2b', 'B2B og ordreportal'], ['shopify-pos', 'Nexus POS / kasse'], ['integrations', 'Integrasjoner'], ['packages', 'Pakker og drift'], ['other', 'Annet']], locale: 'nb-NO' },
+  en: { selectDate: 'Select date', days: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'], times: 'Available times (CET)', loadingTimes: 'Loading available times …', noTimes: 'No available times for this date', meetingType: 'Meeting type', name: 'Name', email: 'Email', firstName: 'First name', lastName: 'Last name', company: 'Company', interest: 'What is it about?', select: 'Select a topic', message: 'Message', msgPlaceholder: 'Tell us briefly about your store and what you need …', sending: 'Sending …', sent: 'Message sent. We will get back to you shortly.', sendFail: 'Failed to send the message. Please try again.', needEmail: 'Please enter your email and message.', booking: 'Creating booking …', booked: 'Booking confirmed. A calendar invite has been sent to your email.', needAll: 'Please fill in all required fields.', bookFail: 'Failed to create booking', openTab: 'Open in a new tab', or: 'Or', options: [['shopify-development', 'New store or development'], ['migration', 'Migration to Shopify'], ['b2b', 'B2B and order portal'], ['shopify-pos', 'Nexus POS'], ['integrations', 'Integrations'], ['packages', 'Packages and operations'], ['other', 'Other']], locale: 'en-GB' },
+} as const
+
+type Labels = (typeof L)['no'] | (typeof L)['en']
+
+const INPUT = 'w-full rounded-lg border border-sc-ink-200 bg-white px-3.5 py-2.5 text-[15px] text-sc-ink-900 outline-none transition-colors placeholder:text-sc-ink-400 focus:border-sc-cyan-500 focus:ring-2 focus:ring-sc-cyan-500/20'
+const LABEL = 'mb-1.5 block text-[13px] font-semibold text-sc-ink-700'
 
 interface MeetingTypeData {
   title?: string
@@ -39,6 +50,8 @@ interface BenefitData {
 }
 
 interface BookingSectionProps {
+  /** Page language from the server; drives the labels. */
+  lang?: string
   bookingSection?: BookingSectionData
   messageSection?: MessageSectionData
   benefits?: BenefitData[]
@@ -56,22 +69,23 @@ const defaultBenefits: BenefitData[] = [
 ]
 
 interface CalendarProps {
+  t: Labels
   selectedDate: string | null
   onDateSelect: (date: string) => void
   /** When set, only these dates (YYYY-MM-DD) are selectable. When null/empty, any future date is selectable. */
   allowedDates?: Set<string> | null
 }
 
-function Calendar({ selectedDate, onDateSelect, allowedDates }: CalendarProps) {
+function Calendar({ t, selectedDate, onDateSelect, allowedDates }: CalendarProps) {
   const [currentMonth, setCurrentMonth] = useState(new Date())
   
-  const monthName = currentMonth.toLocaleString('en-US', { month: 'long', year: 'numeric' })
+  const monthName = currentMonth.toLocaleString(t.locale, { month: 'long', year: 'numeric' })
   const daysInMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 0).getDate()
   const firstDayOfMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth(), 1).getDay()
 
   const adjustedFirstDay = firstDayOfMonth === 0 ? 6 : firstDayOfMonth - 1
 
-  const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+  const days = t.days
 
   const formatDate = (day: number): string => {
     const y = currentMonth.getFullYear()
@@ -131,9 +145,7 @@ function Calendar({ selectedDate, onDateSelect, allowedDates }: CalendarProps) {
           key={day}
           onClick={() => handleDateClick(day)}
           disabled={disabled}
-          className={`h-10 w-10 flex items-center justify-center text-sm font-medium transition-colors mx-auto
-            ${isDaySelected ? 'bg-[#03C1CA] text-white' : disabled ? 'text-gray-300 cursor-not-allowed' : isWeekend ? 'text-gray-400' : 'text-gray-700 hover:bg-gray-100'}
-          `}
+          className={`mx-auto flex h-10 w-10 items-center justify-center rounded-full text-sm font-medium transition-colors ${isDaySelected ? 'bg-sc-ink-900 text-white' : disabled ? 'cursor-not-allowed text-sc-ink-300' : isWeekend ? 'text-sc-ink-400 hover:bg-sc-ink-50' : 'text-sc-ink-900 hover:bg-sc-ink-50'}`}
         >
           {day}
         </button>
@@ -146,21 +158,21 @@ function Calendar({ selectedDate, onDateSelect, allowedDates }: CalendarProps) {
   return (
     <div className="mb-6">
       <div className="flex items-center justify-between mb-4">
-        <h4 className="text-sm font-semibold text-gray-900">Select Date</h4>
+        <h4 className="text-[13px] font-semibold text-sc-ink-700">{t.selectDate}</h4>
         <div className="flex items-center gap-2">
-          <button onClick={goToPreviousMonth} className="p-1 hover:bg-gray-100">
-            <span className="text-gray-500">&lt;</span>
+          <button type="button" onClick={goToPreviousMonth} aria-label="Forrige måned" className="flex h-8 w-8 items-center justify-center rounded-full border border-sc-ink-200 text-sc-ink-700 hover:border-sc-ink-900">
+            &lsaquo;
           </button>
-          <span className="text-sm font-medium text-gray-700">{monthName}</span>
-          <button onClick={goToNextMonth} className="p-1 hover:bg-gray-100">
-            <span className="text-gray-500">&gt;</span>
+          <span className="min-w-[120px] text-center font-mono text-[13px] text-sc-ink-700">{monthName}</span>
+          <button type="button" onClick={goToNextMonth} aria-label="Neste måned" className="flex h-8 w-8 items-center justify-center rounded-full border border-sc-ink-200 text-sc-ink-700 hover:border-sc-ink-900">
+            &rsaquo;
           </button>
         </div>
       </div>
 
       <div className="grid grid-cols-7 gap-1 mb-2">
         {days.map((day) => (
-          <div key={day} className="h-8 flex items-center justify-center text-xs font-medium text-gray-500">
+          <div key={day} className="flex h-8 items-center justify-center text-xs font-medium text-sc-ink-500">
             {day}
           </div>
         ))}
@@ -184,39 +196,37 @@ function MeetingType({ title, description, selected, onSelect }: MeetingTypeProp
   return (
     <button
       onClick={onSelect}
-      className={`w-full text-left p-4 transition-colors ${selected ? 'bg-[#1DEFFA1A]' : 'hover:bg-[#03C1CA08]'
-        }`}
+      type="button"
+      aria-pressed={selected}
+      className={`w-full rounded-lg border p-4 text-left transition-colors ${selected ? 'border-sc-ink-900 bg-sc-ink-900 text-white' : 'border-sc-ink-200 bg-white text-sc-ink-900 hover:border-sc-ink-900'}`}
     >
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between gap-3">
         <div>
-          <p className={`text-sm font-medium ${selected ? 'text-[#03C1CA]' : 'text-gray-900'}`}>
-            {title}
-          </p>
-          <p className="text-xs text-gray-500 mt-0.5">{description}</p>
+          <p className="m-0 text-[15px] font-semibold">{title}</p>
+          <p className={`m-0 mt-0.5 text-[13px] ${selected ? 'text-sc-ink-200' : 'text-sc-ink-500'}`}>{description}</p>
         </div>
-        <div className="w-8 h-8  flex items-center justify-center">
-          <FiClock className={`${selected ? 'text-[#03C1CA]' : 'text-gray-400'}`} size={16} />
-        </div>
+        <FiClock className={selected ? 'text-sc-cyan-300' : 'text-sc-ink-400'} size={16} />
       </div>
     </button>
   )
 }
 
 interface TimeSlotsProps {
+  t: Labels
   slots: string[]
   selectedTime: string | null
   onTimeSelect: (time: string) => void
   loading?: boolean
 }
 
-function TimeSlots({ slots, selectedTime, onTimeSelect, loading }: TimeSlotsProps) {
+function TimeSlots({ t, slots, selectedTime, onTimeSelect, loading }: TimeSlotsProps) {
   if (loading) {
     return (
       <div>
-        <h4 className="text-sm font-semibold text-gray-900 mb-3">Available Times (CET)</h4>
+        <h4 className="mb-3 text-[13px] font-semibold text-sc-ink-700">{t.times}</h4>
         <div className="flex items-center justify-center py-4">
-          <FiLoader className="animate-spin text-[#03C1CA]" size={20} />
-          <span className="ml-2 text-sm text-gray-500">Loading available times...</span>
+          <FiLoader className="animate-spin text-sc-cyan-500" size={20} />
+          <span className="ml-2 text-sm text-sc-ink-500">{t.loadingTimes}</span>
         </div>
       </div>
     )
@@ -225,24 +235,23 @@ function TimeSlots({ slots, selectedTime, onTimeSelect, loading }: TimeSlotsProp
   if (slots.length === 0) {
     return (
       <div>
-        <h4 className="text-sm font-semibold text-gray-900 mb-3">Available Times (CET)</h4>
-        <p className="text-xs text-gray-500">No available times for this date</p>
+        <h4 className="mb-3 text-[13px] font-semibold text-sc-ink-700">{t.times}</h4>
+        <p className="m-0 text-[13px] text-sc-ink-500">{t.noTimes}</p>
       </div>
     )
   }
 
   return (
     <div>
-      <h4 className="text-sm font-semibold text-gray-900 mb-3">Available Times (CET)</h4>
-      <div className="grid grid-cols-3 gap-2">
+      <h4 className="mb-3 text-[13px] font-semibold text-sc-ink-700">{t.times}</h4>
+      <div className="grid grid-cols-3 gap-2 sm:grid-cols-4">
         {slots.map((time) => (
           <button
             key={time}
+            type="button"
             onClick={() => onTimeSelect(time)}
-            className={`py-2 px-3 text-sm border transition-colors ${selectedTime === time
-              ? 'bg-[#03C1CA] text-white'
-              : 'bg-[#F5F5F5] text-gray-700 hover:text-[#03C1CA]'
-              }`}
+            aria-pressed={selectedTime === time}
+            className={`rounded-lg border px-3 py-2 font-mono text-[13px] transition-colors ${selectedTime === time ? 'border-sc-ink-900 bg-sc-ink-900 text-white' : 'border-sc-ink-200 bg-white text-sc-ink-900 hover:border-sc-ink-900'}`}
           >
             {time}
           </button>
@@ -253,10 +262,11 @@ function TimeSlots({ slots, selectedTime, onTimeSelect, loading }: TimeSlotsProp
 }
 
 interface ContactFormProps {
+  t: Labels
   submitButtonText?: string
 }
 
-function ContactForm({ submitButtonText }: ContactFormProps) {
+function ContactForm({ t, submitButtonText }: ContactFormProps) {
   const [firstName, setFirstName] = useState('')
   const [lastName, setLastName] = useState('')
   const [email, setEmail] = useState('')
@@ -273,7 +283,7 @@ function ContactForm({ submitButtonText }: ContactFormProps) {
     setSuccess(false)
 
     if (!email.trim() || !message.trim()) {
-      setError('Please enter your email and message.')
+      setError(t.needEmail)
       return
     }
 
@@ -294,7 +304,7 @@ function ContactForm({ submitButtonText }: ContactFormProps) {
       const data = await res.json()
 
       if (!res.ok) {
-        setError(data.error || 'Failed to send message.')
+        setError(data.error || t.sendFail)
         return
       }
 
@@ -307,107 +317,48 @@ function ContactForm({ submitButtonText }: ContactFormProps) {
       setMessage('')
       setTimeout(() => setSuccess(false), 5000)
     } catch {
-      setError('Failed to send message. Please try again.')
+      setError(t.sendFail)
     } finally {
       setLoading(false)
     }
   }
 
   return (
-    <form className="bg-white" onSubmit={handleSubmit}>
-      <div className="px-9 py-6 flex flex-col justify-between gap-9">
-        <div className="grid grid-cols-2 gap-4">
+    <form id="melding" className="scroll-mt-28" onSubmit={handleSubmit}>
+      <div className="flex flex-col gap-4">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">First Name</label>
-            <input
-              type="text"
-              placeholder="John"
-              value={firstName}
-              onChange={(e) => setFirstName(e.target.value)}
-              className="w-full px-3 py-2 bg-[#F5F5F5] text-sm text-black outline-none"
-            />
+            <label className={LABEL}>{t.firstName}</label>
+            <input type="text" value={firstName} onChange={(e) => setFirstName(e.target.value)} autoComplete="given-name" className={INPUT} />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Last Name</label>
-            <input
-              type="text"
-              placeholder="Doe"
-              value={lastName}
-              onChange={(e) => setLastName(e.target.value)}
-              className="w-full px-3 py-2 bg-[#F5F5F5] text-sm text-black outline-none"
-            />
+            <label className={LABEL}>{t.lastName}</label>
+            <input type="text" value={lastName} onChange={(e) => setLastName(e.target.value)} autoComplete="family-name" className={INPUT} />
           </div>
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Email *</label>
-          <input
-            type="email"
-            placeholder="john@company.com"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            className="w-full px-3 py-2 bg-[#F5F5F5] text-sm text-black outline-none"
-          />
+          <label className={LABEL}>{t.email} *</label>
+          <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required autoComplete="email" className={INPUT} />
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Company</label>
-          <input
-            type="text"
-            placeholder="Your Company AS"
-            value={company}
-            onChange={(e) => setCompany(e.target.value)}
-            className="w-full px-3 py-2 bg-[#F5F5F5] text-sm text-black outline-none"
-          />
+          <label className={LABEL}>{t.company}</label>
+          <input type="text" value={company} onChange={(e) => setCompany(e.target.value)} autoComplete="organization" className={INPUT} />
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">What are you interested in?</label>
-          <select
-            value={interest}
-            onChange={(e) => setInterest(e.target.value)}
-            className="w-full px-3 py-2 bg-[#F5F5F5] text-sm text-gray-500 outline-none"
-          >
-            <option value="">Select a service</option>
-            <option value="shopify-development">Shopify Development</option>
-            <option value="migration">Migration Services</option>
-            <option value="shopify-pos">Shopify POS</option>
-            <option value="consulting">Consulting</option>
-            <option value="other">Other</option>
+          <label className={LABEL}>{t.interest}</label>
+          <select value={interest} onChange={(e) => setInterest(e.target.value)} className={`${INPUT} ${interest ? '' : 'text-sc-ink-400'}`}>
+            <option value="">{t.select}</option>
+            {t.options.map(([v, l]) => <option key={v} value={v}>{l}</option>)}
           </select>
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Message *</label>
-          <textarea
-            placeholder="Tell us about your project..."
-            rows={4}
-            value={message}
-            onChange={(e) => setMessage(e.target.value)}
-            required
-            className="w-full px-3 py-2 bg-[#F5F5F5] text-sm text-black outline-none resize-none"
-          />
+          <label className={LABEL}>{t.message} *</label>
+          <textarea placeholder={t.msgPlaceholder} rows={5} value={message} onChange={(e) => setMessage(e.target.value)} required className={`${INPUT} resize-none`} />
         </div>
-        {error && (
-          <div className="p-3 bg-red-50 border border-red-200 rounded">
-            <p className="text-sm text-red-600">{error}</p>
-          </div>
-        )}
-        {success && (
-          <div className="p-3 bg-green-50 border border-green-200 rounded">
-            <p className="text-sm text-green-600">Message sent! We&apos;ll get back to you soon.</p>
-          </div>
-        )}
-        <button
-          type="submit"
-          disabled={loading}
-          className={`w-full bg-[#03C1CA] text-white py-3 font-semibold hover:bg-[#02a8b0] transition-colors ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
-        >
-          {loading ? (
-            <span className="flex items-center justify-center">
-              <FiLoader className="animate-spin mr-2" size={16} />
-              Sending...
-            </span>
-          ) : (
-            submitButtonText || 'Send Message'
-          )}
+        {error && <p className="m-0 rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700">{error}</p>}
+        {success && <p className="m-0 rounded-lg border border-sc-cyan-200 bg-sc-cyan-50 p-3 text-sm text-sc-cyan-700">{t.sent}</p>}
+        <button type="submit" disabled={loading} className={`${ui.btnPrimary} w-full disabled:cursor-wait disabled:opacity-70`}>
+          {loading ? t.sending : submitButtonText || t.message}
         </button>
       </div>
     </form>
@@ -416,16 +367,15 @@ function ContactForm({ submitButtonText }: ContactFormProps) {
 
 const getBenefitIcon = (iconName?: string) => {
   switch (iconName) {
-    case 'check':
-      return <FiCheck className="text-[#03C1CA]" size={16} />
     case 'clock':
-      return <FiClock className="text-[#03C1CA]" size={16} />
+      return <FiClock className="text-sc-ink-900" size={14} />
     default:
-      return <FiCheck className="text-[#03C1CA]" size={16} />
+      return <FiCheck className="text-sc-ink-900" size={14} />
   }
 }
 
-export default function BookingSection({ bookingSection, messageSection, benefits }: BookingSectionProps) {
+export default function BookingSection({ lang = 'no', bookingSection, messageSection, benefits }: BookingSectionProps) {
+  const t: Labels = lang === 'no' ? L.no : L.en
   const [meetingType, setMeetingType] = useState(0)
   const [date, setDate] = useState<string | null>(null)
   const [slots, setSlots] = useState<string[]>([])
@@ -507,7 +457,7 @@ export default function BookingSection({ bookingSection, messageSection, benefit
 
   async function book() {
     if (!date || !time || !name || !email) {
-      setError('Please fill in all required fields')
+      setError(t.needAll)
       return
     }
 
@@ -535,7 +485,7 @@ export default function BookingSection({ bookingSection, messageSection, benefit
       const data = await res.json()
 
       if (!res.ok) {
-        const msg = [data.error, data.hint].filter(Boolean).join(' — ') || 'Failed to create booking'
+        const msg = [data.error, data.hint].filter(Boolean).join(' – ') || t.bookFail
         throw new Error(msg)
       }
 
@@ -549,7 +499,7 @@ export default function BookingSection({ bookingSection, messageSection, benefit
       setTimeout(() => setSuccess(false), 5000)
     } catch (err) {
       console.error('Error booking:', err)
-      setError(err instanceof Error ? err.message : 'Failed to create booking')
+      setError(err instanceof Error ? err.message : t.bookFail)
     } finally {
       setLoading(false)
     }
@@ -563,168 +513,75 @@ export default function BookingSection({ bookingSection, messageSection, benefit
     ? `${calendlyUrl}${calendlyUrl.includes('?') ? '&' : '?'}embed_domain=${encodeURIComponent(embedDomain)}`
     : ''
 
+  const card = 'flex flex-col gap-5 rounded-lg border border-sc-ink-100 bg-white p-6 lg:p-8'
+
   return (
-    <section className="py-12 lg:py-16 bg-white">
-      <div className="section_container mx-auto page-padding-x">
-        <div className={`grid grid-cols-1 gap-8 lg:gap-12 ${bookingEnabled ? 'lg:grid-cols-2' : 'max-w-2xl mx-auto'}`}>
-          {bookingEnabled && (
-            <div
-              className="bg-[#F5F5F5B3] border border-[#5654544D] overflow-hidden"
-              style={{
-                boxShadow: '0px 15px 22px 0px rgba(84, 114, 115, 0.12), 10px 45px 35px 0px rgba(0, 0, 0, 0.03)'
-              }}
-            >
-              <div className="p-4 xs:p-6 sm:p-[50px_29px_34px_29px]">
-                <span className="inline-block text-xs font-semibold text-white bg-[#03C1CA] px-3 py-1 mb-4">
-                  {bookingLabel}
-                </span>
-                <h2 className="text-[4.3vw] xs:text-[2.6vw] sm:text-[2.5vw] md:text-[2.2vw] lg:text-[18px] xl:text-[24px] font-bold text-gray-900 mb-2">
-                  {bookingTitle}
-                </h2>
-                <p className="text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[16px] xl:text-[18px] text-gray-500 mb-6">
-                  {bookingDescription}
+    <section id="book" className="scroll-mt-24 bg-sc-ink-50 py-16 lg:py-20">
+      <div className={`${ui.container} grid grid-cols-1 items-start gap-5 ${bookingEnabled ? 'lg:grid-cols-2' : 'mx-auto max-w-[720px]'}`}>
+        {bookingEnabled && (
+          <div className={card}>
+            <div>
+              <span className={ui.tag}>{bookingLabel}</span>
+              <h2 className="m-0 mt-3 text-[26px] font-bold leading-tight tracking-[-0.02em] text-sc-ink-900 lg:text-[30px]">{bookingTitle}</h2>
+              <p className="m-0 mt-2 text-[15px] leading-relaxed text-sc-ink-600">{bookingDescription}</p>
+            </div>
+
+            {useCalendly ? (
+              <div className="overflow-hidden rounded-lg border border-sc-ink-100">
+                <iframe title="Calendly" src={calendlyEmbedUrl} width="100%" height="100%" className="block min-h-[640px] w-full border-0" />
+                <p className="m-0 border-t border-sc-ink-100 p-3 text-center text-[13px] text-sc-ink-500">
+                  {t.or} <a href={calendlyUrl} target="_blank" rel="noopener noreferrer" className="font-semibold text-sc-ink-900 underline-offset-2 hover:underline">{t.openTab}</a>
                 </p>
-
-                {useCalendly ? (
-                  <div className="bg-white p-4 min-h-[600px]">
-                    <iframe
-                      title="Calendly scheduling"
-                      src={calendlyEmbedUrl}
-                      width="100%"
-                      height="100%"
-                      className="min-h-[600px] w-full border-0"
-                    />
-                    <p className="mt-3 text-sm text-gray-500 text-center">
-                      Or{' '}
-                      <a
-                        href={calendlyUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-[#03C1CA] underline"
-                      >
-                        open in a new tab
-                      </a>
-                    </p>
-                  </div>
-                ) : (
-                  <div className="bg-white p-4">
-                    <div className="space-y-4 mb-6">
-                      <h4 className="text-sm font-semibold text-gray-900">Meeting Type</h4>
-                      {meetingTypes.map((mt, index) => (
-                        <MeetingType
-                          key={index}
-                          title={mt.title || ''}
-                          description={mt.description || ''}
-                          selected={meetingType === index}
-                          onSelect={() => setMeetingType(index)}
-                        />
-                      ))}
-                    </div>
-
-                    <Calendar
-                      selectedDate={date}
-                      onDateSelect={loadSlots}
-                      allowedDates={allowedDates}
-                    />
-                    <TimeSlots
-                      slots={slots}
-                      selectedTime={time}
-                      onTimeSelect={setTime}
-                      loading={false}
-                    />
-
-                    <div className="mt-6 space-y-4">
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Name *</label>
-                        <input
-                          type="text"
-                          value={name}
-                          onChange={(e) => setName(e.target.value)}
-                          placeholder="John Doe"
-                          required
-                          className="w-full px-3 py-2 bg-[#F5F5F5] text-sm text-black outline-none"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Email *</label>
-                        <input
-                          type="email"
-                          value={email}
-                          onChange={(e) => setEmail(e.target.value)}
-                          placeholder="john@company.com"
-                          required
-                          className="w-full px-3 py-2 bg-[#F5F5F5] text-sm text-black outline-none"
-                        />
-                      </div>
-                    </div>
-
-                    {error && (
-                      <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded">
-                        <p className="text-sm text-red-600">{error}</p>
-                      </div>
-                    )}
-
-                    {success && (
-                      <div className="mt-4 p-3 bg-green-50 border border-green-200 rounded">
-                        <p className="text-sm text-green-600">
-                          Booking confirmed! A calendar invite has been sent to your email.
-                        </p>
-                      </div>
-                    )}
-
-                    <button
-                      onClick={book}
-                      disabled={loading || !date || !time || !name || !email}
-                      className={`w-full mt-6 bg-[#03C1CA] text-white py-3 font-semibold hover:bg-[#02a8b0] transition-colors ${
-                        loading || !date || !time || !name || !email
-                          ? 'opacity-50 cursor-not-allowed'
-                          : ''
-                      }`}
-                    >
-                      {loading ? (
-                        <span className="flex items-center justify-center">
-                          <FiLoader className="animate-spin mr-2" size={16} />
-                          Creating booking...
-                        </span>
-                      ) : (
-                        confirmButtonText
-                      )}
-                    </button>
-                  </div>
-                )}
               </div>
-            </div>
-          )}
-
-          <div className="flex flex-col justify-between">
-            <div className="bg-[#F5F5F5B2] shadow-lg border border-[#5654544D] overflow-hidden">
-              <div className="p-4 xs:p-6 sm:p-[50px_29px_34px_29px]">
-                <span className="inline-block text-xs font-semibold text-white bg-[#03C1CA] px-3 py-1  mb-4">
-                  {messageLabel}
-                </span>
-                <h2 className="text-[4.3vw] xs:text-[2.6vw] sm:text-[2.5vw] md:text-[2.2vw] lg:text-[18px] xl:text-[24px] font-bold text-gray-900 mb-2">
-                  {messageTitle}
-                </h2>
-                <p className="text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[16px] xl:text-[18px] text-gray-500 mb-6">
-                  {messageDescription}
-                </p>
-                <ContactForm submitButtonText={submitButtonText} />
-              </div>
-            </div>
-
-            <div className="bg-white shadow-lg border border-[#5654544D] p-6">
-              <div className="flex flex-col gap-3">
-                {benefitsList.map((benefit, index) => (
-                  <div key={index} className="flex items-center gap-3 text-sm text-gray-600">
-                    <div className="w-8 h-8  bg-gray-100 flex items-center justify-center">
-                      {getBenefitIcon(benefit.icon)}
-                    </div>
-                    <span>{benefit.text}</span>
+            ) : (
+              <>
+                <div className="flex flex-col gap-2">
+                  <h4 className="m-0 text-[13px] font-semibold text-sc-ink-700">{t.meetingType}</h4>
+                  {meetingTypes.map((mt, index) => (
+                    <MeetingType key={index} title={mt.title || ''} description={mt.description || ''} selected={meetingType === index} onSelect={() => setMeetingType(index)} />
+                  ))}
+                </div>
+                <Calendar t={t} selectedDate={date} onDateSelect={loadSlots} allowedDates={allowedDates} />
+                {date && <TimeSlots t={t} slots={slots} selectedTime={time} onTimeSelect={setTime} loading={false} />}
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                  <div>
+                    <label className={LABEL}>{t.name} *</label>
+                    <input type="text" value={name} onChange={(e) => setName(e.target.value)} required autoComplete="name" className={INPUT} />
                   </div>
-                ))}
-              </div>
-            </div>
+                  <div>
+                    <label className={LABEL}>{t.email} *</label>
+                    <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required autoComplete="email" className={INPUT} />
+                  </div>
+                </div>
+                {error && <p className="m-0 rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700">{error}</p>}
+                {success && <p className="m-0 rounded-lg border border-sc-cyan-200 bg-sc-cyan-50 p-3 text-sm text-sc-cyan-700">{t.booked}</p>}
+                <button type="button" onClick={book} disabled={loading || !date || !time || !name || !email} className={`${ui.btnPrimary} w-full disabled:cursor-not-allowed disabled:opacity-50`}>
+                  {loading ? t.booking : confirmButtonText}
+                </button>
+              </>
+            )}
           </div>
+        )}
+
+        <div className="flex flex-col gap-5">
+          <div className={card}>
+            <div>
+              <span className={ui.tagOutline}>{messageLabel}</span>
+              <h2 className="m-0 mt-3 text-[26px] font-bold leading-tight tracking-[-0.02em] text-sc-ink-900 lg:text-[30px]">{messageTitle}</h2>
+              <p className="m-0 mt-2 text-[15px] leading-relaxed text-sc-ink-600">{messageDescription}</p>
+            </div>
+            <ContactForm t={t} submitButtonText={submitButtonText} />
+          </div>
+          {benefitsList.length > 0 && (
+            <ul className="m-0 flex list-none flex-wrap gap-x-6 gap-y-2 p-0 text-sm text-sc-ink-600">
+              {benefitsList.map((benefit, index) => (
+                <li key={index} className="flex items-center gap-2">
+                  <span className="flex h-5 w-5 items-center justify-center rounded-full bg-sc-cyan-50">{getBenefitIcon(benefit.icon)}</span>
+                  {benefit.text}
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
       </div>
     </section>

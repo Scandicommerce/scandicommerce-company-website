@@ -3,9 +3,9 @@
 import { useMemo, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { ArrowRight } from 'lucide-react'
-import { articles as allArticles } from '@/lib/articles'
 import { hrefFor } from '@/lib/routes'
+import { ui } from '@/components/integrations/labels'
+import { formatArticleDate } from './FeaturedArticle'
 
 interface AuthorData {
   name?: string
@@ -51,18 +51,7 @@ interface NormalizedArticle {
   author?: AuthorData
 }
 
-const defaultArticles = allArticles.map((article, index) => ({
-  id: article.id || index + 1,
-  title: article.title,
-  description: article.description,
-  category: article.category,
-  date: article.date,
-  readTime: article.readTime.replace(' read', ''),
-  imageUrl: article.image,
-  slug: article.slug,
-  _type: 'post',
-  author: undefined,
-}))
+const ALL = '__all__'
 
 function parseDate(d: string | undefined): Date | null {
   if (!d) return null
@@ -74,26 +63,81 @@ function parseDate(d: string | undefined): Date | null {
   }
 }
 
-function formatDisplayDate(d: Date | null, raw: string): string {
-  if (!d) return raw
-  try {
-    return d.toLocaleDateString('nb-NO', { day: 'numeric', month: 'short' })
-  } catch {
-    return raw
-  }
-}
-
 function getMonthLabel(d: Date, locale: string): string {
   try {
-    return d.toLocaleDateString(locale.startsWith('nb') || locale === 'no' ? 'nb-NO' : 'en-US', {
-      month: 'long',
-      year: 'numeric',
-    })
+    return d.toLocaleDateString(locale.startsWith('nb') || locale === 'no' ? 'nb-NO' : 'en-GB', { month: 'long', year: 'numeric' })
   } catch {
     return ''
   }
 }
 
+function SectionLabel({ label, right }: { label: string; right?: React.ReactNode }) {
+  return (
+    <div className="mb-8 flex flex-wrap items-baseline justify-between gap-x-4 gap-y-2">
+      <span className={ui.eyebrow}>{label}</span>
+      {right && <span className="font-mono text-[13px] text-sc-ink-400">{right}</span>}
+    </div>
+  )
+}
+
+/** Three cards: image, category, title, excerpt, date and reading time. */
+function DeckCard({ article, index, locale, meta }: { article: NormalizedArticle; index: number; locale: string; meta: string }) {
+  const href = article.slug ? hrefFor({ _type: article._type, slug: article.slug, language: locale }, locale) : '#'
+  return (
+    <Link href={href} className="group flex flex-col gap-5 no-underline">
+      <div className="relative aspect-[4/3] overflow-hidden rounded-lg border border-sc-ink-100 bg-sc-ink-50">
+        {article.imageUrl && (
+          <Image
+            src={article.imageUrl}
+            alt={article.title}
+            fill
+            className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+          />
+        )}
+        <span aria-hidden="true" className="absolute left-3 top-3 select-none font-mono text-[10px] uppercase tracking-widest text-white/80">
+          {String(index).padStart(2, '0')}
+        </span>
+      </div>
+      <div className="flex flex-col gap-3">
+        {article.category && (
+          <div>
+            <span className={ui.tag}>{article.category}</span>
+          </div>
+        )}
+        <h3 className="m-0 text-[20px] font-bold leading-[1.3] tracking-[-0.01em] text-sc-ink-900 transition-colors group-hover:text-sc-cyan-600">{article.title}</h3>
+        {article.description && <p className="m-0 line-clamp-2 text-[15px] leading-relaxed text-sc-ink-600">{article.description}</p>}
+        {meta && <div className={ui.mono}>{meta}</div>}
+      </div>
+    </Link>
+  )
+}
+
+/** The rest as compact rows. */
+function ArchiveRow({ article, index, locale, displayDate }: { article: NormalizedArticle; index: number; locale: string; displayDate: string }) {
+  const href = article.slug ? hrefFor({ _type: article._type, slug: article.slug, language: locale }, locale) : '#'
+  return (
+    <Link href={href} className="group -mx-2 grid grid-cols-12 items-baseline gap-x-4 gap-y-2 border-b border-sc-ink-100 px-2 py-7 no-underline transition-colors hover:bg-sc-ink-50/60">
+      <div className="col-span-1 select-none pt-1 font-mono text-[11px] text-sc-ink-400">{String(index).padStart(2, '0')}</div>
+      <div className="col-span-11 md:col-span-3 md:pt-0.5">
+        {article.category && <span className="text-xs font-semibold uppercase tracking-[0.12em] text-sc-cyan-500">{article.category}</span>}
+      </div>
+      <div className="col-span-11 col-start-2 flex flex-col gap-1.5 md:col-span-5 md:col-start-auto">
+        <h3 className="m-0 text-[20px] font-bold leading-[1.3] tracking-[-0.01em] text-sc-ink-900 transition-colors group-hover:text-sc-cyan-600">{article.title}</h3>
+        {article.description && <p className="m-0 line-clamp-1 text-[14px] leading-relaxed text-sc-ink-600">{article.description}</p>}
+      </div>
+      <div className="col-span-11 col-start-2 flex flex-wrap gap-x-4 gap-y-1 font-mono text-[13px] text-sc-ink-500 md:col-span-3 md:col-start-auto md:flex-col md:items-end md:gap-0.5">
+        {displayDate && <span>{displayDate}</span>}
+        {article.readTime && <span className="text-sc-ink-400">{article.readTime}</span>}
+      </div>
+    </Link>
+  )
+}
+
+/**
+ * The blog archive: three latest posts as cards, then every other post as a
+ * row with search and category filters. Same rhythm as the work page.
+ */
 export default function ArticlesGrid({ articlesGrid, lang }: ArticlesGridProps) {
   const locale = lang || 'en'
   const isNorwegian = locale === 'no' || locale === 'nb-NO' || locale.startsWith('nb')
@@ -101,7 +145,8 @@ export default function ArticlesGrid({ articlesGrid, lang }: ArticlesGridProps) 
   const archiveLabel = articlesGrid?.archiveLabel || (isNorwegian ? 'Arkiv' : 'Archive')
   const searchPlaceholderText = articlesGrid?.searchPlaceholder || (isNorwegian ? 'Søk i arkivet…' : 'Search archive…')
   const allLabel = isNorwegian ? 'Alle' : 'All'
-  const [activeCategory, setActiveCategory] = useState('All')
+  const emptyLabel = isNorwegian ? 'Ingen innlegg matcher søket.' : 'No posts match your search.'
+  const [activeCategory, setActiveCategory] = useState(ALL)
   const [searchQuery, setSearchQuery] = useState('')
 
   const articles: NormalizedArticle[] = useMemo(() => {
@@ -119,279 +164,106 @@ export default function ArticlesGrid({ articlesGrid, lang }: ArticlesGridProps) 
             _type: a._type ?? 'post',
             author: a.author,
           }))
-        : defaultArticles
+        : []
 
-    return raw.map((a) => ({
-      ...a,
-      parsedDate: parseDate(a.date),
-    }))
+    return raw.map((a) => ({ ...a, parsedDate: parseDate(a.date) }))
   }, [articlesGrid])
 
-  const { deck, archive } = useMemo(() => {
-    // Always show the first 3 articles as the deck regardless of date
-    return {
-      deck: articles.slice(0, 3),
-      archive: articles.slice(3),
-    }
-  }, [articles])
+  // The first three are the deck regardless of date; the rest is the archive.
+  const deck = useMemo(() => articles.slice(0, 3), [articles])
+  const archive = useMemo(() => articles.slice(3), [articles])
 
   const deckMonthLabel = useMemo(() => {
-    // Label the deck section by the most recent article's month
     const d = deck[0]?.parsedDate
     return d ? getMonthLabel(d, locale) : ''
   }, [deck, locale])
 
   const categories = useMemo(() => {
     const cats = new Set(archive.map((a) => a.category).filter(Boolean))
-    return ['All', ...Array.from(cats)]
+    return [ALL, ...Array.from(cats)]
   }, [archive])
 
   const filteredArchive = useMemo(() => {
     const q = searchQuery.toLowerCase().trim()
     return archive.filter((a) => {
-      const matchesCategory = activeCategory === 'All' || a.category === activeCategory
-      const matchesSearch =
-        !q ||
-        a.title.toLowerCase().includes(q) ||
-        a.description.toLowerCase().includes(q) ||
-        a.category.toLowerCase().includes(q)
+      const matchesCategory = activeCategory === ALL || a.category === activeCategory
+      const matchesSearch = !q || a.title.toLowerCase().includes(q) || a.description.toLowerCase().includes(q) || a.category.toLowerCase().includes(q)
       return matchesCategory && matchesSearch
     })
   }, [archive, activeCategory, searchQuery])
 
   const totalCount = articles.length
+  const countLabel = `${totalCount} ${isNorwegian ? 'innlegg' : 'posts'}`
+  const dateOf = (a: NormalizedArticle) => formatArticleDate(a.date, locale, false) || a.date
+  const metaOf = (a: NormalizedArticle) => [dateOf(a), a.readTime].filter(Boolean).join(' · ')
+
+  const chip = (active: boolean) =>
+    `inline-flex items-center rounded-full border px-3 py-1.5 text-[13px] font-medium transition-colors ${
+      active ? 'border-sc-ink-900 bg-sc-ink-900 text-white' : 'border-sc-ink-200 bg-white text-sc-ink-600 hover:border-sc-ink-900 hover:text-sc-ink-900'
+    }`
 
   return (
-    <section className="bg-white pb-24">
-
-      {/* More this month */}
+    <section className="bg-white">
       {deck.length > 0 && (
-        <div className="border-b border-neutral-200">
-          <div className="section_container mx-auto page-padding-x pt-16 pb-20">
-            <div className="flex items-baseline justify-between mb-10">
-              <div className="flex items-baseline gap-4">
-                <span className="text-[11px] font-bold uppercase tracking-[0.12em] text-[#11848C]">
-                  {latestLabel}
-                </span>
-                {deckMonthLabel && (
-                  <span className="text-xs text-neutral-400 font-mono">/ {deckMonthLabel}</span>
-                )}
-              </div>
-              {totalCount > 0 && (
-                <span className="text-sm font-semibold text-teal font-mono">
-                  {totalCount} {isNorwegian ? 'poster' : 'posts'}
-                </span>
-              )}
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-              {deck.map((article, i) => {
-                const href = article.slug ? hrefFor({ _type: article._type, slug: article.slug, language: locale }, locale) : '#'
-                const displayDate = formatDisplayDate(article.parsedDate, article.date)
-                return (
-                  <Link key={article.slug || i} href={href} className="group cursor-pointer">
-                    <div className="relative mb-5 overflow-hidden" style={{ aspectRatio: '4 / 3' }}>
-                      {article.imageUrl ? (
-                        <Image
-                          src={article.imageUrl}
-                          alt={article.title}
-                          fill
-                          className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
-                          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                        />
-                      ) : (
-                        <div
-                          className="absolute inset-0"
-                          style={{ background: 'linear-gradient(135deg, #0F4A4F 0%, #16686E 60%, #1EEFFA 110%)' }}
-                        />
-                      )}
-                      <div className="absolute top-3 left-3 text-white/70 text-[10px] font-mono tracking-widest uppercase select-none">
-                        {String(i + 2).padStart(2, '0')}
-                      </div>
-                    </div>
-                    {article.category && (
-                      <div className="text-[10px] font-bold uppercase tracking-[0.12em] text-[#11848C] mb-2.5">
-                        {article.category}
-                      </div>
-                    )}
-                    <h3
-                      className="font-bold leading-snug mb-3 text-[#1F1D1D] group-hover:text-teal transition-colors duration-200"
-                      style={{ fontSize: 20, lineHeight: 1.3, letterSpacing: '-0.005em' }}
-                    >
-                      {article.title}
-                    </h3>
-                    {article.description && (
-                      <p className="text-sm text-neutral-600 leading-relaxed mb-4 line-clamp-2">
-                        {article.description}
-                      </p>
-                    )}
-                    <div className="text-xs text-neutral-500 font-mono">
-                      {[displayDate, article.readTime].filter(Boolean).join(' · ')}
-                    </div>
-                  </Link>
-                )
-              })}
+        <div className={`border-b border-sc-ink-100 ${archive.length === 0 ? 'border-b-0' : ''}`}>
+          <div className={`${ui.container} py-16 lg:py-20`}>
+            <SectionLabel
+              label={latestLabel}
+              right={
+                <>
+                  {deckMonthLabel && <span>{deckMonthLabel}</span>}
+                  {deckMonthLabel && totalCount > 0 && <span aria-hidden="true"> · </span>}
+                  {totalCount > 0 && <span>{countLabel}</span>}
+                </>
+              }
+            />
+            <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+              {deck.map((article, i) => (
+                <DeckCard key={article.slug || i} article={article} index={i + 2} locale={locale} meta={metaOf(article)} />
+              ))}
             </div>
           </div>
         </div>
       )}
 
-      {/* Archive */}
       {archive.length > 0 && (
-        <div className="section_container mx-auto page-padding-x pt-16">
-          {/* Header + search + category tabs */}
-          <div className="flex flex-col gap-5 mb-8">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-              <span className="text-[11px] font-bold uppercase tracking-[0.12em] text-[#11848C]">
-                {archiveLabel}
-              </span>
-              {/* Search input */}
-              <div className="relative sm:w-72">
-                <svg
-                  className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400 pointer-events-none"
-                  fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                >
+        <div className={`${ui.container} py-16 lg:py-20`}>
+          <div className="mb-8 flex flex-col gap-5">
+            <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
+              <span className={ui.eyebrow}>{archiveLabel}</span>
+              <label className="relative block w-full sm:w-72">
+                <span className="sr-only">{searchPlaceholderText}</span>
+                <svg className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-sc-ink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
                 <input
-                  type="text"
+                  type="search"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder={searchPlaceholderText}
-                  className="w-full pl-9 pr-4 py-2 text-sm border border-neutral-200 bg-white text-neutral-900 placeholder-neutral-400 focus:outline-none focus:ring-1 focus:ring-teal"
+                  className="w-full rounded-lg border border-sc-ink-200 bg-white py-2.5 pl-9 pr-4 text-sm text-sc-ink-900 placeholder:text-sc-ink-400 focus:border-sc-ink-900 focus:outline-none"
                 />
-              </div>
+              </label>
             </div>
-            {/* Category tabs */}
             {categories.length > 1 && (
               <div className="flex flex-wrap gap-2">
                 {categories.map((cat) => (
-                  <button
-                    key={cat}
-                    onClick={() => setActiveCategory(cat)}
-                    className={`text-xs font-semibold px-3 py-1.5 transition-colors duration-150 ${
-                      activeCategory === cat
-                        ? 'bg-neutral-900 text-white'
-                        : 'border border-neutral-300 text-neutral-600 hover:border-neutral-900 hover:text-neutral-900'
-                    }`}
-                  >
-                    {cat === 'All' ? allLabel : cat}
+                  <button key={cat} type="button" onClick={() => setActiveCategory(cat)} className={chip(activeCategory === cat)} aria-pressed={activeCategory === cat}>
+                    {cat === ALL ? allLabel : cat}
                   </button>
                 ))}
               </div>
             )}
           </div>
 
-          {/* Archive rows — desktop */}
-          <div className="border-t border-neutral-200">
-            {filteredArchive.map((article, i) => {
-              const href = article.slug ? hrefFor({ _type: article._type, slug: article.slug, language: locale }, locale) : '#'
-              const displayDate = formatDisplayDate(article.parsedDate, article.date)
-              const globalIdx = deck.length + i + 2
-
-              return (
-                <Link
-                  key={article.slug || i}
-                  href={href}
-                  className="group grid grid-cols-12 gap-6 items-baseline py-8 border-b border-neutral-200 hover:bg-neutral-50/60 transition-colors duration-150 px-2 -mx-2"
-                >
-                  {/* Index */}
-                  <div className="col-span-1 text-[11px] font-mono text-neutral-400 pt-1 select-none">
-                    {String(globalIdx).padStart(2, '0')}
-                  </div>
-
-                  {/* Category */}
-                  <div className="hidden md:block col-span-2 text-[10px] font-bold uppercase tracking-[0.12em] text-[#11848C] pt-1">
-                    {article.category}
-                  </div>
-
-                  {/* Title + description */}
-                  <div className="col-span-9 md:col-span-6">
-                    {article.category && (
-                      <div className="block md:hidden text-[10px] font-bold uppercase tracking-[0.12em] text-[#11848C] mb-1">
-                        {article.category}
-                      </div>
-                    )}
-                    <h3
-                      className="font-bold mb-1.5 text-[#1F1D1D] group-hover:text-teal transition-colors duration-200"
-                      style={{ fontSize: 20, lineHeight: 1.3, letterSpacing: '-0.005em' }}
-                    >
-                      {article.title}
-                    </h3>
-                    {article.description && (
-                      <p className="text-sm text-neutral-600 leading-relaxed line-clamp-1">
-                        {article.description}
-                      </p>
-                    )}
-                  </div>
-
-                  {/* Date + readTime */}
-                  <div className="hidden md:block col-span-2 text-xs text-neutral-500 font-mono pt-1.5 leading-relaxed">
-                    {displayDate && <div>{displayDate}</div>}
-                    {article.readTime && <div className="text-neutral-400">{article.readTime}</div>}
-                  </div>
-
-                  {/* Arrow */}
-                  <div className="hidden md:block col-span-1 pt-1 text-right">
-                    <ArrowRight
-                      className="inline w-[18px] h-[18px] opacity-30 group-hover:opacity-100 transition-opacity duration-200 text-teal"
-                      strokeWidth={1.8}
-                    />
-                  </div>
-                </Link>
-              )
-            })}
+          <div className="border-t border-sc-ink-100">
+            {filteredArchive.map((article, i) => (
+              <ArchiveRow key={article.slug || i} article={article} index={deck.length + i + 2} locale={locale} displayDate={dateOf(article)} />
+            ))}
+            {filteredArchive.length === 0 && <p className="m-0 py-10 text-sm text-sc-ink-500">{emptyLabel}</p>}
           </div>
         </div>
       )}
-
-      {/* Fallback: all articles if no date grouping */}
-      {deck.length === 0 && archive.length === 0 && articles.length > 0 && (
-        <div className="section_container mx-auto page-padding-x pt-16">
-          <div className="border-t border-neutral-200">
-            {articles.map((article, i) => {
-              const href = article.slug ? hrefFor({ _type: article._type, slug: article.slug, language: locale }, locale) : '#'
-              const displayDate = formatDisplayDate(article.parsedDate, article.date)
-              return (
-                <Link
-                  key={article.slug || i}
-                  href={href}
-                  className="group grid grid-cols-12 gap-6 items-baseline py-8 border-b border-neutral-200 hover:bg-neutral-50/60 transition-colors duration-150 px-2 -mx-2"
-                >
-                  <div className="col-span-1 text-[11px] font-mono text-neutral-400 pt-1 select-none">
-                    {String(i + 1).padStart(2, '0')}
-                  </div>
-                  <div className="hidden md:block col-span-2 text-[10px] font-bold uppercase tracking-[0.12em] text-[#11848C] pt-1">
-                    {article.category}
-                  </div>
-                  <div className="col-span-9 md:col-span-6">
-                    <h3
-                      className="font-bold mb-1.5 text-[#1F1D1D] group-hover:text-teal transition-colors duration-200"
-                      style={{ fontSize: 20, lineHeight: 1.3, letterSpacing: '-0.005em' }}
-                    >
-                      {article.title}
-                    </h3>
-                    {article.description && (
-                      <p className="text-sm text-neutral-600 leading-relaxed line-clamp-1">{article.description}</p>
-                    )}
-                  </div>
-                  <div className="hidden md:block col-span-2 text-xs text-neutral-500 font-mono pt-1.5 leading-relaxed">
-                    {displayDate && <div>{displayDate}</div>}
-                    {article.readTime && <div className="text-neutral-400">{article.readTime}</div>}
-                  </div>
-                  <div className="hidden md:block col-span-1 pt-1 text-right">
-                    <ArrowRight
-                      className="inline w-[18px] h-[18px] opacity-30 group-hover:opacity-100 transition-opacity duration-200 text-teal"
-                      strokeWidth={1.8}
-                    />
-                  </div>
-                </Link>
-              )
-            })}
-          </div>
-        </div>
-      )}
-
     </section>
   )
 }

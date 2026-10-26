@@ -32,7 +32,7 @@ const COUNTRY_SEGMENT_TO_LANGUAGE: Record<string, Language> = {
   de: 'de',
 }
 
-export const ARTICLE_TYPES = ['post', 'blogPost'] as const
+export const ARTICLE_TYPES = ['post'] as const
 export const CASE_STUDY_TYPES = ['caseStudy'] as const
 
 /** Localized index slug for articles (first segment of an article URL). */
@@ -114,6 +114,8 @@ export function isCaseStudyType(type: string): boolean {
  * Path WITHOUT leading slash and WITHOUT locale prefix for a document,
  * e.g. "", "om-oss", "blogg/vipps-hurtigkasse-shopify-plus", "kundecaser/slikkepott".
  */
+const MIGRATION_SLUG: Partial<Record<Language, string>> = { no: 'tjenester/migrering', en: 'services/migrate', sv: 'services/migrate', da: 'services/migrate', de: 'services/migrate' }
+
 export function docPath(doc: RoutableDoc): string {
   const language = (doc.language ?? 'en') as Language
   const slug = normalizeSlug(doc.slug)
@@ -128,6 +130,8 @@ export function docPath(doc: RoutableDoc): string {
     return `${WORK_INDEX_SLUG[language] ?? 'work'}/${last}`
   }
   if (doc._type === 'author') return `${AUTHOR_PREFIX}/${slug}`
+  // The migration service lives on a code route; the Sanity slug still carries the legacy name.
+  if (doc._type === 'migratePage') return MIGRATION_SLUG[language] ?? 'services/migrate'
   if (doc._type === 'legalPage') return `${LEGAL_PREFIX}/${slug}`
   return slug
 }

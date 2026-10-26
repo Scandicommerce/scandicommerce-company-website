@@ -12,19 +12,13 @@ interface AllPackagesPageData {
   pageTitle: string
   slug: string
   sections?: Array<{ _type: string; _key: string } & Record<string, unknown>>
-  hero?: Record<string, unknown>
-  packages?: Record<string, unknown>
-  faq?: Record<string, unknown>
 }
 
 export default async function AllPackagesPage({ params }: { params: Promise<{ lang: string; slug?: string }> }) {
   const resolvedParams = await params
   const language = getLanguageFromParams(resolvedParams)
-  const pageData = await sanityPageFetch<AllPackagesPageData>(
-    allPackagesPageQuery,
-    getQueryParams({}, language),
-    { next: { revalidate: 0 } }
-  )
+  // Package prices come from Sanity only; the Shopify store sells merch, not packages.
+  const pageData = await sanityPageFetch<AllPackagesPageData>(allPackagesPageQuery, getQueryParams({}, language), { next: { revalidate: 0 } })
 
   const sections = normalizePageSections('allPackagesPage', pageData)
 

@@ -1,9 +1,6 @@
 import { defineArrayMember, defineField, defineType } from "sanity";
 import { languageField } from "../objects/language";
-import {
-  seoExtendedField,
-  legacySeoFieldMinimal,
-} from "../_shared/seoFields";
+import { seoExtendedField } from "../_shared/seoFields";
 import { isUniquePerLanguage } from "@/sanity/lib/slugUtils";
 import { validatePublicSlug } from "@/sanity/lib/slugValidation";
 
@@ -16,7 +13,6 @@ function pageFilter({ document }: { document: Record<string, unknown> }) {
 const pageReferenceTypes = [
   { type: "contactPage" },
   { type: "landingPage" },
-  { type: "servicesPage" },
   { type: "aboutPage" },
   { type: "workPage" },
   { type: "blogPage" },
@@ -293,7 +289,6 @@ export const shopifyXAiPage = defineType({
       ],
     }),
     seoExtendedField,
-    legacySeoFieldMinimal,
   ],
   preview: { select: { title: "pageTitle" } },
 });

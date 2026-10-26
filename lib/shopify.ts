@@ -1197,3 +1197,96 @@ export async function removeCartLine(
     }
   }
 }
+/* ------------------------------------------------------------------ */
+/* Collections                                                         */
+/* ------------------------------------------------------------------ */
+
+const COLLECTION_PRODUCTS_QUERY = `
+  query getCollectionProducts($handle: String!, $first: Int!) {
+    collection(handle: $handle) {
+      id
+      title
+      handle
+      products(first: $first) {
+        edges {
+          node {
+            id
+            title
+            description
+            handle
+            tags
+            availableForSale
+            priceRange { minVariantPrice { amount currencyCode } }
+            images(first: 1) { edges { node { url altText } } }
+            variants(first: 10) {
+              edges { node { id title availableForSale price { amount currencyCode } } }
+            }
+          }
+        }
+      }
+    }
+  }
+`
+
+interface CollectionProductsData {
+  collection: {
+    id: string
+    title: string
+    handle: string
+    products: {
+      edges: Array<{
+        node: {
+          id: string
+          title: string
+          description: string
+          handle: string
+          tags: string[]
+          availableForSale: boolean
+          priceRange: { minVariantPrice: { amount: string; currencyCode: string } }
+          images: { edges: Array<{ node: { url: string; altText: string | null } }> }
+          variants: { edges: Array<{ node: { id: string; title: string; availableForSale: boolean; price: { amount: string; currencyCode: string } } }> }
+        }
+      }>
+    }
+  } | null
+}
+
+/**
+ * Products in one Storefront collection by handle (e.g. "packages" or
+ * "nexus-pos"). Returns an empty list when the collection does not exist or
+ * the store is unreachable, so pages can fall back to their own catalog.
+ */
+export async function getShopifyCollectionProducts(handle: string, first: number = 50): Promise<ShopifyProduct[]> {
+  try {
+    const data = await shopifyFetch<CollectionProductsData>(COLLECTION_PRODUCTS_QUERY, { handle, first })
+    const edges = data.collection?.products.edges ?? []
+    return edges.map(({ node: p }) => {
+      const image = p.images.edges[0]?.node
+      const variants: ShopifyVariant[] = p.variants.edges.map((e) => ({
+        id: e.node.id,
+        title: e.node.title,
+        price: parseFloat(e.node.price.amount),
+        currencyCode: e.node.price.currencyCode,
+        availableForSale: e.node.availableForSale,
+      }))
+      return {
+        id: p.id,
+        title: p.title,
+        description: p.description || '',
+        handle: p.handle,
+        price: parseFloat(p.priceRange.minVariantPrice.amount),
+        currencyCode: p.priceRange.minVariantPrice.currencyCode,
+        image: image?.url || '',
+        imageAlt: image?.altText || undefined,
+        images: image?.url ? [image.url] : [],
+        tags: p.tags,
+        collections: data.collection ? [{ id: data.collection.id, title: data.collection.title, handle: data.collection.handle }] : [],
+        availableForSale: p.availableForSale,
+        variants,
+      }
+    })
+  } catch (error) {
+    console.error(`Error fetching Shopify collection ${handle}:`, error)
+    return []
+  }
+}

@@ -30,7 +30,6 @@ export const button = defineType({
       type: "reference",
       to: [
         { type: "landingPage" },
-        { type: "servicesPage" },
         { type: "aboutPage" },
         { type: "contactPage" },
         { type: "workPage" },

@@ -1,9 +1,6 @@
 import { defineType, defineField, defineArrayMember } from "sanity";
 import { languageField } from "../objects/language";
-import {
-  seoExtendedField,
-  legacySeoFieldMinimal,
-} from "../_shared/seoFields";
+import { seoExtendedField } from "../_shared/seoFields";
 import { isUniquePerLanguage } from "@/sanity/lib/slugUtils";
 import { validatePublicSlug } from "@/sanity/lib/slugValidation";
 
@@ -313,7 +310,6 @@ export const vippsHurtigkassePage = defineType({
       ],
     }),
     seoExtendedField,
-    legacySeoFieldMinimal,
   ],
   preview: {
     select: {

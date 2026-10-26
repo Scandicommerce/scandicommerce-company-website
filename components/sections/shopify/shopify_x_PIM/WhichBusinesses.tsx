@@ -1,4 +1,4 @@
-'use client'
+import { ui } from '@/components/integrations/labels'
 
 interface BusinessCard {
   title?: string
@@ -12,65 +12,30 @@ interface WhichBusinessesData {
   bottomNote?: string
 }
 
-interface WhichBusinessesProps {
-  whichBusinesses?: WhichBusinessesData
-}
-
-export default function WhichBusinesses({ whichBusinesses }: WhichBusinessesProps) {
-  const title = whichBusinesses?.title
-  const description = whichBusinesses?.description
-  const businessCards = whichBusinesses?.businessCards || []
-  const bottomNote = whichBusinesses?.bottomNote
-
+/** Numbered hairline cards, three to a row: who PIM is for. */
+export default function WhichBusinesses({ whichBusinesses, lang = 'no' }: { whichBusinesses?: WhichBusinessesData; lang?: string }) {
+  const cards = (whichBusinesses?.businessCards ?? []).filter((c) => c?.title || c?.description)
+  if (!whichBusinesses?.title && cards.length === 0) return null
   return (
-    <section className="bg-white py-16 lg:py-24">
-      <div className="section_container mx-auto page-padding-x">
-        {/* Header */}
-        <div className="text-center mb-12 lg:mb-16">
-          {title && (
-            <h2 className="text-[5.3vw] xs:text-[3.5vw] sm:text-[3.2vw] md:text-[3.2vw] lg:text-[28px] xl:text-[34px] font-bold text-[#222222] mb-4">
-              {title}
-            </h2>
-          )}
-          {description && (
-            <p className="text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[16px] xl:text-[18px] text-[#565454] max-w-5xl mx-auto">
-              {description}
-            </p>
-          )}
+    <section className="bg-white py-16 lg:py-20">
+      <div className={`${ui.container} flex flex-col gap-10`}>
+        <div className="flex max-w-[680px] flex-col gap-2.5">
+          <div className={ui.eyebrow}>{lang === 'no' ? 'Hvem passer det for' : 'Who it is for'}</div>
+          {whichBusinesses?.title && <h2 className={ui.h2}>{whichBusinesses.title}</h2>}
+          {whichBusinesses?.description && <p className="m-0 text-lg leading-relaxed text-sc-ink-600">{whichBusinesses.description}</p>}
         </div>
-
-        {/* Cards Grid */}
-        {businessCards.length > 0 && (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 max-w-5xl mx-auto">
-            {businessCards.map((card, index) => {
-              const isLastInRow = (index + 1) % 3 === 0
-              return (
-                <div
-                  key={index}
-                  className={`border-l border-[#E5E5E5] p-6 lg:p-8 ${isLastInRow ? 'lg:border-r' : ''}`}
-                >
-                  {card.title && (
-                    <h3 className="text-[4.3vw] xs:text-[2.6vw] sm:text-[2.5vw] md:text-[2.2vw] lg:text-[18px] xl:text-[24px] font-semibold text-[#03C1CA] mb-3 text-center">
-                      {card.title}
-                    </h3>
-                  )}
-                  {card.description && (
-                    <p className="text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[16px] xl:text-[18px] text-[#565454] text-center">
-                      {card.description}
-                    </p>
-                  )}
-                </div>
-              )
-            })}
-          </div>
+        {cards.length > 0 && (
+          <ol className="m-0 grid list-none grid-cols-1 gap-4 p-0 sm:grid-cols-2 lg:grid-cols-3 lg:gap-5">
+            {cards.map((card, i) => (
+              <li key={i} className={ui.card}>
+                <span className={ui.mono}>{String(i + 1).padStart(2, '0')}</span>
+                {card.title && <h3 className="m-0 text-lg font-semibold leading-snug text-sc-ink-900">{card.title}</h3>}
+                {card.description && <p className="m-0 text-[15px] leading-relaxed text-sc-ink-600">{card.description}</p>}
+              </li>
+            ))}
+          </ol>
         )}
-
-        {/* Bottom Note */}
-        {bottomNote && (
-          <p className="text-center text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[16px] xl:text-[18px] text-[#565454] mt-12 max-w-5xl mx-auto">
-            {bottomNote}
-          </p>
-        )}
+        {whichBusinesses?.bottomNote && <p className="m-0 max-w-[760px] text-[15px] leading-relaxed text-sc-ink-500">{whichBusinesses.bottomNote}</p>}
       </div>
     </section>
   )

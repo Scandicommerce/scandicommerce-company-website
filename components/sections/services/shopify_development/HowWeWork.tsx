@@ -1,6 +1,7 @@
-'use client'
+import { ui } from '@/components/integrations/labels'
 
 interface HowWeWorkData {
+  howWeWorkEyebrow?: string
   howWeWorkTitle?: string
   howWeWorkSteps?: Array<{
     number: number
@@ -11,53 +12,35 @@ interface HowWeWorkData {
 
 interface HowWeWorkProps {
   howWeWork?: HowWeWorkData
+  lang?: string
 }
 
-export default function HowWeWork({ howWeWork }: HowWeWorkProps) {
-  // Content variables from Sanity
+/** Process as a numbered row: mono step numbers over a hairline, like the data-flow steps. */
+export default function HowWeWork({ howWeWork, lang }: HowWeWorkProps) {
+  const isNo = (lang ?? 'no') === 'no'
   const title = howWeWork?.howWeWorkTitle
   const steps = howWeWork?.howWeWorkSteps
 
   return (
-    <section className="bg-white py-12 sm:py-16 lg:py-24">
-      <div className="section_container mx-auto page-padding-x">
-        {/* Header */}
+    <section className="bg-sc-ink-50 py-16 lg:py-20">
+      <div className={`${ui.container} flex flex-col gap-10`}>
         {title && (
-          <div className="text-center mb-8 sm:mb-12 lg:mb-16">
-            <h2 className="text-[5.3vw] xs:text-[3.5vw] sm:text-[3.2vw] md:text-[3.2vw] lg:text-[28px] xl:text-[34px] font-bold text-gray-900">
-              {title}
-            </h2>
+          <div className="flex max-w-[680px] flex-col gap-2.5">
+            <div className={ui.eyebrow}>{howWeWork?.howWeWorkEyebrow || (isNo ? 'Prosess' : 'Process')}</div>
+            <h2 className={ui.h2}>{title}</h2>
           </div>
         )}
 
-        {/* Steps */}
         {steps && steps.length > 0 && (
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 lg:gap-12">
+          <ol className="m-0 grid list-none grid-cols-1 gap-6 p-0 sm:grid-cols-2 lg:grid-cols-4 lg:gap-8">
             {steps.map((step, index) => (
-              <div key={index} className="text-center">
-                {/* Number Circle */}
-                <div className="w-9 h-9 xs:w-12 xs:h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 bg-[#03C1CA] rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-5 lg:mb-6">
-                  <span className="text-white text-lg sm:text-xl lg:text-2xl font-bold">
-                    {step.number}
-                  </span>
-                </div>
-
-                {/* Title */}
-                {step.title && (
-                  <h3 className="text-[4.3vw] xs:text-[2.6vw] sm:text-[2.5vw] md:text-[2.2vw] lg:text-[18px] xl:text-[24px] font-bold text-gray-900 mb-2 sm:mb-3">
-                    {step.title}
-                  </h3>
-                )}
-
-                {/* Description */}
-                {step.description && (
-                  <p className="text-xs sm:text-sm text-gray-500 leading-relaxed">
-                    {step.description}
-                  </p>
-                )}
-              </div>
+              <li key={index} className="flex flex-col gap-3 border-t border-sc-ink-900 pt-5">
+                <span className="font-mono text-[13px] text-sc-ink-500">{String(index + 1).padStart(2, '0')}</span>
+                {step.title && <h3 className="m-0 text-lg font-semibold leading-snug text-sc-ink-900">{step.title}</h3>}
+                {step.description && <p className="m-0 text-[15px] leading-relaxed text-sc-ink-600">{step.description}</p>}
+              </li>
             ))}
-          </div>
+          </ol>
         )}
       </div>
     </section>

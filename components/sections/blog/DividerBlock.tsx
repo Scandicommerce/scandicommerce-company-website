@@ -1,19 +1,13 @@
-"use client";
-
-import type { DividerBlock as DividerBlockType } from "@/lib/blogBuilder";
+import type { DividerBlock as DividerBlockType } from '@/lib/blogBuilder'
 
 interface DividerBlockProps {
-  block?: DividerBlockType;
+  block?: DividerBlockType
 }
 
-const spacingClass = {
-  small: "my-4 md:my-6",
-  medium: "my-8 md:my-10",
-  large: "my-12 md:my-16",
-};
+const SPACE = { small: 'my-0', medium: 'my-2 lg:my-4', large: 'my-6 lg:my-8' }
 
+/** Hairline rule between sections. */
 export default function DividerBlock({ block }: DividerBlockProps) {
-  const spacing = block?.spacing ?? "medium";
-  const className = spacingClass[spacing] ?? spacingClass.medium;
-  return <div className={`${className} h-4`} aria-hidden />;
+  const spacing = block?.spacing ?? 'medium'
+  return <hr className={`m-0 border-0 border-t border-sc-ink-100 ${SPACE[spacing] ?? SPACE.medium}`} aria-hidden />
 }

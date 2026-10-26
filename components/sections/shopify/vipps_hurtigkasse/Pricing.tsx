@@ -1,10 +1,6 @@
-'use client'
+import { ui } from '@/components/integrations/labels'
 
-const DEFAULT_PRICE_ITEMS = [
-  { priceText: '399 NOK' },
-  { priceText: '259 DKK' },
-  { priceText: '35 EUR' },
-]
+const DEFAULT_PRICE_ITEMS = [{ priceText: '399 NOK' }, { priceText: '259 DKK' }, { priceText: '35 EUR' }]
 
 interface PricingData {
   sectionTitle?: string
@@ -14,56 +10,36 @@ interface PricingData {
   supportText?: string
 }
 
-interface PricingProps {
-  pricing?: PricingData
-}
+/** Price per market as mono figures in one hairline card. */
+export default function Pricing({ pricing, lang = 'no' }: { pricing?: PricingData; lang?: string }) {
+  const isNo = lang === 'no'
+  const sectionTitle = pricing?.sectionTitle || (isNo ? 'Hva koster Hurtigkasse for Vipps i Shopify?' : 'How much does Quick Checkout for Vipps in Shopify cost?')
+  const priceNote = pricing?.priceNote || (isNo ? 'eks. mva per måned' : 'ex. VAT per month')
+  const supportText = pricing?.supportText || (isNo ? 'Gratis support på e-post' : 'Free support via email')
 
-export default function Pricing({ pricing }: PricingProps) {
-  const sectionTitle = pricing?.sectionTitle || 'How much does it cost to use Quick Checkout for Vipps in Shopify'
-  const priceNote = pricing?.priceNote || 'ex. VAT per month'
-  const supportText = pricing?.supportText || 'free support via email'
-
-  const priceItems = (pricing?.priceItems?.filter((p) => p?.priceText?.trim()).length
-    ? pricing.priceItems
-    : DEFAULT_PRICE_ITEMS) as { priceText: string }[]
-
-  const hasRegionalPrices = priceItems.length > 0
+  const fromSanity = (pricing?.priceItems ?? []).filter((p): p is { priceText: string } => !!p?.priceText?.trim())
+  const priceItems = fromSanity.length > 0 ? fromSanity : pricing?.price ? [{ priceText: pricing.price }] : DEFAULT_PRICE_ITEMS
 
   return (
-    <section className="bg-white py-16 lg:py-24">
-      <div className="section_container mx-auto page-padding-x">
-        <div className="max-w-6xl mx-auto text-center">
-          <h2 className="text-[5.3vw] xs:text-[3.5vw] sm:text-[3.2vw] md:text-[3.2vw] lg:text-[28px] xl:text-[34px] font-bold text-[#222222] mb-10 lg:mb-14">
-            {sectionTitle}
-          </h2>
-
-          <div className="bg-[#F8F8F8] p-8 lg:p-12 shadow-lg">
-            <p className="text-sm font-semibold text-[#03C1CA] uppercase tracking-wider mb-4">
-              PRICE
-            </p>
-            {hasRegionalPrices ? (
-              <div className="mb-4 space-y-2">
-                {priceItems.map((item, i) => (
-                  <div key={i} className="flex flex-wrap items-baseline justify-center gap-x-1 gap-y-1">
-                    <span className="text-[5.3vw] xs:text-[3.5vw] sm:text-[3.2vw] md:text-[3.2vw] lg:text-[28px] xl:text-[34px] font-bold text-[#03C1CA] font-mono tracking-tight">
-                      {item.priceText}
-                    </span>
-                    <span className="text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[16px] xl:text-[18px] text-[#565454] font-sans">/{priceNote}</span>
-                  </div>
-                ))}
+    <section className="bg-white py-16 lg:py-20">
+      <div className={`${ui.container} flex flex-col gap-10`}>
+        <div className="flex max-w-[680px] flex-col gap-2.5">
+          <div className={ui.eyebrow}>{isNo ? 'Pris' : 'Price'}</div>
+          <h2 className={ui.h2}>{sectionTitle}</h2>
+        </div>
+        <div className="flex flex-col gap-6 rounded-lg border border-sc-ink-100 bg-white p-6 lg:p-8">
+          <dl className="m-0 grid grid-cols-1 gap-px overflow-hidden rounded-lg border border-sc-ink-100 bg-sc-ink-100 sm:grid-cols-3">
+            {priceItems.map((item, i) => (
+              <div key={i} className="flex flex-col gap-1.5 bg-sc-ink-50 p-5">
+                <dt className="font-mono text-[28px] font-semibold leading-none tracking-[-0.02em] text-sc-ink-900 lg:text-[32px]">{item.priceText}</dt>
+                <dd className="m-0 text-[13px] text-sc-ink-500">{priceNote}</dd>
               </div>
-            ) : (
-              <div className="mb-4">
-                <span className="text-[5.3vw] xs:text-[3.5vw] sm:text-[3.2vw] md:text-[3.2vw] lg:text-[28px] xl:text-[34px] font-bold text-[#03C1CA] font-mono tracking-tight">
-                  {pricing?.price || 'kr 399'}
-                </span>
-                <span className="text-base lg:text-lg text-[#565454] ml-1 font-sans">/{priceNote}</span>
-              </div>
-            )}
-            <p className="text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[16px] xl:text-[18px] text-[#565454]">
-              {supportText}
-            </p>
-          </div>
+            ))}
+          </dl>
+          <p className="m-0 flex items-center gap-2 text-[15px] text-sc-ink-600">
+            <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-sc-cyan-500" />
+            {supportText}
+          </p>
         </div>
       </div>
     </section>

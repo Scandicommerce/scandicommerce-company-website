@@ -36,6 +36,7 @@ export function BlogPageSectionRenderer({
               <GetShopifyInsitesDelivered
                 key={_key}
                 newsletterCta={rest as Parameters<typeof GetShopifyInsitesDelivered>[0]['newsletterCta']}
+                lang={lang}
               />
             )
           default:

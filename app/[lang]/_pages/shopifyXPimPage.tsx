@@ -12,14 +12,6 @@ interface ShopifyXPimPageData {
   pageTitle: string
   slug: string
   sections?: Array<{ _type: string; _key: string } & Record<string, unknown>>
-  hero?: Record<string, unknown>
-  whatIsPim?: Record<string, unknown>
-  integratingPim?: Record<string, unknown>
-  whichBusinesses?: Record<string, unknown>
-  timeSavings?: Record<string, unknown>
-  whyGoodInvestment?: Record<string, unknown>
-  combinedSection?: Record<string, unknown>
-  cta?: Record<string, unknown>
 }
 
 export default async function ShopifyXPimPage({ params }: { params: Promise<{ lang: string; slug?: string }> }) {

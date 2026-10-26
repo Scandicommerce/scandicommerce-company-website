@@ -17,7 +17,7 @@ interface LegalPageData {
   language?: string
   lastUpdated?: string
   content?: unknown[]
-  seo?: { metaTitle?: string; metaDescription?: string }
+  seoExtended?: { metaTitle?: string; metaDescription?: string }
 }
 
 async function getLegalPage(lang: string, slug: string): Promise<LegalPageData | null> {
@@ -39,8 +39,8 @@ export async function generateMetadata({
   const [page, settings] = await Promise.all([getLegalPage(lang, slug), getSiteSettings(language)])
   if (!page) return {}
   const seo = coalescePageSeo(null, settings)
-  seo.metaTitle = page.seo?.metaTitle ?? page.pageTitle
-  seo.metaDescription = page.seo?.metaDescription ?? seo.metaDescription
+  seo.metaTitle = page.seoExtended?.metaTitle ?? page.pageTitle
+  seo.metaDescription = page.seoExtended?.metaDescription ?? seo.metaDescription
   // Legal pages are served in the requested language but only exist in English:
   // canonical stays self-referencing on this origin; no hreflang cluster.
   return buildMetadata({ seo, settings, language, pathWithoutLang: `legal/${slug}` })

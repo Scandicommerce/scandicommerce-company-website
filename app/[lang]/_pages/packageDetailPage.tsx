@@ -2,7 +2,6 @@ import HeaderWrapper from '@/components/layout/HeaderWrapper'
 import FooterWrapper from '@/components/layout/FooterWrapper'
 import { PackageDetailPageSectionRenderer } from '@/components/pageSectionRenderers/PackageDetailPageSectionRenderer'
 import { getPackageBySlug, Package } from '@/lib/packages'
-import { getShopifyProductByHandle } from '@/lib/shopify'
 import { notFound } from 'next/navigation'
 import { sanityPageFetch } from '@/sanity/lib/fetch'
 import { packageDetailPageQuery } from '@/sanity/lib/queries'
@@ -16,24 +15,28 @@ interface PackageDetailPageData {
   pageTitle?: string
   slug?: string
   sections?: Array<{ _type: string; _key: string } & Record<string, unknown>>
+  seo?: { metaTitle?: string; metaDescription?: string }
+}
+
+/** Flat shape produced by mergePackageDetailPageData from the page's `sections[]`. */
+interface PackageDetailMerged {
   packageInfo?: { title?: string; subtitle?: string; price?: string; priceType?: string; timeline?: string; rating?: number; ratingValue?: string; reviewCount?: number; description?: string }
-  bestFor?: string[] | { bestFor?: string[] }
-  idealFor?: string[] | { idealFor?: string[] }
-  highlights?: string[] | { highlights?: string[] }
-  moreDeliverablesCount?: number | { moreDeliverablesCount?: number }
-  included?: string[] | { included?: string[] }
-  includedCategories?: { category?: string; items?: string[] }[] | { includedCategories?: { category?: string; items?: string[] }[] }
-  processSteps?: { week?: string; title?: string; description?: string }[] | { processSteps?: { week?: string; title?: string; description?: string }[] }
-  faq?: { question?: string; answer?: string }[] | { faq?: { question?: string; answer?: string }[] }
-  reviews?: { name?: string; rating?: number; comment?: string; title?: string }[] | { reviews?: { name?: string; rating?: number; comment?: string; title?: string }[] }
+  bestFor?: string[]
+  idealFor?: string[]
+  highlights?: string[]
+  moreDeliverablesCount?: number
+  included?: string[]
+  includedCategories?: { category?: string; items?: string[] }[]
+  processSteps?: { week?: string; title?: string; description?: string }[]
+  faq?: { question?: string; answer?: string }[]
+  reviews?: { name?: string; rating?: number; comment?: string; title?: string }[]
   tabLabels?: { overview?: string; whatsIncluded?: string; process?: string; faq?: string; reviews?: string; idealFor?: string; bestFor?: string }
   addOns?: { sectionTitle?: string; sectionSubtitle?: string; items?: { title?: string; description?: string; price?: string }[] }
   heroButtons?: { primaryButtonText?: string; primaryButtonLink?: string; secondaryButtonText?: string; secondaryButtonLink?: string }
   caseStudiesBanner?: { title?: string; description?: string; buttonText?: string; buttonLink?: string }
-  seo?: { metaTitle?: string; metaDescription?: string }
 }
 
-function sanityToPackage(sanityData: PackageDetailPageData, slug: string): Package {
+function sanityToPackage(sanityData: PackageDetailMerged, slug: string): Package {
   return {
     slug,
     title: sanityData.packageInfo?.title || '',
@@ -98,7 +101,7 @@ export default async function PackageDetailPage({ params }: { params: Promise<{ 
   const sections = normalizePageSections('packageDetailPage', raw)
 
   const mergedRecord = mergePackageDetailPageData(raw, sections)
-  const sanityData = mergedRecord as unknown as PackageDetailPageData
+  const sanityData = mergedRecord as PackageDetailMerged
 
   const pkg: Package = raw ? sanityToPackage(sanityData, slug) : staticPkg!
   if (staticPkg && raw) {
@@ -119,48 +122,11 @@ export default async function PackageDetailPage({ params }: { params: Promise<{ 
     if (pkg.moreDeliverablesCount === undefined) pkg.moreDeliverablesCount = staticPkg.included.length - staticPkg.highlights.length
     if (!pkg.processSteps?.length) pkg.processSteps = staticPkg.processSteps
     if (!pkg.faq?.length) pkg.faq = staticPkg.faq
-    if (!pkg.reviews?.length) pkg.reviews = staticPkg.reviews
   }
 
-  let shopifyProduct = null
-  try {
-    shopifyProduct = await getShopifyProductByHandle(slug)
-  } catch {
-    /* not a Shopify product */
-  }
-
-  const titleToHandle = (title: string) => title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '')
-  const addOnsToProcess =
-    sanityData?.addOns?.items && sanityData.addOns.items.length > 0
-      ? sanityData.addOns.items
-      : [
-          { title: 'CRO Audit', description: 'Comprehensive conversion optimization analysis', price: '12.000 kr' },
-          { title: 'Monthly Support', description: 'Ongoing updates, bug fixes, and improvements', price: '8.000 kr/mo' },
-        ]
-
-  const addOnsWithShopify = await Promise.all(
-    addOnsToProcess.map(async (addOn) => {
-      if (!addOn.title) return { ...addOn }
-      const handle = titleToHandle(addOn.title)
-      let shopifyAddOn = null
-      try {
-        shopifyAddOn = await getShopifyProductByHandle(handle)
-      } catch {
-        /* not a product */
-      }
-      return {
-        ...addOn,
-        shopifyProduct: shopifyAddOn
-          ? {
-              variantId: shopifyAddOn.variants?.[0]?.id || '',
-              productTitle: shopifyAddOn.title,
-              hasVariants: (shopifyAddOn.variants?.length || 0) > 1,
-              variants: shopifyAddOn.variants || [],
-            }
-          : undefined,
-      }
-    })
-  )
+  // Packages and add-ons are sold through a call, not the Shopify cart, so
+  // price and copy come from Sanity only.
+  const addOnItems = sanityData?.addOns?.items ?? []
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -169,18 +135,7 @@ export default async function PackageDetailPage({ params }: { params: Promise<{ 
         <PackageDetailPageSectionRenderer
           sections={sections}
           pkg={pkg}
-          shopifyProduct={
-            shopifyProduct
-              ? {
-                  variantId: shopifyProduct.variants?.[0]?.id || '',
-                  productTitle: shopifyProduct.title,
-                  hasVariants: (shopifyProduct.variants?.length || 0) > 1,
-                  variants: shopifyProduct.variants || [],
-                }
-              : undefined
-          }
-          tabLabels={sanityData?.tabLabels}
-          addOns={{ ...sanityData?.addOns, items: addOnsWithShopify }}
+          addOns={{ ...sanityData?.addOns, items: addOnItems }}
           caseStudiesBanner={sanityData?.caseStudiesBanner}
           lang={lang}
         />

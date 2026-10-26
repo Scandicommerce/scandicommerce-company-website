@@ -1,4 +1,5 @@
 import { defineField, defineType } from "sanity";
+import { seoExtendedField } from "../_shared/seoFields";
 import { DocumentTextIcon } from "@sanity/icons";
 import { languages, defaultLanguage } from "@/sanity/lib/languages";
 import { isUniquePerLanguage } from "@/sanity/lib/slugUtils";
@@ -59,20 +60,7 @@ export const legalPage = defineType({
       type: "array",
       of: [{ type: "block" }],
     }),
-    defineField({
-      name: "seo",
-      title: "SEO",
-      type: "object",
-      fields: [
-        defineField({ name: "metaTitle", title: "Meta Title", type: "string" }),
-        defineField({
-          name: "metaDescription",
-          title: "Meta Description",
-          type: "text",
-          rows: 3,
-        }),
-      ],
-    }),
+    seoExtendedField,
   ],
   preview: {
     select: { title: "pageTitle", subtitle: "language" },

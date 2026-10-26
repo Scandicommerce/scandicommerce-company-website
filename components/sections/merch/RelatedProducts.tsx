@@ -4,6 +4,7 @@ import { useRef, useState, useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { HiChevronLeft, HiChevronRight } from 'react-icons/hi2'
+import { ui } from '@/components/integrations/labels'
 
 interface RelatedProduct {
   id: string
@@ -23,6 +24,7 @@ interface RelatedProductsProps {
   relatedProductsSettings?: RelatedProductsSettingsData
 }
 
+/** Related products as a scroll row of hairline cards with arrow controls in the section head. */
 export default function RelatedProducts({
   products = [],
   relatedProductsSettings,
@@ -80,65 +82,55 @@ export default function RelatedProducts({
     return null
   }
 
+  const arrowClass =
+    'flex h-10 w-10 items-center justify-center rounded-full border border-sc-ink-300 text-sc-ink-900 transition-colors hover:bg-sc-ink-50 disabled:cursor-not-allowed disabled:opacity-40'
+
   return (
-    <section className="bg-white py-12 lg:py-20">
-      <div className="section_container mx-auto page-padding-x">
-        <h2 className="text-2xl lg:text-3xl xl:text-4xl font-bold text-[#222222] text-center mb-10 lg:mb-12">
-          {title}
-        </h2>
-
-        <div className="relative">
-          {canScrollLeft && (
-            <button
-              onClick={() => scroll('left')}
-              className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 hover:bg-white shadow-lg rounded-full p-2 transition-all duration-200 hover:scale-110"
-              aria-label="Previous products"
-            >
-              <HiChevronLeft className="w-6 h-6 text-[#222222]" />
+    <section className="bg-white py-16 lg:py-20">
+      <div className={`${ui.container} flex flex-col gap-8`}>
+        <div className="flex items-end justify-between gap-6">
+          <div className="flex flex-col gap-2.5">
+            <div className={ui.eyebrow}>More merch</div>
+            <h2 className={ui.h2}>{title}</h2>
+          </div>
+          <div className="hidden gap-2 sm:flex">
+            <button onClick={() => scroll('left')} disabled={!canScrollLeft} className={arrowClass} aria-label="Previous products">
+              <HiChevronLeft className="h-5 w-5" />
             </button>
-          )}
+            <button onClick={() => scroll('right')} disabled={!canScrollRight} className={arrowClass} aria-label="Next products">
+              <HiChevronRight className="h-5 w-5" />
+            </button>
+          </div>
+        </div>
 
-          <div
-            ref={scrollContainerRef}
-            className="flex gap-4 overflow-x-auto scrollbar-hide snap-x snap-mandatory scroll-smooth"
-          >
-            {products.map(product => (
-              <Link
-                key={product.id}
-                href={`/merch/${product.slug}`}
-                className="group relative aspect-[3/4] overflow-hidden rounded-lg flex-shrink-0 snap-start w-[280px] sm:w-[300px] lg:w-[320px]"
-              >
+        <div
+          ref={scrollContainerRef}
+          className="scrollbar-hide flex snap-x snap-mandatory gap-4 overflow-x-auto scroll-smooth pb-1"
+        >
+          {products.map(product => (
+            <Link
+              key={product.id}
+              href={`/merch/${product.slug}`}
+              className="group flex w-[240px] flex-shrink-0 snap-start flex-col overflow-hidden rounded-lg border border-sc-ink-100 bg-white transition-transform hover:-translate-y-1 sm:w-[260px]"
+            >
+              <div className="relative aspect-[3/4] bg-sc-ink-50">
                 <Image
                   src={product.image}
                   alt={product.name}
                   fill
-                  className="object-cover transition-transform duration-500 group-hover:scale-105"
+                  className="object-contain p-6 transition-transform duration-500 group-hover:scale-105"
+                  sizes="260px"
                   unoptimized={product.image?.endsWith('.svg')}
                 />
-
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-
-                <div className="absolute bottom-0 left-0 right-0 p-6">
-                  <h3 className="text-lg font-medium text-white mb-2">
-                    {product.name}
-                  </h3>
-                  <span className="inline-block px-3 py-1 bg-black/50 backdrop-blur-sm rounded text-sm text-white font-mono">
-                    {Math.round(product.price)} {product.currency}
-                  </span>
-                </div>
-              </Link>
-            ))}
-          </div>
-
-          {canScrollRight && (
-            <button
-              onClick={() => scroll('right')}
-              className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 hover:bg-white shadow-lg rounded-full p-2 transition-all duration-200 hover:scale-110"
-              aria-label="Next products"
-            >
-              <HiChevronRight className="w-6 h-6 text-[#222222]" />
-            </button>
-          )}
+              </div>
+              <div className="flex flex-col gap-1.5 border-t border-sc-ink-100 p-4">
+                <h3 className="m-0 line-clamp-2 text-[15px] font-semibold leading-snug text-sc-ink-900">{product.name}</h3>
+                <span className="font-mono text-[13px] text-sc-ink-500">
+                  {Math.round(product.price)} {product.currency}
+                </span>
+              </div>
+            </Link>
+          ))}
         </div>
       </div>
     </section>

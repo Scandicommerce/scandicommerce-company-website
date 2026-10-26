@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react'
-import Link from 'next/link'
+import Link from '@/components/ui/LocalizedLink'
 
 interface CTAData {
   title?: string
@@ -34,7 +34,7 @@ export default function CTA({ data }: CTAProps) {
         className="hidden md:block absolute -right-20 -top-20 h-[420px] w-auto opacity-[0.08] pointer-events-none select-none"
       />
 
-      <div className="section_container max-w-[1320px] mx-auto page-padding-x py-11 lg:py-[88px] relative flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 lg:gap-12">
+      <div className="w-full max-w-[1320px] mx-auto px-5 lg:px-8 py-11 lg:py-[88px] relative flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 lg:gap-12">
         <div>
           {title && (
             <h2 className="text-[26px] lg:text-[44px] font-bold text-white tracking-[-0.02em] leading-tight mb-2 lg:mb-2.5">

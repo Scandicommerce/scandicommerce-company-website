@@ -28,12 +28,6 @@ export type PageSeoExtended = {
   noFollow?: boolean;
 };
 
-export type PageSeoLegacy = {
-  metaTitle?: string;
-  metaDescription?: string;
-  ogImage?: SanityImageRef;
-};
-
 export type SanityImageRef = {
   asset?: { _ref?: string; _id?: string; url?: string };
   _ref?: string;
@@ -62,7 +56,6 @@ export type PageSeoDoc = {
   slug?: string;
   isHomepage?: boolean;
   seoExtended?: PageSeoExtended | null;
-  seo?: PageSeoLegacy | null;
   /** Translated siblings via @sanity/document-internationalization translation.metadata. */
   translations?: PageSeoTranslation[] | null;
   /** FAQ pairs extracted from page sections (for FAQPage JSON-LD). */
@@ -179,7 +172,7 @@ export async function getSiteSettings(
 }
 
 /**
- * Coalesce `seoExtended` → legacy `seo` → derived defaults into a single
+ * Coalesce `seoExtended` → derived defaults into a single
  * normalised shape that `buildMetadata` consumes. Pure, side-effect-free.
  */
 export function coalescePageSeo(
@@ -187,7 +180,6 @@ export function coalescePageSeo(
   settings: SiteSettingsForSeo | null
 ) {
   const ext = doc?.seoExtended ?? undefined;
-  const legacy = doc?.seo ?? undefined;
   const pageTitle = doc?.pageTitle;
 
   // stegaClean strips invisible Vercel Visual Editing markers that can leak
@@ -195,10 +187,9 @@ export function coalescePageSeo(
   const clean = (v: string | undefined | null): string =>
     stegaClean(v ?? "") as string;
 
-  const metaTitle = clean(ext?.metaTitle) || clean(legacy?.metaTitle) || clean(pageTitle) || "";
+  const metaTitle = clean(ext?.metaTitle) || clean(pageTitle) || "";
   const metaDescription =
     clean(ext?.metaDescription) ||
-    clean(legacy?.metaDescription) ||
     clean(doc?.excerpt) ||
     clean(settings?.defaultMetaDescription) ||
     "";
@@ -209,7 +200,7 @@ export function coalescePageSeo(
     canonical: clean(ext?.canonical) || undefined,
     ogTitle: clean(ext?.ogTitle) || metaTitle,
     ogDescription: clean(ext?.ogDescription) || metaDescription,
-    ogImage: ext?.ogImage ?? legacy?.ogImage ?? settings?.defaultOgImage,
+    ogImage: ext?.ogImage ?? settings?.defaultOgImage,
     ogImageAlt: clean(ext?.ogImageAlt) || clean(settings?.defaultOgImageAlt) || undefined,
     structuredDataType: clean(ext?.structuredDataType) || "none",
     noIndex: Boolean(ext?.noIndex),

@@ -1,4 +1,4 @@
-'use client'
+import { ui } from '@/components/integrations/labels'
 
 interface Value {
   title?: string
@@ -10,58 +10,26 @@ interface OurValuesData {
   values?: Value[]
 }
 
-interface OurValuesProps {
-  ourValues?: OurValuesData
-}
-
-// Default values
-const defaultValues: Value[] = [
-  {
-    title: 'Transparency',
-    description: "No hidden fees, no surprise costs. You know exactly what you're getting and what it costs.",
-  },
-  {
-    title: 'Results First',
-    description: "We're measured by your success. Conversions, revenue, and customer satisfaction matter most.",
-  },
-  {
-    title: 'No BS',
-    description: 'We tell you what you need to hear, not what you want to hear. Honest advice always.',
-  },
-  {
-    title: 'Long-term Partnerships',
-    description: "We're not project-hopping. We build relationships and grow with our clients.",
-  },
-]
-
-export default function OurValues({ ourValues }: OurValuesProps) {
-  const title = ourValues?.title || 'Our values'
-  const values = ourValues?.values && ourValues.values.length > 0 ? ourValues.values : defaultValues
-
+/** Values as a numbered hairline list, four to a row on desktop. */
+export default function OurValues({ ourValues, lang = 'no' }: { ourValues?: OurValuesData; lang?: string }) {
+  const values = (ourValues?.values ?? []).filter((v) => v?.title)
+  if (values.length === 0) return null
   return (
-    <section className="bg-white py-16 lg:py-24">
-      <div className="section_container mx-auto page-padding-x">
-        {/* Title */}
-        <h2 className="text-[5.3vw] xs:text-[3.5vw] sm:text-[3.2vw] md:text-[3.2vw] lg:text-[28px] xl:text-[34px] font-bold text-[#222222] text-center mb-12 lg:mb-16">
-          {title}
-        </h2>
-
-        {/* Values Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
-          {values.map((value, index) => (
-            <div
-              key={index}
-              className="bg-[#F5F5F5] px-4 lg:px-6 py-6 lg:py-10"
-            >
-              <h3 className="text-[4.3vw] xs:text-[2.6vw] sm:text-[2.5vw] md:text-[2.2vw] lg:text-[18px] xl:text-[24px] font-bold text-[#222222] mb-4 text-center">
-                {value.title}
-              </h3>
-              <p className="text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[16px] xl:text-[18px] text-[#555555] leading-relaxed text-center">
-                {value.description}
-              </p>
-            </div>
-          ))}
+    <section id="verdier" className="scroll-mt-24 bg-sc-ink-50 py-16 lg:py-20">
+      <div className={`${ui.container} flex flex-col gap-10`}>
+        <div className="flex max-w-[680px] flex-col gap-2.5">
+          <div className={ui.eyebrow}>{lang === 'no' ? 'Verdier' : 'Values'}</div>
+          {ourValues?.title && <h2 className={ui.h2}>{ourValues.title}</h2>}
         </div>
+        <ol className="m-0 grid list-none grid-cols-1 gap-px overflow-hidden rounded-lg border border-sc-ink-100 bg-sc-ink-100 p-0 sm:grid-cols-2 lg:grid-cols-4">
+          {values.map((v, i) => (
+            <li key={i} className="flex flex-col gap-3 bg-white p-6">
+              <span className="font-mono text-[13px] text-sc-ink-500">{String(i + 1).padStart(2, '0')}</span>
+              <h3 className="m-0 text-[19px] font-bold leading-snug tracking-[-0.01em] text-sc-ink-900">{v.title}</h3>
+              {v.description && <p className="m-0 text-[15px] leading-relaxed text-sc-ink-600">{v.description}</p>}
+            </li>
+          ))}
+        </ol>
       </div>
     </section>
   )

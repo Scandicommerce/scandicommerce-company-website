@@ -7,7 +7,7 @@ import MigrationCTA from '@/components/sections/services/migrate/MigrationCTA'
 import { Button } from '@/components/ui'
 import type { SanitySectionItem } from '@/lib/sanity/normalizeDocumentSections'
 
-export function MigratePageSectionRenderer({ sections }: { sections: SanitySectionItem[] }) {
+export function MigratePageSectionRenderer({ sections, lang }: { sections: SanitySectionItem[]; lang?: string }) {
   return (
     <>
       {sections.map((section) => {
@@ -32,15 +32,15 @@ export function MigratePageSectionRenderer({ sections }: { sections: SanitySecti
             )
           }
           case 'migratePagePlatformsSection':
-            return <Platforms key={_key} platforms={rest as Parameters<typeof Platforms>[0]['platforms']} />
+            return <Platforms key={_key} lang={lang} platforms={rest as Parameters<typeof Platforms>[0]['platforms']} />
           case 'migratePageRisksProtectionSection':
             return <RisksAndProtection key={_key} risksProtection={rest as Parameters<typeof RisksAndProtection>[0]['risksProtection']} />
           case 'migratePageProcessSection':
-            return <MigrationProcess key={_key} process={rest as Parameters<typeof MigrationProcess>[0]['process']} />
+            return <MigrationProcess key={_key} lang={lang} process={rest as Parameters<typeof MigrationProcess>[0]['process']} />
           case 'migratePageResultsSection':
-            return <RealMigrationResults key={_key} results={rest as Parameters<typeof RealMigrationResults>[0]['results']} />
+            return <RealMigrationResults key={_key} lang={lang} results={rest as Parameters<typeof RealMigrationResults>[0]['results']} />
           case 'migratePageCtaSection':
-            return <MigrationCTA key={_key} cta={rest as Parameters<typeof MigrationCTA>[0]['cta']} />
+            return <MigrationCTA key={_key} lang={lang} cta={rest as Parameters<typeof MigrationCTA>[0]['cta']} />
           default:
             return null
         }

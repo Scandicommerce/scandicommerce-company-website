@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { HiOutlineChatBubbleOvalLeft } from 'react-icons/hi2'
+import { ui } from '@/components/integrations/labels'
 
 interface NewsletterData {
   title?: string
@@ -15,6 +15,7 @@ interface NewsletterProps {
   newsletter?: NewsletterData
 }
 
+/** Merch newsletter on the ink CTA band: heading and lead left, the form right. */
 export default function Newsletter({ newsletter }: NewsletterProps) {
   const [email, setEmail] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -49,41 +50,40 @@ export default function Newsletter({ newsletter }: NewsletterProps) {
   }
 
   return (
-    <section className="bg-[#03C1CA] py-16 lg:py-20">
-      <div className="section_container mx-auto page-padding-x">
-        <div className="max-w-2xl mx-auto text-center">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full border-2 border-white/30 mb-6">
-            <HiOutlineChatBubbleOvalLeft className="w-8 h-8 text-white" />
-          </div>
+    <section className="bg-sc-ink-900 py-16 text-white lg:py-20">
+      <div className={`${ui.container} flex flex-wrap items-center justify-between gap-8`}>
+        <div className="flex max-w-[560px] flex-col gap-3">
+          <div className="text-xs font-semibold uppercase tracking-[0.12em] text-sc-cyan-300">Newsletter</div>
+          <h2 className="m-0 text-[32px] font-bold leading-[1.15] tracking-[-0.02em] lg:text-[36px]">{title}</h2>
+          <p className="m-0 text-lg leading-relaxed text-sc-ink-200">{description}</p>
+        </div>
 
-          <h2 className="text-2xl lg:text-3xl xl:text-4xl font-bold text-white mb-4">
-            {title}
-          </h2>
-          <p className="text-base lg:text-lg text-white/90 mb-8">
-            {description}
-          </p>
-
-          <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
+        <div className="w-full max-w-[440px]">
+          <form onSubmit={handleSubmit} className="flex flex-col gap-3 sm:flex-row">
+            <label className="sr-only" htmlFor="merch-newsletter-email">
+              Email
+            </label>
             <input
+              id="merch-newsletter-email"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder={emailPlaceholder}
-              className="flex-1 px-4 py-3 rounded-lg border-2 border-transparent bg-white/10 text-white placeholder:text-white/60 focus:outline-none focus:border-white/50 transition-colors"
+              className="min-h-[46px] flex-1 rounded-lg border border-sc-ink-600 bg-sc-ink-800 px-4 py-3 text-sm text-white placeholder:text-sc-ink-400 focus:border-sc-cyan-300 focus:outline-none"
               required
             />
             <button
               type="submit"
               disabled={isSubmitting}
-              className="px-6 py-3 bg-[#222222] text-white font-medium rounded-lg hover:bg-[#333333] disabled:opacity-70 disabled:cursor-not-allowed transition-colors whitespace-nowrap"
+              className="inline-flex min-h-[46px] items-center justify-center whitespace-nowrap rounded-lg bg-white px-[22px] py-3 text-sm font-semibold tracking-[0.02em] text-sc-ink-900 transition-colors hover:bg-sc-ink-50 disabled:cursor-not-allowed disabled:opacity-70"
             >
               {isSubmitting ? 'Subscribing...' : buttonText}
             </button>
           </form>
 
           {isSubmitted && (
-            <p className="mt-4 text-white/90 text-sm animate-fade-in">
-              ✓ {successMessage}
+            <p className="m-0 mt-3 text-sm text-sc-cyan-300" role="status">
+              {successMessage}
             </p>
           )}
         </div>

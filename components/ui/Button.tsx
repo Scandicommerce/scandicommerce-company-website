@@ -41,13 +41,15 @@ export default function Button({
   htmlType = 'button',
   ...props
 }: ButtonProps) {
+  // Live-site button (measured on scandicommerce.no, 2026-10-16): radius 8,
+  // 14px semibold, 12px 22px padding. Primary is ink, secondary a hairline.
   const baseStyles =
-    'flex justify-center items-center gap-3 min-w-[286px] lg:px-8 px-4 lg:py-4 py-2 transition-colors text-center w-full sm:w-auto sm:text-base xs:text-sm text-xs'
+    'inline-flex justify-center items-center gap-2 min-h-[46px] rounded-lg px-[22px] py-3 text-sm font-semibold tracking-[0.02em] text-center transition-colors w-full sm:w-auto'
 
   const typeStyles =
     type === 'primary'
-      ? 'bg-[#1DEFFA] text-[#1F1D1D] hover:bg-[#1DEFFA]/90'
-      : 'bg-white text-[#1F1D1D] hover:bg-gray-100 border border-[#E5E5E5]'
+      ? 'bg-sc-ink-900 text-white hover:bg-sc-ink-700'
+      : 'bg-transparent text-sc-ink-900 border border-sc-ink-300 hover:bg-sc-ink-50'
 
   const combinedClassName = `${baseStyles} ${typeStyles} ${className}`.trim()
 

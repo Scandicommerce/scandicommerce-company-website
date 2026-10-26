@@ -12,12 +12,6 @@ interface MigratePageData {
   pageTitle: string
   slug: string
   sections?: Array<{ _type: string; _key: string } & Record<string, unknown>>
-  hero?: Record<string, unknown>
-  platforms?: Record<string, unknown>
-  risksProtection?: Record<string, unknown>
-  process?: Record<string, unknown>
-  results?: Record<string, unknown>
-  cta?: Record<string, unknown>
 }
 
 export default async function MigratePage({ params }: { params: Promise<{ lang: string; slug?: string }> }) {

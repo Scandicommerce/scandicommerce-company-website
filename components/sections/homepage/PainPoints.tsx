@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react'
-import Link from 'next/link'
+import Link from '@/components/ui/LocalizedLink'
 
 interface PainPointsData {
   painPointsTitle?: {
@@ -49,7 +49,7 @@ export default function PainPoints({ painPoints }: PainPointsProps) {
 
   return (
     <section className="relative bg-sc-ink-900 overflow-hidden">
-      <div className="section_container max-w-[1320px] mx-auto page-padding-x py-12 lg:py-20 grid grid-cols-1 lg:grid-cols-[1.1fr_1fr] gap-8 lg:gap-[60px] items-center">
+      <div className="w-full max-w-[1320px] mx-auto px-5 lg:px-8 py-12 lg:py-20 grid grid-cols-1 lg:grid-cols-[1.1fr_1fr] gap-8 lg:gap-[60px] items-center">
         <div>
           {titleText && (
             <h2 className="text-[26px] lg:text-[40px] font-bold text-white tracking-[-0.02em] leading-snug m-0">

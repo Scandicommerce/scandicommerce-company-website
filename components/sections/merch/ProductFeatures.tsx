@@ -1,6 +1,5 @@
-'use client'
-
-import { HiCheckBadge } from 'react-icons/hi2'
+import { BadgeCheck } from 'lucide-react'
+import { ui } from '@/components/integrations/labels'
 
 interface Feature {
   title?: string
@@ -30,42 +29,25 @@ const defaultFeatures: Feature[] = [
   },
 ]
 
+/** Three product facts on the integrations card: cyan disc, Lucide icon, hairline card. */
 export default function ProductFeatures({ productFeatures }: ProductFeaturesProps) {
-  const features = productFeatures?.features && productFeatures.features.length > 0 
-    ? productFeatures.features 
+  const features = productFeatures?.features && productFeatures.features.length > 0
+    ? productFeatures.features
     : defaultFeatures
 
   return (
-    <section className="bg-[#FFFFFF] py-12 lg:py-16">
-      <div className="section_container mx-auto page-padding-x">
-        <div className="bg-white rounded-lg p-8 lg:p-12">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12">
-            {features.map((feature, index) => (
-              <div
-                key={index}
-                className={`flex flex-col items-center text-center ${
-                  index < features.length - 1
-                    ? 'md:border-r md:border-[#E5E5E5] md:pr-8 lg:pr-12'
-                    : ''
-                }`}
-              >
-                {/* Icon */}
-                <div className="w-16 h-16 lg:w-20 lg:h-20 rounded-full bg-[#03C1CA] flex items-center justify-center mb-4 lg:mb-6">
-                  <HiCheckBadge className="w-8 h-8 lg:w-10 lg:h-10 text-white" />
-                </div>
-
-                {/* Title */}
-                <h3 className="text-lg lg:text-xl font-bold text-[#222222] mb-2">
-                  {feature.title || ''}
-                </h3>
-
-                {/* Description */}
-                <p className="text-sm lg:text-base text-[#666666]">
-                  {feature.description || ''}
-                </p>
-              </div>
-            ))}
-          </div>
+    <section className="bg-sc-ink-50 py-16 lg:py-20">
+      <div className={ui.container}>
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-3 lg:gap-5">
+          {features.map((feature, index) => (
+            <div key={index} className={ui.card}>
+              <span className="flex h-11 w-11 items-center justify-center rounded-full bg-sc-cyan-500 text-white">
+                <BadgeCheck className="h-5 w-5" strokeWidth={1.75} aria-hidden="true" />
+              </span>
+              <h3 className="m-0 text-lg font-semibold leading-snug text-sc-ink-900">{feature.title || ''}</h3>
+              <p className="m-0 text-[15px] leading-relaxed text-sc-ink-600">{feature.description || ''}</p>
+            </div>
+          ))}
         </div>
       </div>
     </section>

@@ -1,4 +1,5 @@
 import { defineArrayMember, defineField, defineType } from "sanity";
+import { seoExtendedField } from "../_shared/seoFields";
 import { isUniquePerLanguage } from "@/sanity/lib/slugUtils";
 import { validatePublicSlug } from "@/sanity/lib/slugValidation";
 
@@ -76,16 +77,7 @@ export const author = defineType({
       group: "expertise",
       description: "Used as a sameAs link in structured data (Google E-E-A-T).",
     }),
-    defineField({
-      name: "seo",
-      title: "SEO",
-      type: "object",
-      group: "expertise",
-      fields: [
-        defineField({ name: "metaTitle", title: "Meta Title", type: "string" }),
-        defineField({ name: "metaDescription", title: "Meta Description", type: "text", rows: 3 }),
-      ],
-    }),
+    { ...seoExtendedField, group: "expertise" },
   ],
   preview: {
     select: { title: "name", subtitle: "role", media: "image" },

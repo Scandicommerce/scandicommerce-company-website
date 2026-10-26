@@ -388,7 +388,7 @@ export const caseStudy = defineType({
       of: [
         defineArrayMember({
           type: "reference",
-          to: [{ type: "blogPost" }, { type: "post" }],
+          to: [{ type: "post" }],
         }),
       ],
     }),
@@ -397,18 +397,6 @@ export const caseStudy = defineType({
 
     // ── SEO ──
     { ...seoExtendedField, group: "settings" },
-    defineField({
-      name: "seo",
-      title: "SEO (legacy — read-only)",
-      type: "object",
-      group: "settings",
-      readOnly: true,
-      hidden: ({ value }) => !value,
-      fields: [
-        defineField({ name: "metaTitle", title: "Meta Title", type: "string" }),
-        defineField({ name: "metaDescription", title: "Meta Description", type: "text", rows: 3 }),
-      ],
-    }),
   ],
   preview: {
     select: {

@@ -8,6 +8,7 @@ import type { Metadata } from 'next'
 import { docHref } from '@/lib/routes'
 import { getShopifyProducts } from '@/lib/shopify'
 import LocalizedLink from '@/components/ui/LocalizedLink'
+import { ui } from '@/components/integrations/labels'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -92,9 +93,7 @@ const PAGE_TYPE_CATEGORY: Record<string, CategoryKey> = {
   integrationPage: 'integrations',
   migrationPage: 'integrations',
   legalPage: 'legal',
-  // `post` is the current article type; `blogPost` is the legacy one
   post: 'articles',
-  blogPost: 'articles',
   caseStudy: 'caseStudies',
 }
 
@@ -197,58 +196,29 @@ export default async function SitemapPage({
     <div className="flex flex-col min-h-screen">
       <HeaderWrapper />
       <main className="flex-grow">
-        <section className="section_container mx-auto page-padding-x py-16 sm:py-20 lg:py-24">
-          <div className="max-w-4xl mx-auto">
-            <div className="mb-12 sm:mb-16">
-              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
-                {copy.heading}
-              </h1>
-              <p className="text-gray-500 text-base sm:text-lg">
-                {copy.intro}
-              </p>
-              <div className="mt-4 h-1 w-16 bg-teal rounded-full" />
+        <section className="bg-white">
+          <div className={`${ui.container} py-14 lg:py-20`}>
+            <div className="mb-12 flex max-w-[820px] flex-col gap-4 lg:mb-16">
+              <h1 className="m-0 text-[36px] font-bold leading-[1.02] tracking-[-0.028em] text-sc-ink-900 sm:text-[44px] lg:text-[60px]">{copy.heading}</h1>
+              <p className="m-0 max-w-[640px] text-base leading-relaxed text-sc-ink-600 lg:text-lg">{copy.intro}</p>
             </div>
 
-            {/* <div className="mb-8">
-              <LocalizedLink
-                href="/"
-                className="inline-flex items-center gap-2 text-teal hover:text-teal-dark font-medium transition-colors"
-              >
-                <svg
-                  className="w-4 h-4"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={2}
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="m2.25 12 8.954-8.955a1.126 1.126 0 0 1 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"
-                  />
-                </svg>
-                Home
-              </LocalizedLink>
-            </div> */}
-
-            <div className="grid gap-10 sm:gap-12">
+            <div className="flex flex-col gap-12 lg:gap-14">
               {categories.map((category) => (
-                <div key={category.key}>
-                  <h2 className="text-xl sm:text-2xl font-semibold text-gray-900 mb-1">
-                    {category.label}
-                  </h2>
-                  <div className="h-0.5 w-10 bg-teal/40 rounded-full mb-5" />
-                  <ul className="grid sm:grid-cols-2 gap-x-8 gap-y-3">
+                <div key={category.key} className="grid grid-cols-1 gap-5 border-t border-sc-ink-100 pt-8 md:grid-cols-[220px_minmax(0,1fr)] md:gap-10">
+                  <div className="flex items-baseline justify-between gap-4 md:flex-col md:items-start md:gap-1">
+                    <h2 className="m-0 text-[24px] font-bold leading-snug tracking-[-0.02em] text-sc-ink-900">{category.label}</h2>
+                    <span className="font-mono text-[13px] text-sc-ink-400">{category.entries.length}</span>
+                  </div>
+                  <ul className="m-0 grid list-none gap-x-8 gap-y-3 p-0 sm:grid-cols-2">
                     {category.entries.map((entry) => (
                       <li key={`${entry._type}-${entry.slug}`}>
                         <LocalizedLink
                           href={getPageHref(entry, language)}
-                          className="group flex items-center gap-2 text-gray-600 hover:text-teal transition-colors"
+                          className="group flex items-start gap-2.5 text-[15px] leading-relaxed text-sc-ink-600 no-underline transition-colors hover:text-sc-ink-900"
                         >
-                          <span className="w-1.5 h-1.5 rounded-full bg-gray-300 group-hover:bg-teal transition-colors shrink-0" />
-                          <span className="text-sm sm:text-base">
-                            {entry.title || entry.slug}
-                          </span>
+                          <span aria-hidden="true" className="mt-[11px] h-1.5 w-1.5 flex-shrink-0 rounded-full bg-sc-ink-300 transition-colors group-hover:bg-sc-cyan-500" />
+                          <span>{entry.title || entry.slug}</span>
                         </LocalizedLink>
                       </li>
                     ))}
@@ -257,11 +227,7 @@ export default async function SitemapPage({
               ))}
             </div>
 
-            {categories.length === 0 && (
-              <p className="text-gray-400 text-center py-12">
-                {copy.empty}
-              </p>
-            )}
+            {categories.length === 0 && <p className="m-0 py-12 text-center text-sc-ink-500">{copy.empty}</p>}
           </div>
         </section>
       </main>

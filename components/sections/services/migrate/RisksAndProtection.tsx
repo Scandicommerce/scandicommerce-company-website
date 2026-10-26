@@ -1,90 +1,65 @@
-'use client'
-
-import { HiXMark } from 'react-icons/hi2'
-import { IoCheckmarkSharp } from 'react-icons/io5'
+import { Check, X } from 'lucide-react'
+import { ui } from '@/components/integrations/labels'
 
 interface RisksProtectionData {
   risksTitle?: string
-  risksItems?: Array<{
-    text: string
-  }>
+  risksItems?: Array<{ text: string }>
   protectionTitle?: string
-  protectionItems?: Array<{
-    title: string
-    description: string
-  }>
+  protectionItems?: Array<{ title: string; description: string }>
 }
 
 interface RisksAndProtectionProps {
   risksProtection?: RisksProtectionData
 }
 
+/** Two columns: the risks a migration carries, and what we do about each. */
 export default function RisksAndProtection({ risksProtection }: RisksAndProtectionProps) {
-  const risksTitle = risksProtection?.risksTitle
-  const risks = risksProtection?.risksItems
-  const protectionTitle = risksProtection?.protectionTitle
-  const protections = risksProtection?.protectionItems
+  const risks = risksProtection?.risksItems ?? []
+  const protections = risksProtection?.protectionItems ?? []
+  if (risks.length === 0 && protections.length === 0) return null
 
   return (
-    <section className="bg-[#F8F8F8] py-16 lg:py-[170px]">
-      <div className="section_container mx-auto page-padding-x">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
-          {/* Left Column: Migration risks we eliminate */}
-          <div>
-            {risksTitle && (
-              <h2 className="text-[5.3vw] xs:text-[3.5vw] sm:text-[3.2vw] md:text-[3.2vw] lg:text-[28px] xl:text-[34px] text-center font-bold text-[#1F1D1D] mb-8 lg:mb-12">
-                {risksTitle}
-              </h2>
-            )}
-            {risks && risks.length > 0 && (
-              <div className="space-y-4 lg:space-y-6">
-                {risks.map((risk, index) => (
-                  <div
-                    key={index}
-                    className="bg-white h-[98px] p-6 flex items-center gap-4 backdrop-blur-[10px]"
-                  >
-                    <HiXMark className="w-6 h-6 text-[#000000] flex-shrink-0" />
-                    <p className="text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[16px] xl:text-[18px] text-[#565454]">
-                      {risk.text}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
+    <section className="bg-white py-16 lg:py-20">
+      <div className={`${ui.container} grid grid-cols-1 gap-10 lg:grid-cols-2 lg:gap-12`}>
+        <div className="flex flex-col gap-6">
+          {risksProtection?.risksTitle && (
+            <div className="flex flex-col gap-2.5">
+              <div className={ui.eyebrow}>Risiko</div>
+              <h2 className="m-0 text-[26px] font-bold leading-tight tracking-[-0.02em] text-sc-ink-900 lg:text-[32px]">{risksProtection.risksTitle}</h2>
+            </div>
+          )}
+          <ul className="m-0 flex list-none flex-col gap-3 p-0">
+            {risks.map((risk, index) => (
+              <li key={index} className="flex items-start gap-3 rounded-lg border border-sc-ink-100 bg-white p-5">
+                <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-sc-ink-100 text-sc-ink-700">
+                  <X className="h-3.5 w-3.5" strokeWidth={2.5} aria-hidden="true" />
+                </span>
+                <p className="m-0 text-[15px] leading-relaxed text-sc-ink-700">{risk.text}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
 
-          {/* Right Column: How we protect your business */}
-          <div>
-            {protectionTitle && (
-              <h2 className="text-[5.3vw] xs:text-[3.5vw] sm:text-[3.2vw] md:text-[3.2vw] lg:text-[28px] xl:text-[34px] text-center font-bold text-[#1F1D1D] mb-8 lg:mb-12">
-                {protectionTitle}
-              </h2>
-            )}
-            {protections && protections.length > 0 && (
-              <div className="space-y-4 lg:space-y-6">
-                {protections.map((protection, index) => (
-                  <div
-                    key={index}
-                    className="bg-white h-[98px] p-6 flex items-center gap-4 backdrop-blur-[10px]"
-                  >
-                    <IoCheckmarkSharp className="w-6 h-6 text-[#03C1CA] flex-shrink-0" />
-                    <div>
-                      {protection.title && (
-                        <h3 className="text-[4.3vw] xs:text-[2.6vw] sm:text-[2.5vw] md:text-[2.2vw] lg:text-[18px] xl:text-[24px] font-bold text-[#565454] mb-1">
-                          {protection.title}
-                        </h3>
-                      )}
-                      {protection.description && (
-                        <p className="text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[16px] xl:text-[18px] text-[#565454]">
-                          {protection.description}
-                        </p>
-                      )}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
+        <div className="flex flex-col gap-6">
+          {risksProtection?.protectionTitle && (
+            <div className="flex flex-col gap-2.5">
+              <div className={ui.eyebrow}>Slik sikrer vi deg</div>
+              <h2 className="m-0 text-[26px] font-bold leading-tight tracking-[-0.02em] text-sc-ink-900 lg:text-[32px]">{risksProtection.protectionTitle}</h2>
+            </div>
+          )}
+          <ul className="m-0 flex list-none flex-col gap-3 p-0">
+            {protections.map((protection, index) => (
+              <li key={index} className="flex items-start gap-3 rounded-lg border border-sc-ink-100 bg-sc-ink-50 p-5">
+                <span className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-sc-cyan-500 text-white">
+                  <Check className="h-3.5 w-3.5" strokeWidth={2.5} aria-hidden="true" />
+                </span>
+                <div className="flex flex-col gap-1">
+                  {protection.title && <h3 className="m-0 text-base font-semibold leading-snug text-sc-ink-900">{protection.title}</h3>}
+                  {protection.description && <p className="m-0 text-[15px] leading-relaxed text-sc-ink-600">{protection.description}</p>}
+                </div>
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
     </section>

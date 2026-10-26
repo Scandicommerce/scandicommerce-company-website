@@ -1,47 +1,62 @@
-'use client'
-
 import Link from 'next/link'
-import { useLanguage } from '@/contexts/LanguageContext'
-import { contactHref, ensureInternalHref } from '@/lib/routes'
+import { contactHref, ensureInternalHref, packagesHref } from '@/lib/routes'
+import { ui } from '@/components/integrations/labels'
 
 interface CTAData {
   title?: string
   description?: string
   buttonText?: string
   buttonLink?: string
+  secondaryButtonText?: string
+  secondaryButtonLink?: string
+  hideSecondaryButton?: boolean
 }
 
 interface CTAProps {
   cta?: CTAData
+  /** Page language, from the route (the language context can disagree on localhost). */
+  lang: string
 }
 
-export default function CTA({ cta }: CTAProps) {
-  const title = cta?.title || 'Ready for results like these?'
-  const description = cta?.description || "Let's discuss your project and how we can help you grow"
-  const buttonText = cta?.buttonText || 'Book Discovery Call'
-  const { currentLanguage } = useLanguage()
-  const buttonLink = cta?.buttonLink ? ensureInternalHref(cta.buttonLink) : contactHref(currentLanguage)
+const T: Record<string, { title: string; primary: string; secondary: string }> = {
+  no: { title: 'Klar for resultater som dette?', primary: 'Book en samtale', secondary: 'Se pakkene' },
+  en: { title: 'Ready for results like these?', primary: 'Book a call', secondary: 'Browse packages' },
+  sv: { title: 'Redo för resultat som dessa?', primary: 'Boka ett samtal', secondary: 'Se paketen' },
+  da: { title: 'Klar til resultater som disse?', primary: 'Book en samtale', secondary: 'Se pakkerne' },
+  de: { title: 'Bereit für solche Ergebnisse?', primary: 'Gespräch buchen', secondary: 'Pakete ansehen' },
+}
+
+/** Ink CTA band, the same block that closes the integrations and package pages. */
+export default function CTA({ cta, lang }: CTAProps) {
+  const t = T[lang] ?? T.en
+  const title = cta?.title || t.title
+  const buttonText = cta?.buttonText || t.primary
+  const buttonLink = cta?.buttonLink ? ensureInternalHref(cta.buttonLink) : contactHref(lang)
+  const secondaryText = cta?.secondaryButtonText || t.secondary
+  const secondaryLink = cta?.secondaryButtonLink ? ensureInternalHref(cta.secondaryButtonLink) : packagesHref(lang)
 
   return (
-    <section className="bg-[#03C1CA] py-16 lg:py-[170px]">
-      <div className="section_container mx-auto page-padding-x">
-        <div className="text-center flex flex-col items-center justify-start lg:gap-[91px] gap-16">
-          <div className="flex flex-col items-center justify-start lg:gap-7 gap-4">
-            <h2 className="text-[5.3vw] xs:text-[3.5vw] sm:text-[3.2vw] md:text-[3.2vw] lg:text-[28px] xl:text-[34px] font-bold text-white mb-4 lg:mb-6">
-              {title}
-            </h2>
-
-            <p className="text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[16px] xl:text-[18px] text-white">
-              {description}
-            </p>
-          </div>
-
+    <section className="bg-sc-ink-900 py-16 text-white lg:py-20">
+      <div className={`${ui.container} flex flex-wrap items-center justify-between gap-8`}>
+        <div className="flex max-w-[640px] flex-col gap-3">
+          <h2 className="m-0 text-[32px] font-bold leading-[1.15] tracking-[-0.02em] lg:text-[36px]">{title}</h2>
+          {cta?.description && <p className="m-0 text-lg leading-relaxed text-sc-ink-200">{cta.description}</p>}
+        </div>
+        <div className="flex flex-col gap-3 sm:flex-row">
           <Link
             href={buttonLink}
-            className="inline-block bg-white text-gray-900 px-[50px] py-3 lg:px-[30px] lg:py-[18px] font-semibold md:text-base text-sm hover:bg-gray-100 transition-colors"
+            className="inline-flex min-h-[46px] items-center justify-center rounded-lg bg-white px-[22px] py-3 text-sm font-semibold tracking-[0.02em] text-sc-ink-900 transition-colors hover:bg-sc-ink-50"
           >
             {buttonText}
           </Link>
+          {!cta?.hideSecondaryButton && (
+            <Link
+              href={secondaryLink}
+              className="inline-flex min-h-[46px] items-center justify-center rounded-lg border border-sc-ink-600 px-[22px] py-3 text-sm font-semibold tracking-[0.02em] text-white transition-colors hover:bg-sc-ink-800"
+            >
+              {secondaryText}
+            </Link>
+          )}
         </div>
       </div>
     </section>

@@ -1,7 +1,5 @@
-'use client'
-
-import Link from 'next/link'
 import Image from 'next/image'
+import { ui } from '@/components/integrations/labels'
 
 interface FeaturesData {
   title?: string
@@ -17,82 +15,73 @@ interface FeaturesData {
   }
 }
 
-interface FeaturesProps {
-  features?: FeaturesData
+const DEFAULT_PARAGRAPHS = {
+  en: [
+    'Your customers get an easier shopping experience with Quick Checkout for Vipps, both at product level and in the cart.',
+    "The integration is fully integrated with Shopify's backend and supports capture, refund and cancel.",
+    'Automatically integrated with your shipping options; also supports discount codes, different VAT rates and tracking of purchase events.',
+    'Add quick checkout buttons to the cart and product page yourself with the visual theme editor in Shopify. There you can change colour, shape and placement.',
+  ],
+  no: [
+    'Kundene dine får en enklere handleopplevelse med Hurtigkasse for Vipps, både på produktnivå og i handlekurven.',
+    'Integrasjonen er fullt integrert med Shopify sitt backend og støtter capture, refusjon og kansellering.',
+    'Kobles automatisk til fraktalternativene dine, og støtter rabattkoder, ulike MVA-satser og sporing av kjøpshendelser.',
+    'Legg til hurtigkasse-knapper i handlekurv og på produktside selv med Shopify sin temaredigering. Der endrer du farge, form og plassering.',
+  ],
 }
 
-const defaultParagraphs = [
-  'Your customers will get an easier shopping experience with Quick Checkout for Vipps, both at product level and in the cart.',
-  'The integration is fully integrated with Shopify\'s backend, and supports capture, refund and cancel.',
-  'Automatically integrated with your shipping options, also supports discount codes, different VAT rates and tracking of purchase events.',
-  'Easily add quick checkout buttons to cart and product page yourself with visual theme editor in Shopify. There you can change both color, shape and placement.'
-]
-
-export default function Features({ features }: FeaturesProps) {
-  const title = features?.title || 'Accept payments with Quick Checkout for Vipps in your online store'
-  const paragraphs = features?.paragraphs && features.paragraphs.length > 0 ? features.paragraphs : defaultParagraphs
+/** Intro prose, product screenshot in a hairline panel, demo store as a hairline card with a mono password. */
+export default function Features({ features, lang = 'no' }: { features?: FeaturesData; lang?: string }) {
+  const isNo = lang === 'no'
+  const title = features?.title || (isNo ? 'Ta betalt med Hurtigkasse for Vipps i nettbutikken' : 'Accept payments with Quick Checkout for Vipps in your online store')
+  const paragraphs = features?.paragraphs && features.paragraphs.length > 0 ? features.paragraphs : DEFAULT_PARAGRAPHS[isNo ? 'no' : 'en']
   const demoStore = features?.demoStore || {
-    text: 'Check out our demo store here:',
+    text: isNo ? 'Se demobutikken vår her:' : 'Check out our demo store here:',
     url: 'https://scandicommerce-demo.myshopify.com/',
-    password: 'demo123'
+    password: 'demo123',
   }
   const productImage = features?.productImage || {
     src: '/images/shopify/vipps_hurtigkasse/product_details.png',
-    alt: 'Vipps Quick Checkout on product page'
+    alt: 'Vipps Quick Checkout on product page',
   }
 
   return (
-    <section className="bg-white py-16 lg:py-24">
-      <div className="section_container mx-auto page-padding-x">
-        <div className="max-w-6xl mx-auto">
-          <h2 className="text-[5.3vw] xs:text-[3.5vw] sm:text-[3.2vw] md:text-[3.2vw] lg:text-[28px] xl:text-[34px] font-bold text-[#222222] text-center mb-8 lg:mb-12">
-            {title}
-          </h2>
-
-          <div className="space-y-6">
-            {paragraphs.map((paragraph, index) => (
-              <p key={index} className="text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[16px] xl:text-[18px] text-[#565454] leading-relaxed">
-                {paragraph}
+    <section className="bg-white py-16 lg:py-20">
+      <div className={`${ui.container} flex flex-col gap-10`}>
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-16">
+          <div className="flex flex-col gap-2.5">
+            <div className={ui.eyebrow}>{isNo ? 'Hva du får' : 'What you get'}</div>
+            <h2 className={ui.h2}>{title}</h2>
+          </div>
+          <div className="flex flex-col gap-5">
+            {paragraphs.map((p, i) => (
+              <p key={i} className="m-0 text-base leading-relaxed text-sc-ink-600 lg:text-lg">
+                {p}
               </p>
             ))}
           </div>
-
-          {/* Product Details Image */}
-          {productImage.src && (
-            <div className="mt-10 lg:mt-14">
-              <div className="relative w-full overflow-hidden shadow-lg border border-gray-200">
-                <Image
-                  src={productImage.src}
-                  alt={productImage.alt || 'Vipps Hurtigkasse demo'}
-                  width={1200}
-                  height={800}
-                  className="w-full h-auto"
-                />
-              </div>
-            </div>
-          )}
-
-          {demoStore.url && (
-            <div className="mt-10 p-6 lg:p-8 bg-[#1DEFFA15] border-l-4 border-[#03C1CA]">
-              <p className="text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[16px] xl:text-[18px] text-[#222222] font-medium mb-2">
-                {demoStore.text}
-              </p>
-              <Link
-                href={demoStore.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[16px] xl:text-[18px] text-[#03C1CA] hover:underline font-medium break-all"
-              >
-                {demoStore.url}
-              </Link>
-              {demoStore.password && (
-                <p className="text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[16px] xl:text-[18px] text-[#565454] mt-2">
-                  Password: <span className="font-mono bg-gray-100 px-2 py-1">{demoStore.password}</span>
-                </p>
-              )}
-            </div>
-          )}
         </div>
+
+        {productImage.src && (
+          <div className="overflow-hidden rounded-lg border border-sc-ink-100 bg-sc-ink-50 p-4 sm:p-8 lg:p-12">
+            <Image src={productImage.src} alt={productImage.alt || 'Vipps Hurtigkasse'} width={1200} height={800} className="h-auto w-full rounded-md border border-sc-ink-100 bg-white" />
+          </div>
+        )}
+
+        {demoStore.url && (
+          <div className="flex flex-col gap-3 rounded-lg border border-sc-ink-100 border-l-2 border-l-sc-cyan-500 bg-sc-ink-50 p-6">
+            {demoStore.text && <p className="m-0 text-[15px] font-semibold text-sc-ink-900">{demoStore.text}</p>}
+            <a href={demoStore.url} target="_blank" rel="noopener noreferrer" className="break-all text-[15px] font-semibold text-sc-cyan-600 underline-offset-4 hover:underline">
+              {demoStore.url}
+            </a>
+            {demoStore.password && (
+              <p className="m-0 flex flex-wrap items-center gap-2 text-[15px] text-sc-ink-600">
+                {isNo ? 'Passord:' : 'Password:'}
+                <code className="rounded-md border border-sc-ink-200 bg-white px-2 py-0.5 font-mono text-[13px] text-sc-ink-900">{demoStore.password}</code>
+              </p>
+            )}
+          </div>
+        )}
       </div>
     </section>
   )

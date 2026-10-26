@@ -12,11 +12,6 @@ interface ShopifyPlatformPageData {
   pageTitle: string
   slug: string
   sections?: Array<{ _type: string; _key: string } & Record<string, unknown>>
-  hero?: Record<string, unknown>
-  bleedingMoney?: Record<string, unknown>
-  shopifyEmpires?: Record<string, unknown>
-  revenueForm?: Record<string, unknown>
-  successStories?: Record<string, unknown>
 }
 
 export default async function ShopifyPlatformPage({ params }: { params: Promise<{ lang: string; slug?: string }> }) {

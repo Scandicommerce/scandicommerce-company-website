@@ -8,9 +8,9 @@ import { defineArrayMember, defineField } from "sanity";
 export const RELATED_PAGE_TYPES = [
   "pillarPage",
   "integrationPage",
+  "integrationCategory",
   "migrationPage",
   "post",
-  "blogPost",
   "caseStudy",
   "allPackagesPage",
   "packageDetailPage",

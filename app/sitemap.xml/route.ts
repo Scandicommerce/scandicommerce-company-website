@@ -47,7 +47,6 @@ const INDEXABLE_TYPES = [
   'shopifyTcoCalculatorPage',
   'shopifyDevelopmentPage',
   'post',
-  'blogPost',
   'caseStudy',
   'author',
   'legalPage',
@@ -62,7 +61,6 @@ const sitemapDocsQuery = groq`
     && defined(slug.current)
     && !(_id in path("drafts.**"))
     && seoExtended.noIndex != true
-    && seo.noIndex != true
     && !defined(seoExtended.canonical)
   ] {
     _id,
@@ -162,6 +160,32 @@ export async function GET() {
         lines.push('  </url>')
         entries.push(lines.join('\n'))
       }
+    }
+  }
+
+  // Code-built pages have no Sanity document, so they are listed here.
+  // The English routes serve sv/da/de too (English copy until translated).
+  const COM_LANGUAGES: Language[] = ['en', 'sv', 'da', 'de']
+  const CODE_ROUTES: { path: string; languages: Language[] }[] = [
+    { path: 'tjenester', languages: ['no'] },
+    { path: 'tjenester/shopify', languages: ['no'] },
+    { path: 'tjenester/migrering', languages: ['no'] },
+    { path: 'tjenester/b2b', languages: ['no'] },
+    { path: 'tjenester/utvikling', languages: ['no'] },
+    { path: 'services', languages: COM_LANGUAGES },
+    { path: 'services/shopify', languages: COM_LANGUAGES },
+    { path: 'services/migrate', languages: COM_LANGUAGES },
+    { path: 'services/b2b', languages: COM_LANGUAGES },
+    { path: 'services/shopify-development', languages: COM_LANGUAGES },
+    { path: 'nexuspos', languages: ['no', 'en', 'sv', 'da', 'de'] },
+  ]
+  for (const route of CODE_ROUTES) {
+    for (const lang of route.languages) {
+      if (siteForLanguage(lang).key !== site.key) continue
+      const loc = absoluteUrl(lang, route.path)
+      if (seenLoc.has(loc)) continue
+      seenLoc.add(loc)
+      entries.push(['  <url>', `    <loc>${escapeXml(loc)}</loc>`, '  </url>'].join('\n'))
     }
   }
 

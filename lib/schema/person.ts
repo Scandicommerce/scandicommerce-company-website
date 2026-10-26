@@ -8,7 +8,7 @@ import { toPlainTextForSchema } from './plainText'
 const PERSON_DESCRIPTION_MAX = 4000
 
 const COMPANY_CONTEXT_BLURB =
-  'a Shopify Plus partner agency headquartered in Oslo, Norway, that serves brands across Norway and the Nordics with both headed Shopify Online Store themes and headless commerce using Sanity, the Shopify Storefront API, Hydrogen, Klaviyo, and Make'
+  'a Shopify Plus partner agency headquartered in Oslo, Norway, that serves brands across Norway and the Nordics with both headed Shopify Online Store themes and headless commerce using Sanity, the Shopify Storefront API, Hydrogen, and email automation'
 
 function personNodeFragmentId(name: string, personIndex: number): string {
   const base = name
@@ -99,7 +99,7 @@ export function buildPersonSchemaForTeamMember(
         ? knowsAbout[0]!
         : `${knowsAbout.slice(0, -1).join(', ')}, and ${knowsAbout[knowsAbout.length - 1]!}`
     schema.knowsAbout = [
-      `${name} centers their practice on ${phrase} while representing scandicommerce in Oslo, Norway, for Nordic e-commerce brands, spanning headed Shopify storefronts and headless programs with Sanity, the Shopify Storefront API, Hydrogen, Klaviyo, and Make.`,
+      `${name} centers their practice on ${phrase} while representing scandicommerce in Oslo, Norway, for Nordic e-commerce brands, spanning headed Shopify storefronts and headless programs with Sanity, the Shopify Storefront API, Hydrogen, and email automation.`,
     ]
   }
 

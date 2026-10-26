@@ -77,7 +77,7 @@ export function findArticleByOldLeaf(language: string, leaf: string): PlanDocume
   const l = leaf.toLowerCase()
   for (const doc of PLAN_DOCUMENTS) {
     if (doc.language !== language) continue
-    if (!['post', 'blogPost', 'caseStudy'].includes(doc.type)) continue
+    if (!['post', 'caseStudy'].includes(doc.type)) continue
     if (doc.oldSlug === doc.newSlug) continue
     const oldLeaf = trimSlashes(doc.oldSlug).split('/').pop()?.toLowerCase()
     if (oldLeaf === l) return doc

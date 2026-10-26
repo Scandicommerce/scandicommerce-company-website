@@ -12,10 +12,6 @@ interface ShopifyPosInfoPageData {
   pageTitle: string
   slug: string
   sections?: Array<{ _type: string; _key: string } & Record<string, unknown>>
-  hero?: Record<string, unknown>
-  bleedingMoney?: Record<string, unknown>
-  omnichannelFeatures?: Record<string, unknown>
-  revenueForm?: Record<string, unknown>
 }
 
 export default async function ShopifyPosInfoPage({ params }: { params: Promise<{ lang: string; slug?: string }> }) {

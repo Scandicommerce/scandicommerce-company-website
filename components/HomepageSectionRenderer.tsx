@@ -89,6 +89,7 @@ export function HomepageSectionRenderer({
                 key={_key}
                 data={rest as Parameters<typeof ServicesPackaged>[0]['data']}
                 packages={servicesPackagesFromSection(rest as HomepageServicesShowcasePayload, allPackages)}
+                lang={lang}
               />
             )
           case 'resultsSection':
@@ -101,7 +102,7 @@ export function HomepageSectionRenderer({
               />
             )
           case 'processSection':
-            return <HowWeWork key={_key} process={rest as Parameters<typeof HowWeWork>[0]['process']} />
+            return <HowWeWork key={_key} process={rest as Parameters<typeof HowWeWork>[0]['process']} lang={lang} />
           case 'partnersSection':
             return <Partners key={_key} partners={rest as Parameters<typeof Partners>[0]['partners']} />
           case 'ctaSection':

@@ -12,7 +12,6 @@ interface ShopifyTcoCalculatorPageData {
   pageTitle: string
   slug: string
   sections?: Array<{ _type: string; _key: string } & Record<string, unknown>>
-  hero?: Record<string, unknown>
 }
 
 export default async function ShopifyTcoCalculatorPage({ params }: { params: Promise<{ lang: string; slug?: string }> }) {

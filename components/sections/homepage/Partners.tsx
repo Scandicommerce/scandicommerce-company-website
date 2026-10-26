@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useRef } from 'react'
-import Link from 'next/link'
+import Link from '@/components/ui/LocalizedLink'
 import { motion, useInView } from 'framer-motion'
 
 interface PartnersData {
@@ -63,7 +63,7 @@ export default function Partners({ partners }: PartnersProps) {
 
   return (
     <section className="relative bg-gray-50 py-12 md:py-16 lg:py-24 overflow-hidden" ref={ref}>
-      <div className="section_container mx-auto page-padding-x">
+      <div className="w-full max-w-[1320px] mx-auto px-5 lg:px-8">
         {badges && badges.length > 0 && (
           <motion.div 
             className="flex flex-col md:grid md:grid-cols-3 max-w-4xl mx-auto mb-8 md:mb-12"
@@ -85,7 +85,7 @@ export default function Partners({ partners }: PartnersProps) {
                   href={badge.link || '#'}
                   className="block border-t md:border-t-0 md:border-l border-gray-300 py-4 text-center last:border-b md:last:border-b-0 md:last:border-r"
                 >
-                  <span className="text-gray-900 font-semibold text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[16px] xl:text-[18px] hover:text-teal transition-colors">
+                  <span className="text-gray-900 font-semibold text-[15px] lg:text-base hover:text-teal transition-colors">
                     {badge.text}
                   </span>
                 </Link>
@@ -101,7 +101,7 @@ export default function Partners({ partners }: PartnersProps) {
             initial="hidden"
             animate={isInView ? "visible" : "hidden"}
           >
-            <p className="text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[16px] xl:text-[18px] text-[#555555] max-w-2xl mx-auto px-4 md:px-0">
+            <p className="text-[15px] lg:text-base text-[#555555] max-w-2xl mx-auto px-4 md:px-0">
               {description}
             </p>
           </motion.div>

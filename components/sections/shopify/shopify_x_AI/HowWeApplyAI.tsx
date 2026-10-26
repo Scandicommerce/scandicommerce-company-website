@@ -1,4 +1,5 @@
-'use client'
+import { ui } from '@/components/integrations/labels'
+import { Bullet } from '@/components/sections/shopify/shopify_x_PIM/IntegratingPIM'
 
 interface ApplicationArea {
   title?: string
@@ -12,61 +13,39 @@ interface HowWeApplyAiData {
   applicationAreas?: ApplicationArea[]
 }
 
-interface HowWeApplyAIProps {
-  howWeApplyAi?: HowWeApplyAiData
-}
-
-export default function HowWeApplyAI({ howWeApplyAi }: HowWeApplyAIProps) {
-  const title = howWeApplyAi?.title
-  const applicationAreas = howWeApplyAi?.applicationAreas || []
-
+/** Ink section: three application areas as hairline cards with bullet lists and a benefit line. */
+export default function HowWeApplyAI({ howWeApplyAi, lang = 'no' }: { howWeApplyAi?: HowWeApplyAiData; lang?: string }) {
+  const areas = (howWeApplyAi?.applicationAreas ?? []).filter((a) => a?.title || a?.description)
+  if (!howWeApplyAi?.title && areas.length === 0) return null
   return (
-    <section className="bg-[#1F1D1D] py-16 lg:py-24">
-      <div className="section_container mx-auto page-padding-x">
-        {/* Header */}
-        <div className="text-center mb-12 lg:mb-16">
-          {title && (
-            <h2 className="text-[5.3vw] xs:text-[3.5vw] sm:text-[3.2vw] md:text-[3.2vw] lg:text-[28px] xl:text-[34px] font-bold text-white mb-4">
-              {title}
-            </h2>
-          )}
+    <section className="bg-sc-ink-900 py-16 text-white lg:py-20">
+      <div className={`${ui.container} flex flex-col gap-10`}>
+        <div className="flex max-w-[680px] flex-col gap-2.5">
+          <div className={ui.eyebrow}>{lang === 'no' ? 'Bruksområder' : 'Where we apply it'}</div>
+          {howWeApplyAi?.title && <h2 className="text-[32px] font-bold leading-[1.25] tracking-[-0.02em] lg:text-[44px]">{howWeApplyAi.title}</h2>}
         </div>
-
-        {/* Cards Grid */}
-        {applicationAreas.length > 0 && (
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8 max-w-5xl mx-auto">
-            {applicationAreas.map((area, index) => (
-              <div
-                key={index}
-                className="bg-[#2A2828] p-6 lg:p-8"
-              >
-                {area.title && (
-                  <h3 className="text-[4.3vw] xs:text-[2.6vw] sm:text-[2.5vw] md:text-[2.2vw] lg:text-[18px] xl:text-[24px] font-bold text-white mb-3">
-                    {area.title}
-                  </h3>
-                )}
-                {area.description && (
-                  <p className="text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[16px] xl:text-[18px] text-white/80 mb-6">
-                    {area.description}
-                  </p>
-                )}
-                {area.features && area.features.length > 0 && (
-                  <ul className="space-y-4 mb-6">
-                    {area.features.map((feature, featureIndex) => (
-                      <li key={featureIndex} className="flex items-start text-white">
-                        <span className="mr-3 text-white">•</span>
-                        <span className="text-sm">{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
-                )}
-                {area.benefit && (
-                  <p className="text-[#1DEFFA] text-sm font-medium mt-auto">
-                    {area.benefit}
-                  </p>
-                )}
-              </div>
-            ))}
+        {areas.length > 0 && (
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-3 lg:gap-5">
+            {areas.map((area, i) => {
+              const features = (area.features ?? []).filter(Boolean)
+              return (
+                <div key={i} className="flex flex-col gap-4 rounded-lg border border-sc-ink-700 bg-sc-ink-800 p-6">
+                  <span className="font-mono text-[13px] text-sc-ink-400">{String(i + 1).padStart(2, '0')}</span>
+                  {area.title && <h3 className="m-0 text-[20px] font-bold leading-snug tracking-[-0.01em] text-white">{area.title}</h3>}
+                  {area.description && <p className="m-0 text-[15px] leading-relaxed text-sc-ink-300">{area.description}</p>}
+                  {features.length > 0 && (
+                    <ul className="m-0 flex list-none flex-col gap-2 p-0">
+                      {features.map((f, j) => (
+                        <Bullet key={j} dark>
+                          {f}
+                        </Bullet>
+                      ))}
+                    </ul>
+                  )}
+                  {area.benefit && <p className="m-0 mt-auto border-t border-sc-ink-700 pt-4 text-sm font-semibold text-sc-cyan-300">{area.benefit}</p>}
+                </div>
+              )
+            })}
           </div>
         )}
       </div>

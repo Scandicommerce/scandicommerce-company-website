@@ -36,21 +36,15 @@ async function getHomepage(language?: string): Promise<HomepageData | null> {
 }
 
 interface AllPackagesData {
-  packages?: {
-    packagesItems?: Array<{
-      title: string
-      subtitle: string
-      price: string
-      priceType: string
-      timeline: string
-      rating: number
-      ratingValue: string
-      bestFor: string[]
-      included: string[]
-      description: string
-      href: string
-    }>
-  }
+  sections?: Array<{ _type: string; _key: string } & Record<string, unknown>>
+}
+
+type PackagesFallback = NonNullable<Parameters<typeof HomepageSectionRenderer>[0]['allPackages']>
+
+/** The homepage services block falls back to the all-packages page's packages section when it has no packages of its own. */
+function packagesFallbackFromSections(data: AllPackagesData | null): PackagesFallback | null {
+  const section = data?.sections?.find((s) => s._type === 'allPackagesPagePackagesSection')
+  return section ? { packages: section as PackagesFallback['packages'] } : null
 }
 
 async function getAllPackages(language?: string): Promise<AllPackagesData | null> {
@@ -96,7 +90,7 @@ export default async function Home({
   const { lang } = await params
   const language = getLanguageFromParams({ lang })
   const homepage = await getHomepage(language)
-  const allPackages = await getAllPackages(language)
+  const allPackages = packagesFallbackFromSections(await getAllPackages(language))
   const latestPosts = await sanityPageFetch<TeaserPost[]>(
     latestPostsTeaserQuery,
     getQueryParams({}, language),

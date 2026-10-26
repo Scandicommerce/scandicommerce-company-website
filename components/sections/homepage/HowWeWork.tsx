@@ -13,10 +13,11 @@ interface ProcessData {
 }
 
 interface HowWeWorkProps {
+  lang?: string
   process?: ProcessData
 }
 
-export default function HowWeWork({ process }: HowWeWorkProps) {
+export default function HowWeWork({ process, lang }: HowWeWorkProps) {
   // Content variables from Sanity
   const title = process?.processTitle
   const subtitle = process?.processSubtitle
@@ -24,10 +25,10 @@ export default function HowWeWork({ process }: HowWeWorkProps) {
 
   return (
     <section className="relative bg-white py-10 lg:py-24 overflow-hidden">
-      <div className="section_container max-w-[1320px] mx-auto page-padding-x">
+      <div className="w-full max-w-[1320px] mx-auto px-5 lg:px-8">
         <div className="mb-[18px] lg:mb-8">
           <div className="text-[11px] lg:text-xs font-semibold uppercase tracking-[0.12em] text-sc-cyan-500 mb-2 lg:mb-2.5">
-            Prosess
+            {({ no: 'Prosess', en: 'Process', sv: 'Process', da: 'Proces', de: 'Ablauf' } as Record<string, string>)[lang ?? 'no'] ?? 'Process'}
           </div>
           {title && (
             <h2 className="text-[26px] lg:text-[40px] font-bold text-sc-ink-900 tracking-[-0.02em] leading-tight m-0">

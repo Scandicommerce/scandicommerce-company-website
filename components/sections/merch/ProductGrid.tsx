@@ -3,6 +3,7 @@
 import { useState, useMemo, useEffect } from 'react'
 import ProductCard, { Product, Collection } from './ProductCard'
 import { HiChevronDown, HiChevronLeft, HiChevronRight } from 'react-icons/hi2'
+import { ui } from '@/components/integrations/labels'
 
 interface ProductGridProps {
   initialProducts?: Product[]
@@ -134,10 +135,10 @@ export default function ProductGrid({ initialProducts }: ProductGridProps) {
 
   if (loading) {
     return (
-      <section className="bg-white py-12 lg:py-16">
-        <div className="section_container mx-auto page-padding-x">
-          <div className="text-center py-12">
-            <p className="text-[#666666]">Loading products...</p>
+      <section className="bg-white pb-16 lg:pb-20">
+        <div className={ui.container}>
+          <div className="py-12 text-center">
+            <p className="m-0 text-[15px] text-sc-ink-600">Loading products...</p>
           </div>
         </div>
       </section>
@@ -146,11 +147,11 @@ export default function ProductGrid({ initialProducts }: ProductGridProps) {
 
   if (products.length === 0) {
     return (
-      <section className="bg-white py-12 lg:py-16">
-        <div className="section_container mx-auto page-padding-x">
-          <div className="text-center py-12">
-            <p className="text-[#666666]">No products found.</p>
-            <p className="text-sm text-[#666666] mt-2">
+      <section className="bg-white pb-16 lg:pb-20">
+        <div className={ui.container}>
+          <div className="py-12 text-center">
+            <p className="m-0 text-[15px] text-sc-ink-600">No products found.</p>
+            <p className="m-0 mt-2 text-sm text-sc-ink-500">
               Make sure your Shopify store is connected and has products.
             </p>
           </div>
@@ -160,91 +161,90 @@ export default function ProductGrid({ initialProducts }: ProductGridProps) {
   }
 
   return (
-    <section className="bg-white py-12 lg:py-16">
-      <div className="section_container mx-auto page-padding-x">
-        <div className="border border-[#E5E5E5]">
-          <div className="flex flex-col lg:flex-row lg:justify-between lg:items-stretch">
-            <div className="flex overflow-x-auto border-b lg:border-b-0 border-[#E5E5E5]">
-              {categories.map((category) => (
-                <button
-                  key={category.key}
-                  onClick={() => handleCategoryChange(category.key)}
-                  className={`page-padding-x py-3 sm:py-4 lg:py-5 text-sm font-medium transition-all duration-200 border-r border-[#E5E5E5] whitespace-nowrap flex-shrink-0 ${activeCategory === category.key
-                    ? 'text-[#222222]'
-                    : 'text-[#666666] hover:text-[#222222]'
-                    }`}
-                >
-                  {category.label}
-                </button>
-              ))}
-            </div>
-
-            <div className="relative flex items-center lg:border-l border-[#E5E5E5]">
+    <section className="bg-white pb-16 lg:pb-20">
+      <div className={`${ui.container} flex flex-col gap-6`}>
+        {/* Filter bar: collection chips and the sort menu */}
+        <div className="flex flex-col gap-4 border-b border-sc-ink-200 pb-5 lg:flex-row lg:items-center lg:justify-between">
+          <div className="flex gap-2 overflow-x-auto">
+            {categories.map((category) => (
               <button
-                onClick={() => setIsSortOpen(!isSortOpen)}
-                className="flex items-center gap-4 px-4 sm:px-6 py-3 sm:py-4 lg:py-5 text-sm font-medium text-[#666666] hover:text-[#222222] transition-colors w-full lg:w-auto lg:min-w-[180px] justify-between"
+                key={category.key}
+                onClick={() => handleCategoryChange(category.key)}
+                className={`${ui.chip} flex-shrink-0 whitespace-nowrap transition-colors ${
+                  activeCategory === category.key
+                    ? 'border-sc-ink-900 bg-sc-ink-900 text-white'
+                    : 'hover:border-sc-ink-400 hover:text-sc-ink-900'
+                }`}
               >
-                <span>{sortOptions.find(s => s.key === sortBy)?.label || 'Newest'}</span>
-                <HiChevronDown
-                  className={`w-4 h-4 transition-transform ${isSortOpen ? 'rotate-180' : ''}`}
-                />
+                {category.label}
               </button>
-
-              {isSortOpen && (
-                <>
-                  <div
-                    className="fixed inset-0 z-10"
-                    onClick={() => setIsSortOpen(false)}
-                  />
-                  <div className="absolute right-0 left-0 lg:left-auto top-full mt-0 lg:w-full bg-white border border-[#E5E5E5] border-t-0 shadow-lg z-20 overflow-hidden">
-                    {sortOptions.map(option => (
-                      <button
-                        key={option.key}
-                        onClick={() => handleSortChange(option.key)}
-                        className={`w-full px-4 sm:px-6 py-3 text-left text-sm transition-colors ${sortBy === option.key
-                          ? 'bg-[#03C1CA] text-white'
-                          : 'text-[#666666] hover:bg-[#F8F8F8]'
-                          }`}
-                      >
-                        {option.label}
-                      </button>
-                    ))}
-                  </div>
-                </>
-              )}
-            </div>
-          </div>
-        </div>
-
-        <div className="border border-[#E5E5E5]">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
-            {paginatedProducts.map(product => (
-              <ProductCard key={product.id} product={product} />
             ))}
           </div>
-          {paginatedProducts.length === 0 && (
-            <div className="text-center py-12">
-              <p className="text-[#666666]">No products found in this category.</p>
-            </div>
-          )}
+
+          <div className="relative">
+            <button
+              onClick={() => setIsSortOpen(!isSortOpen)}
+              className="flex w-full items-center justify-between gap-3 rounded-lg border border-sc-ink-300 bg-white px-4 py-2 text-sm font-medium text-sc-ink-900 transition-colors hover:bg-sc-ink-50 lg:w-auto lg:min-w-[200px]"
+            >
+              <span>{sortOptions.find(s => s.key === sortBy)?.label || 'Newest'}</span>
+              <HiChevronDown
+                className={`h-4 w-4 text-sc-ink-500 transition-transform ${isSortOpen ? 'rotate-180' : ''}`}
+              />
+            </button>
+
+            {isSortOpen && (
+              <>
+                <div
+                  className="fixed inset-0 z-10"
+                  onClick={() => setIsSortOpen(false)}
+                />
+                <div className="absolute left-0 right-0 top-full z-20 mt-1 overflow-hidden rounded-lg border border-sc-ink-200 bg-white shadow-lg lg:left-auto lg:w-full">
+                  {sortOptions.map(option => (
+                    <button
+                      key={option.key}
+                      onClick={() => handleSortChange(option.key)}
+                      className={`w-full px-4 py-2.5 text-left text-sm transition-colors ${sortBy === option.key
+                        ? 'bg-sc-ink-900 text-white'
+                        : 'text-sc-ink-600 hover:bg-sc-ink-50'
+                        }`}
+                    >
+                      {option.label}
+                    </button>
+                  ))}
+                </div>
+              </>
+            )}
+          </div>
         </div>
 
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-5">
+          {paginatedProducts.map(product => (
+            <ProductCard key={product.id} product={product} />
+          ))}
+        </div>
+        {paginatedProducts.length === 0 && (
+          <div className="py-12 text-center">
+            <p className="m-0 text-[15px] text-sc-ink-600">No products found in this category.</p>
+          </div>
+        )}
+
         {totalPages > 1 && (
-          <div className="flex items-center justify-center gap-6 mt-12">
+          <div className="mt-6 flex items-center justify-center gap-5">
             <button
               onClick={() => handlePageChange(currentPage - 1)}
               disabled={currentPage === 1}
-              className="text-[#222222] hover:text-[#03C1CA] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              className="text-sc-ink-900 transition-colors hover:text-sc-cyan-600 disabled:cursor-not-allowed disabled:opacity-50"
+              aria-label="Previous page"
             >
-              <HiChevronLeft className="w-5 h-5" />
+              <HiChevronLeft className="h-5 w-5" />
             </button>
             {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
               <button
                 key={page}
                 onClick={() => handlePageChange(page)}
-                className={`text-lg font-medium transition-colors ${currentPage === page
-                  ? 'text-[#03C1CA]'
-                  : 'text-[#222222] hover:text-[#03C1CA]'
+                className={`font-mono text-[15px] transition-colors ${currentPage === page
+                  ? 'text-sc-cyan-600'
+                  : 'text-sc-ink-900 hover:text-sc-cyan-600'
                   }`}
               >
                 {page}
@@ -254,10 +254,10 @@ export default function ProductGrid({ initialProducts }: ProductGridProps) {
             <button
               onClick={() => handlePageChange(currentPage + 1)}
               disabled={currentPage === totalPages}
-              className="text-[#222222] hover:text-[#03C1CA] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              className="text-sc-ink-900 transition-colors hover:text-sc-cyan-600 disabled:cursor-not-allowed disabled:opacity-50"
               aria-label="Next page"
             >
-              <HiChevronRight className="w-5 h-5" />
+              <HiChevronRight className="h-5 w-5" />
             </button>
           </div>
         )}
@@ -265,4 +265,3 @@ export default function ProductGrid({ initialProducts }: ProductGridProps) {
     </section>
   )
 }
-

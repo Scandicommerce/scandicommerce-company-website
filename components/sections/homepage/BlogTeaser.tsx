@@ -1,4 +1,4 @@
-import Link from 'next/link'
+import Link from '@/components/ui/LocalizedLink'
 import { hrefFor, blogIndexHref } from '@/lib/routes'
 
 export interface TeaserPost {

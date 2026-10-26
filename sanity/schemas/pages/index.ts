@@ -1,10 +1,8 @@
 export { landingPage } from "./landingPage";
-export { servicesPage } from "./servicesPage";
 export { aboutPage } from "./aboutPage";
 export { contactPage } from "./contactPage";
 export { workPage } from "./workPage";
 export { blogPage } from "./blogPage";
-export { blogPost } from "./blogPost";
 export { shopifyDevelopmentPage } from "./shopifyDevelopmentPage";
 export { migratePage } from "./migratePage";
 export { shopifyPosPage } from "./shopifyPosPage";

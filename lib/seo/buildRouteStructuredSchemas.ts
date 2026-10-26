@@ -1,12 +1,11 @@
 import type { ResolvedPage } from '@/lib/resolvePageByPath'
 import type { Post } from '@/lib/blogBuilder'
-import { getBlogPostBySlugCached, getPostBySlugCached } from '@/lib/sanity/cachedDocuments'
+import { getPostBySlugCached } from '@/lib/sanity/cachedDocuments'
 import type { PageSeoDoc } from '@/lib/sanity/pageSeo'
 import { buildArticleJsonLd } from '@/lib/seo/articleJsonLd'
 import { ALL_PACKAGES_FAQ_JSON_LD_ITEMS } from '@/lib/schema/allPackagesFaqSchema'
 import { buildFaqPageSchema, type FaqItem } from '@/lib/schema/faq'
 import { getSchemaInLanguageTag } from '@/lib/schema/inLanguage'
-import type { LegacyBlogPostDocumentForJsonLd } from '@/lib/schema/routeBlogPostingJsonLd'
 import { SCHEMA_ORG_CONTEXT } from '@/lib/schema/types'
 import type { JsonLdObject } from '@/lib/schema/types'
 import { toPlainTextForSchema } from '@/lib/schema/plainText'
@@ -69,32 +68,10 @@ export async function buildRouteStructuredSchemasFromPageDoc(opts: {
   if (!structured || structured === 'none') return schemas
 
   const pageTitle = pageDoc?.pageTitle?.trim() || 'scandicommerce'
-  const metaDesc =
-    pageDoc?.seoExtended?.metaDescription?.trim() ||
-    pageDoc?.seo?.metaDescription?.trim() ||
-    null
+  const metaDesc = pageDoc?.seoExtended?.metaDescription?.trim() || null
 
   if (structured === 'Article') {
-    if (resolved?.type === 'blogPost' && resolved.slug) {
-      const post = (await getBlogPostBySlugCached(
-        resolved.slug,
-        language
-      )) as LegacyBlogPostDocumentForJsonLd | null
-      const docLang = post?.language || language
-      const node = buildArticleJsonLd({
-        origin,
-        pageUrl,
-        headline: post?.title?.trim() || pageTitle,
-        description: post?.metaDescription ?? post?.description ?? metaDesc,
-        datePublished: post?.publishedAt ?? post?._createdAt ?? undefined,
-        dateModified: post?._updatedAt ?? undefined,
-        imageUrl: post?.featuredImage || post?.image || null,
-        authorName: post?.author?.name ?? null,
-        authorUrl: null,
-        inLanguage: getSchemaInLanguageTag(typeof docLang === 'string' ? docLang : language),
-      })
-      if (node) schemas.push(node)
-    } else if (resolved?.type === 'post' && resolved.slug) {
+    if (resolved?.type === 'post' && resolved.slug) {
       const post = (await getPostBySlugCached(
         resolved.slug,
         language

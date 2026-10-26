@@ -1,6 +1,7 @@
-'use client'
+import { ui } from '@/components/integrations/labels'
 
 interface PlatformsData {
+  platformsEyebrow?: string
   platformsTitle?: string
   platformsItems?: Array<{
     name: string
@@ -10,40 +11,31 @@ interface PlatformsData {
 
 interface PlatformsProps {
   platforms?: PlatformsData
+  lang?: string
 }
 
-export default function Platforms({ platforms }: PlatformsProps) {
+/** Source platforms as hairline cards with the typical duration in mono. */
+export default function Platforms({ platforms, lang }: PlatformsProps) {
+  const isNo = (lang ?? 'no') === 'no'
   const title = platforms?.platformsTitle
   const items = platforms?.platformsItems
 
   return (
-    <section className="bg-white py-16 lg:py-[170px]">
-      <div className="section_container mx-auto page-padding-x">
-        {/* Heading */}
+    <section className="bg-white py-16 lg:py-20">
+      <div className={`${ui.container} flex flex-col gap-10`}>
         {title && (
-          <h2 className="text-[5.3vw] xs:text-[3.5vw] sm:text-[3.2vw] md:text-[3.2vw] lg:text-[28px] xl:text-[34px] font-bold text-[#1F1D1D] text-center mb-12 lg:mb-16">
-            {title}
-          </h2>
+          <div className="flex max-w-[680px] flex-col gap-2.5">
+            <div className={ui.eyebrow}>{platforms?.platformsEyebrow || (isNo ? 'Plattformer' : 'Platforms')}</div>
+            <h2 className={ui.h2}>{title}</h2>
+          </div>
         )}
 
-        {/* Platform Cards */}
         {items && items.length > 0 && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
+          <div className="grid grid-cols-2 gap-4 lg:grid-cols-4 lg:gap-5">
             {items.map((platform, index) => (
-              <div
-                key={index}
-                className="bg-[#F8F8F8] p-6 lg:p-8 text-center shadow-md"
-              >
-                {platform.name && (
-                  <h3 className="text-[4.3vw] xs:text-[2.6vw] sm:text-[2.5vw] md:text-[2.2vw] lg:text-[18px] xl:text-[24px] font-bold text-[#565454] mb-3">
-                    {platform.name}
-                  </h3>
-                )}
-                {platform.duration && (
-                  <p className="text-[4vw] xs:text-[2.6vw] sm:text-[2.3vw] md:text-[1.8vw] lg:text-[16px] xl:text-[18px] text-[#565454]">
-                    {platform.duration}
-                  </p>
-                )}
+              <div key={index} className="flex flex-col gap-2 rounded-lg border border-sc-ink-100 bg-white p-6">
+                {platform.name && <h3 className="m-0 text-lg font-semibold leading-snug text-sc-ink-900">{platform.name}</h3>}
+                {platform.duration && <p className="m-0 font-mono text-[13px] text-sc-ink-500">{platform.duration}</p>}
               </div>
             ))}
           </div>
