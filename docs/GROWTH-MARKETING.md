@@ -70,7 +70,7 @@ Følger tjenestesidene under `/tjenester` (Shopify, Migrering, Utvikling), så h
 3. **Hvorfor:** To korte avsnitt, med **ett** forskningspunkt med kilde, eller én dataflyt.
 4. **Når du trenger dette:** Fire situasjoner.
 5. **Leveranser:** Rundt seks, nummerert i den rekkefølgen de skjer, pluss én linje om hva som ikke er inkludert.
-6. **De første 90 dagene:** Tre steg og tre måltall («Det vi styrer etter»).
+6. **Slik kommer vi i gang:** Tre steg (uke 1–2: tilganger, mål og plan; uke 3–4: oppsett og første tiltak; fra måned 2: løpende forbedring) og tre måltall («Det vi styrer etter»). Ingress: «Vi er raskt i gang når tilgangene er på plass og mål og strategi er avklart.»
 7. **Vanlige spørsmål:** Fire.
 8. **Les videre:** Inntil tre kort. Kanalsidene kommer først, deretter relaterte tjenester med stedet i modellen.
 9. **CTA** (`CtaBand`).
@@ -172,6 +172,16 @@ npm run dev                 # http://localhost:3000/no/growth-marketing
 - [ ] AI-søk: Bør Copilot og ChatGPT nevnes før de er åpnet i Norge? Siden sier at vi tester dem når de åpner.
 - [ ] «Les videre» viser inntil tre kort. På SEM og SoMe fyller nå kanalsidene alle tre, så Affiliate og Merkevare ikke lenger lenkes derfra. Er det OK?
 
+**Fra kvalitetskontrollen 2026-10-26 (beslutninger som gjenstår):**
+- [ ] **Bevis:** Ingen av sidene har kundecase, egne tall eller navngitt spesialist. Dette er den største svakheten for konvertering og E-E-A-T. Vi trenger tillatelse til 2–3 case med tall, og en navngitt spesialist med bilde per område.
+- [ ] **Pris og «Se pakkene»:** Samlesiden sier «fastpris», og «Se pakkene» går til pakkeoversikten. Der finnes bare Shopify-pakker, én av dem heter «Growth» (8 000 kr/mnd), og den inneholder allerede «E-post og markedsføringsautomatisering» og «Analyse og sporing». Enten lager vi Growth-pakker med pris, eller så fjerner vi «fastpris» og «Se pakkene» og avklarer forholdet til Shopify-pakken.
+- [ ] **Neste steg:** Et konkret inngangstilbud (for eksempel en revisjon med omfang, varighet og pris), og «Før vi starter» med minstebudsjett, oppsigelse og oppstartstid, slik tjenestesidene har.
+- [ ] **Overlapp mellom sidene:** SEM og Google Ads, og SoMe og kanalsidene, dekker mye av det samme. Forslag: SEM og SoMe handler om valg av kanal og fordeling av budsjett, og detaljene står bare på kanalsidene. Kanalsidene får hver sin egen vinkel, så de ikke leses som samme mal.
+- [ ] **Hero for besøkende fra Google:** «Steg 2 · Fang etterspørselen» og modellpanelet er intern logikk. Vurder bevis i hero og modellen lenger ned, særlig på mobil.
+- [ ] **To grupperinger:** Menyen (Strategi og innsikt · Annonsering · Egne kanaler) og modellen (Skap · Fang · Selg og behold · Grunnmur) plasserer SEO ulikt. Velg én.
+- [ ] **Titler og beskrivelser:** Ingen titler har kommersiell hensikt (for eksempel «byrå»), og meta-beskrivelsen er ingressen, ofte under 100 tegn.
+- [ ] **Ferskvare:** Tall og status for plattformene (Statcounter september 2026, Ipsos 2023, Snap 2023, AI-søk, TikTok Shop) må sjekkes hvert kvartal. Vurder «Sist oppdatert» og en eier.
+
 **Øvrige:**
 
 - [ ] **Navnekollisjon:** Shopify-pakken heter «Growth» (`/tjenester/alle-pakker/growth`, 8 000 kr/mnd). Gi pakken nytt navn, eller behold? *(Avventer.)*
@@ -259,7 +269,7 @@ Tekstene skal bare inneholde påstander vi kan stå for. Tidsavhengige fakta sje
 - Shopify Rollouts: A/B-tester (Experiments) krever Grow-plan eller høyere. Lanseringsdato er ikke bekreftet.
 - Microsoft Clarity er gratis, og krever samtykkesignal for besøk fra EØS fra 31. oktober 2025.
 - Vipps MobilePay har **ikke** Hurtigkasse for Shopify, ifølge deres egen dokumentasjon.
-- EUs tilgjengelighetsdirektiv er ikke innført i Norge (Bufdir). Vi skriver ikke at nettbutikker har krav etter norsk lov.
+- EUs tilgjengelighetsdirektiv er ikke innført i Norge (Bufdir). **Rettet 2026-10-26:** Norske regler om universell utforming av IKT (likestillings- og diskrimineringsloven og IKT-forskriften, WCAG 2.0 for private) gjelder også private nettløsninger rettet mot allmennheten, og Uutilsynet fører tilsyn. Kilde: uutilsynet.no (IKT i privat sektor). CRO-siden sier dette.
 - Ikke brukt: Rakuten-caset fra web.dev (bare ett selskap) og antall Vipps-brukere i Norge (ikke bekreftet).
 
 **AI-søk** (research 2026-10-26):
@@ -320,3 +330,5 @@ Tekstene skal bare inneholde påstander vi kan stå for. Tidsavhengige fakta sje
 | 2026-10-26 | Samlesiden: fire prinsipper (i stedet for seks), ingen forskningsgraf | «Én feed» og «Kreativet er målrettingen» står på Affiliate og SoMe; grafen for kort og lang effekt står på Merkevare og strategi |
 | 2026-10-26 | Tekstutkast for E-post, CRO, Meta Ads og Bing Ads etter den nye malen; SEO overlates til andre | Brukeren ba om å fylle på der innholdet manglet; research med kilder først (se §8) |
 | 2026-10-26 | Nye kanalsider: AI-søk under SEM, og TikTok og Snapchat under SoMe | Brukeren ville ha kanalene med; AI-søk dekker den betalte delen, mens GEO blir under SEO |
+| 2026-10-26 | Oppstarten kortes fra 0–30/30–60/60–90 dager til uke 1–2, uke 3–4 og fra måned 2, og seksjonen heter «Slik kommer vi i gang» | Brukeren: vi er raskt i gang når tilganger, strategi og mål er på plass. Stemmer med Growth-pakken («De to første ukene kartlegger vi butikken …») |
+| 2026-10-26 | Kvalitetskontroll: rettet universell utforming (CRO), Ahrefs-påstand, unntaket i § 15 og attribusjon (E-post), påstander om billigere klikk uten kilde (Bing), produktannonser og daglig bruk (Snapchat), forbehold om AI Max og nye flater (AI-søk), samtykkeforbehold for server-side på annonsesidene, én definisjon av lønnsomhet, språk; «Les videre» viser inntil fire kort | Uavhengig gjennomgang (Opus) og egne sjekker; strategiske funn står i §7 |

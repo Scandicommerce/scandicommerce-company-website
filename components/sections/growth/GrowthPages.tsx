@@ -41,6 +41,8 @@ const HERO_BUTTONS = [
   { text: 'Se pakkene', link: `/${PACKAGES_SLUG.no}`, variant: 'secondary' as const },
 ]
 
+const PROCESS_LEAD = 'Vi er raskt i gang når tilgangene er på plass og mål og strategi er avklart.'
+
 const CTA = {
   heading: 'Klar for mer vekst?',
   text: 'Fortell oss hvor butikken står i dag, så foreslår vi hvor det lønner seg å starte.',
@@ -53,7 +55,7 @@ const TEMPLATE_BRIEF: { name: string; text: string }[] = [
   { name: 'Hvorfor', text: 'Hvorfor tjenesten betyr noe for en nettbutikk, med ett forskningspunkt og kilde.' },
   { name: 'Når du trenger dette', text: 'Fire situasjoner kunden kjenner seg igjen i.' },
   { name: 'Leveranser', text: 'Rundt seks leveranser i den rekkefølgen de skjer, og hva som ikke er inkludert.' },
-  { name: 'De første 90 dagene', text: 'Tre steg, og de tre måltallene vi styrer etter.' },
+  { name: 'Slik kommer vi i gang', text: 'Tre steg (uke 1–2, uke 3–4, fra måned 2), og de tre måltallene vi styrer etter.' },
   { name: 'Vanlige spørsmål', text: 'Fire spørsmål kunder faktisk stiller før de kjøper.' },
 ]
 
@@ -295,7 +297,7 @@ function DeliverablesSection({ deliverables, notIncluded }: { deliverables: NonN
         <SectionHead
           eyebrow="Leveranser"
           title="Dette får du"
-          lead="Fra revisjon til løpende oppfølging. Du kan starte med én del og bygge videre."
+          lead="Du kan starte med én del og bygge videre."
         />
         <NumberedList items={deliverables} />
         {notIncluded?.length ? (
@@ -308,7 +310,7 @@ function DeliverablesSection({ deliverables, notIncluded }: { deliverables: NonN
   )
 }
 
-/** The first 90 days as a numbered row, with the KPIs we steer by underneath. */
+/** How we get started, as a numbered row, with the KPIs we steer by underneath. */
 function ProcessSection({
   title,
   steps,
@@ -321,7 +323,7 @@ function ProcessSection({
   return (
     <section className="bg-white py-16 lg:py-20">
       <div className={ui.container}>
-        <SectionHead eyebrow="Prosess" title={title} />
+        <SectionHead eyebrow="Prosess" title={title} lead={PROCESS_LEAD} />
         <ol className="m-0 grid list-none grid-cols-1 gap-6 p-0 md:grid-cols-3 lg:gap-8">
           {steps.map((step) => (
             <li key={step.period} className="flex flex-col gap-3 border-t border-sc-ink-900 pt-5">
@@ -349,20 +351,20 @@ function ProcessSection({
   )
 }
 
-/** Onward links: the service's channel pages first, then related services. Three at most. */
+/** Onward links: the service's channel pages first, then related services. Four at most. */
 function LinksSection({ service, related }: { service: GrowthService; related?: GrowthPageContent['related'] }) {
   const channels = growthChildren(service.slug).map((child) => ({ target: child, eyebrow: 'Kanal', text: child.lead }))
   const others = (related ?? []).flatMap((item) => {
     const target = findGrowthService(item.slug)
     return target ? [{ target, eyebrow: stageEyebrow(target.slug) ?? growthHub.label, text: item.why }] : []
   })
-  const items = [...channels, ...others].slice(0, 3)
+  const items = [...channels, ...others].slice(0, 4)
   if (!items.length) return null
   return (
     <section className="bg-white py-16 lg:py-20">
       <div className={ui.container}>
         <div className={`${ui.eyebrow} mb-5`}>Les videre</div>
-        <ul className="m-0 grid list-none grid-cols-1 gap-4 p-0 md:grid-cols-3 lg:gap-5">
+        <ul className={`m-0 grid list-none grid-cols-1 gap-4 p-0 md:grid-cols-2 lg:gap-5 ${items.length === 4 ? 'lg:grid-cols-4' : 'lg:grid-cols-3'}`}>
           {items.map(({ target, eyebrow, text }) => (
             <li key={target.slug}>
               <LocalizedLink href={growthHref(target.slug)} className={`${ui.card} group h-full no-underline`}>
@@ -414,7 +416,7 @@ export function GrowthServicePage({ service }: { service: GrowthService }) {
           {content.why && <WhySection why={content.why} />}
           {content.situations?.length ? <SituationsSection situations={content.situations} /> : null}
           {content.deliverables?.length ? <DeliverablesSection deliverables={content.deliverables} notIncluded={content.notIncluded} /> : null}
-          {content.process?.length ? <ProcessSection title="De første 90 dagene" steps={content.process} kpis={content.kpis} /> : null}
+          {content.process?.length ? <ProcessSection title="Slik kommer vi i gang" steps={content.process} kpis={content.kpis} /> : null}
           <Faq items={content.faq} heading="Vanlige spørsmål" />
         </>
       ) : (

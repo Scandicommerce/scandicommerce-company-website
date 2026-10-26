@@ -60,7 +60,7 @@ export interface GrowthPageContent {
   /** "Leveranser": about six, in the order they happen. */
   deliverables?: { name: string; text: string }[]
   notIncluded?: string[]
-  /** "De første 90 dagene": three steps. */
+  /** "Slik kommer vi i gang": three steps (Uke 1–2, Uke 3–4, Fra måned 2). */
   process?: { period: string; title: string; text: string }[]
   /** What we steer by: three KPIs. */
   kpis?: { name: string; text: string }[]
@@ -111,12 +111,12 @@ export const growthContent: Record<string, GrowthPageContent> = {
     ],
     notIncluded: ['Logodesign og full visuell identitet', 'Film- og fotoproduksjon', 'Medieinnkjøp'],
     process: [
-      { period: '0–30 dager', title: 'Innsikt', text: 'Workshop, kundedata, konkurrenter og søkedata. Vi finner kjøpssituasjonene og det som skiller deg ut.' },
-      { period: '30–60 dager', title: 'Strategi', text: 'Posisjonering, merkevareelementer, fordeling mellom merkevare og salg, og en vekstplan.' },
-      { period: '60–90 dager', title: 'Ut i kanalene', text: 'Strategien tas i bruk i kampanjer, innhold og nettbutikk, og målingen starter.' },
+      { period: 'Uke 1–2', title: 'Innsikt', text: 'Workshop, kundedata, konkurrenter og søkedata. Vi finner kjøpssituasjonene og det som skiller deg ut.' },
+      { period: 'Uke 3–4', title: 'Strategi', text: 'Posisjonering, merkevareelementer, fordeling mellom merkevare og salg, og en vekstplan.' },
+      { period: 'Fra måned 2', title: 'Ut i kanalene', text: 'Strategien tas i bruk i kampanjer, innhold og nettbutikk, og målingen starter.' },
     ],
     kpis: [
-      { name: 'Andel av søk', text: 'Din andel av merkenavnsøkene i kategorien, en tidlig indikator på markedsandel.' },
+      { name: 'Andel av søk', text: 'Din andel av merkenavnsøkene i kategorien, en tidlig indikator på markedsandel, der det er nok søk til å måle.' },
       { name: 'Merkevaresøk', text: 'Hvor mange som søker på navnet ditt, over tid.' },
       { name: 'Andel nye kunder', text: 'Om veksten kommer fra flere kjøpere, ikke bare de samme.' },
     ],
@@ -127,11 +127,11 @@ export const growthContent: Record<string, GrowthPageContent> = {
       },
       {
         question: 'Hvordan måler dere merkevare?',
-        answer: 'Med tall som kan følges hver måned: andel av søk mot konkurrentene i Google Trends, merkevaresøk i Search Console, andel nye kunder og synlighet i AI-svar.',
+        answer: 'Med tall som kan følges hver måned: merkevaresøk i Search Console, andel nye kunder og, der det er nok søk, andel av søk mot konkurrentene i Google Trends. For de viktigste spørsmålene i kategorien sjekker vi også om du nevnes i AI-svar.',
       },
       {
         question: 'Hvorfor betyr merkevaren noe for AI-søk?',
-        answer: 'AI-tjenester gjengir det som sies om deg på nettet. En analyse av 75 000 merkevarer fra Ahrefs fant at omtale av merkevaren og søk på navnet henger sterkere sammen med synlighet i Googles AI-oversikter enn lenker gjør. Det er sammenheng, ikke bevist årsak, men retningen er tydelig.',
+        answer: 'AI-tjenester gjengir det som sies om deg på nettet. En analyse av 75 000 merkevarer fra Ahrefs fant at omtale av merkevaren hang sterkest sammen med synlighet i Googles AI-oversikter, klart sterkere enn antall lenkende domener. Det er sammenheng, ikke bevist årsak.',
       },
       {
         question: 'Er dette bare for store merkevarer?',
@@ -157,7 +157,7 @@ export const growthContent: Record<string, GrowthPageContent> = {
       title: 'Sosiale medier skaper etterspørsel',
       paragraphs: [
         'Søk fanger etterspørsel som allerede finnes. I sosiale medier når du folk før de begynner å lete, slik at det er deg de kommer på når behovet melder seg.',
-        'Algoritmene til Meta, TikTok og Snapchat velger selv hvem som ser hvilken annonse, ut fra kreativene du gir dem. Gode og varierte kreativer er derfor den viktigste målrettingen du har.',
+        'Algoritmene til Meta, TikTok og Snapchat velger i stor grad selv hvem som ser hvilken annonse. Gode og varierte kreativer er derfor blitt avgjørende, og Meta skriver selv at variasjon gir systemet mer å jobbe med.',
       ],
       insight: {
         title: 'Kreativet er målrettingen',
@@ -184,9 +184,9 @@ export const growthContent: Record<string, GrowthPageContent> = {
     ],
     notIncluded: ['Annonsebudsjett, som du betaler direkte til plattformene', 'Større film- og fotoproduksjoner', 'Honorarer til influensere og skapere'],
     process: [
-      { period: '0–30 dager', title: 'Innsikt og kreativ plattform', text: 'Revisjon av kontoer og kreativer, målgrupper og kjøpssituasjoner, og faste merkevareelementer.' },
-      { period: '30–60 dager', title: 'Lansering og testing', text: 'Nye kampanjer for rekkevidde og salg, med mange kreative varianter som testes mot hverandre.' },
-      { period: '60–90 dager', title: 'Skaler det som virker', text: 'Mer budsjett til kreativene som gir nye kunder, og en fast rytme for nye kreativer.' },
+      { period: 'Uke 1–2', title: 'Innsikt og kreativ plattform', text: 'Revisjon av kontoer og kreativer, målgrupper og kjøpssituasjoner, og faste merkevareelementer.' },
+      { period: 'Uke 3–4', title: 'Lansering og testing', text: 'Nye kampanjer for rekkevidde og salg, med mange kreative varianter som testes mot hverandre.' },
+      { period: 'Fra måned 2', title: 'Skaler det som virker', text: 'Mer budsjett til kreativene som gir nye kunder, og en fast rytme for nye kreativer.' },
     ],
     kpis: [
       { name: 'Kostnad per ny kunde', text: 'Hva det koster å vinne kunder som ikke har handlet før.' },
@@ -254,9 +254,9 @@ export const growthContent: Record<string, GrowthPageContent> = {
     ],
     notIncluded: ['Lisens til Tracklution og kostnader i Google Cloud, som du betaler direkte', 'Juridisk rådgivning om personvern'],
     process: [
-      { period: '0–30 dager', title: 'Revisjon og plan', text: 'Vi kartlegger sporing og samtykke, finner avvikene og lager en måleplan.' },
-      { period: '30–60 dager', title: 'Server-side på plass', text: 'Tracklution settes opp, plattformene kobles på, og tallene kontrolleres mot ordrene i nettbutikken.' },
-      { period: '60–90 dager', title: 'Analyse og dashboards', text: 'Data samles i BigQuery, og dashboardene bygges rundt måltallene dere styrer etter.' },
+      { period: 'Uke 1–2', title: 'Revisjon og plan', text: 'Vi kartlegger sporing og samtykke, finner avvikene og lager en måleplan.' },
+      { period: 'Uke 3–4', title: 'Server-side på plass', text: 'Tracklution settes opp, plattformene kobles på, og tallene kontrolleres mot ordrene i nettbutikken.' },
+      { period: 'Fra måned 2', title: 'Analyse og dashboards', text: 'Data samles i BigQuery, og dashboardene bygges rundt måltallene dere styrer etter.' },
     ],
     kpis: [
       { name: 'Andel sporede ordre', text: 'Hvor mange av ordrene i nettbutikken som også registreres i plattformene og GA4.' },
@@ -319,12 +319,12 @@ export const growthContent: Record<string, GrowthPageContent> = {
     ],
     notIncluded: ['Annonsebudsjett, som du betaler direkte til Google og Microsoft', 'Produksjon av video og foto', 'Annonsering i sosiale medier'],
     process: [
-      { period: '0–30 dager', title: 'Rydd og mål', text: 'Revisjon, sporing på plass, feed i orden og en kampanjestruktur vi kan stole på.' },
-      { period: '30–60 dager', title: 'Bygg og test', text: 'Ny struktur i drift, budstrategier stilt inn mot lønnsomhet og de første testene i gang.' },
-      { period: '60–90 dager', title: 'Skaler det som virker', text: 'Mer budsjett til det som leverer, kutt i det som ikke gjør det, og plan for neste kvartal.' },
+      { period: 'Uke 1–2', title: 'Rydd og mål', text: 'Revisjon, sporing på plass, feed i orden og en kampanjestruktur vi kan stole på.' },
+      { period: 'Uke 3–4', title: 'Bygg og test', text: 'Ny struktur i drift, budstrategier stilt inn mot lønnsomhet og de første testene i gang.' },
+      { period: 'Fra måned 2', title: 'Skaler det som virker', text: 'Mer budsjett til det som leverer, kutt i det som ikke gjør det, og plan for neste kvartal.' },
     ],
     kpis: [
-      { name: 'Lønnsomhet', text: 'Inntekt per annonsekrone, og hva som er igjen etter varekost.' },
+      { name: 'Lønnsomhet', text: 'Hva som er igjen etter varekost og annonsekostnad, ikke bare ROAS.' },
       { name: 'Kostnad per ny kunde', text: 'Hva det koster å vinne en kunde som ikke har handlet hos deg før.' },
       { name: 'Kostnad på merkevaresøk', text: 'Hvor stor del av budsjettet som går til ditt eget navn, og om det kan senkes.' },
     ],
@@ -339,7 +339,7 @@ export const growthContent: Record<string, GrowthPageContent> = {
       },
       {
         question: 'Bør jeg annonsere på Bing i tillegg til Google?',
-        answer: 'Ofte, men ikke alltid. Bing er en liten del av søkene i Norge, men har gjerne lavere klikkpris og en annen målgruppe, særlig på desktop. Vi tester det som et tillegg når Google-kontoen er i orden.',
+        answer: 'Ofte, men ikke alltid. Bing er en liten del av søkene i Norge totalt, men står for om lag ett av fem søk på desktop. Vi tester det som et tillegg når Google-kontoen er i orden.',
       },
       {
         question: 'Hvem eier kontoen og dataene?',
@@ -381,9 +381,9 @@ export const growthContent: Record<string, GrowthPageContent> = {
     ],
     notIncluded: ['Annonsebudsjett til Google', 'Videoproduksjon til YouTube'],
     process: [
-      { period: '0–30 dager', title: 'Data i orden', text: 'Feed, sporing og samtykke rettes opp, slik at Google lærer av riktige tall.' },
-      { period: '30–60 dager', title: 'Ny struktur', text: 'Merkevare og nye kunder skilles, Performance Max får rammer, og budstrategiene settes mot lønnsomhet.' },
-      { period: '60–90 dager', title: 'Test og skaler', text: 'Eksperimenter med nye kampanjetyper, og mer budsjett til det som leverer.' },
+      { period: 'Uke 1–2', title: 'Data i orden', text: 'Feed, sporing og samtykke rettes opp, slik at Google lærer av riktige tall.' },
+      { period: 'Uke 3–4', title: 'Ny struktur', text: 'Merkevare og nye kunder skilles, Performance Max får rammer, og budstrategiene settes mot lønnsomhet.' },
+      { period: 'Fra måned 2', title: 'Test og skaler', text: 'Eksperimenter med nye kampanjetyper, og mer budsjett til det som leverer.' },
     ],
     kpis: [
       { name: 'Konverteringsverdi og ROAS', text: 'Inntekt fra Google Ads per annonsekrone, målt mot nettbutikken.' },
@@ -430,7 +430,7 @@ export const growthContent: Record<string, GrowthPageContent> = {
         'Derfor starter vi når Google Ads er i orden. Kampanjene importeres, tilpasses og følges opp for seg, så Bing bare får budsjett når det lønner seg.',
       ],
       insight: {
-        title: 'Om lag én av fem søk på desktop',
+        title: 'Om lag ett av fem søk på desktop',
         text: 'I september 2026 sto Bing for om lag 21 % av søkene på desktop i Norge, og om lag 6 % på tvers av alle enheter. Google er størst på begge, men på desktop er Bing en klar nummer to.',
         chart: {
           kind: 'bars',
@@ -465,12 +465,12 @@ export const growthContent: Record<string, GrowthPageContent> = {
     ],
     notIncluded: ['Annonsebudsjett, som du betaler direkte til Microsoft'],
     process: [
-      { period: '0–30 dager', title: 'Vurder og importer', text: 'Vi ser på om Bing passer, setter opp UET-taggen med samtykke og importerer kampanjene.' },
-      { period: '30–60 dager', title: 'Tilpass', text: 'Budsjett, bud og søkeord justeres for Bing, og Shopping kobles på.' },
-      { period: '60–90 dager', title: 'Skaler eller kutt', text: 'Vi sammenligner lønnsomheten med Google og anbefaler å øke, holde eller avslutte.' },
+      { period: 'Uke 1–2', title: 'Vurder og importer', text: 'Vi ser på om Bing passer, setter opp UET-taggen med samtykke og importerer kampanjene.' },
+      { period: 'Uke 3–4', title: 'Tilpass', text: 'Budsjett, bud og søkeord justeres for Bing, og Shopping kobles på.' },
+      { period: 'Fra måned 2', title: 'Skaler eller kutt', text: 'Vi sammenligner lønnsomheten med Google og anbefaler å øke, holde eller avslutte.' },
     ],
     kpis: [
-      { name: 'Lønnsomhet', text: 'Inntekt per annonsekrone i Bing, målt mot nettbutikken.' },
+      { name: 'Lønnsomhet', text: 'Hva som er igjen etter varekost og annonsekostnad i Bing, målt mot nettbutikken.' },
       { name: 'Kostnad per ny kunde', text: 'Hva en ny kunde koster i Bing, sammenlignet med Google.' },
       { name: 'Klikkpris', text: 'Hva et klikk koster i Bing på de samme søkene som i Google.' },
     ],
@@ -503,9 +503,9 @@ export const growthContent: Record<string, GrowthPageContent> = {
     highlights: ['AI Max for Search', 'Produktdata klare for AI', 'Tester når nye flater åpner'],
     facts: [
       { label: 'I dag', value: 'Google', note: 'annonser rundt AI-oversiktene' },
-      { label: 'Verktøy', value: 'AI Max', note: 'for Search, med kontroll på merke og URL' },
+      { label: 'Verktøy', value: 'AI Max', note: 'for Search, der det er tilgjengelig' },
       { label: 'Grunnlag', value: 'Produktdata', note: 'Merchant Center og nettbutikken' },
-      { label: 'Neste', value: 'ChatGPT · Copilot', note: 'når de åpner for norske annonsører' },
+      { label: 'Nye flater', value: 'Testes', note: 'når de åpner for norske annonsører' },
     ],
     why: {
       title: 'Søk blir til samtaler',
@@ -527,17 +527,17 @@ export const growthContent: Record<string, GrowthPageContent> = {
     ],
     deliverables: [
       { name: 'Status for Norge', text: 'Hva som er tilgjengelig for norske annonsører nå, og hva som kommer.' },
-      { name: 'Kampanjer klare for AI-oversiktene', text: 'Søk, Shopping og Performance Max satt opp slik at annonsene kan vises rundt AI-oversiktene.' },
-      { name: 'AI Max for Search som eksperiment', text: 'Testet mot vanlige søkekampanjer, med kontroll på merker, URL-er og tekster.' },
+      { name: 'Kampanjer for lengre spørsmål', text: 'Annonsene rundt AI-oversiktene kommer fra vanlige kampanjer. Vi sørger for at søkeord, tekster og produktdata passer til lengre spørsmål.' },
+      { name: 'AI Max for Search som eksperiment', text: 'Der det er tilgjengelig, testet mot vanlige søkekampanjer, med kontroll på merker, URL-er og tekster.' },
       { name: 'Produktdata for AI-tjenester', text: 'Merchant Center og produktkatalogen komplette og oppdaterte, så produktene kan hentes inn i AI-søk og AI-handel.' },
       { name: 'Nye flater når de åpner', text: 'Annonser i ChatGPT, Copilot og andre AI-tjenester testes når de blir tilgjengelige i Norge.' },
-      { name: 'Ærlig rapportering', text: 'Hva vi kan og ikke kan måle: Google viser foreløpig ikke egne tall for annonser i AI-oversikter.' },
+      { name: 'Tydelig rapportering', text: 'Hva vi kan og ikke kan måle: Google viser foreløpig ikke egne tall for annonser i AI-oversikter.' },
     ],
     notIncluded: ['Annonsebudsjett, som du betaler direkte til plattformene', 'Synlighet i AI-svar uten å betale, som ligger under SEO'],
     process: [
-      { period: '0–30 dager', title: 'Status og data', text: 'Vi kartlegger hva som er tilgjengelig, og får produktdata og søkekampanjer klare.' },
-      { period: '30–60 dager', title: 'Test AI Max', text: 'AI Max kjøres som eksperiment mot dagens kampanjer, med tydelige rammer.' },
-      { period: '60–90 dager', title: 'Behold det som virker', text: 'Vi skalerer det som gir lønnsomt salg, og er klare når nye flater åpner.' },
+      { period: 'Uke 1–2', title: 'Status og data', text: 'Vi kartlegger hva som er tilgjengelig, og får produktdata og søkekampanjer klare.' },
+      { period: 'Uke 3–4', title: 'Test AI Max', text: 'AI Max kjøres som eksperiment mot dagens kampanjer, med tydelige rammer.' },
+      { period: 'Fra måned 2', title: 'Behold det som virker', text: 'Vi skalerer det som gir lønnsomt salg, og er klare når nye flater åpner.' },
     ],
     kpis: [
       { name: 'Lønnsomhet i eksperimentene', text: 'AI Max og nye flater målt mot vanlige kampanjer.' },
@@ -603,14 +603,14 @@ export const growthContent: Record<string, GrowthPageContent> = {
       { name: 'Katalogen i orden', text: 'Synkronisert med nettbutikken, med samme ID-er som i hendelsene, og produktsett til kampanjene.' },
       { name: 'Conversions API', text: 'Kjøp og andre hendelser sendt server-side, med Tracklution som standard, og hendelsesmatchkvaliteten fulgt opp.' },
       { name: 'Kampanjestruktur', text: 'Advantage+ salgskampanjer med katalog, og kundelister som holder budsjettet på nye kunder der det trengs.' },
-      { name: 'Kreativer for Reels, Stories og feed', text: 'Video i 9:16, bilder og karuseller, med kantene fri for tekst og logo.' },
+      { name: 'Kreativer for Reels, Stories og feed', text: 'Video i 9:16, bilder og karuseller, med kantene frie for tekst og logo.' },
       { name: 'Rapport mot butikken', text: 'Nye kunder og salg målt mot ordrene i nettbutikken, med løftstester der det går.' },
     ],
     notIncluded: ['Annonsebudsjett, som du betaler direkte til Meta', 'Større film- og fotoproduksjoner'],
     process: [
-      { period: '0–30 dager', title: 'Data og katalog', text: 'Revisjon, Conversions API på plass og katalogen synkronisert med riktige ID-er.' },
-      { period: '30–60 dager', title: 'Struktur og kreativer', text: 'Ny kampanjestruktur, kundelister for nye kunder og de første kreative variantene i test.' },
-      { period: '60–90 dager', title: 'Skaler og test', text: 'Mer budsjett til det som gir nye kunder, og en fast rytme for nye kreativer.' },
+      { period: 'Uke 1–2', title: 'Data og katalog', text: 'Revisjon, Conversions API på plass og katalogen synkronisert med riktige ID-er.' },
+      { period: 'Uke 3–4', title: 'Struktur og kreativer', text: 'Ny kampanjestruktur, kundelister for nye kunder og de første kreative variantene i test.' },
+      { period: 'Fra måned 2', title: 'Skaler og test', text: 'Mer budsjett til det som gir nye kunder, og en fast rytme for nye kreativer.' },
     ],
     kpis: [
       { name: 'Kostnad per ny kunde', text: 'Hva det koster å vinne kunder som ikke har handlet før.' },
@@ -624,11 +624,11 @@ export const growthContent: Record<string, GrowthPageContent> = {
       },
       {
         question: 'Hvordan unngår vi å betale for kunder vi allerede har?',
-        answer: 'Meta har fjernet budsjettaket for eksisterende kunder i Advantage+ salgskampanjer. Vi gjør det samme manuelt, med kundelister som ekskluderes eller egne annonsesett med egne budsjettgrenser.',
+        answer: 'Meta har fjernet budsjettaket for eksisterende kunder i Advantage+ salgskampanjer. Vi styrer det i stedet selv, med kundelister som ekskluderes eller egne annonsesett med egne budsjettgrenser.',
       },
       {
         question: 'Hvorfor Conversions API når vi har pikselen?',
-        answer: 'Pikselen kjører i nettleseren og kan stoppes av annonseblokkere. Conversions API sender hendelsene fra server til server, så Meta ser flere av kjøpene og har mer å optimalisere på.',
+        answer: 'Pikselen kjører i nettleseren og kan stoppes av annonseblokkere. Conversions API sender hendelsene fra server til server, så Meta ser flere av kjøpene fra besøkende som har samtykket, og har mer å optimalisere på.',
       },
       {
         question: 'Hvilket attribusjonsvindu bruker dere?',
@@ -673,14 +673,14 @@ export const growthContent: Record<string, GrowthPageContent> = {
       { name: 'Kreativer laget for TikTok', text: 'Vertikal video med lyd og en tydelig start, i mange varianter som testes mot hverandre.' },
       { name: 'Skapere og Spark Ads', text: 'Samarbeid med skapere, og innlegg fra dem og fra egen konto brukt som annonser med tillatelse.' },
       { name: 'Smart+ og kampanjestruktur', text: 'Kampanjer der TikTok finner publikum, med kundelister og budsjett satt av oss.' },
-      { name: 'Pixel og Events API', text: 'TikTok-pikselen og Events API via Tracklution, så TikTok ser de samme kjøpene som nettbutikken.' },
+      { name: 'Piksel og Events API', text: 'TikTok-pikselen og Events API via Tracklution, så TikTok ser kjøpene fra besøkende som har samtykket.' },
       { name: 'Rapport mot butikken', text: 'Nye kunder og salg målt mot ordrene i nettbutikken, ikke bare visninger.' },
     ],
     notIncluded: ['Annonsebudsjett, som du betaler direkte til TikTok', 'Honorarer til skapere', 'TikTok Shop, som ikke er lansert i Norge'],
     process: [
-      { period: '0–30 dager', title: 'Plan og data', text: 'Kanalplan, pikselen og Events API på plass, og de første kreative konseptene.' },
-      { period: '30–60 dager', title: 'Test kreativer', text: 'Mange varianter og innhold fra skapere testes mot hverandre.' },
-      { period: '60–90 dager', title: 'Skaler', text: 'Mer budsjett til kreativene som gir nye kunder, og en fast rytme for nytt innhold.' },
+      { period: 'Uke 1–2', title: 'Plan og data', text: 'Kanalplan, pikselen og Events API på plass, og de første kreative konseptene.' },
+      { period: 'Uke 3–4', title: 'Test kreativer', text: 'Mange varianter og innhold fra skapere testes mot hverandre.' },
+      { period: 'Fra måned 2', title: 'Skaler', text: 'Mer budsjett til kreativene som gir nye kunder, og en fast rytme for nytt innhold.' },
     ],
     kpis: [
       { name: 'Kostnad per ny kunde', text: 'Hva det koster å vinne kunder som ikke har handlet før.' },
@@ -690,7 +690,7 @@ export const growthContent: Record<string, GrowthPageContent> = {
     faq: [
       {
         question: 'Er TikTok bare for unge?',
-        answer: 'Nei. Ifølge Ipsos hadde 29 % av nordmenn over 18 år en TikTok-profil i fjerde kvartal 2023. Vi ser på om målgruppen din er der før vi anbefaler budsjett.',
+        answer: 'Ikke bare. Ifølge Ipsos hadde 29 % av nordmenn over 18 år en TikTok-profil i fjerde kvartal 2023. Vi ser på om målgruppen din er der før vi anbefaler budsjett.',
       },
       {
         question: 'Kan vi selge direkte i TikTok?',
@@ -713,21 +713,21 @@ export const growthContent: Record<string, GrowthPageContent> = {
 
   'some/snapchat': {
     highlight: 'Snapchat',
-    highlights: ['Der nordmenn er hver dag', 'Produktannonser fra katalogen', 'Pixel og Conversions API'],
+    highlights: ['58 % bruker den en vanlig dag', 'Vertikale annonser i fullskjerm', 'Piksel og Conversions API'],
     facts: [
       { label: 'Formater', value: 'Snap Ads', note: 'video, Story og Collection' },
-      { label: 'Katalog', value: 'Produktannonser', note: 'Dynamic Product Ads' },
+      { label: 'Katalog', value: 'Produktannonser', note: 'der formatet er tilgjengelig' },
       { label: 'Data', value: 'Conversions API', note: 'via Tracklution' },
       { label: 'Vi måler', value: 'Nye kunder', note: 'mot ordrene i nettbutikken' },
     ],
     why: {
-      title: 'Der mange nordmenn er hver dag',
+      title: 'Der mange nordmenn er en vanlig dag',
       paragraphs: [
         'Snapchat er et av de mest brukte sosiale mediene i Norge, og ikke bare blant de yngste. Annonsene vises vertikalt i fullskjerm og gir merkevaren plass til å bli lagt merke til.',
-        'For nettbutikker kan produktkatalogen bli til annonser som viser riktige produkter til riktige personer. Det forutsetter at katalogen og kjøpene fra butikken når Snapchat.',
+        'For nettbutikker kan produktkatalogen bli til annonser som viser riktige produkter til riktige personer, der formatet er tilgjengelig. Det forutsetter at katalogen og kjøpene fra butikken når Snapchat.',
       ],
       insight: {
-        title: 'Nesten seks av ti bruker Snapchat hver dag',
+        title: '58 % bruker Snapchat en vanlig dag',
         text: 'Ifølge SSBs Norsk mediebarometer for 2025 bruker 58 % av befolkningen Snapchat en gjennomsnittsdag. Bare Facebook er høyere, med 63 %.',
         chart: {
           kind: 'bars',
@@ -755,16 +755,16 @@ export const growthContent: Record<string, GrowthPageContent> = {
     deliverables: [
       { name: 'Kanalplan', text: 'Hvilken rolle Snapchat skal ha ved siden av Meta og TikTok, med mål og budsjett.' },
       { name: 'Kreativer i fullskjerm', text: 'Vertikal video og bilder i 9:16, korte og med budskapet tidlig.' },
-      { name: 'Produktannonser', text: 'Katalogen koblet til Snapchat, så annonsene viser produktene som passer hver person.' },
+      { name: 'Produktannonser', text: 'Katalogen koblet til Snapchat, så annonsene viser produktene som passer hver person, når formatet er tilgjengelig for kontoen.' },
       { name: 'Story- og Collection-annonser', text: 'Flere bilder eller produkter i samme annonse, så kundene kan bla og velge.' },
-      { name: 'Pixel og Conversions API', text: 'Snap-pikselen og Conversions API via Tracklution, så Snapchat ser de samme kjøpene som nettbutikken.' },
+      { name: 'Piksel og Conversions API', text: 'Snap-pikselen og Conversions API via Tracklution, så Snapchat ser kjøpene fra besøkende som har samtykket.' },
       { name: 'Rapport mot butikken', text: 'Nye kunder og salg målt mot ordrene i nettbutikken.' },
     ],
     notIncluded: ['Annonsebudsjett, som du betaler direkte til Snapchat', 'AR-linser og større produksjoner'],
     process: [
-      { period: '0–30 dager', title: 'Plan og data', text: 'Kanalplan, pikselen og Conversions API på plass, og katalogen koblet til.' },
-      { period: '30–60 dager', title: 'Test', text: 'Vertikale kreativer og produktannonser testes mot hverandre.' },
-      { period: '60–90 dager', title: 'Skaler', text: 'Mer budsjett til det som gir nye kunder, og nye kreativer før de gamle slites ut.' },
+      { period: 'Uke 1–2', title: 'Plan og data', text: 'Kanalplan, pikselen og Conversions API på plass, og katalogen koblet til.' },
+      { period: 'Uke 3–4', title: 'Test', text: 'Vertikale kreativer og produktannonser testes mot hverandre.' },
+      { period: 'Fra måned 2', title: 'Skaler', text: 'Mer budsjett til det som gir nye kunder, og nye kreativer før de gamle slites ut.' },
     ],
     kpis: [
       { name: 'Kostnad per ny kunde', text: 'Hva det koster å vinne kunder som ikke har handlet før.' },
@@ -786,7 +786,7 @@ export const growthContent: Record<string, GrowthPageContent> = {
       },
       {
         question: 'Holder det med Shopify-appen?',
-        answer: 'Snapchat-appen i Shopify synkroniserer katalogen og legger inn pikselen. Kjøpene sender vi i tillegg server-side via Tracklution, så Snapchat ser flere av dem.',
+        answer: 'Snapchat-appen i Shopify synkroniserer katalogen og legger inn pikselen. Kjøpene sender vi i tillegg server-side via Tracklution, så Snapchat ser flere av dem, for besøkende som har samtykket.',
       },
     ],
     related: [
@@ -808,7 +808,7 @@ export const growthContent: Record<string, GrowthPageContent> = {
       title: 'Fra første kjøp til neste',
       paragraphs: [
         'Annonsene skaffer nye kunder. E-posten sørger for at de kommer tilbake. Med flytene på plass får kunden riktig melding når de registrerer seg, legger noe i handlekurven, handler eller blir borte, uten at noen trykker send.',
-        'Med data fra nettbutikken får hver kunde innhold ut fra hva de har kjøpt og hvor de er i kundereisen. Det er 1:1-kommunikasjon i stor skala, og det forutsetter at samtykke og levering er i orden.',
+        'Med data fra nettbutikken får hver kunde innhold ut fra hva de har kjøpt og hvor de er i kundereisen. Det er personlig kommunikasjon, automatisert, og det forutsetter at samtykke og levering er i orden.',
       ],
       insight: {
         title: 'Gmail stiller krav til avsenderen',
@@ -825,16 +825,16 @@ export const growthContent: Record<string, GrowthPageContent> = {
     deliverables: [
       { name: 'Revisjon', text: 'Flyter, lister, segmenter, levering og samtykke, med en prioritert tiltaksliste.' },
       { name: 'Kjerneflytene', text: 'Velkomstserie, forlatt handlekurv, sett produkt, etter kjøp og tilbakevinning.' },
-      { name: 'Segmentering', text: 'Segmenter ut fra kjøpshistorikk og adferd, og prediksjoner som forventet neste kjøp når dataene er store nok.' },
+      { name: 'Segmentering', text: 'Segmenter ut fra kjøpshistorikk og atferd, og prediksjoner som forventet neste kjøp når dataene er store nok.' },
       { name: 'Kampanjer med plan', text: 'En fast kampanjekalender, koblet til sesongene og resten av markedsføringen.' },
       { name: 'Levering og samtykke', text: 'SPF, DKIM og DMARC, avmelding med ett klikk, og samtykke som samles inn riktig.' },
       { name: 'Månedlig rapport', text: 'Inntekt per flyt og kampanje, gjenkjøp og listehelse.' },
     ],
     notIncluded: ['Lisens til Klaviyo, som du betaler direkte', 'SMS-markedsføring', 'Fotoproduksjon'],
     process: [
-      { period: '0–30 dager', title: 'Revisjon og grunnmur', text: 'Levering, samtykke og Klaviyo-oppsettet gjennomgått, og de viktigste flytene prioritert.' },
-      { period: '30–60 dager', title: 'Flytene på plass', text: 'Velkomst, forlatt handlekurv og etter kjøp bygget og testet, med segmenter fra kjøpsdataene.' },
-      { period: '60–90 dager', title: 'Kampanjer og finjustering', text: 'Fast kampanjerytme, flere flyter og tester av emnelinjer, innhold og tidspunkt.' },
+      { period: 'Uke 1–2', title: 'Revisjon og grunnmur', text: 'Levering, samtykke og Klaviyo-oppsettet gjennomgått, og de viktigste flytene prioritert.' },
+      { period: 'Uke 3–4', title: 'Flytene på plass', text: 'Velkomst, forlatt handlekurv og etter kjøp bygget og testet, med segmenter fra kjøpsdataene.' },
+      { period: 'Fra måned 2', title: 'Kampanjer og finjustering', text: 'Fast kampanjerytme, flere flyter og tester av emnelinjer, innhold og tidspunkt.' },
     ],
     kpis: [
       { name: 'Inntekt per mottaker', text: 'Hva hver flyt og kampanje gir i salg, delt på antall mottakere.' },
@@ -844,11 +844,11 @@ export const growthContent: Record<string, GrowthPageContent> = {
     faq: [
       {
         question: 'Hvorfor Klaviyo?',
-        answer: 'Klaviyo er laget for netthandel og henter kunder, ordre og adferd fra nettbutikken, også fra Shopify. Da kan flyter og segmenter bygges på det kundene faktisk gjør. Bruker dere et annet verktøy, kan vi jobbe der.',
+        answer: 'Klaviyo er laget for netthandel og henter kunder, ordre og atferd fra nettbutikken, også fra Shopify. Da kan flyter og segmenter bygges på det kundene faktisk gjør. Bruker dere et annet verktøy, kan vi jobbe der.',
       },
       {
         question: 'Hva sier loven?',
-        answer: 'Etter markedsføringsloven § 15 trenger du samtykke før du sender markedsføring på e-post til forbrukere. Unntaket er egne kunder som har kjøpt av deg, for lignende varer, så lenge de enkelt og gratis kan melde seg av. Forbrukertilsynet anbefaler likevel å samle inn samtykke.',
+        answer: 'Etter markedsføringsloven § 15 trenger du samtykke før du sender markedsføring på e-post til forbrukere. Unntaket er egne kunder: adressen må være samlet inn ved et kjøp, markedsføringen må gjelde lignende varer, og kunden må enkelt og gratis kunne reservere seg, både da adressen ble samlet inn og i hver e-post. Forbrukertilsynet anbefaler likevel å samle inn samtykke.',
       },
       {
         question: 'Hvorfor styrer dere ikke etter åpningsraten?',
@@ -856,7 +856,7 @@ export const growthContent: Record<string, GrowthPageContent> = {
       },
       {
         question: 'Hvordan måles salget fra e-post?',
-        answer: 'Klaviyo gir som standard æren til e-posten når kunden har åpnet eller klikket i løpet av fem dager før kjøpet. Vinduet kan justeres, og vi ser alltid salget fra e-post sammen med resten av markedsføringen.',
+        answer: 'Klaviyo gir som standard æren til e-posten når kunden har åpnet eller klikket i løpet av fem dager før kjøpet. Fordi åpninger er upålitelige, legger vi mest vekt på klikk, og ser alltid salget fra e-post sammen med resten av markedsføringen.',
       },
     ],
     related: [
@@ -915,9 +915,9 @@ export const growthContent: Record<string, GrowthPageContent> = {
     ],
     notIncluded: ['Nytt tema eller redesign, som er et eget prosjekt', 'Egenutviklede apper og funksjoner'],
     process: [
-      { period: '0–30 dager', title: 'Analyse', text: 'Data, heatmaps og opptak viser hvor kundene faller fra, og vi lager en prioritert testplan.' },
-      { period: '30–60 dager', title: 'Raske forbedringer', text: 'Åpenbare feil rettes med en gang, og de første testene settes i gang.' },
-      { period: '60–90 dager', title: 'Test, lær og rull ut', text: 'Vinnerne rulles ut, og testplanen oppdateres med det vi har lært.' },
+      { period: 'Uke 1–2', title: 'Analyse', text: 'Data, heatmaps og opptak viser hvor kundene faller fra, og vi lager en prioritert testplan.' },
+      { period: 'Uke 3–4', title: 'Raske forbedringer', text: 'Åpenbare feil rettes med en gang, og de første testene settes i gang.' },
+      { period: 'Fra måned 2', title: 'Test, lær og rull ut', text: 'Vinnerne rulles ut, og testplanen oppdateres med det vi har lært.' },
     ],
     kpis: [
       { name: 'Konverteringsrate', text: 'Andel besøk som ender i kjøp, på mobil og desktop hver for seg.' },
@@ -935,11 +935,11 @@ export const growthContent: Record<string, GrowthPageContent> = {
       },
       {
         question: 'Kan vi få Vipps Hurtigkasse i Shopify?',
-        answer: 'Vipps kan legges inn som betalingsmåte i kassen i Shopify. Hurtigkasse finnes ifølge Vipps MobilePay ikke for Shopify i dag, på grunn av begrensninger hos Shopify.',
+        answer: 'Vipps kan legges inn som betalingsmåte i kassen i Shopify. Hurtigkasse finnes ifølge Vipps MobilePay ikke for Shopify i dag.',
       },
       {
         question: 'Må nettbutikken være universelt utformet?',
-        answer: 'EUs tilgjengelighetsdirektiv er ikke innført i Norge ennå, men gjelder hvis du selger til EU. God kontrast, tastaturnavigasjon og tydelige skjema er uansett god praksis, og vi tar det med i forbedringene.',
+        answer: 'Ja. Norske regler om universell utforming av IKT gjelder også private virksomheter med nettløsninger rettet mot allmennheten, og Uutilsynet fører tilsyn. EUs tilgjengelighetsdirektiv er ikke innført i Norge ennå, men gjelder hvis du selger til EU. Vi tar tilgjengelighet med i forbedringene.',
       },
     ],
     related: [
@@ -980,9 +980,9 @@ export const growthContent: Record<string, GrowthPageContent> = {
     ],
     notIncluded: ['Klikkostnader og provisjon, som du betaler direkte', 'Produktfotografering'],
     process: [
-      { period: '0–30 dager', title: 'Feeden i orden', text: 'Avvisninger rettet, titler og attributter strukturert, og etiketter for margin lagt inn.' },
-      { period: '30–60 dager', title: 'Ut i kanalene', text: 'CSS-partner koblet på, produktene ut til prissammenligning og affiliate satt opp med sporing.' },
-      { period: '60–90 dager', title: 'Mer fra det som selger', text: 'Vi ser på salg per kanal og etikett, og flytter innsatsen dit marginen og volumet er best.' },
+      { period: 'Uke 1–2', title: 'Feeden i orden', text: 'Avvisninger rettet, titler og attributter strukturert, og etiketter for margin lagt inn.' },
+      { period: 'Uke 3–4', title: 'Ut i kanalene', text: 'CSS-partner koblet på, produktene ut til prissammenligning og affiliate satt opp med sporing.' },
+      { period: 'Fra måned 2', title: 'Mer fra det som selger', text: 'Vi ser på salg per kanal og etikett, og flytter innsatsen dit marginen og volumet er best.' },
     ],
     kpis: [
       { name: 'Godkjente produkter', text: 'Andel av sortimentet som faktisk kan vises i Shopping og hos partnerne.' },
@@ -1038,7 +1038,7 @@ export const growthHubContent: GrowthHubContent = {
   highlight: 'for nettbutikker',
   highlights: ['Bare netthandel', 'Fastpris', 'Styrt etter lønnsomhet'],
   intro:
-    'Nettbutikker vokser ved å nå flere kjøpere: bli husket når folk skal handle, og vær lett å finne og kjøpe hos når de gjør det. Derfor ser vi på hele veien fra første inntrykk til gjenkjøp, med riktig data i bunnen.',
+    'Nettbutikker vokser ved å nå flere kjøpere: å bli husket når folk skal handle, og å være lett å finne og kjøpe hos når de gjør det. Derfor ser vi på hele veien fra første inntrykk til gjenkjøp, med riktig data i bunnen.',
   model: {
     stages: [
       {
@@ -1086,12 +1086,12 @@ export const growthHubContent: GrowthHubContent = {
     },
   ],
   process: [
-    { period: '0–30 dager', title: 'Revisjon og måling', text: 'Vi går gjennom sporing, kontoer, feed og merkevare, og setter opp målingen vi skal styre etter.' },
-    { period: '30–60 dager', title: 'Plan og oppsett', text: 'Vekstplan på tvers av kanalene, data i orden og de første kampanjene og testene i gang.' },
-    { period: '60–90 dager', title: 'Skaler det som virker', text: 'Mer innsats der lønnsomheten og de nye kundene kommer fra, og en fast rytme for oppfølging.' },
+    { period: 'Uke 1–2', title: 'Tilganger, mål og plan', text: 'Vi får tilgangene, går gjennom sporing, kontoer, feed og merkevare, og setter mål og plan sammen med deg.' },
+    { period: 'Uke 3–4', title: 'Oppsett og første tiltak', text: 'Data i orden, og de første kampanjene, tiltakene og testene i gang.' },
+    { period: 'Fra måned 2', title: 'Løpende forbedring', text: 'Mer innsats der lønnsomheten og de nye kundene kommer fra, med fast rytme for oppfølging.' },
   ],
   kpis: [
-    { name: 'Lønnsomhet', text: 'Hva som er igjen etter varekost og markedsføring, ikke bare omsetning.' },
+    { name: 'Lønnsomhet', text: 'Hva som er igjen etter varekost og markedsføring, ikke bare omsetning eller ROAS.' },
     { name: 'Nye kunder', text: 'Andel og kostnad per ny kunde, skilt fra gjenkjøp og merkevaresøk.' },
     { name: 'Andel av søk', text: 'Din andel av merkenavnsøkene i kategorien, en tidlig indikator på markedsandel.' },
   ],

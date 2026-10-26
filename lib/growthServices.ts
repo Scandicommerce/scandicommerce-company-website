@@ -87,7 +87,7 @@ export const growthServices: GrowthService[] = [
     parent: 'sem',
     label: 'Bing Ads',
     title: 'Bing Ads (Microsoft Advertising) for nettbutikker',
-    lead: 'Den billigere delen av betalt søk – ofte rimeligere klikk og en annen målgruppe enn i Google.',
+    lead: 'Annonser i Bing og søkemotorene som bruker Bing – et tillegg til Google Ads, med en større andel av søkene på desktop.',
   },
   {
     // Paid visibility in AI answers; organic AI visibility (GEO) stays under SEO
