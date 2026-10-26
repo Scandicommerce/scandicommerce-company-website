@@ -39,7 +39,7 @@ Samleside: `/growth-marketing`. Gjelder bare norsk side (.no). Andre språk gir 
 | Samleside | Tekstutkast. Modellen er også navigasjonen: alle tjenester og kanalsider står i sitt steg. Deretter prinsipper (4), oppstart og måltall, FAQ og CTA |
 | Tjenestesider (11) | `noindex`, ikke i XML-sitemap. Status per side: se «Ekte innhold» |
 | Menyforslag | Ligger i `lib/growthServices.ts` (`growthNavItem()`). **Ikke koblet inn** i headeren ennå (se §5) |
-| Ekte innhold | **Merkevare og strategi**, **Sporing og analyse**, **SoMe**, **SEM**, **Google Ads** og **Affiliate, CSS og feed** har kortet ned tekstutkast (2026-10-26). **SEO**, **E-post**, **CRO**, **Meta Ads** og **Bing Ads** viser malen som brief |
+| Ekte innhold | Alle sider unntatt **SEO** har tekstutkast etter malen: Merkevare og strategi, Sporing og analyse, SoMe, Meta Ads, SEM, Google Ads, Bing Ads, Affiliate, E-post og CRO (2026-10-26). SEO skrives av andre og viser malen som brief |
 | Layout | Samme byggeklosser og stil som tjenestesidene i `main` (`ServiceHero`, `Faq`, `CtaBand`, `ui`-tokens) |
 | Innhold i Sanity | Ikke startet. Innholdet ligger i kode til tekstene er klare |
 
@@ -163,6 +163,12 @@ npm run dev                 # http://localhost:3000/no/growth-marketing
 - [ ] Sporing og analyse: Stemmer leveransene og de tre pakkene (sporingsrevisjon, server-side sporing, analyse og dashboards månedlig)? Lover vi «varsling og retting når sporingen brytes»? Hvilke dashboardverktøy bruker vi i praksis (Looker, Looker Studio, annet)?
 - [ ] Merkevare og strategi: Stemmer leveransene og pakkene (strategi som engangsleveranse, strategisk partner månedlig)? «Logodesign og full visuell identitet» står som ikke inkludert. Stemmer det?
 
+**Må bekreftes for de nye sidene (2026-10-26):**
+- [ ] E-post: Leverer vi SMS? Siden sier «ikke inkludert». Klaviyo-lisens betales av kunden. Stemmer flytene (velkomst, forlatt handlekurv, sett produkt, etter kjøp og tilbakevinning)?
+- [ ] CRO: Bruker vi Shopify Rollouts og Microsoft Clarity i praksis? Er «nytt tema eller redesign» et eget prosjekt (Shopify-tjenestene)?
+- [ ] Meta Ads: Lager vi kreativene selv? Samme spørsmål som for SoMe.
+- [ ] Bing Ads: Anbefaler vi Microsoft Channel-appen, eller feed direkte til Microsoft Merchant Center?
+
 **Øvrige:**
 
 - [ ] **Navnekollisjon:** Shopify-pakken heter «Growth» (`/tjenester/alle-pakker/growth`, 8 000 kr/mnd). Gi pakken nytt navn, eller behold? *(Avventer.)*
@@ -221,6 +227,38 @@ Tekstene skal bare inneholde påstander vi kan stå for. Tidsavhengige fakta sje
 - Førpris: Laveste pris de siste 30 dagene (prisopplysningsforskriften § 9a, fra 1. oktober 2023). Forbrukertilsynet har ilagt gebyr for ulovlige førpriser (juni 2025).
 - Merking av reklame: Forbrukertilsynets veiledning sier at merkingen skal komme tydelig og først. Ingen egen regel for affiliate-lenker er funnet, så vi skriver generelt.
 
+**Meta Ads** (research 2026-10-26; Metas hjelpesider blokkerer henting, så teksten er hentet gjennom Metas eget hjelpeverktøy, mens Shopify- og utviklersidene er lest direkte):
+- Advantage+ salgskampanjer: Budsjettaket for eksisterende kunder er fjernet, og det samme gjøres manuelt med ekskluderte kundelister eller egne annonsesett. Kilde: Meta Business Help Center 1142614290190459.
+- Katalogannonser: `content_ids` i hendelsene må stemme med ID-ene i katalogen. Meta anbefaler et samsvar over 75 %, og helst over 90 %. Kilde: Meta Business Help Center 1183006658734497.
+- Hendelsesmatchkvalitet: Gis på en skala fra 1 til 10. Kilde: developers.facebook.com (Conversions API, verifying setup).
+- Attribusjon: Standard er 7 dagers klikk eller 1 dags visning. Kilde: Meta Business Help Center 1997130013754737. At 7 og 28 dagers visning ble fjernet i januar 2026, er bare omtalt i blogger og brukes **ikke**.
+- Butikker og kasse: Norge er i åpen beta. Kasse i appene støttes ikke lenger, og kjøpet skjer i nettbutikken. Vi skriver **ikke** «bare i USA».
+- Ikke brukt: Metas påstander om forbedring i prosent.
+
+**Bing Ads** (research 2026-10-26):
+- Statcounter, september 2026: Bing har 20,66 % av søkene på desktop i Norge og 6,38 % på tvers av alle enheter. Siden sier «om lag 21 %» og «om lag 6 %».
+- Import fra Google Ads med planlagt synkronisering. Kilde: learn.microsoft.com (google-ads-import).
+- Shopping-kampanjer: Norge er støttet salgsland. Kilde: GetBSCCountries.
+- UET: Samtykkesignaler kreves for besøk fra EØS siden 5. mai 2025. Uten dem stopper sporingen av konverteringer og remarketinglistene. Kilde: Microsoft Advertising-blogg (mars 2025) og FAQ om UET-samtykke.
+- Microsoft Channel-appen finnes i Shopify App Store, men har vurderingen 2,9.
+- Ikke brukt: Annonser i Copilot (ingen primærkilde for Norge), hvor Audience Network vises, og klikkpriser.
+
+**E-post** (research 2026-10-26):
+- Markedsføringsloven § 15: Samtykke kreves før markedsføring på e-post til forbrukere. Unntaket er egne kunder, for lignende varer, med enkel og gratis avmelding. Forbrukertilsynets veileder (oppdatert mai 2026) anbefaler å samle inn samtykke.
+- Gmail: Avsendere med over 5 000 e-poster om dagen må ha SPF, DKIM og DMARC, avmelding med ett klikk og en spamrate under 0,30 %. Kilde: support.google.com/a/answer/81126. Yahoo har tilsvarende krav.
+- Apple Mail Privacy Protection gjør åpninger upålitelige. Kilde: Klaviyo-hjelp 4416791883163.
+- Klaviyo: Anbefalte flyter (velkomst, forlatt handlekurv, etter kjøp, tilbakevinning), og «sett produkt» som egen flyt. Prediksjonene krever blant annet minst 500 kunder med ordre og 180 dagers historikk. Standard attribusjon er 5 dager for åpning og klikk.
+- Ikke brukt: Personlige produktanbefalinger (ikke bekreftet) og bransjetall.
+
+**CRO** (research 2026-10-26):
+- Baymard: 70,22 % forlatte handlekurver i snitt over 50 studier. Grunner: ekstrakostnader 40 %, treg levering 20 %, manglende tillit 19 %, krav om konto 18 % og komplisert kasse 17 %.
+- Core Web Vitals «god»: LCP ≤ 2,5 s, INP ≤ 200 ms og CLS ≤ 0,1. Kilde: web.dev.
+- Shopify Rollouts: A/B-tester (Experiments) krever Grow-plan eller høyere. Lanseringsdato er ikke bekreftet.
+- Microsoft Clarity er gratis, og krever samtykkesignal for besøk fra EØS fra 31. oktober 2025.
+- Vipps MobilePay har **ikke** Hurtigkasse for Shopify, ifølge deres egen dokumentasjon.
+- EUs tilgjengelighetsdirektiv er ikke innført i Norge (Bufdir). Vi skriver ikke at nettbutikker har krav etter norsk lov.
+- Ikke brukt: Rakuten-caset fra web.dev (bare ett selskap) og antall Vipps-brukere i Norge (ikke bekreftet).
+
 ## 9. Beslutningslogg
 
 | Dato | Beslutning | Begrunnelse |
@@ -256,3 +294,4 @@ Tekstene skal bare inneholde påstander vi kan stå for. Tidsavhengige fakta sje
 | 2026-10-26 | Innholdet kortes ned til en fast mal: 4 fakta, ett forskningspunkt eller én flyt, 4 situasjoner, ~6 leveranser, 3 steg, 3 måltall, 4 spørsmål i FAQ og inntil 3 kort i «Les videre». Pakkekort, plassholdere, kildelister og plattformlister er tatt bort | Brukeren ville ha bare det viktigste og en rød tråd |
 | 2026-10-26 | Modellen er den røde tråden: hver side viser steget sitt i eyebrow og i «Her i modellen» i hero, og på samlesiden er modellen også navigasjonen | Leseren ser hvordan tjenestene henger sammen, og den doble tjenesteoversikten på samlesiden forsvinner |
 | 2026-10-26 | Samlesiden: fire prinsipper (i stedet for seks), ingen forskningsgraf | «Én feed» og «Kreativet er målrettingen» står på Affiliate og SoMe; grafen for kort og lang effekt står på Merkevare og strategi |
+| 2026-10-26 | Tekstutkast for E-post, CRO, Meta Ads og Bing Ads etter den nye malen; SEO overlates til andre | Brukeren ba om å fylle på der innholdet manglet; research med kilder først (se §8) |

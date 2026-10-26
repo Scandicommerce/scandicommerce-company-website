@@ -414,6 +414,316 @@ export const growthContent: Record<string, GrowthPageContent> = {
     ],
   },
 
+  'sem/bing-ads': {
+    highlight: 'Bing Ads',
+    highlights: ['Importert fra Google Ads', 'Søk og Shopping', 'Når søkerne på desktop'],
+    facts: [
+      { label: 'Utgangspunkt', value: 'Google Ads', note: 'kampanjene importeres' },
+      { label: 'Kampanjer', value: 'Søk · Shopping', note: 'og Performance Max' },
+      { label: 'Sporing', value: 'UET-taggen', note: 'med samtykkesignaler' },
+      { label: 'Vi måler', value: 'Lønnsomhet', note: 'side om side med Google' },
+    ],
+    why: {
+      title: 'Søkene Google ikke tar',
+      paragraphs: [
+        'Microsoft Advertising viser annonsene dine i Bing og søkemotorene som bruker Bing. Det er en liten del av søkene i Norge totalt, men en langt større del på desktop.',
+        'Derfor starter vi når Google Ads er i orden. Kampanjene importeres, tilpasses og følges opp for seg, så Bing bare får budsjett når det lønner seg.',
+      ],
+      insight: {
+        title: 'Om lag én av fem søk på desktop',
+        text: 'I september 2026 sto Bing for om lag 21 % av søkene på desktop i Norge, og om lag 6 % på tvers av alle enheter. Google er størst på begge, men på desktop er Bing en klar nummer to.',
+        chart: {
+          kind: 'bars',
+          valueLabel: 'Bings andel av søk',
+          categoryLabel: 'Enhet',
+          format: 'percent',
+          legend: { emphasis: 'Desktop', context: 'Alle enheter' },
+          items: [
+            { label: 'Desktop', value: 20.66, emphasis: true },
+            { label: 'Alle enheter', value: 6.38, emphasis: false },
+          ],
+        },
+        source: {
+          label: 'Statcounter: Search engine market share Norway, september 2026',
+          href: 'https://gs.statcounter.com/search-engine-market-share/desktop/norway',
+        },
+      },
+    },
+    situations: [
+      { title: 'Google Ads er i orden, men veksten stopper', text: 'Du har tatt ut det meste i Google og trenger nye søk å vinne, uten å starte fra null.' },
+      { title: 'Ingen har testet Bing', text: 'Kontoen ble aldri satt opp, eller den ble satt opp én gang og glemt.' },
+      { title: 'Kampanjene i Bing er kopier ingen følger opp', text: 'Importen kjører, men budsjett, bud og søkeord er ikke tilpasset Bing.' },
+      { title: 'Konverteringene i Bing er borte', text: 'UET-taggen sender ikke samtykkesignaler, og da slutter Microsoft å spore konverteringer fra EØS.' },
+    ],
+    deliverables: [
+      { name: 'Vurdering', text: 'Om Bing passer for deg, ut fra kundene, produktene og marginene dine, før vi bruker budsjett.' },
+      { name: 'Import fra Google Ads', text: 'Kampanjene importeres med fast synkronisering, og tilpasses der Bing skiller seg fra Google.' },
+      { name: 'Shopping og produktfeed', text: 'Microsoft Merchant Center med den samme feeden som går til Google, og Shopping-kampanjer for Norge.' },
+      { name: 'UET-tagg og samtykke', text: 'Konverteringssporing med Consent Mode, så Microsoft kan måle besøk fra EØS.' },
+      { name: 'Eget budsjett og egne bud', text: 'Satt for Bing, ikke kopiert fra Google.' },
+      { name: 'Rapport side om side med Google', text: 'Lønnsomhet og nye kunder fra Bing i den samme månedsrapporten som Google.' },
+    ],
+    notIncluded: ['Annonsebudsjett, som du betaler direkte til Microsoft'],
+    process: [
+      { period: '0–30 dager', title: 'Vurder og importer', text: 'Vi ser på om Bing passer, setter opp UET-taggen med samtykke og importerer kampanjene.' },
+      { period: '30–60 dager', title: 'Tilpass', text: 'Budsjett, bud og søkeord justeres for Bing, og Shopping kobles på.' },
+      { period: '60–90 dager', title: 'Skaler eller kutt', text: 'Vi sammenligner lønnsomheten med Google og anbefaler å øke, holde eller avslutte.' },
+    ],
+    kpis: [
+      { name: 'Lønnsomhet', text: 'Inntekt per annonsekrone i Bing, målt mot nettbutikken.' },
+      { name: 'Kostnad per ny kunde', text: 'Hva en ny kunde koster i Bing, sammenlignet med Google.' },
+      { name: 'Klikkpris', text: 'Hva et klikk koster i Bing på de samme søkene som i Google.' },
+    ],
+    faq: [
+      {
+        question: 'Er Bing verdt det i Norge?',
+        answer: 'For mange nettbutikker, ja, som et tillegg. Bing er liten totalt, men står for om lag en femtedel av søkene på desktop. Vi tester det på dine tall og avslutter hvis det ikke lønner seg.',
+      },
+      {
+        question: 'Må vi bygge alt på nytt?',
+        answer: 'Nei. Kampanjene importeres fra Google Ads og synkroniseres jevnlig. Vi tilpasser det som bør være ulikt, som budsjett, bud og enkelte søkeord.',
+      },
+      {
+        question: 'Kan vi bruke Microsoft Channel-appen i Shopify?',
+        answer: 'Den finnes og er gratis å installere, men har blandede omtaler. Vi vurderer den opp mot å sende feeden direkte til Microsoft Merchant Center.',
+      },
+      {
+        question: 'Hvorfor er samtykke så viktig her?',
+        answer: 'Siden mai 2025 krever Microsoft samtykkesignaler for besøk fra EØS. Uten dem slutter Microsoft å spore konverteringer fra UET-taggen og å fylle remarketinglistene.',
+      },
+    ],
+    related: [
+      { slug: 'sem/google-ads', why: 'Bing bygger på kampanjene og feeden fra Google Ads.' },
+      { slug: 'sporing-og-analyse', why: 'UET-taggen og samtykket må være riktig for at Bing skal kunne måle.' },
+    ],
+  },
+
+  'some/meta-ads': {
+    highlight: 'Meta Ads',
+    highlights: ['Katalog og Conversions API', 'Mange varierte kreativer', 'Målt mot salget i butikken'],
+    facts: [
+      { label: 'Kampanjer', value: 'Advantage+', note: 'salgskampanjer med katalog' },
+      { label: 'Data', value: 'Conversions API', note: 'server-side, via Tracklution' },
+      { label: 'Starter med', value: 'Revisjon', note: 'konto, katalog og hendelser' },
+      { label: 'Vi måler', value: 'Nye kunder', note: 'mot ordrene i nettbutikken' },
+    ],
+    why: {
+      title: 'Katalogen, dataene og kreativene gjør jobben',
+      paragraphs: [
+        'Meta styrer i dag det meste av målrettingen selv. Advantage+ salgskampanjer velger publikum, plasseringer og budsjett, og produktannonsene henter varene fra katalogen din.',
+        'Det du styrer, er det systemet lærer av: en katalog som stemmer med butikken, kjøp som faktisk når Meta, og kreativer nok til å treffe ulike folk. Det er der vi bruker tiden.',
+      ],
+      insight: {
+        title: 'Katalogen må kjenne igjen produktene',
+        text: 'Produktannonsene virker bare når produkt-ID-ene i hendelsene fra nettbutikken stemmer med ID-ene i katalogen. Meta anbefaler å holde samsvaret over 75 %, og helst over 90 %.',
+        source: {
+          label: 'Meta Business Help Center: Om samsvarsraten for katalogen',
+          href: 'https://www.facebook.com/business/help/1183006658734497',
+        },
+      },
+    },
+    situations: [
+      { title: 'Eksisterende kunder spiser budsjettet', text: 'Salgskampanjene finner dem som uansett ville handlet, og du ser ikke hvor mye som går til nye kunder.' },
+      { title: 'Produktannonsene viser feil varer', text: 'Katalogen er ikke synkronisert, eller ID-ene i hendelsene stemmer ikke med katalogen.' },
+      { title: 'Meta ser færre kjøp enn butikken', text: 'Pikselen alene stoppes av annonseblokkere, og kampanjene lærer av for lite data.' },
+      { title: 'De samme annonsene har gått i månedsvis', text: 'Resultatene faller, men ingen har en plan for nye kreativer.' },
+    ],
+    deliverables: [
+      { name: 'Revisjon', text: 'Kontostruktur, katalog, hendelser og kreativer, med en prioritert tiltaksliste.' },
+      { name: 'Katalogen i orden', text: 'Synkronisert med nettbutikken, med samme ID-er som i hendelsene, og produktsett til kampanjene.' },
+      { name: 'Conversions API', text: 'Kjøp og andre hendelser sendt server-side, med Tracklution som standard, og hendelsesmatchkvaliteten fulgt opp.' },
+      { name: 'Kampanjestruktur', text: 'Advantage+ salgskampanjer med katalog, og kundelister som holder budsjettet på nye kunder der det trengs.' },
+      { name: 'Kreativer for Reels, Stories og feed', text: 'Video i 9:16, bilder og karuseller, med kantene fri for tekst og logo.' },
+      { name: 'Rapport mot butikken', text: 'Nye kunder og salg målt mot ordrene i nettbutikken, med løftstester der det går.' },
+    ],
+    notIncluded: ['Annonsebudsjett, som du betaler direkte til Meta', 'Større film- og fotoproduksjoner'],
+    process: [
+      { period: '0–30 dager', title: 'Data og katalog', text: 'Revisjon, Conversions API på plass og katalogen synkronisert med riktige ID-er.' },
+      { period: '30–60 dager', title: 'Struktur og kreativer', text: 'Ny kampanjestruktur, kundelister for nye kunder og de første kreative variantene i test.' },
+      { period: '60–90 dager', title: 'Skaler og test', text: 'Mer budsjett til det som gir nye kunder, og en fast rytme for nye kreativer.' },
+    ],
+    kpis: [
+      { name: 'Kostnad per ny kunde', text: 'Hva det koster å vinne kunder som ikke har handlet før.' },
+      { name: 'Hendelsesmatchkvalitet', text: 'Metas mål fra 1 til 10 på hvor godt hendelsene kobles til riktige personer.' },
+      { name: 'Samsvar med katalogen', text: 'Andel hendelser med produkt-ID-er som finnes i katalogen.' },
+    ],
+    faq: [
+      {
+        question: 'Kan vi selge direkte i Facebook og Instagram?',
+        answer: 'I praksis skjer kjøpet i nettbutikken din. Meta støtter ikke lenger alle kassefunksjonene i appene, og annonsene sender kundene videre til kassen hos deg.',
+      },
+      {
+        question: 'Hvordan unngår vi å betale for kunder vi allerede har?',
+        answer: 'Meta har fjernet budsjettaket for eksisterende kunder i Advantage+ salgskampanjer. Vi gjør det samme manuelt, med kundelister som ekskluderes eller egne annonsesett med egne budsjettgrenser.',
+      },
+      {
+        question: 'Hvorfor Conversions API når vi har pikselen?',
+        answer: 'Pikselen kjører i nettleseren og kan stoppes av annonseblokkere. Conversions API sender hendelsene fra server til server, så Meta ser flere av kjøpene og har mer å optimalisere på.',
+      },
+      {
+        question: 'Hvilket attribusjonsvindu bruker dere?',
+        answer: 'Metas standard er 7 dagers klikk eller 1 dags visning. Vi rapporterer det Meta viser, men styrer etter salget i nettbutikken og nye kunder, fordi plattformen og butikken teller ulikt.',
+      },
+    ],
+    related: [
+      { slug: 'some', why: 'Kanalplanen og den kreative plattformen Meta-kampanjene bygger på.' },
+      { slug: 'sporing-og-analyse', why: 'Conversions API og hendelser Meta kan stole på.' },
+    ],
+  },
+
+  'e-postmarkedsforing': {
+    highlight: 'E-postmarkedsføring',
+    highlights: ['Klaviyo', 'Flyter som går av seg selv', 'Samtykke og levering i orden'],
+    facts: [
+      { label: 'Plattform', value: 'Klaviyo', note: 'koblet til nettbutikken' },
+      { label: 'Kjernen', value: 'Flyter', note: 'som sendes når kunden gjør noe' },
+      { label: 'Starter med', value: 'Revisjon', note: 'flyter, lister og levering' },
+      { label: 'Vi måler', value: 'Gjenkjøp', note: 'og inntekt per mottaker' },
+    ],
+    why: {
+      title: 'Fra første kjøp til neste',
+      paragraphs: [
+        'Annonsene skaffer nye kunder. E-posten sørger for at de kommer tilbake. Med flytene på plass får kunden riktig melding når de registrerer seg, legger noe i handlekurven, handler eller blir borte, uten at noen trykker send.',
+        'Med data fra nettbutikken får hver kunde innhold ut fra hva de har kjøpt og hvor de er i kundereisen. Det er 1:1-kommunikasjon i stor skala, og det forutsetter at samtykke og levering er i orden.',
+      ],
+      insight: {
+        title: 'Gmail stiller krav til avsenderen',
+        text: 'Sender du mer enn 5 000 e-poster om dagen til Gmail, krever Google SPF, DKIM og DMARC, avmelding med ett klikk og en spamrate under 0,3 %. Yahoo har tilsvarende krav. Vi sjekker dette før vi skalerer utsendelsene.',
+        source: { label: 'Google: Email sender guidelines', href: 'https://support.google.com/a/answer/81126' },
+      },
+    },
+    situations: [
+      { title: 'Bare kampanjer, ingen flyter', text: 'Nyhetsbrevet går når noen har tid, og ingenting skjer automatisk mellom kampanjene.' },
+      { title: 'Alle får den samme e-posten', text: 'Nye og faste kunder, store og små kjøpere får det samme budskapet.' },
+      { title: 'E-postene havner i søppelpost', text: 'Domenet mangler riktig autentisering, eller listene er fulle av inaktive mottakere.' },
+      { title: 'Åpningsraten ser bra ut, men salget uteblir', text: 'Apple Mail laster ned e-poster automatisk, så åpninger sier lite. Det er klikk og salg som teller.' },
+    ],
+    deliverables: [
+      { name: 'Revisjon', text: 'Flyter, lister, segmenter, levering og samtykke, med en prioritert tiltaksliste.' },
+      { name: 'Kjerneflytene', text: 'Velkomstserie, forlatt handlekurv, sett produkt, etter kjøp og tilbakevinning.' },
+      { name: 'Segmentering', text: 'Segmenter ut fra kjøpshistorikk og adferd, og prediksjoner som forventet neste kjøp når dataene er store nok.' },
+      { name: 'Kampanjer med plan', text: 'En fast kampanjekalender, koblet til sesongene og resten av markedsføringen.' },
+      { name: 'Levering og samtykke', text: 'SPF, DKIM og DMARC, avmelding med ett klikk, og samtykke som samles inn riktig.' },
+      { name: 'Månedlig rapport', text: 'Inntekt per flyt og kampanje, gjenkjøp og listehelse.' },
+    ],
+    notIncluded: ['Lisens til Klaviyo, som du betaler direkte', 'SMS-markedsføring', 'Fotoproduksjon'],
+    process: [
+      { period: '0–30 dager', title: 'Revisjon og grunnmur', text: 'Levering, samtykke og Klaviyo-oppsettet gjennomgått, og de viktigste flytene prioritert.' },
+      { period: '30–60 dager', title: 'Flytene på plass', text: 'Velkomst, forlatt handlekurv og etter kjøp bygget og testet, med segmenter fra kjøpsdataene.' },
+      { period: '60–90 dager', title: 'Kampanjer og finjustering', text: 'Fast kampanjerytme, flere flyter og tester av emnelinjer, innhold og tidspunkt.' },
+    ],
+    kpis: [
+      { name: 'Inntekt per mottaker', text: 'Hva hver flyt og kampanje gir i salg, delt på antall mottakere.' },
+      { name: 'Gjenkjøpsrate', text: 'Andel kunder som handler igjen.' },
+      { name: 'Listehelse', text: 'Spamrate, avmeldinger og andel aktive mottakere.' },
+    ],
+    faq: [
+      {
+        question: 'Hvorfor Klaviyo?',
+        answer: 'Klaviyo er laget for netthandel og henter kunder, ordre og adferd fra nettbutikken, også fra Shopify. Da kan flyter og segmenter bygges på det kundene faktisk gjør. Bruker dere et annet verktøy, kan vi jobbe der.',
+      },
+      {
+        question: 'Hva sier loven?',
+        answer: 'Etter markedsføringsloven § 15 trenger du samtykke før du sender markedsføring på e-post til forbrukere. Unntaket er egne kunder som har kjøpt av deg, for lignende varer, så lenge de enkelt og gratis kan melde seg av. Forbrukertilsynet anbefaler likevel å samle inn samtykke.',
+      },
+      {
+        question: 'Hvorfor styrer dere ikke etter åpningsraten?',
+        answer: 'Apple Mail laster ned e-poster i bakgrunnen, og da registreres åpninger som ingen har gjort. Vi styrer derfor etter klikk, salg og gjenkjøp.',
+      },
+      {
+        question: 'Hvordan måles salget fra e-post?',
+        answer: 'Klaviyo gir som standard æren til e-posten når kunden har åpnet eller klikket i løpet av fem dager før kjøpet. Vinduet kan justeres, og vi ser alltid salget fra e-post sammen med resten av markedsføringen.',
+      },
+    ],
+    related: [
+      { slug: 'cro', why: 'Flere kjøp fra trafikken du har, i samme steg av modellen.' },
+      { slug: 'sporing-og-analyse', why: 'Riktige kjøpsdata er grunnlaget for segmentene.' },
+    ],
+  },
+
+  cro: {
+    highlight: 'CRO',
+    highlights: ['Data før endringer', 'Tester før utrulling', 'Enklere vei gjennom kassen'],
+    facts: [
+      { label: 'Starter med', value: 'Analyse', note: 'trakt, heatmaps og opptak' },
+      { label: 'Metode', value: 'Test', note: 'før endringer rulles ut' },
+      { label: 'Fokus', value: 'Kassen', note: 'og produktsidene' },
+      { label: 'Vi måler', value: 'Konvertering', note: 'og inntekt per besøk' },
+    ],
+    why: {
+      title: 'Flere kjøp fra trafikken du allerede har',
+      paragraphs: [
+        'All annen markedsføring sender folk til butikken. CRO handler om det som skjer når de kommer: om de finner det de leter etter, stoler på butikken og kommer seg gjennom kassen.',
+        'Vi starter med data, ikke magefølelse. Analyse, heatmaps og opptak viser hvor kundene faller fra, og vi tester endringene før de rulles ut til alle.',
+      ],
+      insight: {
+        title: 'Sju av ti handlekurver forlates',
+        text: 'Baymard Institute har samlet 50 studier, og i snitt forlates om lag 70 % av handlekurvene. Blant dem som faktisk ville handle, er høye ekstrakostnader den vanligste grunnen.',
+        chart: {
+          kind: 'bars',
+          valueLabel: 'Andel som oppgir grunnen',
+          categoryLabel: 'Grunn',
+          format: 'percent',
+          items: [
+            { label: 'Høye ekstrakostnader', value: 40, emphasis: true },
+            { label: 'Treg levering', value: 20, emphasis: true },
+            { label: 'Manglende tillit', value: 19, emphasis: true },
+            { label: 'Krav om å lage konto', value: 18, emphasis: true },
+            { label: 'Komplisert kasse', value: 17, emphasis: true },
+          ],
+        },
+        source: { label: 'Baymard Institute: Cart Abandonment Rate', href: 'https://baymard.com/lists/cart-abandonment-rate' },
+      },
+    },
+    situations: [
+      { title: 'Mange legger i handlekurven, få fullfører', text: 'Kundene kommer langt, men faller fra i kassen, og ingen vet hvorfor.' },
+      { title: 'Mobil selger dårligere enn desktop', text: 'Det meste av trafikken kommer på mobil, men salget gjør det ikke.' },
+      { title: 'Endringer gjøres på magefølelse', text: 'Nye seksjoner og apper legges til uten at noen måler om de hjelper.' },
+      { title: 'Butikken er treg', text: 'Sidene laster sakte, særlig på mobil, og Core Web Vitals er i rødt.' },
+    ],
+    deliverables: [
+      { name: 'Analyse av kundereisen', text: 'Trakten fra produktside til kjøp i GA4, med heatmaps og opptak i Microsoft Clarity.' },
+      { name: 'Prioritert testplan', text: 'Hypoteser rangert etter effekt og innsats, så vi starter der gevinsten er størst.' },
+      { name: 'Tester', text: 'A/B-tester av tema og innhold med Shopify Rollouts der butikken har det, og nok trafikk til å vite.' },
+      { name: 'Produktsider og kasse', text: 'Pris og frakt tydelig tidlig, betalingsmåter som Vipps, og færre steg fram til kjøp.' },
+      { name: 'Hastighet', text: 'Core Web Vitals forbedret: bilder, apper og skript som bremser butikken.' },
+      { name: 'Rapport', text: 'Hva vi testet, hva som vant, og hva det ga i konvertering og inntekt.' },
+    ],
+    notIncluded: ['Nytt tema eller redesign, som er et eget prosjekt', 'Egenutviklede apper og funksjoner'],
+    process: [
+      { period: '0–30 dager', title: 'Analyse', text: 'Data, heatmaps og opptak viser hvor kundene faller fra, og vi lager en prioritert testplan.' },
+      { period: '30–60 dager', title: 'Raske forbedringer', text: 'Åpenbare feil rettes med en gang, og de første testene settes i gang.' },
+      { period: '60–90 dager', title: 'Test, lær og rull ut', text: 'Vinnerne rulles ut, og testplanen oppdateres med det vi har lært.' },
+    ],
+    kpis: [
+      { name: 'Konverteringsrate', text: 'Andel besøk som ender i kjøp, på mobil og desktop hver for seg.' },
+      { name: 'Inntekt per besøk', text: 'Salg delt på antall besøk, så både konvertering og ordreverdi teller.' },
+      { name: 'Forlatte handlekurver', text: 'Andel som legger i handlekurven uten å fullføre kjøpet.' },
+    ],
+    faq: [
+      {
+        question: 'Har vi nok trafikk til A/B-tester?',
+        answer: 'Ikke alltid. En test trenger nok besøk og kjøp til at forskjellen er til å stole på. Med lite trafikk prioriterer vi tydelige forbedringer basert på data, og tester der volumet holder.',
+      },
+      {
+        question: 'Hvilke verktøy bruker dere?',
+        answer: 'GA4 for trakten, Microsoft Clarity for heatmaps og opptak, og Shopify Rollouts for tester i Shopify. Clarity er gratis, men krever samtykke for besøk fra EØS, så vi kobler det til samtykkebanneret.',
+      },
+      {
+        question: 'Kan vi få Vipps Hurtigkasse i Shopify?',
+        answer: 'Vipps kan legges inn som betalingsmåte i kassen i Shopify. Hurtigkasse finnes ifølge Vipps MobilePay ikke for Shopify i dag, på grunn av begrensninger hos Shopify.',
+      },
+      {
+        question: 'Må nettbutikken være universelt utformet?',
+        answer: 'EUs tilgjengelighetsdirektiv er ikke innført i Norge ennå, men gjelder hvis du selger til EU. God kontrast, tastaturnavigasjon og tydelige skjema er uansett god praksis, og vi tar det med i forbedringene.',
+      },
+    ],
+    related: [
+      { slug: 'e-postmarkedsforing', why: 'Får kundene tilbake etter første kjøp, i samme steg av modellen.' },
+      { slug: 'sporing-og-analyse', why: 'Riktige data viser hvor kundene faller fra.' },
+    ],
+  },
+
   affiliate: {
     highlight: 'feedoptimalisering',
     highlights: ['Én feed, mange kanaler', 'Google Shopping via CSS', 'Prissammenligning og affiliate'],
