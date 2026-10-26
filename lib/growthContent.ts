@@ -146,9 +146,9 @@ export const growthContent: Record<string, GrowthPageContent> = {
 
   some: {
     highlight: 'sosiale medier',
-    highlights: ['Meta og TikTok', 'Nye kreativer hver måned', 'Målt på nye kunder'],
+    highlights: ['Meta, TikTok og Snapchat', 'Nye kreativer hver måned', 'Målt på nye kunder'],
     facts: [
-      { label: 'Kanaler', value: 'Meta · TikTok', note: 'og andre der kundene dine er' },
+      { label: 'Kanaler', value: 'Meta · TikTok', note: 'Snapchat og andre der kundene er' },
       { label: 'Starter med', value: 'Revisjon', note: 'og kreativ plan' },
       { label: 'Videre', value: 'Løpende drift', note: 'med nye kreativer hver måned' },
       { label: 'Vi måler', value: 'Nye kunder', note: 'ikke bare siste klikk' },
@@ -157,7 +157,7 @@ export const growthContent: Record<string, GrowthPageContent> = {
       title: 'Sosiale medier skaper etterspørsel',
       paragraphs: [
         'Søk fanger etterspørsel som allerede finnes. I sosiale medier når du folk før de begynner å lete, slik at det er deg de kommer på når behovet melder seg.',
-        'Algoritmene til Meta og TikTok velger selv hvem som ser hvilken annonse, ut fra kreativene du gir dem. Gode og varierte kreativer er derfor den viktigste målrettingen du har.',
+        'Algoritmene til Meta, TikTok og Snapchat velger selv hvem som ser hvilken annonse, ut fra kreativene du gir dem. Gode og varierte kreativer er derfor den viktigste målrettingen du har.',
       ],
       insight: {
         title: 'Kreativet er målrettingen',
@@ -175,7 +175,7 @@ export const growthContent: Record<string, GrowthPageContent> = {
       { title: 'ROAS ser bra ut, men veksten uteblir', text: 'Rapportene gir æren til siste klikk, mens det som skaper nye kunder, ikke blir målt.' },
     ],
     deliverables: [
-      { name: 'Kanalplan', text: 'Meta, TikTok og andre kanaler der kundene dine er, med fordeling mellom rekkevidde og salg.' },
+      { name: 'Kanalplan', text: 'Meta, TikTok, Snapchat og andre kanaler der kundene dine er, med fordeling mellom rekkevidde og salg.' },
       { name: 'Kreativ plattform', text: 'Faste merkevareelementer og budskap som går igjen, så annonsene kjennes igjen.' },
       { name: 'Mange kreative varianter', text: 'Video i 9:16, UGC-stil, bilder og karuseller, byttet ut før de slites ut.' },
       { name: 'Kampanjer for rekkevidde og salg', text: 'Egne kampanjer for å nå nye kunder, ved siden av salgskampanjer med bred målretting og produktkatalog.' },
@@ -289,9 +289,9 @@ export const growthContent: Record<string, GrowthPageContent> = {
 
   sem: {
     highlight: 'Betalt søk',
-    highlights: ['Google og Bing', 'Søk, Shopping og Performance Max', 'Styrt mot lønnsomhet'],
+    highlights: ['Google, Bing og AI-søk', 'Søk, Shopping og Performance Max', 'Styrt mot lønnsomhet'],
     facts: [
-      { label: 'Kanaler', value: 'Google · Bing', note: 'Bing som tillegg der det lønner seg' },
+      { label: 'Kanaler', value: 'Google · Bing', note: 'og annonser i AI-søk' },
       { label: 'Starter med', value: 'Revisjon', note: 'konto, sporing og feed' },
       { label: 'Videre', value: 'Løpende drift', note: 'arbeid i kontoen hver uke' },
       { label: 'Vi måler', value: 'Lønnsomhet', note: 'og kostnad per ny kunde' },
@@ -299,7 +299,7 @@ export const growthContent: Record<string, GrowthPageContent> = {
     why: {
       title: 'Lønnsomt salg, ikke flest klikk',
       paragraphs: [
-        'SEM er betalt synlighet i søkemotorer: søkeannonser, Shopping-annonser med produktene dine og Performance Max på tvers av Googles flater.',
+        'SEM er betalt synlighet i søkemotorer og AI-søk: søkeannonser, Shopping-annonser med produktene dine og Performance Max på tvers av Googles flater.',
         'Vi kjører det sammen med SEO, sporing og produktfeeden. Betalt og organisk søk konkurrerer om de samme klikkene, og budstrategiene er bare så gode som dataene de lærer av.',
       ],
     },
@@ -498,6 +498,76 @@ export const growthContent: Record<string, GrowthPageContent> = {
     ],
   },
 
+  'sem/ai-sok': {
+    highlight: 'AI-søk',
+    highlights: ['AI Max for Search', 'Produktdata klare for AI', 'Tester når nye flater åpner'],
+    facts: [
+      { label: 'I dag', value: 'Google', note: 'annonser rundt AI-oversiktene' },
+      { label: 'Verktøy', value: 'AI Max', note: 'for Search, med kontroll på merke og URL' },
+      { label: 'Grunnlag', value: 'Produktdata', note: 'Merchant Center og nettbutikken' },
+      { label: 'Neste', value: 'ChatGPT · Copilot', note: 'når de åpner for norske annonsører' },
+    ],
+    why: {
+      title: 'Søk blir til samtaler',
+      paragraphs: [
+        'Kundene stiller lengre spørsmål til Google og AI-tjenester, og får svar med tekst, produkter og annonser. Da må både kampanjene og produktdataene være klare for det.',
+        'Mye er ennå ikke åpnet i Norge. Vi er derfor konkrete på hva som virker i dag: annonser rundt Googles AI-oversikter, AI Max for Search og produktdata som AI-tjenestene kan bruke. Det som kommer, tester vi når det kommer.',
+      ],
+      insight: {
+        title: 'Annonser rundt AI-oversiktene',
+        text: 'Annonser over og under Googles AI-oversikter kan vises i alle markeder der oversiktene finnes, fra vanlige kampanjer for Søk, Shopping og Performance Max. Annonser inne i selve oversikten finnes foreløpig bare på engelsk, i 12 land, og ikke i Norge.',
+        source: { label: 'Google Ads Help: About ads and AI Overviews', href: 'https://support.google.com/google-ads/answer/16297775?hl=en' },
+      },
+    },
+    situations: [
+      { title: 'Søkekampanjene er bygget for korte søkeord', text: 'Lengre spørsmål fanges ikke opp, eller treffer feil annonser.' },
+      { title: 'Produktdataene er ikke klare', text: 'Titler, attributter og lager i Merchant Center og nettbutikken er mangelfulle.' },
+      { title: 'Du vil teste AI Max, men vil ha kontroll', text: 'Uten rammer kan automatikken treffe søk og sider du ikke ønsker.' },
+      { title: 'Du vet ikke hva som finnes i Norge', text: 'Nyhetene kommer tett, og det er vanskelig å skille det som er lansert her fra det som bare finnes i USA.' },
+    ],
+    deliverables: [
+      { name: 'Status for Norge', text: 'Hva som er tilgjengelig for norske annonsører nå, og hva som kommer.' },
+      { name: 'Kampanjer klare for AI-oversiktene', text: 'Søk, Shopping og Performance Max satt opp slik at annonsene kan vises rundt AI-oversiktene.' },
+      { name: 'AI Max for Search som eksperiment', text: 'Testet mot vanlige søkekampanjer, med kontroll på merker, URL-er og tekster.' },
+      { name: 'Produktdata for AI-tjenester', text: 'Merchant Center og produktkatalogen komplette og oppdaterte, så produktene kan hentes inn i AI-søk og AI-handel.' },
+      { name: 'Nye flater når de åpner', text: 'Annonser i ChatGPT, Copilot og andre AI-tjenester testes når de blir tilgjengelige i Norge.' },
+      { name: 'Ærlig rapportering', text: 'Hva vi kan og ikke kan måle: Google viser foreløpig ikke egne tall for annonser i AI-oversikter.' },
+    ],
+    notIncluded: ['Annonsebudsjett, som du betaler direkte til plattformene', 'Synlighet i AI-svar uten å betale, som ligger under SEO'],
+    process: [
+      { period: '0–30 dager', title: 'Status og data', text: 'Vi kartlegger hva som er tilgjengelig, og får produktdata og søkekampanjer klare.' },
+      { period: '30–60 dager', title: 'Test AI Max', text: 'AI Max kjøres som eksperiment mot dagens kampanjer, med tydelige rammer.' },
+      { period: '60–90 dager', title: 'Behold det som virker', text: 'Vi skalerer det som gir lønnsomt salg, og er klare når nye flater åpner.' },
+    ],
+    kpis: [
+      { name: 'Lønnsomhet i eksperimentene', text: 'AI Max og nye flater målt mot vanlige kampanjer.' },
+      { name: 'Nye søk', text: 'Søk vi ikke nådde før, og hva de gir i salg.' },
+      { name: 'Produktdekning', text: 'Andel produkter med komplette data i Merchant Center og katalogen.' },
+    ],
+    faq: [
+      {
+        question: 'Kan vi annonsere i ChatGPT?',
+        answer: 'OpenAI har begynt å teste annonser i ChatGPT. Vi følger med på når norske annonsører får tilgang, og tester det når det skjer.',
+      },
+      {
+        question: 'Hva er forskjellen på dette og GEO?',
+        answer: 'GEO, eller synlighet i AI-svar uten å betale, ligger under SEO. Her handler det om den betalte delen: annonser og produktdata.',
+      },
+      {
+        question: 'Hva er AI Max for Search?',
+        answer: 'En funksjon i Google Ads som utvider søkekampanjene til flere søk, lager tekster ut fra nettsiden og annonsene dine, og kan velge landingsside. Du kan styre merker og URL-er. Vi tester det som eksperiment før vi tar det i bruk fullt ut.',
+      },
+      {
+        question: 'Kan vi måle annonser i AI-oversikter for seg?',
+        answer: 'Ikke i dag. Google oppgir at det ikke finnes egen rapportering for annonser i AI-oversikter. Vi måler derfor effekten på kampanjenivå, mot salget i nettbutikken.',
+      },
+    ],
+    related: [
+      { slug: 'seo', why: 'Synlighet i AI-svar uten å betale, med GEO.' },
+      { slug: 'sem/google-ads', why: 'Kampanjene AI-søk bygger på.' },
+    ],
+  },
+
   'some/meta-ads': {
     highlight: 'Meta Ads',
     highlights: ['Katalog og Conversions API', 'Mange varierte kreativer', 'Målt mot salget i butikken'],
@@ -568,6 +638,160 @@ export const growthContent: Record<string, GrowthPageContent> = {
     related: [
       { slug: 'some', why: 'Kanalplanen og den kreative plattformen Meta-kampanjene bygger på.' },
       { slug: 'sporing-og-analyse', why: 'Conversions API og hendelser Meta kan stole på.' },
+    ],
+  },
+
+  'some/tiktok': {
+    highlight: 'TikTok',
+    highlights: ['Mange kreativer', 'Skapere og Spark Ads', 'Events API via Tracklution'],
+    facts: [
+      { label: 'Kampanjer', value: 'Smart+', note: 'automatisk målretting og kreativ' },
+      { label: 'Data', value: 'Events API', note: 'server-side, via Tracklution' },
+      { label: 'Kreativ', value: 'Video 9:16', note: 'med lyd og en sterk start' },
+      { label: 'Vi måler', value: 'Nye kunder', note: 'mot ordrene i nettbutikken' },
+    ],
+    why: {
+      title: 'Underholdning først, annonse etterpå',
+      paragraphs: [
+        'Folk åpner TikTok for å bli underholdt, ikke for å handle. Nettopp derfor kan kanalen skape etterspørsel hos dem som ikke leter ennå.',
+        'Det stiller krav til kreativene: annonser som ser ut som TikTok, ikke som reklamefilm. Innhold fra skapere og fra egen konto kan brukes som annonser med Spark Ads.',
+      ],
+      insight: {
+        title: 'De første sekundene avgjør',
+        text: 'TikTok anbefaler å vise hva du tilbyr i løpet av de første tre sekundene og å fange seeren i løpet av de første seks. Videoen bør være vertikal (9:16), ha lyd og holde det viktigste innenfor den sikre sonen.',
+        source: { label: 'TikTok Ads Help: Creative best practices', href: 'https://ads.tiktok.com/help/article/creative-best-practices?lang=en' },
+      },
+    },
+    situations: [
+      { title: 'Dere er ikke på TikTok', text: 'Målgruppen er der, men ingen har en plan for innhold og annonser.' },
+      { title: 'Annonsene ser ut som reklame', text: 'Polerte filmer fra andre kanaler blir scrollet forbi.' },
+      { title: 'Innhold fra skapere brukes ikke', text: 'Samarbeidene gir gode videoer, men de blir liggende i skapernes kanaler.' },
+      { title: 'TikTok ser ikke salgene', text: 'Pikselen alene mister kjøp, og kampanjene optimaliserer på for lite data.' },
+    ],
+    deliverables: [
+      { name: 'Kanalplan', text: 'Hvilken rolle TikTok skal ha ved siden av Meta og Snapchat, med mål og budsjett.' },
+      { name: 'Kreativer laget for TikTok', text: 'Vertikal video med lyd og en tydelig start, i mange varianter som testes mot hverandre.' },
+      { name: 'Skapere og Spark Ads', text: 'Samarbeid med skapere, og innlegg fra dem og fra egen konto brukt som annonser med tillatelse.' },
+      { name: 'Smart+ og kampanjestruktur', text: 'Kampanjer der TikTok finner publikum, med kundelister og budsjett satt av oss.' },
+      { name: 'Pixel og Events API', text: 'TikTok-pikselen og Events API via Tracklution, så TikTok ser de samme kjøpene som nettbutikken.' },
+      { name: 'Rapport mot butikken', text: 'Nye kunder og salg målt mot ordrene i nettbutikken, ikke bare visninger.' },
+    ],
+    notIncluded: ['Annonsebudsjett, som du betaler direkte til TikTok', 'Honorarer til skapere', 'TikTok Shop, som ikke er lansert i Norge'],
+    process: [
+      { period: '0–30 dager', title: 'Plan og data', text: 'Kanalplan, pikselen og Events API på plass, og de første kreative konseptene.' },
+      { period: '30–60 dager', title: 'Test kreativer', text: 'Mange varianter og innhold fra skapere testes mot hverandre.' },
+      { period: '60–90 dager', title: 'Skaler', text: 'Mer budsjett til kreativene som gir nye kunder, og en fast rytme for nytt innhold.' },
+    ],
+    kpis: [
+      { name: 'Kostnad per ny kunde', text: 'Hva det koster å vinne kunder som ikke har handlet før.' },
+      { name: 'Kreativ effekt', text: 'Hvor mange som ser videre etter de første sekundene, og hvilke videoer som gir salg.' },
+      { name: 'Merkevaresøk', text: 'Om flere søker på navnet ditt når kampanjene går.' },
+    ],
+    faq: [
+      {
+        question: 'Er TikTok bare for unge?',
+        answer: 'Nei. Ifølge Ipsos hadde 29 % av nordmenn over 18 år en TikTok-profil i fjerde kvartal 2023. Vi ser på om målgruppen din er der før vi anbefaler budsjett.',
+      },
+      {
+        question: 'Kan vi selge direkte i TikTok?',
+        answer: 'Ikke i Norge ennå. TikTok Shop er lansert i flere europeiske land, men ikke her. Annonsene sender kundene til nettbutikken din.',
+      },
+      {
+        question: 'Må vi lage innholdet selv?',
+        answer: 'Ikke nødvendigvis. Kreativene kan komme fra dere, fra oss eller fra skapere. Med Spark Ads kan innlegg fra skapere brukes som annonser når de gir tillatelse.',
+      },
+      {
+        question: 'Hvordan måler dere effekten?',
+        answer: 'Mange ser en video og handler senere, via søk eller direkte besøk. Vi sender kjøpene server-side med Events API, og følger nye kunder og merkevaresøk, ikke bare klikk.',
+      },
+    ],
+    related: [
+      { slug: 'some', why: 'Kanalplanen og den kreative plattformen TikTok bygger på.' },
+      { slug: 'sporing-og-analyse', why: 'Events API og kjøp TikTok kan lære av.' },
+    ],
+  },
+
+  'some/snapchat': {
+    highlight: 'Snapchat',
+    highlights: ['Der nordmenn er hver dag', 'Produktannonser fra katalogen', 'Pixel og Conversions API'],
+    facts: [
+      { label: 'Formater', value: 'Snap Ads', note: 'video, Story og Collection' },
+      { label: 'Katalog', value: 'Produktannonser', note: 'Dynamic Product Ads' },
+      { label: 'Data', value: 'Conversions API', note: 'via Tracklution' },
+      { label: 'Vi måler', value: 'Nye kunder', note: 'mot ordrene i nettbutikken' },
+    ],
+    why: {
+      title: 'Der mange nordmenn er hver dag',
+      paragraphs: [
+        'Snapchat er et av de mest brukte sosiale mediene i Norge, og ikke bare blant de yngste. Annonsene vises vertikalt i fullskjerm og gir merkevaren plass til å bli lagt merke til.',
+        'For nettbutikker kan produktkatalogen bli til annonser som viser riktige produkter til riktige personer. Det forutsetter at katalogen og kjøpene fra butikken når Snapchat.',
+      ],
+      insight: {
+        title: 'Nesten seks av ti bruker Snapchat hver dag',
+        text: 'Ifølge SSBs Norsk mediebarometer for 2025 bruker 58 % av befolkningen Snapchat en gjennomsnittsdag. Bare Facebook er høyere, med 63 %.',
+        chart: {
+          kind: 'bars',
+          valueLabel: 'Andel som bruker tjenesten en gjennomsnittsdag',
+          categoryLabel: 'Tjeneste',
+          format: 'percent',
+          legend: { emphasis: 'Snapchat', context: 'Facebook' },
+          items: [
+            { label: 'Facebook', value: 63, emphasis: false },
+            { label: 'Snapchat', value: 58, emphasis: true },
+          ],
+        },
+        source: {
+          label: 'SSB: Norsk mediebarometer 2025',
+          href: 'https://www.ssb.no/kultur-og-fritid/tids-og-mediebruk/statistikk/norsk-mediebarometer/artikler/dette-er-de-mest-populaere-sosiale-mediene',
+        },
+      },
+    },
+    situations: [
+      { title: 'Snapchat er ikke testet', text: 'Kanalen der mange av kundene er hver dag, er ikke med i planen.' },
+      { title: 'Annonsene er laget for andre kanaler', text: 'Kvadratiske bilder og lange filmer fra feeden fungerer dårlig i fullskjerm.' },
+      { title: 'Alle ser de samme annonsene', text: 'Katalogen er ikke koblet til, så annonsene viser ikke produktene hver person er interessert i.' },
+      { title: 'Snapchat ser ikke salgene', text: 'Pikselen alene mister kjøp, og kampanjene lærer av for lite data.' },
+    ],
+    deliverables: [
+      { name: 'Kanalplan', text: 'Hvilken rolle Snapchat skal ha ved siden av Meta og TikTok, med mål og budsjett.' },
+      { name: 'Kreativer i fullskjerm', text: 'Vertikal video og bilder i 9:16, korte og med budskapet tidlig.' },
+      { name: 'Produktannonser', text: 'Katalogen koblet til Snapchat, så annonsene viser produktene som passer hver person.' },
+      { name: 'Story- og Collection-annonser', text: 'Flere bilder eller produkter i samme annonse, så kundene kan bla og velge.' },
+      { name: 'Pixel og Conversions API', text: 'Snap-pikselen og Conversions API via Tracklution, så Snapchat ser de samme kjøpene som nettbutikken.' },
+      { name: 'Rapport mot butikken', text: 'Nye kunder og salg målt mot ordrene i nettbutikken.' },
+    ],
+    notIncluded: ['Annonsebudsjett, som du betaler direkte til Snapchat', 'AR-linser og større produksjoner'],
+    process: [
+      { period: '0–30 dager', title: 'Plan og data', text: 'Kanalplan, pikselen og Conversions API på plass, og katalogen koblet til.' },
+      { period: '30–60 dager', title: 'Test', text: 'Vertikale kreativer og produktannonser testes mot hverandre.' },
+      { period: '60–90 dager', title: 'Skaler', text: 'Mer budsjett til det som gir nye kunder, og nye kreativer før de gamle slites ut.' },
+    ],
+    kpis: [
+      { name: 'Kostnad per ny kunde', text: 'Hva det koster å vinne kunder som ikke har handlet før.' },
+      { name: 'Kreativ effekt', text: 'Hvor mange som ser videre, og hvilke kreativer som gir salg.' },
+      { name: 'Salg fra produktannonser', text: 'Hva katalogannonsene gir, målt mot ordrene i nettbutikken.' },
+    ],
+    faq: [
+      {
+        question: 'Er Snapchat bare for unge?',
+        answer: 'Nei. Snap oppga i 2023 at de hadde over tre millioner månedlige brukere i Norge, og at over 60 % av dem var 25 år eller eldre.',
+      },
+      {
+        question: 'Hva er Sponsored Snaps?',
+        answer: 'Et format der annonsen sendes som en Snap til chatten. Annonser med konkrete tilbud eller rabatter er ikke tillatt der, så formatet passer best for merkevare og lanseringer.',
+      },
+      {
+        question: 'Hvilket attribusjonsvindu bruker dere?',
+        answer: 'Snapchat teller som standard kjøp inntil 28 dager etter et sveip og én dag etter en visning. Vi rapporterer det Snapchat viser, men styrer etter salget i nettbutikken og nye kunder.',
+      },
+      {
+        question: 'Holder det med Shopify-appen?',
+        answer: 'Snapchat-appen i Shopify synkroniserer katalogen og legger inn pikselen. Kjøpene sender vi i tillegg server-side via Tracklution, så Snapchat ser flere av dem.',
+      },
+    ],
+    related: [
+      { slug: 'some', why: 'Kanalplanen og den kreative plattformen Snapchat bygger på.' },
+      { slug: 'sporing-og-analyse', why: 'Conversions API og kjøp Snapchat kan lære av.' },
     ],
   },
 

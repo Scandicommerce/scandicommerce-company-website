@@ -71,7 +71,7 @@ export const growthServices: GrowthService[] = [
     group: 'annonsering',
     label: 'SEM',
     title: 'Betalt søk (SEM) for nettbutikker',
-    lead: 'Annonser i Google og Bing som styres mot lønnsomhet, ikke klikk.',
+    lead: 'Annonser i Google, Bing og AI-søk som styres mot lønnsomhet, ikke klikk.',
   },
   {
     slug: 'sem/google-ads',
@@ -90,6 +90,15 @@ export const growthServices: GrowthService[] = [
     lead: 'Den billigere delen av betalt søk – ofte rimeligere klikk og en annen målgruppe enn i Google.',
   },
   {
+    // Paid visibility in AI answers; organic AI visibility (GEO) stays under SEO
+    slug: 'sem/ai-sok',
+    group: 'annonsering',
+    parent: 'sem',
+    label: 'AI-søk',
+    title: 'Annonsering i AI-søk for nettbutikker',
+    lead: 'Annonser og produktdata klare for AI-søk – i Google i dag, og i nye AI-tjenester når de åpner i Norge.',
+  },
+  {
     slug: 'some',
     group: 'annonsering',
     label: 'SoMe',
@@ -103,6 +112,22 @@ export const growthServices: GrowthService[] = [
     label: 'Meta Ads',
     title: 'Meta Ads (Facebook og Instagram) for nettbutikker',
     lead: 'Kampanjer i Facebook og Instagram koblet til produktkatalogen og målt mot salg i nettbutikken.',
+  },
+  {
+    slug: 'some/tiktok',
+    group: 'annonsering',
+    parent: 'some',
+    label: 'TikTok',
+    title: 'TikTok-annonsering for nettbutikker',
+    lead: 'Korte videoer som skaper etterspørsel – med mange kreativer, skapere og måling mot salget i nettbutikken.',
+  },
+  {
+    slug: 'some/snapchat',
+    group: 'annonsering',
+    parent: 'some',
+    label: 'Snapchat',
+    title: 'Snapchat-annonsering for nettbutikker',
+    lead: 'Vertikale annonser og produktannonser der mange nordmenn er hver dag – målt mot salget i nettbutikken.',
   },
   {
     // Includes CSS partners (Comparison Shopping Services) for Google Shopping

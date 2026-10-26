@@ -27,8 +27,8 @@ Tjenestene vi leverer:
 | CRO | `/growth-marketing/cro` |
 
 Kanalsider, som lenkes fra forelderen og **ikke** fra menyen eller samlesiden:
-`/growth-marketing/sem/google-ads`, `/growth-marketing/sem/bing-ads` og
-`/growth-marketing/some/meta-ads`.
+`/growth-marketing/sem/google-ads`, `/growth-marketing/sem/bing-ads`, `/growth-marketing/sem/ai-sok`,
+`/growth-marketing/some/meta-ads`, `/growth-marketing/some/tiktok` og `/growth-marketing/some/snapchat`.
 
 Samleside: `/growth-marketing`. Gjelder bare norsk side (.no). Andre språk gir 404.
 
@@ -39,7 +39,7 @@ Samleside: `/growth-marketing`. Gjelder bare norsk side (.no). Andre språk gir 
 | Samleside | Tekstutkast. Modellen er også navigasjonen: alle tjenester og kanalsider står i sitt steg. Deretter prinsipper (4), oppstart og måltall, FAQ og CTA |
 | Tjenestesider (11) | `noindex`, ikke i XML-sitemap. Status per side: se «Ekte innhold» |
 | Menyforslag | Ligger i `lib/growthServices.ts` (`growthNavItem()`). **Ikke koblet inn** i headeren ennå (se §5) |
-| Ekte innhold | Alle sider unntatt **SEO** har tekstutkast etter malen: Merkevare og strategi, Sporing og analyse, SoMe, Meta Ads, SEM, Google Ads, Bing Ads, Affiliate, E-post og CRO (2026-10-26). SEO skrives av andre og viser malen som brief |
+| Ekte innhold | Alle sider unntatt **SEO** har tekstutkast etter malen: Merkevare og strategi, Sporing og analyse, SoMe, Meta Ads, TikTok, Snapchat, SEM, Google Ads, Bing Ads, AI-søk, Affiliate, E-post og CRO (2026-10-26). SEO skrives av andre og viser malen som brief |
 | Layout | Samme byggeklosser og stil som tjenestesidene i `main` (`ServiceHero`, `Faq`, `CtaBand`, `ui`-tokens) |
 | Innhold i Sanity | Ikke startet. Innholdet ligger i kode til tekstene er klare |
 
@@ -168,6 +168,9 @@ npm run dev                 # http://localhost:3000/no/growth-marketing
 - [ ] CRO: Bruker vi Shopify Rollouts og Microsoft Clarity i praksis? Er «nytt tema eller redesign» et eget prosjekt (Shopify-tjenestene)?
 - [ ] Meta Ads: Lager vi kreativene selv? Samme spørsmål som for SoMe.
 - [ ] Bing Ads: Anbefaler vi Microsoft Channel-appen, eller feed direkte til Microsoft Merchant Center?
+- [ ] TikTok og Snapchat: Leverer vi disse kanalene i dag? Hvem lager kreativene? AR-linser står som ikke inkludert.
+- [ ] AI-søk: Bør Copilot og ChatGPT nevnes før de er åpnet i Norge? Siden sier at vi tester dem når de åpner.
+- [ ] «Les videre» viser inntil tre kort. På SEM og SoMe fyller nå kanalsidene alle tre, så Affiliate og Merkevare ikke lenger lenkes derfra. Er det OK?
 
 **Øvrige:**
 
@@ -259,6 +262,27 @@ Tekstene skal bare inneholde påstander vi kan stå for. Tidsavhengige fakta sje
 - EUs tilgjengelighetsdirektiv er ikke innført i Norge (Bufdir). Vi skriver ikke at nettbutikker har krav etter norsk lov.
 - Ikke brukt: Rakuten-caset fra web.dev (bare ett selskap) og antall Vipps-brukere i Norge (ikke bekreftet).
 
+**AI-søk** (research 2026-10-26):
+- Googles annonser over og under AI-oversikter kan vises i alle markeder der AI-oversiktene vises, fra Søk, Shopping og Performance Max. Annonser inne i selve AI-oversikten: bare engelsk, i 12 land, ikke Norge. Ingen egen rapportering. Kilde: Google Ads-hjelp 16297775.
+- AI Max for Search: global beta fra mai 2025, med søkeordsutvidelse, tekstgenerering, utvidelse av landingsside og kontroll på merke og URL. Kilde: blog.google. Status som ferdig produkt og støtte for norsk er ikke bekreftet.
+- Annonser i AI Mode testes (Google Marketing Live 2026), men det er ikke bekreftet hvilke land de finnes i. Nevnes ikke.
+- Copilot-annonser er bekreftet bare for engelsk, fransk og tysk. Norge nevnes ikke.
+- ChatGPT: OpenAI tester annonser, men at det gjelder Norge, kommer bare fra sekundærkilder. Siden sier at vi tester det når norske annonsører får tilgang.
+- Shopify Agentic Storefronts kobler katalogen til ChatGPT, Copilot, AI Mode og Gemini, men landene er ikke oppgitt. Perplexity er ikke bekreftet og nevnes ikke.
+
+**TikTok** (research 2026-10-26):
+- Smart+ automatiserer målretting, kreativer og budsjett, hver for seg. Spark Ads bruker egne innlegg og innlegg fra skapere, med tillatelse. Kreative råd: 9:16, lyd, tilbudet i løpet av de første 3 sekundene og en krok i løpet av de første 6. Kilde: TikTok Ads Help (creative best practices).
+- Tracklution sender til TikTok Events API med deduplisering.
+- Ikke brukt: produktannonser fra katalog i Norge (ikke bekreftet), TikToks mål for samsvarskvalitet (bare tredjepartskilde) og nyere norske brukstall enn Ipsos 4. kvartal 2023 (29 % over 18 år).
+
+**Snapchat** (research 2026-10-26; Snapchats hjelpesider for annonsører blokkerer henting):
+- SSB, Norsk mediebarometer 2025: 58 % bruker Snapchat en gjennomsnittsdag, og Facebook 63 %.
+- Snap, 2023: Over 3 millioner månedlige brukere i Norge, og over 60 % av dem er 25 år eller eldre.
+- Formater: Snap Ads (9:16, 3–180 sekunder), Story, Collection, Dynamic Product Ads og Sponsored Snaps (i chatten; ikke tillatt med tilbud eller rabatter). Kilde: forbusiness.snapchat.com.
+- Attribusjon som standard: 28 dager etter sveip og 1 dag etter visning (Ads API).
+- Tracklution sender til Snap-pikselen og Conversions API. Snapchat-appen i Shopify synkroniserer katalogen og legger inn pikselen.
+- Ikke bekreftet: at produktannonser fra katalog er tilgjengelige i Norge (bare en sekundærkilde fra 2020). Siden lover det ikke som noe bare Norge har, men beskriver formatet.
+
 ## 9. Beslutningslogg
 
 | Dato | Beslutning | Begrunnelse |
@@ -295,3 +319,4 @@ Tekstene skal bare inneholde påstander vi kan stå for. Tidsavhengige fakta sje
 | 2026-10-26 | Modellen er den røde tråden: hver side viser steget sitt i eyebrow og i «Her i modellen» i hero, og på samlesiden er modellen også navigasjonen | Leseren ser hvordan tjenestene henger sammen, og den doble tjenesteoversikten på samlesiden forsvinner |
 | 2026-10-26 | Samlesiden: fire prinsipper (i stedet for seks), ingen forskningsgraf | «Én feed» og «Kreativet er målrettingen» står på Affiliate og SoMe; grafen for kort og lang effekt står på Merkevare og strategi |
 | 2026-10-26 | Tekstutkast for E-post, CRO, Meta Ads og Bing Ads etter den nye malen; SEO overlates til andre | Brukeren ba om å fylle på der innholdet manglet; research med kilder først (se §8) |
+| 2026-10-26 | Nye kanalsider: AI-søk under SEM, og TikTok og Snapchat under SoMe | Brukeren ville ha kanalene med; AI-søk dekker den betalte delen, mens GEO blir under SEO |
