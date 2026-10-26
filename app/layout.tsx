@@ -1,18 +1,31 @@
 import type { Metadata } from 'next'
 import { draftMode, headers } from 'next/headers'
 import Script from 'next/script'
-import { VisualEditing } from 'next-sanity'
+import { JetBrains_Mono, Space_Grotesk } from 'next/font/google'
 import './globals.css'
 import { CartProvider } from '@/contexts/CartContext'
 import { LanguageProvider } from '@/contexts/LanguageContext'
-import CartDrawer from '@/components/cart/CartDrawer'
+import LazyCartDrawer from '@/components/cart/LazyCartDrawer'
 import JsonLd from '@/components/JsonLd'
 import { getRequestSite } from '@/lib/schema/request'
 import { HTML_LANG_BY_LANGUAGE, isLanguage } from '@/lib/site-config'
 import { DEFAULT_OG_IMAGE_PATH } from '@/lib/seo/buildMetadata'
-import DraftModeBanner from '@/components/ui/DraftModeBanner'
+import DraftModeTools from '@/components/ui/DraftModeTools'
 import CookieConsent from '@/components/tracking/CookieConsent'
 import TrackingScripts from '@/components/tracking/TrackingScripts'
+
+const spaceGrotesk = Space_Grotesk({
+  subsets: ['latin', 'latin-ext'],
+  display: 'swap',
+  variable: '--font-space-grotesk',
+})
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ['latin', 'latin-ext'],
+  display: 'swap',
+  preload: false,
+  variable: '--font-jetbrains-mono',
+})
 
 /**
  * Root metadata. `metadataBase` is the canonical origin of the site that
@@ -50,7 +63,7 @@ export default async function RootLayout({
   const htmlLang = isLanguage(locale) ? HTML_LANG_BY_LANGUAGE[locale] : locale
   const isDraftMode = draftMode().isEnabled
   return (
-    <html lang={htmlLang}>
+    <html lang={htmlLang} className={`${spaceGrotesk.variable} ${jetbrainsMono.variable}`}>
       <head>
         {/* Google Consent Mode v2 — everything denied by default; the cookie
             banner grants per category and TrackingScripts loads GTM/HubSpot
@@ -63,28 +76,20 @@ export default async function RootLayout({
 gtag('consent','default',{ad_storage:'denied',ad_user_data:'denied',ad_personalization:'denied',analytics_storage:'denied',wait_for_update:500});`,
           }}
         />
-        {/* Preload the two critical brand-font weights to shorten the font chain */}
-        <link rel="preload" href="/fonts/space-grotesk-400.ttf" as="font" type="font/ttf" crossOrigin="anonymous" />
-        <link rel="preload" href="/fonts/space-grotesk-700.ttf" as="font" type="font/ttf" crossOrigin="anonymous" />
         <JsonLd />
       </head>
       <body>
         <LanguageProvider>
           <CartProvider>
             {children}
-            <CartDrawer />
+            <LazyCartDrawer />
           </CartProvider>
         </LanguageProvider>
         {/* Consent-gated tracking (GTM + HubSpot) and the cookie banner */}
         <TrackingScripts />
         <CookieConsent locale={locale} />
         {/* Visual editing: click-to-edit overlays inside the Presentation tool */}
-        {isDraftMode && (
-          <>
-            <VisualEditing />
-            <DraftModeBanner />
-          </>
-        )}
+        {isDraftMode && <DraftModeTools />}
       </body>
     </html>
   )

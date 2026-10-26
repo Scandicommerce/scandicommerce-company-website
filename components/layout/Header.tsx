@@ -145,6 +145,8 @@ export default function Header({ settings, language }: HeaderProps) {
               <img
                 src="/images/brand/logo-dark-text.png"
                 alt="Scandicommerce"
+                width={808}
+                height={193}
                 className="block h-6 lg:h-[30px] w-auto"
               />
             </LocalizedLink>

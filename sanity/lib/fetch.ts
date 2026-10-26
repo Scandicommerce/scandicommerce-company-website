@@ -1,6 +1,6 @@
 import { draftMode } from "next/headers";
 import { client } from "./client";
-import type { QueryParams } from "next-sanity";
+import type { QueryParams } from "@sanity/client";
 
 const token = process.env.SANITY_API_READ_TOKEN;
 

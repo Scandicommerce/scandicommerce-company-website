@@ -8,7 +8,7 @@ import { sanityPageFetch } from '@/sanity/lib/fetch'
 import { templatePageBySlugQuery } from '@/sanity/lib/templateQueries'
 import { getLanguageFromParams } from '@/lib/language'
 import { hrefFor, publicPath } from '@/lib/routes'
-import { sanityImg } from '@/lib/sanityImage'
+import { sanityImg, sanityImgSize } from '@/lib/sanityImage'
 import { CapabilityMatrix, DataFlowLegend, type FlowStep, type FlowSystem } from '@/components/integrations/DataFlow'
 import DataFlowAnimation from '@/components/integrations/DataFlowAnimation'
 import { Breadcrumb, CtaBand, Faq, LinkList, type LinkDoc } from '@/components/integrations/LinkBlocks'
@@ -113,7 +113,7 @@ export default async function IntegrationDetailPage({ params }: { params: Promis
               <div className="flex flex-wrap items-center gap-4">
                 {doc.logo?.url && (
                   // eslint-disable-next-line @next/next/no-img-element
-                  <img src={doc.logo.url} alt={doc.logo.alt ?? doc.integrationName ?? ''} className="h-9 w-auto max-w-[200px] object-contain object-left" />
+                  <img src={doc.logo.url} alt={doc.logo.alt ?? doc.integrationName ?? ''} {...sanityImgSize(doc.logo.url)} className="h-9 w-auto max-w-[200px] object-contain object-left" />
                 )}
                 {doc.category && <div className={ui.eyebrow}>{doc.category.title}</div>}
               </div>

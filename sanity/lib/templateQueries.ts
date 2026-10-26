@@ -1,4 +1,4 @@
-import { groq } from 'next-sanity'
+import groq from 'groq'
 
 /**
  * Queries for the SEO templates (pillarPage / integrationPage / migrationPage).

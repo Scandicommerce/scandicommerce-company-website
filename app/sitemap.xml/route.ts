@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import { headers } from 'next/headers'
-import { groq } from 'next-sanity'
+import groq from 'groq'
 import { client } from '@/sanity/lib/client'
 import { SITES, X_DEFAULT_LANGUAGE, isLanguage, siteForHost, siteForLanguage, type Language } from '@/lib/site-config'
 import { docPath, absoluteUrl, hreflangCode, isNoIndexPath } from '@/lib/routes'

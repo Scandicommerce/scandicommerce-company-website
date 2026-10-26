@@ -113,6 +113,8 @@ export default function Footer({ settings, language }: FooterProps) {
             <img
               src="/images/brand/logo-white-text.png"
               alt="Scandicommerce"
+              width={808}
+              height={193}
               className="block h-6 lg:h-[30px] w-auto mb-4"
             />
             <p className="text-[12px] lg:text-[13px] leading-relaxed text-[#8a95a0]">

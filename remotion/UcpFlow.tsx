@@ -21,7 +21,7 @@ export const UCP_STEP = 96
 export const UCP_STEPS = 6
 export const UCP_HOLD = 60
 export const UCP_DURATION = UCP_STEP * UCP_STEPS + UCP_HOLD
-export const UCP_SIZE = { wide: { width: 1200, height: 640 }, tall: { width: 720, height: 1080 } }
+export { UCP_SIZE } from './ucpSize'
 
 const INK = '#12181a'
 const INK_600 = '#3a444a'
@@ -31,7 +31,7 @@ const INK_100 = '#e9ecee'
 const BG = '#f6f7f8'
 const CYAN = '#16a7b3'
 const CYAN_50 = '#e8f7f8'
-const MONO = "'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace"
+const MONO = "var(--font-jetbrains-mono, 'JetBrains Mono'), ui-monospace, SFMono-Regular, Menlo, monospace"
 
 type Copy = {
   shopper: string

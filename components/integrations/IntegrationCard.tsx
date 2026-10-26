@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { hrefFor } from '@/lib/routes'
+import { sanityImgSize } from '@/lib/sanityImage'
 import { CAPABILITY_LABEL, METHOD_LABEL, STATUS_LABEL, T, lang, ui, type IntegrationCard as Card } from './labels'
 
 function directionLabel(item: Card): string | null {
@@ -20,7 +21,7 @@ export default function IntegrationCard({ item, language }: { item: Card; langua
       <div className="flex items-center justify-between gap-3">
         {item.logoUrl ? (
           // eslint-disable-next-line @next/next/no-img-element
-          <img src={item.logoUrl} alt={item.integrationName} className="h-7 w-auto max-w-[150px] object-contain object-left" loading="lazy" />
+          <img src={item.logoUrl} alt={item.integrationName} {...sanityImgSize(item.logoUrl)} className="h-7 w-auto max-w-[150px] object-contain object-left" loading="lazy" />
         ) : (
           <span className={`${ui.mono} rounded-md border border-dashed border-sc-ink-200 px-3 py-2`}>{item.integrationName}</span>
         )}

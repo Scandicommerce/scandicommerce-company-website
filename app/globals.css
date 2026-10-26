@@ -2,27 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
-/* JetBrains Mono — self-hosted variable font (was a render-blocking Google
- * Fonts @import costing ~780 ms on the critical path). */
-@font-face {
-  font-family: 'JetBrains Mono';
-  font-weight: 100 800;
-  font-style: normal;
-  font-display: swap;
-  src: url('/fonts/jetbrains-mono-var.woff2') format('woff2');
-}
-
-/* Space Grotesk — self-hosted (from the 2026 design delivery, /public/fonts) */
-@font-face { font-family: 'Space Grotesk'; font-weight: 300; font-style: normal; font-display: swap;
-  src: url('/fonts/space-grotesk-300.ttf') format('truetype'); }
-@font-face { font-family: 'Space Grotesk'; font-weight: 400; font-style: normal; font-display: swap;
-  src: url('/fonts/space-grotesk-400.ttf') format('truetype'); }
-@font-face { font-family: 'Space Grotesk'; font-weight: 500; font-style: normal; font-display: swap;
-  src: url('/fonts/space-grotesk-500.ttf') format('truetype'); }
-@font-face { font-family: 'Space Grotesk'; font-weight: 600; font-style: normal; font-display: swap;
-  src: url('/fonts/space-grotesk-600.ttf') format('truetype'); }
-@font-face { font-family: 'Space Grotesk'; font-weight: 700; font-style: normal; font-display: swap;
-  src: url('/fonts/space-grotesk-700.ttf') format('truetype'); }
+/* Space Grotesk and JetBrains Mono are loaded with next/font in app/layout.tsx
+ * (self-hosted woff2 subsets with metric-matched fallbacks), which set
+ * --font-space-grotesk and --font-jetbrains-mono on <html>. */
 
 /* ─── Scandicommerce design system 2026 — tokens from the design delivery ───
  * New/redesigned sections use these; legacy components keep their hardcoded
@@ -64,8 +46,8 @@
   --background-end-rgb: 255, 255, 255;
 
   /* Font families */
-  --font-grotesque: 'Space Grotesk', sans-serif;
-  --font-mono: 'JetBrains Mono', monospace;
+  --font-grotesque: var(--font-space-grotesk), sans-serif;
+  --font-mono: var(--font-jetbrains-mono), monospace;
 
   /* Page padding: smooth by default, stepped in 768px–1024px (two parts), origin at 896px & 1023px */
   --page-padding-x: clamp(1rem, 4vw, 2rem);
@@ -102,7 +84,7 @@
 /* Base typography - Grotesque for everything by default */
 html,
 body {
-  font-family: 'Space Grotesk', var(--font-grotesque), sans-serif;
+  font-family: var(--font-grotesque);
   font-weight: 400;
 }
 
@@ -117,7 +99,7 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: 'Space Grotesk', var(--font-grotesque), sans-serif;
+  font-family: var(--font-grotesque);
   font-weight: 600;
 }
 
@@ -128,7 +110,7 @@ h6 {
 .technical,
 code,
 pre {
-  font-family: 'JetBrains Mono', var(--font-mono), monospace;
+  font-family: var(--font-mono);
 }
 
 .section_container {
@@ -138,20 +120,20 @@ pre {
 
 /* Typography utility classes */
 .hero-title {
-  font-family: 'Space Grotesk', var(--font-grotesque), sans-serif;
+  font-family: var(--font-grotesque);
   font-weight: 700;
   font-size: 4rem;
 }
 
 .metric-value {
-  font-family: 'JetBrains Mono', var(--font-mono), monospace;
+  font-family: var(--font-mono);
   font-weight: 600;
   font-size: 2.5rem;
   letter-spacing: -0.02em;
 }
 
 .metric-label {
-  font-family: 'Space Grotesk', var(--font-grotesque), sans-serif;
+  font-family: var(--font-grotesque);
   font-weight: 500;
   font-size: 0.875rem;
   text-transform: uppercase;
@@ -160,13 +142,13 @@ pre {
 
 /* Case Study Stats */
 .case-study-stat {
-  font-family: 'JetBrains Mono', var(--font-mono), monospace;
+  font-family: var(--font-mono);
   font-weight: 600;
 }
 
 /* Navigation */
 nav {
-  font-family: 'Space Grotesk', var(--font-grotesque), sans-serif;
+  font-family: var(--font-grotesque);
   font-weight: 500;
   font-size: 0.9rem;
 }

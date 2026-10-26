@@ -32,7 +32,7 @@ export function DataFlowPoster({ systems, steps, language }: { systems: FlowSyst
   const Node = ({ x, name, dark }: { x: number; name: string; dark?: boolean }) => (
     <g>
       <rect x={x} y={y - 4} width={nodeW} height={nodeH} rx={8} fill={dark ? '#12181a' : '#ffffff'} stroke={dark ? '#12181a' : '#d6dade'} />
-      <text x={x + nodeW / 2} y={y - 4 + nodeH / 2 + 6} textAnchor="middle" fontFamily="JetBrains Mono, ui-monospace, monospace" fontSize="16" fontWeight="500" fill={dark ? '#ffffff' : '#12181a'}>
+      <text x={x + nodeW / 2} y={y - 4 + nodeH / 2 + 6} textAnchor="middle" className="font-mono" fontSize="16" fontWeight="500" fill={dark ? '#ffffff' : '#12181a'}>
         {name}
       </text>
     </g>
@@ -59,7 +59,7 @@ export function DataFlowPoster({ systems, steps, language }: { systems: FlowSyst
               <line x1={x1} y1={ly} x2={x2} y2={ly} stroke="#d6dade" strokeWidth={2} markerEnd="url(#df-head)" />
               <circle cx={mid} cy={ly} r={6} fill="#16a7b3" />
               <circle cx={mid} cy={ly} r={12} fill="#16a7b3" opacity={0.2} />
-              <text x={mid} y={labelY(i)} textAnchor="middle" fontFamily="JetBrains Mono, ui-monospace, monospace" fontSize="12" fill="#5a6670">
+              <text x={mid} y={labelY(i)} textAnchor="middle" className="font-mono" fontSize="12" fill="#5a6670">
                 {short(e.payload)}
               </text>
             </g>
@@ -68,7 +68,7 @@ export function DataFlowPoster({ systems, steps, language }: { systems: FlowSyst
         <Node x={xs.source} name={source.name} dark />
         {middleware && <Node x={xs.mid} name={middleware.name} />}
         {target.name && <Node x={xs.target} name={target.name} />}
-        <text x={40} y={H - 36} fontFamily="Space Grotesk, sans-serif" fontSize="12" fontWeight="600" letterSpacing="1.4" fill="#5a6670">
+        <text x={40} y={H - 36} className="font-sans" fontSize="12" fontWeight="600" letterSpacing="1.4" fill="#5a6670">
           {t.poster.toUpperCase()}
         </text>
       </svg>

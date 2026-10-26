@@ -2,8 +2,10 @@
 
 import dynamic from 'next/dynamic'
 import { useEffect, useState, type ReactNode } from 'react'
+import { useInView } from '@/lib/useInView'
 import { DataFlowPoster, type FlowStep, type FlowSystem } from './DataFlow'
 import type { FlowNode, FlowProps, FlowTheme, FlowVariant, OverviewNode } from './remotion/FlowComposition'
+import { SIZE } from './remotion/flowSize'
 
 const DataFlowPlayer = dynamic(() => import('./remotion/DataFlowPlayer'), { ssr: false })
 
@@ -24,8 +26,9 @@ function resolveLogo(name: string, vendorName?: string | null, vendorLogoUrl?: s
 
 /**
  * Data-flow animation with the static SVG poster as its fallback. The poster
- * is server-rendered and shown while the Remotion bundle loads, when the
- * visitor prefers reduced motion, and when JavaScript is off.
+ * is server-rendered and shown until the block scrolls into view (the
+ * Remotion bundle is only fetched then), when the visitor prefers reduced
+ * motion, and when JavaScript is off.
  */
 export default function DataFlowAnimation({
   variant,
@@ -51,10 +54,11 @@ export default function DataFlowAnimation({
   /** Replaces the generic poster as the no-motion fallback. */
   poster?: ReactNode
 }) {
-  const [animate, setAnimate] = useState(false)
+  const [reducedMotion, setReducedMotion] = useState(false)
+  const [ref, inView] = useInView<HTMLDivElement>('0px')
   useEffect(() => {
     const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
-    const update = () => setAnimate(!mq.matches)
+    const update = () => setReducedMotion(mq.matches)
     update()
     mq.addEventListener('change', update)
     return () => mq.removeEventListener('change', update)
@@ -83,6 +87,12 @@ export default function DataFlowAnimation({
   }
   const label = steps.map((s) => `${s.from} → ${s.to}, ${s.payload}`).join('; ')
 
-  if (!animate) return poster ? <>{poster}</> : <DataFlowPoster systems={systems} steps={steps} language={language} />
-  return <DataFlowPlayer props={props} ariaLabel={label} />
+  const fallback = poster ?? <DataFlowPoster systems={systems} steps={steps} language={language} />
+  // The player's box is reserved from the server render on, so swapping the poster for the player doesn't shift the page.
+  const size = SIZE[variant]
+  return (
+    <div ref={ref} className="flex flex-col justify-center" style={reducedMotion ? undefined : { aspectRatio: `${size.width} / ${size.height}` }}>
+      {inView && !reducedMotion ? <DataFlowPlayer props={props} ariaLabel={label} /> : fallback}
+    </div>
+  )
 }

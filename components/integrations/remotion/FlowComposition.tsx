@@ -41,14 +41,7 @@ export const INTRO = 44
 export const BEAT = 84
 export const HOLD = 40
 export const FADE = 14
-export const SIZE: Record<FlowVariant, { width: number; height: number }> = {
-  make: { width: 1600, height: 900 },
-  code: { width: 1600, height: 900 },
-  direct: { width: 1600, height: 900 },
-  overview: { width: 1600, height: 600 },
-  tiers: { width: 1600, height: 600 },
-  web: { width: 1000, height: 800 },
-}
+export { SIZE } from './flowSize'
 export function durationFor(props: FlowProps): number {
   if (props.variant === 'overview') return 330
   if (props.variant === 'tiers') return 330
@@ -61,8 +54,8 @@ const C = {
   light: { bg: '#f6f7f8', edge: '#d6dade', pulse: '#16a7b3', halo: 'rgba(22,167,179,0.22)', text: '#12181a', muted: '#5a6670', card: '#ffffff', cardBorder: '#d6dade', ink: '#12181a', inkText: '#ffffff', amber: '#e8a83a', ok: '#118792' },
   dark: { bg: '#12181a', edge: '#3a444a', pulse: '#1EEFFA', halo: 'rgba(30,239,250,0.22)', text: '#ffffff', muted: '#8a95a0', card: '#1a2124', cardBorder: '#3a444a', ink: '#ffffff', inkText: '#12181a', amber: '#e8a83a', ok: '#7ee5eb' },
 }
-const MONO = "'JetBrains Mono', ui-monospace, Menlo, monospace"
-const SANS = "'Space Grotesk', ui-sans-serif, system-ui, sans-serif"
+const MONO = "var(--font-jetbrains-mono, 'JetBrains Mono'), ui-monospace, Menlo, monospace"
+const SANS = "var(--font-space-grotesk, 'Space Grotesk'), ui-sans-serif, system-ui, sans-serif"
 const ease = Easing.inOut(Easing.ease)
 const clamp = { extrapolateLeft: 'clamp' as const, extrapolateRight: 'clamp' as const }
 const t01 = (frame: number, from: number, to: number) => interpolate(frame, [from, to], [0, 1], { ...clamp, easing: ease })

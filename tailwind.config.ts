@@ -43,9 +43,9 @@ const config: Config = {
         'header': '0px 4px 18px 0px rgba(0, 0, 0, 0.05)',
       },
       fontFamily: {
-        sans: ['Space Grotesk', 'var(--font-grotesque)', 'sans-serif'],
-        mono: ['JetBrains Mono', 'var(--font-mono)', 'monospace'],
-        grotesque: ['Space Grotesk', 'var(--font-grotesque)', 'sans-serif'],
+        sans: ['var(--font-grotesque)'],
+        mono: ['var(--font-mono)'],
+        grotesque: ['var(--font-grotesque)'],
       },
     },
   },

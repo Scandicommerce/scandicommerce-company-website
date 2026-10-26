@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { headers } from 'next/headers'
-import { groq } from 'next-sanity'
+import groq from 'groq'
 import { sanityPageFetch } from '@/sanity/lib/fetch'
 import { resolvePageByPath } from '@/lib/resolvePageByPath'
 import { toSanityLanguageId } from '@/lib/language'
