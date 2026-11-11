@@ -2,12 +2,11 @@ import { defineField, defineType } from "sanity";
 import { EnvelopeIcon } from "@sanity/icons";
 
 /**
- * Reusable newsletter signup block (doc §3.1).
+ * Reusable newsletter signup block.
  *
- * Embed this object anywhere a newsletter form is wanted (article body,
- * footer, homepage section) instead of maintaining three separate
- * implementations. `variant` controls visual size only, not content.
- * The frontend renders it via <NewsletterForm /> (posts to /api/newsletter).
+ * Add it to a landing page's sections, to an article's content, or set it in
+ * footerSettings. Every placement posts to /api/newsletter, which submits to
+ * the HubSpot form "Nyhetsbrevnettsiden" with the page URL. `variant` sets the layout.
  */
 export const newsletterSignup = defineType({
   name: "newsletterSignup",
@@ -19,12 +18,12 @@ export const newsletterSignup = defineType({
       name: "variant",
       title: "Variant",
       type: "string",
-      description: "Controls visual size, not content.",
+      description: "Layout of the block.",
       options: {
         list: [
           { title: "Inline (in an article)", value: "inline" },
+          { title: "Section (full width on landing pages)", value: "section" },
           { title: "Footer", value: "footer" },
-          { title: "Section (full width)", value: "seksjon" },
         ],
         layout: "radio",
       },
@@ -42,13 +41,25 @@ export const newsletterSignup = defineType({
       type: "string",
       description: 'e.g. "Shopify-nytt og kundecaser, rett i innboksen"',
     }),
+    defineField({
+      name: "buttonText",
+      title: "Button text",
+      type: "string",
+      description: 'Optional. Defaults to "Meld meg på" / "Subscribe".',
+    }),
+    defineField({
+      name: "successMessage",
+      title: "Success message",
+      type: "string",
+      description: "Optional. Shown after a successful signup. Defaults to a standard thank-you.",
+    }),
   ],
   preview: {
     select: { title: "overskrift", subtitle: "variant" },
     prepare({ title, subtitle }) {
       return {
         title: title || "Newsletter Signup",
-        subtitle: subtitle ? `Variant: ${subtitle}` : "Newsletter",
+        subtitle: subtitle ? `Newsletter · ${subtitle}` : "Newsletter",
       };
     },
   },

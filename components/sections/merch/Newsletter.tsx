@@ -36,7 +36,7 @@ export default function Newsletter({ newsletter }: NewsletterProps) {
       const res = await fetch('/api/newsletter', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, source: 'merch' }),
+        body: JSON.stringify({ email, variant: 'section', language: 'en', pageUri: window.location.href, pageName: document.title }),
       })
       if (!res.ok) throw new Error('Subscribe failed')
       setIsSubmitted(true)

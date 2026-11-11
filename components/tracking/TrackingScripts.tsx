@@ -2,9 +2,9 @@
 
 import { useEffect, useState } from 'react'
 import { readConsent, updateGtagConsent, type ConsentState } from '@/lib/consent'
+import { HUBSPOT_TRACKING_SRC } from '@/lib/hubspot'
 
 const GTM_ID = process.env.NEXT_PUBLIC_GTM_ID || 'GTM-W9VS4NHX'
-const HUBSPOT_PORTAL_ID = process.env.NEXT_PUBLIC_HUBSPOT_PORTAL_ID
 
 function loadScriptOnce(id: string, src: string) {
   if (document.getElementById(id)) return
@@ -24,8 +24,7 @@ function loadGtm() {
 }
 
 function loadHubSpot() {
-  if (!HUBSPOT_PORTAL_ID) return
-  loadScriptOnce('hs-script-loader', `https://js.hs-scripts.com/${HUBSPOT_PORTAL_ID}.js`)
+  loadScriptOnce('hs-script-loader', HUBSPOT_TRACKING_SRC)
 }
 
 /**

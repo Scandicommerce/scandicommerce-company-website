@@ -150,6 +150,7 @@ export const post = defineType({
         defineArrayMember({ type: imageBlock.name }),
         defineArrayMember({ type: dividerBlock.name }),
         defineArrayMember({ type: videoBlock.name }),
+        defineArrayMember({ type: "newsletterSignup" }),
       ],
     }),
     relatedPagesField({ group: "content" }),

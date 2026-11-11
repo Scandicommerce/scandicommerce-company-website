@@ -41,6 +41,8 @@ interface FooterSettings {
     variant?: string
     overskrift?: string
     undertekst?: string
+    buttonText?: string
+    successMessage?: string
   }
 }
 
@@ -133,10 +135,11 @@ export default function Footer({ settings, language }: FooterProps) {
                   </p>
                 )}
                 <NewsletterForm
-                  source="footer"
-                  emailPlaceholder="din@epost.no"
-                  buttonText="Meld meg på"
-                  successText="Takk! Du er meldt på."
+                  variant="footer"
+                  language={language}
+                  buttonText={settings.newsletter.buttonText}
+                  successText={settings.newsletter.successMessage}
+                  tone="dark"
                   className="flex w-full max-w-[320px]"
                   inputClassName="bg-white/[0.06] border border-white/10 text-white placeholder:text-[#5a6670] text-[13px] px-3 py-2.5 outline-none flex-1 rounded-l-lg focus:border-sc-cyan-500"
                   buttonClassName="px-4 py-2.5 text-[12px] font-semibold text-white bg-sc-cyan-500 hover:bg-sc-cyan-600 transition-colors rounded-r-lg whitespace-nowrap"

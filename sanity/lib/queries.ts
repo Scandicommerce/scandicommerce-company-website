@@ -169,6 +169,13 @@ export const landingPageQuery = groq`
         linkText,
         linkHref,
         count
+      },
+      _type == "newsletterSignup" => {
+        variant,
+        overskrift,
+        undertekst,
+        buttonText,
+        successMessage
       }
     }
   }
@@ -315,6 +322,13 @@ export const homepageQuery = groq`
         linkText,
         linkHref,
         count
+      },
+      _type == "newsletterSignup" => {
+        variant,
+        overskrift,
+        undertekst,
+        buttonText,
+        successMessage
       }
     }
   }
@@ -1409,6 +1423,8 @@ export const postBySlugQuery = groq`
       (_type == "codeBlock") => { language, code },
       // faqBlock
       (_type == "faqBlock") => { title, items[] { question, answer } },
+      // newsletterSignup (reusable signup block)
+      (_type == "newsletterSignup") => { variant, overskrift, undertekst, buttonText, successMessage },
       // ctaBlock (rich text body)
       (_type == "ctaBlock") => {
         heading,
@@ -1584,7 +1600,9 @@ export const footerSettingsQuery = groq`
     newsletter {
       variant,
       overskrift,
-      undertekst
+      undertekst,
+      buttonText,
+      successMessage
     }
   }
 `;

@@ -14,6 +14,15 @@ export type HomepageSectionBlock =
   | ({ _type: "ctaSection"; _key: string } & HomepageCtaPayload)
   | ({ _type: "technicalDepthSection"; _key: string } & TechnicalDepthPayload)
   | ({ _type: "blogTeaserSection"; _key: string } & HomepageBlogTeaserPayload)
+  | ({ _type: "newsletterSignup"; _key: string } & NewsletterSignupPayload)
+
+export interface NewsletterSignupPayload {
+  variant?: string
+  overskrift?: string
+  undertekst?: string
+  buttonText?: string
+  successMessage?: string
+}
 
 export interface HomepageHeroPayload {
   heroBadge?: string
