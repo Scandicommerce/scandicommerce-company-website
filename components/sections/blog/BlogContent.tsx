@@ -14,6 +14,7 @@ import ImageBlock from './ImageBlock'
 import DividerBlock from './DividerBlock'
 import RichTextBlock from './RichTextBlock'
 import VideoBlock from './VideoBlock'
+import NewsletterSignupBlock from '@/components/sections/newsletter/NewsletterSignupBlock'
 
 interface BlogContentProps {
   /** Blocks from `prepareContent`, so headings already carry their ids. */
@@ -60,6 +61,8 @@ export default function BlogContent({ blocks, language = 'no' }: BlogContentProp
             return <DividerBlock key={key} block={block} />
           case 'videoBlock':
             return <VideoBlock key={key} block={block} />
+          case 'newsletterSignup':
+            return <NewsletterSignupBlock key={key} data={{ ...block, variant: 'inline' }} language={language} />
           default:
             return null
         }

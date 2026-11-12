@@ -8,6 +8,7 @@ import Partners from '@/components/sections/homepage/Partners'
 import CTA from '@/components/sections/homepage/CTA'
 import TechnicalDepth from '@/components/sections/homepage/TechnicalDepth'
 import BlogTeaser, { type TeaserPost } from '@/components/sections/homepage/BlogTeaser'
+import NewsletterSignupBlock, { type NewsletterSignupData } from '@/components/sections/newsletter/NewsletterSignupBlock'
 import Testimonial from '@/components/sections/services/shopify_development/Testimonial'
 import type { HomepageSectionBlock, HomepageServicesShowcasePayload } from '@/lib/homepageSections'
 
@@ -111,6 +112,8 @@ export function HomepageSectionRenderer({
             return <TechnicalDepth key={_key} data={rest as Parameters<typeof TechnicalDepth>[0]['data']} />
           case 'blogTeaserSection':
             return <BlogTeaser key={_key} data={rest as Parameters<typeof BlogTeaser>[0]['data']} posts={latestPosts} lang={lang} />
+          case 'newsletterSignup':
+            return <NewsletterSignupBlock key={_key} data={{ variant: 'section', ...(rest as NewsletterSignupData) }} language={lang} />
           default:
             return null
         }

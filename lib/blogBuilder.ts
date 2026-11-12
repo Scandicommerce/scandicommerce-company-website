@@ -35,7 +35,18 @@ export type PostBlock =
   | GradientTitleBlock
   | ImageBlock
   | DividerBlock
-  | VideoBlock;
+  | VideoBlock
+  | NewsletterSignupBlock;
+
+export interface NewsletterSignupBlock {
+  _type: "newsletterSignup";
+  _key: string;
+  variant?: string | null;
+  overskrift?: string | null;
+  undertekst?: string | null;
+  buttonText?: string | null;
+  successMessage?: string | null;
+}
 
 export interface VideoBlock {
   _type: "videoBlock";

@@ -55,6 +55,7 @@ export const landingPage = defineType({
         defineArrayMember({ type: "ctaSection" }),
         defineArrayMember({ type: "technicalDepthSection" }),
         defineArrayMember({ type: "blogTeaserSection" }),
+        defineArrayMember({ type: "newsletterSignup" }),
       ],
     }),
     seoExtendedField,
