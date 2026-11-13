@@ -5,6 +5,8 @@ import { client } from '@/sanity/lib/client'
 import { SITES, X_DEFAULT_LANGUAGE, isLanguage, siteForHost, siteForLanguage, type Language } from '@/lib/site-config'
 import { docPath, absoluteUrl, hreflangCode, isNoIndexPath } from '@/lib/routes'
 import { findDocByLegacyPath } from '@/lib/seo/urlPlan'
+import { growthHref, growthServices } from '@/lib/growthServices'
+import { isGrowthPagePublished } from '@/lib/growthContent'
 
 /** Canonical path for a doc, mapped through the URL plan while a slug rename is still unpublished. */
 function canonicalPathFor(m: { _type: string; slug: string; isHomepage?: boolean }, lang: Language): string {
@@ -178,6 +180,11 @@ export async function GET() {
     { path: 'services/b2b', languages: COM_LANGUAGES },
     { path: 'services/shopify-development', languages: COM_LANGUAGES },
     { path: 'nexuspos', languages: ['no', 'en', 'sv', 'da', 'de'] },
+    // Growth marketing: the hub and every service page with written copy
+    { path: growthHref().slice(1), languages: ['no'] },
+    ...growthServices
+      .filter((service) => isGrowthPagePublished(service.slug))
+      .map((service) => ({ path: growthHref(service.slug).slice(1), languages: ['no'] as Language[] })),
   ]
   for (const route of CODE_ROUTES) {
     for (const lang of route.languages) {

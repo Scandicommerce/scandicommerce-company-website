@@ -19,6 +19,7 @@ import { ui } from '@/components/integrations/labels'
 import { growthChildren, growthHref, growthHub, findGrowthService, type GrowthService } from '@/lib/growthServices'
 import {
   findGrowthContent,
+  isGrowthPagePublished,
   growthHubContent,
   growthStageOf,
   type GrowthFlow,
@@ -141,7 +142,7 @@ function ModelPosition({ service }: { service: GrowthService }) {
               <ul className="m-0 mt-2.5 flex list-none flex-wrap gap-1.5 p-0 pl-8">
                 {stage.services.map((slug) => {
                   const item = findGrowthService(slug)
-                  if (!item) return null
+                  if (!item || !isGrowthPagePublished(slug)) return null
                   const isCurrent = slug === root
                   return (
                     <li key={slug}>
@@ -356,10 +357,10 @@ function ProcessSection({
 
 /** Onward links: the service's channel pages first, then related services. Four at most. */
 function LinksSection({ service, related }: { service: GrowthService; related?: GrowthPageContent['related'] }) {
-  const channels = growthChildren(service.slug).map((child) => ({ target: child, eyebrow: 'Kanal', text: child.lead }))
+  const channels = growthChildren(service.slug).filter((child) => isGrowthPagePublished(child.slug)).map((child) => ({ target: child, eyebrow: 'Kanal', text: child.lead }))
   const others = (related ?? []).flatMap((item) => {
     const target = findGrowthService(item.slug)
-    return target ? [{ target, eyebrow: stageEyebrow(target.slug) ?? growthHub.label, text: item.why }] : []
+    return target && isGrowthPagePublished(target.slug) ? [{ target, eyebrow: stageEyebrow(target.slug) ?? growthHub.label, text: item.why }] : []
   })
   const items = [...channels, ...others].slice(0, 4)
   if (!items.length) return null
@@ -406,7 +407,7 @@ export function GrowthServicePage({ service }: { service: GrowthService }) {
   const content = findGrowthContent(service.slug)
   return (
     <>
-      <DraftNotice />
+      {!content && <DraftNotice />}
       <ServiceHero
         eyebrow={stageEyebrow(service.slug)}
         title={service.heroTitle ?? service.title}
@@ -439,7 +440,6 @@ export function GrowthHubPage() {
   const content = growthHubContent
   return (
     <>
-      <DraftNotice />
       <ServiceHero
         eyebrow={growthHub.label}
         title={growthHub.title}
@@ -460,9 +460,9 @@ export function GrowthHubPage() {
 /** A service in the model, with its channel pages as small links. */
 function ModelServiceLink({ slug, onDark }: { slug: string; onDark?: boolean }) {
   const service = findGrowthService(slug)
-  if (!service) return null
+  if (!service || !isGrowthPagePublished(slug)) return null
   const Icon = SERVICE_ICONS[slug]
-  const children = growthChildren(slug)
+  const children = growthChildren(slug).filter((child) => isGrowthPagePublished(child.slug))
   return (
     <div className={`rounded-lg px-3.5 py-3 ${onDark ? 'bg-white/10' : 'bg-sc-ink-50'}`}>
       <LocalizedLink href={growthHref(slug)} className="group flex items-center gap-2.5">

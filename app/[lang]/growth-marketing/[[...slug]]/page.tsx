@@ -5,6 +5,7 @@ import HeaderWrapper from '@/components/layout/HeaderWrapper'
 import { GrowthHubPage, GrowthServicePage } from '@/components/sections/growth/GrowthPages'
 import { getLanguageFromParams } from '@/lib/language'
 import { findGrowthService, growthHub } from '@/lib/growthServices'
+import { isGrowthPagePublished } from '@/lib/growthContent'
 import { coalescePageSeo, getSiteSettings } from '@/lib/sanity/pageSeo'
 import { buildMetadata } from '@/lib/seo/buildMetadata'
 
@@ -34,8 +35,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const seo = coalescePageSeo(null, settings)
   seo.metaTitle = service ? service.title : growthHub.title
   seo.metaDescription = service ? service.lead : growthHub.lead
-  // Placeholder pages: keep them out of the index until real copy is in
-  seo.noIndex = true
+  // Pages without written copy stay out of the index until it is in
+  seo.noIndex = service ? !isGrowthPagePublished(service.slug) : false
   return buildMetadata({
     seo,
     settings,

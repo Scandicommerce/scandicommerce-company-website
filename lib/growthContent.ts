@@ -1119,6 +1119,15 @@ export function findGrowthContent(slug: string): GrowthPageContent | undefined {
   return growthContent[slug]
 }
 
+/**
+ * A page is published (indexed, in the sitemap, linked from other growth pages)
+ * once it has written copy here. Pages without an entry stay reachable by URL
+ * but render the template brief, noindex and unlinked.
+ */
+export function isGrowthPagePublished(slug: string): boolean {
+  return slug in growthContent
+}
+
 /** The model stage a service belongs to; channel pages inherit their parent's. */
 export function growthStageOf(slug: string): GrowthStage | undefined {
   const { stages, foundation } = growthHubContent.model
